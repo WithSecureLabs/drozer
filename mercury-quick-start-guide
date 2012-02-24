@@ -1,0 +1,70 @@
+*************************************************************************
+	  This software is the copyright of MWR InfoSecurity	
+			Written by: Tyrone Erasmus			
+*************************************************************************
+
+###########################
+Recommended requirements
+###########################
+
+* Phone or emulator running Android 2.2 or greater
+* PC running Linux and Python 2.7 - autocompletion of commands and some other features do not work on Windows
+
+###########################
+Getting started
+###########################
+
+* Install server/mercury.apk on a device or emulator and start it
+
+* Start client/mercury.py
+
+* If you are connected to your phone with USB or you are using the emulator, you will need to forward port 1337 (this can be done using 'adb forward tcp:1337 tcp:1337')
+  OR
+* If you are connecting to your phone over a wireless connection, you will need to get the IP address of the phone
+
+* Type "connect" followed by the appropriate IP address. It will be 127.0.0.1 if you have a directly connected device
+
+* There is inline help available within Mercury. Typing 'help <command>' is all you need to know in order to use a command
+
+###########################
+Cool things to try
+###########################
+
+* Start exported activities (activity section)
+	# Try starting the Android Market app by issuing "launchintent com.android.vending" and trying to build the given intent using the "start" command
+	# When typing intents like "android.intent.action.MAIN", try to tab complete these to avoid having to type too much
+	# Type "info" to get information about all the exported activities available on the device. Try to start 1 of these using the --component argument of the "start" command	
+
+* Finding package information (packages section)
+	# Type info to get information about all the installed packages on the device. Try to use "info -f package" to filter for any specific package you are looking for
+	# Look for packages that contain the INSTALL_PACKAGES permission by typing "info -p INSTALL_PACKAGES"
+	# View how you can interact with one of these applications by issuing the "attacksurface" command
+	# Look for the Mercury package using the "info" command with a filter on it
+
+* Uploading and downloading files (tools section)
+	# Find an APK to download using the "APK path" returned when issuing the "info" command in the packages section
+	# Use the "download" function to download this APK file to your desired location on your PC
+	# Upload a file using the "upload" command. Look at where it places it if you do not specify an upload folder
+
+* Finding vulnerable content providers (provider section)
+	# Type "info -p null" to search for content providers with no permissions set
+	# Try to read from 1 of them using "query content://authority"
+	# Find content URI's referenced in an APK using the "finduri" command
+	# Successfully query a content provider
+	# Try to find SQL injection on the projection parameter of a content provider using: query content://provider --projection "'"
+	# Get the SQLITE_MASTER table using SQL injection by using: query content://provider --projection "* FROM SQLITE_MASTER--"
+
+* Playing with shells (modules and shell section)
+	# In the modules section, type "run setup/busybox"
+	# In the shell section, try "oneoff" shell and the "persistent" shell - see if you can notice what the difference is from a coding point of view between these 2 shells
+	# Type "$BB" in one of the shells and use busybox to get the date
+	# Poke around the filesystem using one of the shells
+
+* Playing with modules (modules section)
+	# Type "list" to get all available modules
+	# Type "info ex" and then press the tab key, notice how it completes. In the Mercury client directory, notice the "modules" folder and how this relates to the tab completed items
+	# Run the exploit/shell/reverse_shell module and pipe a shell from Android to a remote device (or your PC)
+	#ADVANCED# Look at the various Samsung exploit modules. See how the structure looks and make your own new module to query a content provider
+	#ADVANCED# Look at Commands.java in the server source code and notice how it maps to session.executeCommand("provider", "query", request) executed in the modules on the client
+	#ADVANCED# Create a new server command in Commands.java by following the structure of the other commands. These should be once-off commands that do not carry their own state
+
