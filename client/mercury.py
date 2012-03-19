@@ -3,7 +3,6 @@
 # License: Refer to the README in the root directory
 #
 
-import xml.dom.minidom
 import argparse, shlex, sys, urllib2
 from xml.dom.minidom import parseString
 from merc.lib.basecmd import BaseCmd
@@ -97,7 +96,7 @@ Check if there is an updated release available from http://labs.mwrinfosecurity.
         
         try:
             # Fetch the manifest file from the Labs site
-            response = urllib2.urlopen("http://labs.mwrinfosecurity.com/labs/tools/2012/03/16/mercury/downloads/manifest.xml")
+            response = urllib2.urlopen("http://labs.mwrinfosecurity.com/tools/2012/03/16/mercury/downloads/manifest.xml")
             xmlStr = response.read()
             
             # Parse XML and get <version> contents
@@ -111,7 +110,7 @@ Check if there is an updated release available from http://labs.mwrinfosecurity.
             else:
                 raise Exception("XML not in expected format")
             
-             # Get <uri> text
+            # Get <uri> text
             data = version.getElementsByTagName("uri")[0].childNodes[0]
             if (data.nodeType == data.TEXT_NODE):
                 update_version_uri = data.nodeValue
