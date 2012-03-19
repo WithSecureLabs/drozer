@@ -16,7 +16,7 @@ Credit: Nils - MWR Labs"""
         try:
             request = {}
             info = session.executeCommand("provider", "info", request).getPaddedErrorOrData()
-        except Exception, e:
+        except BaseException, e:
             print "Exception while retrieving provider info:"
             print e
             return
