@@ -351,7 +351,7 @@ public class Commands
 				String returnValue = "";
 				
 				//Get all packages from packagemanager
-				List <PackageInfo> packages = currentSession.applicationContext.getPackageManager().getInstalledPackages(PackageManager.GET_PERMISSIONS);
+				List <PackageInfo> packages = currentSession.applicationContext.getPackageManager().getInstalledPackages(0);
 				
 				//Iterate through packages
 				for (PackageInfo package_:packages)
