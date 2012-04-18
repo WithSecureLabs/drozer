@@ -34,7 +34,7 @@ public class Shell
 			
 			//Change cwd to mercury data folder
 			write("cd /data/data/com.mwr.mercury");
-			read();
+			//read(); -- this was done as per luander's suggestion
 			
 			return true;
 		}
