@@ -22,19 +22,24 @@ Return to main menu
     def do_info(self, args):
         """
 Get information about exported services
-usage: info [--filter <filter>]
+usage: info [--filter <filter>] [--permission <filter>]
         """
 
         # Define command-line arguments using argparse
         parser = argparse.ArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
+        parser.add_argument('--permissions', '-p', metavar = '<filter>')
 
         try:
 
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
             splitargs = parser.parse_args(shlex.split(args))
 
-            print self.session.executeCommand("service", "info", {'filter':splitargs.filter} if splitargs.filter else None).getPaddedErrorOrData()
+            # Compile stated arguments to send to executeCommand
+            request = vars(splitargs)
+
+            #print self.session.executeCommand("service", "info", {'filter':splitargs.filter} if splitargs.filter else None).getPaddedErrorOrData()
+            print self.session.executeCommand("service", "info", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
         except:
