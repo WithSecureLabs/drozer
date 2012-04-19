@@ -24,4 +24,6 @@ Credit: Tyrone Erasmus - MWR Labs"""
             print "[+] Succeeded"
             print "[*] chmod 770 busybox\n"
             session.executeCommand("shell", "executeSingleCommand", {'args':'chmod 770 /data/data/com.mwr.mercury/busybox'})
+            
+            print "You are now able to use $BB to reference the busybox binary inside the oneoff and persistent shells\n"
 
