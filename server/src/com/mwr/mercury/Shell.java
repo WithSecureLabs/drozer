@@ -82,7 +82,7 @@ public class Shell
 		{
 			int newByte = 0;
 			
-			while (!returnVal.endsWith("$ ") && !returnVal.contains("# ") && (newByte != -1))
+			while (!returnVal.endsWith("$ ") && !returnVal.endsWith("# ") && (newByte != -1))
 			{
 				newByte = termIn.read();
 				returnVal += (char)newByte;
