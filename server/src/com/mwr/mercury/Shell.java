@@ -34,7 +34,6 @@ public class Shell
 			
 			//Change cwd to mercury data folder
 			write("cd /data/data/com.mwr.mercury");
-			//read(); -- this was done as per luander's suggestion
 			
 			return true;
 		}
@@ -83,7 +82,7 @@ public class Shell
 		{
 			int newByte = 0;
 			
-			while (!returnVal.endsWith("\r\n$ ") && !returnVal.contains("\r\n# ") && (newByte != -1))
+			while (!returnVal.endsWith("$ ") && !returnVal.contains("# ") && (newByte != -1))
 			{
 				newByte = termIn.read();
 				returnVal += (char)newByte;
