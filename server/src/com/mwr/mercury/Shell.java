@@ -83,10 +83,30 @@ public class Shell
 		{
 			int newByte = 0;
 			
-			while (!returnVal.endsWith("\r\n$ ") && !returnVal.contains("\r\n# ") && (newByte != -1))
-			{
-				newByte = termIn.read();
-				returnVal += (char)newByte;
+			// Get the Android version of the Device
+			int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+			if (currentapiVersion >= 14){ // 14 -> The Ice Cream Sandwich API version.
+				while (true)
+				{
+					// Terminal lines in ICS are different of the ones in Gingerbread
+					if (returnVal.equals("") || (!returnVal.endsWith(" $ ") && 
+							!returnVal.endsWith(" # ") && (newByte != -1)))
+					{
+						newByte = termIn.read();
+					}
+					else
+					{
+						break;
+					}
+					returnVal += (char)newByte;
+				}
+			} else{
+				while (!returnVal.endsWith("\r\n$ ")
+						&& !returnVal.contains("\r\n# ") && (newByte != -1))
+				{
+					newByte = termIn.read();
+					returnVal += (char)newByte;
+				}
 			}
 
 		}
