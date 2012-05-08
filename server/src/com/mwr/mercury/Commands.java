@@ -1279,6 +1279,45 @@ public class Commands
 			}
 		}));
 		
+		//provider.finduri(path) - returns a list of uris in the target
+		commandList.add(new CommandWrapper("provider", "finduri", new Executor()
+		{
+			
+			@Override
+			public void execute(List<ArgumentWrapper> argsArray, Session currentSession)
+			{		
+				//Get path from arguments
+				String path = Common.getParamString(argsArray, "path");
+				
+				//Get all strings from the file
+				ArrayList<String> fullLines = Common.strings(path);
+				
+				//Filter URI 								
+				ArrayList<String> lines = new ArrayList<String>();
+				
+				for (String line : fullLines) {
+					if (line.toUpperCase().contains("CONTENT://") &&
+							!line.toUpperCase().equals("CONTENT://")) {
+						lines.add(line);
+					}
+				}
+								
+				Iterator<String> it = lines.iterator();
+				
+				currentSession.startTransmission();
+				currentSession.startResponse();
+				currentSession.startData();
+				
+				while (it.hasNext())
+					currentSession.send(it.next() + "\n", true); //Send this with newline
+				
+				currentSession.endData();
+				currentSession.noError();
+				currentSession.endResponse();
+				currentSession.endTransmission();				
+			}
+		}));
+		
 		
 		/*************************************************************************************/
 		/** Command section - PACKAGES

@@ -17,4 +17,16 @@
 # This makefile supplies the rules for building a library of JNI code for
 # use by our example of how to bundle a shared library with an APK.
 
-include $(call all-subdir-makefiles)
+LOCAL_PATH:= $(call my-dir)
+include $(CLEAR_VARS)
+
+# This is the target being built.
+LOCAL_MODULE:= libjackpal-androidterm3
+
+# All of the source files that we will compile.
+LOCAL_SRC_FILES:= \
+  termExec.cpp
+
+LOCAL_LDLIBS := -ldl -llog
+
+include $(BUILD_SHARED_LIBRARY)
