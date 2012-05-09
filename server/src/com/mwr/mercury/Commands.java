@@ -23,6 +23,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PathPermission;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
@@ -1278,8 +1279,157 @@ public class Commands
 				
 			}
 		}));
-		
-		
+
+		/*
+		 * Command added by Luander <luander.r@samsung.com>
+		 * 
+		 * USAGE:
+		 * This is a command that lists all content providers on the phone and 
+		 * then tries to query those providers without using any permission.
+		 * 
+		 * If the query succeeds, it means the content provider is open for any
+		 * application to read its data, that could be a security flaw.
+		 */
+		commandList.add(new CommandWrapper("provider", "securityscan", new Executor()
+		{
+
+			@Override
+			public void execute(List<ArgumentWrapper> argsArray, Session currentSession)
+			{
+				// Assign filter and permissions if they came in the arguments
+				String filter = Common.getParamString(argsArray, "filter");
+				String filterPackage = Common.getParamString(argsArray, "package");
+				
+				if (!(filter.equalsIgnoreCase("vulnerable") || filter.equalsIgnoreCase("safe") || filter.equalsIgnoreCase("")))
+				{
+					currentSession.sendFullTransmission("filter "+ filter + " is not recognised\nPlase use \"vulnerable\" or \"safe\"", "");
+				}
+				// Get contentResolver to make queries in providers
+				ContentResolver mContentResolver = currentSession.applicationContext.getContentResolver();
+
+				currentSession.startTransmission();
+				currentSession.startResponse();
+				currentSession.startData();
+
+				// Get all providers and iterate through them
+				// If package filter is activated, only one package 
+				// will be analyzed.
+				List<PackageInfo> packages = new ArrayList<PackageInfo>();
+				if ("" != filterPackage)
+				{
+					try
+					{
+						packages.add(currentSession.applicationContext
+						.getPackageManager().getPackageInfo(filterPackage, PackageManager.GET_PROVIDERS));
+					}
+					catch (NameNotFoundException e)
+					{
+						currentSession.sendFullTransmission("Package name not found", "");
+					}
+				} else {
+					packages = currentSession.applicationContext
+							.getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS);
+				}
+
+				int vulnerableCount = 0;
+				// Iterate through content providers
+				for (PackageInfo pkgInfo : packages)
+				{
+					// List of URIs of the content providers
+					List<String> uris = new ArrayList<String>();
+					if (null != pkgInfo.providers)
+					{
+						// Gets information about de application
+						ApplicationInfo pkg = pkgInfo.applicationInfo;
+
+						if (null != pkg)
+						{
+							// This section makes file operations to find the
+							// content providers URIs to query the providers
+							String appDir = pkg.publicSourceDir;
+							// Check if an odex file exists for the package
+							if (new File(appDir.replace(".apk", ".odex")).exists()){
+								appDir += "\n" + appDir.replace(".apk", ".odex");
+							}
+
+							for (String dir : appDir.split("\n"))
+							{
+								ArrayList<String> lines;
+								if (dir.contains(".odex"))
+								{
+									lines = Common.strings(dir);
+								}
+								else
+								{
+									// Unzip .apk file
+									Common.unzipClassesDex(appDir,
+											currentSession.applicationContext.getFilesDir()
+													.getPath());
+									lines = Common
+											.strings(currentSession.applicationContext
+													.getFilesDir().getPath()
+													+ "classes.dex");
+									new File("/data/data/com.mwr.mercury/classes.dex").delete();
+								}
+								for (String line : lines)
+								{
+									if (line.toUpperCase().contains("CONTENT://"))
+									{
+										if (!line.equalsIgnoreCase("CONTENT://"))
+										{
+											uris.add(line.substring(line.indexOf("c")));
+										}
+									}
+								}
+							}
+
+							for (String uri : uris)
+							{
+								try
+								{
+									Cursor cursor = mContentResolver.query(Uri.parse(uri),
+											null, null, null, null);
+									if (null != cursor){
+										if((0 < cursor.getColumnCount()) || (0 < cursor.getCount())){
+											if ("" == filter || filter.equalsIgnoreCase("vulnerable"))
+											{
+												currentSession.send("VULNERABLE "
+														+ pkgInfo.packageName
+														+ " -> " + "uri: " + uri + " " + "\n", true);
+											}
+											vulnerableCount++;
+										}
+									}
+									cursor.close();
+								}
+								catch (Exception e)
+								{
+									if ("" == filter || filter.equalsIgnoreCase("safe"))
+									{
+										currentSession.send("SAFE " +
+												pkgInfo.packageName + " -> " + "uri: "
+														+ uri + " "
+														+ "\n",
+												true);
+									}
+								}
+							}
+							uris = null;
+						}
+					}
+				}
+
+				currentSession.send("Vulnerable providers found: "
+						+ vulnerableCount + "\nDONE!",
+						true);
+				currentSession.endData();
+				currentSession.noError();
+				currentSession.endResponse();
+				currentSession.endTransmission();
+			}
+		}));
+
+
 		/*************************************************************************************/
 		/** Command section - PACKAGES
 		/*************************************************************************************/
