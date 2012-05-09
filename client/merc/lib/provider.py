@@ -292,13 +292,13 @@ usage: finduri packageName
     def do_securityscan(self, args):
         """
 Get access information about all content providers with optional filter
-usage: info [--filter <filter>]
+usage: securityscan [--filter <vulnerable | safe>] [--package <package name>]
         """
 
         # Define command-line arguments using argparse
         parser = argparse.ArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
-        parser.add_argument('--permissions', '-p', metavar = '<filter>')
+        parser.add_argument('--package', metavar = '<filter>')
 
 
         try:

@@ -23,6 +23,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PathPermission;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
@@ -1297,6 +1298,8 @@ public class Commands
 			{
 				// Assign filter and permissions if they came in the arguments
 				String filter = Common.getParamString(argsArray, "filter");
+				String filterPackage = Common.getParamString(argsArray, "package");
+				
 				if (!(filter.equalsIgnoreCase("vulnerable") || filter.equalsIgnoreCase("safe") || filter.equalsIgnoreCase("")))
 				{
 					currentSession.sendFullTransmission("filter "+ filter + " is not recognised\nPlase use \"vulnerable\" or \"safe\"", "");
@@ -1309,8 +1312,24 @@ public class Commands
 				currentSession.startData();
 
 				// Get all providers and iterate through them
-				 List<PackageInfo> packages = currentSession.applicationContext
-						.getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS);
+				// If package filter is activated, only one package 
+				// will be analyzed.
+				List<PackageInfo> packages = new ArrayList<PackageInfo>();
+				if ("" != filterPackage)
+				{
+					try
+					{
+						packages.add(currentSession.applicationContext
+						.getPackageManager().getPackageInfo(filterPackage, PackageManager.GET_PROVIDERS));
+					}
+					catch (NameNotFoundException e)
+					{
+						currentSession.sendFullTransmission("Package name not found", "");
+					}
+				} else {
+					packages = currentSession.applicationContext
+							.getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS);
+				}
 
 				int vulnerableCount = 0;
 				// Iterate through content providers
@@ -1352,11 +1371,14 @@ public class Commands
 													+ "classes.dex");
 									new File("/data/data/com.mwr.mercury/classes.dex").delete();
 								}
-								for (String string : lines)
+								for (String line : lines)
 								{
-									if (string.toUpperCase().contains("CONTENT://"))
+									if (line.toUpperCase().contains("CONTENT://"))
 									{
-										uris.add(string.substring(string.indexOf("c")));
+										if (!line.equalsIgnoreCase("CONTENT://"))
+										{
+											uris.add(line.substring(line.indexOf("c")));
+										}
 									}
 								}
 							}
