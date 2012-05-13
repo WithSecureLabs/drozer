@@ -322,7 +322,7 @@ public class Common
 				if (arg.type.toUpperCase().equals("DATA"))
 					localIntent.setData(Uri.parse(new String(arg.value)));
 					
-				if (arg.type.toUpperCase().equals("MIME_TYPE"))
+				if (arg.type.toUpperCase().equals("MIMETYPE"))
 					localIntent.setType(new String(arg.value));
 
 				if (arg.type.toUpperCase().equals("CATEGORY"))
@@ -334,31 +334,31 @@ public class Common
 				if (arg.type.toUpperCase().equals("FLAGS"))
 					localIntent.setFlags(Integer.parseInt(new String(arg.value)));
 					
-				if (arg.type.toUpperCase().equals("EXTRA-BOOLEAN"))
+				if (arg.type.toUpperCase().equals("EXTRABOOLEAN"))
 					localIntent.putExtra(key, Boolean.parseBoolean(value));
 					
-				if (arg.type.toUpperCase().equals("EXTRA-BYTE"))
+				if (arg.type.toUpperCase().equals("EXTRABYTE"))
 					localIntent.putExtra(key, Byte.parseByte(value));
 					
-				if (arg.type.toUpperCase().equals("EXTRA-DOUBLE"))
+				if (arg.type.toUpperCase().equals("EXTRADOUBLE"))
 					localIntent.putExtra(key, Double.parseDouble(value));
 					
-				if (arg.type.toUpperCase().equals("EXTRA-FLOAT"))
+				if (arg.type.toUpperCase().equals("EXTRAFLOAT"))
 					localIntent.putExtra(key, Float.parseFloat(value));
 					
-				if (arg.type.toUpperCase().equals("EXTRA-INTEGER"))
+				if (arg.type.toUpperCase().equals("EXTRAINTEGER"))
 					localIntent.putExtra(key, Integer.parseInt(value));
 					
-				if (arg.type.toUpperCase().equals("EXTRA-LONG"))
+				if (arg.type.toUpperCase().equals("EXTRALONG"))
 					localIntent.putExtra(key, Long.parseLong(value));
 					
-				if (arg.type.toUpperCase().equals("EXTRA-SERIALIZABLE"))
+				if (arg.type.toUpperCase().equals("EXTRASERIALIZABLE"))
 					localIntent.putExtra(key, Serializable.class.cast(value));
 					
-				if (arg.type.toUpperCase().equals("EXTRA-SHORT"))
+				if (arg.type.toUpperCase().equals("EXTRASHORT"))
 					localIntent.putExtra(key, Short.parseShort(value));
 					
-				if (arg.type.toUpperCase().equals("EXTRA-STRING"))
+				if (arg.type.toUpperCase().equals("EXTRASTRING"))
 					localIntent.putExtra(key, value);
 					
 			}

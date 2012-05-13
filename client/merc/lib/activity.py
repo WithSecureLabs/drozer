@@ -22,7 +22,7 @@ class Activity(BaseCmd):
 Start an activity with an intent
 usage: start [--action <action>] [--category <category> [<category> ...]]
              [--component package class] [--data <data>]
-             [--flags <0x...>] [--mimetype <mime_type>]
+             [--flags <0x...>] [--mimetype <mimetype>]
              [--extraboolean key=value [key=value ...]]
              [--extrabyte key=value [key=value ...]]
              [--extradouble key=value [key=value ...]]
@@ -41,7 +41,7 @@ usage: start [--action <action>] [--category <category> [<category> ...]]
         parser.add_argument('--component', '-co', nargs = 2, metavar = ('package', 'class'))
         parser.add_argument('--data', '-d', metavar = '<data>')
         parser.add_argument('--flags', '-f', metavar = '<0x...>')
-        parser.add_argument('--mimetype', '-dt', metavar = '<mime_type>')
+        parser.add_argument('--mimetype', '-dt', metavar = '<mimetype>')
         parser.add_argument('--extraboolean', '-eb', nargs = '+', metavar = 'key=value')
         parser.add_argument('--extrabyte', '-eby', nargs = '+', metavar = 'key=value')
         parser.add_argument('--extradouble', '-ed', nargs = '+', metavar = 'key=value')
@@ -96,7 +96,7 @@ usage: start [--action <action>] [--category <category> [<category> ...]]
 Find which apps can handle the given intent
 usage: match [--action <action>] [--category <category> [<category> ...]]
              [--component package class] [--data <data>]
-             [--flags <0x...>] [--mimetype <mime_type>]
+             [--flags <0x...>] [--mimetype <mimetype>]
              [--extraboolean key=value [key=value ...]]
              [--extrabyte key=value [key=value ...]]
              [--extradouble key=value [key=value ...]]
@@ -115,7 +115,7 @@ usage: match [--action <action>] [--category <category> [<category> ...]]
         parser.add_argument('--component', '-co', nargs = 2, metavar = ('package', 'class'))
         parser.add_argument('--data', '-d', metavar = '<data>')
         parser.add_argument('--flags', '-f', metavar = '<0x...>')
-        parser.add_argument('--mimetype', '-dt', metavar = '<mime_type>')
+        parser.add_argument('--mimetype', '-dt', metavar = '<mimetype>')
         parser.add_argument('--extraboolean', '-eb', nargs = '+', metavar = 'key=value')
         parser.add_argument('--extrabyte', '-eby', nargs = '+', metavar = 'key=value')
         parser.add_argument('--extradouble', '-ed', nargs = '+', metavar = 'key=value')
