@@ -262,7 +262,7 @@ usage: finduri packageName
 
                     else:
 
-                        strings = self.session.executeCommand("core", "strings", {'path':'/data/data/com.mwr.mercury/classes.dex'}).data
+                        strings = self.session.executeCommand("provider", "finduri", {'path':'/data/data/com.mwr.mercury/classes.dex'}).data
 
                         for string in strings.split():
                             if (("CONTENT://" in string.upper()) and ("CONTENT://" != string.upper())):
