@@ -63,17 +63,21 @@ Execute Linux commands one at a time (no persistent shell is maintained) within 
             while (prompt.upper() != "BACK"):
                 # When executing commands, first place user back in the same directory then execute command with trailing pwd to get cwd
                 command = "cd " + cwd + ";" + prompt + ";pwd"
-                result = self.session.executeCommand("shell", "executeSingleCommand", {'args':command}).getErrorOrData().split("\n")
-
-                # Parse out cwd
-                if ("**Network Error**" not in result[-1]):
-                    cwd = result[-1]
-
-                    # Print result
-                    for i in result[:-1]:
-                        print i
-                else:
-                    print result[-1]
+                
+                # Check that blank input was not entered
+                if len(prompt) > 0:
+                
+                    result = self.session.executeCommand("shell", "executeSingleCommand", {'args':command}).getErrorOrData().split("\n")
+    
+                    # Parse out cwd
+                    if ("**Network Error**" not in result[-1]):
+                        cwd = result[-1]
+    
+                        # Print result
+                        for i in result[:-1]:
+                            print i
+                    else:
+                        print result[-1]
 
                 prompt = raw_input("oneoffshell:" + cwd + "$ ").replace("$BB", "/data/data/com.mwr.mercury/busybox")
 
