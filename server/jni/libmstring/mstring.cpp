@@ -138,6 +138,8 @@ int strings_file(const char* path) {
 
 		c_byte = read_char(file);
 	}
+	
+	string_list[cur_size] = '\0';
 
 	fclose(file);
 
