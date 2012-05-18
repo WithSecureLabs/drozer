@@ -1,0 +1,5 @@
+# This little hack keeps the gen/ folder in the repo to and
+# avoid some eclipse error messages, but ignores everything
+# inside the folder.
+*
+!.gitignore
