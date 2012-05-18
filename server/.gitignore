@@ -1,0 +1,4 @@
+bin/*
+obj/*
+gen/*
+!bin/mercury.apk
