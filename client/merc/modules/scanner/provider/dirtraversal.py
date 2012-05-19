@@ -7,7 +7,7 @@ Credit: Nils - MWR Labs"""
 
     def __init__(self, *args, **kwargs):
         Module.__init__(self, *args, **kwargs)
-        self.path = ["auxiliary"]
+        self.path = ["scanner", "provider"]
 
     def execute(self, session, _arg):
         # list all authorities

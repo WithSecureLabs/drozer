@@ -2,14 +2,14 @@ from merc.lib.modules import Module
 import re, string
 
 class ProviderScan(Module):
-    """Usage: run information.providerscan --arg <filter>
+    """Usage: run scanner.provider.providerscan --arg <filter>
     Search for all packages and tries to query respective providers, a filter can be added to restrict queries to a specific package 
     Credit: Luander <luander.r@samsung.com> - Samsung SIDI 
     """
 
     def __init__(self, *args, **kwargs):
         Module.__init__(self, *args, **kwargs)
-        self.path = ["information"]
+        self.path = ["scanner", "provider"]
         
     def execute(self, session, _arg):
 

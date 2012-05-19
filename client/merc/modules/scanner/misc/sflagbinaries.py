@@ -1,12 +1,12 @@
 from merc.lib.modules import Module
 
-class sbitbinaries(Module):
+class sflagbinaries(Module):
     """Description: Find all the suid/sgid binaries in the /system folder - uses method from http://hexesec.wordpress.com/2009/10/14/exploiting-suid-binaries/
 Credit: Tyrone Erasmus - MWR Labs"""
 
     def __init__(self, *args, **kwargs):
         Module.__init__(self, *args, **kwargs)
-        self.path = ["information"]
+        self.path = ["scanner", "misc"]
 
     def execute(self, session, _arg):
 
