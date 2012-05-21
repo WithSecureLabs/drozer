@@ -1,2 +1,4 @@
-bin/*
+bin/
+gen/
+obj/
 !bin/mercury-server.apk
