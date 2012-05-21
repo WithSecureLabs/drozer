@@ -11,7 +11,7 @@ import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 
-class Session
+public class Session
 {
 	private BufferedReader input;
 	private PrintWriter output;

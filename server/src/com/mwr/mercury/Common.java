@@ -30,13 +30,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
-//A class to wrap arguments in
-class ArgumentWrapper
-{
-	public String type;
-	public byte[] value;
-}
-
 //An interface to use in CommandWrapper to better define Commands
 interface Executor { public void execute(List<ArgumentWrapper> argsArray, Session currentSession); }
 
