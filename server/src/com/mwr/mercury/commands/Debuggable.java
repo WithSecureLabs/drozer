@@ -1,13 +1,16 @@
+// License: Refer to the README in the root directory
+
 package com.mwr.mercury.commands;
+
+import java.util.List;
+
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import com.mwr.mercury.ArgumentWrapper;
 import com.mwr.mercury.Common;
 import com.mwr.mercury.Session;
-
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-
-import java.util.List;
 
 public class Debuggable
 {
@@ -19,7 +22,7 @@ public class Debuggable
 		String returnValue = "";
 		
 		//Get all packages from packagemanager
-		List <PackageInfo> packages = currentSession.applicationContext.getPackageManager().getInstalledPackages(0);
+		List <PackageInfo> packages = currentSession.applicationContext.getPackageManager().getInstalledPackages(PackageManager.GET_PERMISSIONS);
 		
 		//Iterate through packages
 		for (PackageInfo package_:packages)
