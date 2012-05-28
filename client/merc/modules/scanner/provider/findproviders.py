@@ -40,7 +40,7 @@ Updated by: Tyrone - MWR Labs"""
         uris = []
         
         # Get content uris out of all packages dex and odex files
-        reqres = session.executeCommand("packages", "info", {"filter":_arg}).getPaddedErrorOrData()
+        reqres = session.executeCommand("packages", "info", None).getPaddedErrorOrData()
         packlist = re.findall('(?<=Package name: ).+', reqres)
         
         for package in packlist:
