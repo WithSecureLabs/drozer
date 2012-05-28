@@ -29,7 +29,9 @@ Credit: Rob M && Tyrone Erasmus - MWR Labs"""
         # Get list of all packages
         packagesinfo = session.executeCommand("packages", "info", {}).getPaddedErrorOrData()
         packages = re.findall('(?<=Package name: ).+', packagesinfo)
+        
         for package in packages:
+            
             path = session.executeCommand("packages", "path", {'packageName':package}).data
             
             # Iterate through paths returned
@@ -66,24 +68,24 @@ Credit: Rob M && Tyrone Erasmus - MWR Labs"""
             selectioninject = session.executeCommand("provider", "query", {"Uri":uri, "selection":"'"})
             
             if "unrecognized token" in projectioninject.error:
-                print "Injection point:", session.color.fail("projection") + " - " + uri
+                print "Injection point:", session.color.red("projection") + " - " + uri
                 
                 if uri not in projectionList:
                         projectionList.append(uri)
             else:
                 if "unrecognized token:" in selectioninject.error:
-                    print "Injection point:", session.color.warning("selection") + " - " + uri
+                    print "Injection point:", session.color.yellow("selection") + " - " + uri
                     
                     if uri not in selectionList:
                         selectionList.append(uri)
                         
         # Generate a summary
-        print session.color.okblue('\n[*] Summary\n    -------')
-        print session.color.fail("\nInjection in projection:")
+        print session.color.blue('\n[*] Summary\n    -------')
+        print session.color.red("\nInjection in projection:")
         for uri in projectionList:
             print uri
             
-        print session.color.fail("\nInjection in selection:")
+        print session.color.red("\nInjection in selection:")
         for uri in selectionList:
             print uri
         print ""
