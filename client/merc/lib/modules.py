@@ -3,7 +3,7 @@
 # License: Refer to the README in the root directory
 #
 
-import os, os.path, sys
+import os.path, sys
 import argparse, shlex
 from basecmd import BaseCmd
 
@@ -13,7 +13,7 @@ class Module(object):
         """ Non-existent constructor """
         self.path = "miscellaneous"
 
-    def execute(self, session, arg):
+    def execute(self, session, args):
         """ Abstract execution function """
 
 class Modules(BaseCmd):
@@ -129,25 +129,37 @@ usage: list [--filter <filter>]
     def do_run(self, args):
         """
 Run a custom module
-usage: run [--arg <arg>] module
+usage: run module [--args arg=value [arg=value ...]]
         """
 
         # Define command-line arguments using argparse
         parser = argparse.ArgumentParser(prog = 'run', add_help = False)
         parser.add_argument('module')
-        parser.add_argument('--arg', '-a', metavar = '<arg>')
+        parser.add_argument('--args', '-a', nargs = '+', metavar = 'arg=value')
 
         try:
 
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
             splitargs = parser.parse_args(shlex.split(args))
 
+            # Compile stated arguments to send to execute
+            args = vars(splitargs)['args']
+            
+            # Convert to a dict
+            args_dict = {}
+            
+            if args:
+                for arg in args:
+                    split = arg.split('=')
+                    if split:
+                        args_dict[split[0]] = split[1]
+
             # Load module
             mod = self.modules.get(splitargs.module, None)
 
             if (mod):
                 # Instantiate the module and execute it
-                mod.execute(self.session, splitargs.arg if splitargs.arg else None)
+                mod.execute(self.session, args_dict)
             else:
                 print "\nFailed to execute module\n"
 
