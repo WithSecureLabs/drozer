@@ -10,9 +10,6 @@ class SessionThread extends Thread
 {
 	Session currentSession;
   
-	//Server version info
-	String version_info = "Mercury v0.1";
-  
 	//Assign session variables
 	SessionThread(Session session)
 	{
