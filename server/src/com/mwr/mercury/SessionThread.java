@@ -29,8 +29,11 @@ class SessionThread extends Thread
 	{
 		while (currentSession.connected)
 		{
+			String received = currentSession.receive();
+			
 			//Pass off command to be handled
-			handleCommand(currentSession.receive());
+			if (received.length() > 0) //Check that it is not null
+				handleCommand(received);
 		}
 		Log.e("mercury", "Exiting thread");
 	}
