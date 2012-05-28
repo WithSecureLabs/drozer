@@ -27,40 +27,40 @@ class Color:
        Write normal text on Windows Command Prompt.
        Added by Luander <luander.r@samsung.com>
     """
-    OKGREEN = "\033[92m"
+    RED = "\033[91m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    BLUE = "\033[94m"
+    PURPLE = "\033[95m"
     ENDC = "\033[0m"
-    FAIL = "\033[91m"
-    HEADER = "\033[95m"
-    OKBLUE = "\033[94m"
-    WARNING = "\033[93m"
 
-    def fail(self, text):
+    def red(self, text):
         if (os.name == "posix"):
-            return self.FAIL + text + self.ENDC
+            return self.RED + text + self.ENDC
         else:
             return text
 
-    def okgreen(self, text):
+    def green(self, text):
         if (os.name == "posix"):
-            return self.OKGREEN + text + self.ENDC
+            return self.GREEN + text + self.ENDC
         else:
             return text
 
-    def warning(self, text):
+    def yellow(self, text):
         if (os.name == "posix"):
-            return self.WARNING + text + self.ENDC
+            return self.YELLOW + text + self.ENDC
         else:
             return text
 
-    def okblue(self, text):
+    def blue(self, text):
         if (os.name == "posix"):
-            return self.OKBLUE + text + self.ENDC
+            return self.BLUE + text + self.ENDC
         else:
             return text
 
-    def header(self, text):
+    def purple(self, text):
         if (os.name == "posix"):
-            return self.HEADER + text + self.ENDC
+            return self.PURPLE + text + self.ENDC
         else:
             return text
 
