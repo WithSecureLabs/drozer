@@ -20,8 +20,10 @@ Return to menu
 
     def do_info(self, args):
         """
-List debuggable apps on the device with optional filter
+Show information about debuggable apps on the device with optional filter
 usage: info [--filter <filter>]
+
+Note: it is possible to use -f instead of --filter as shorthand
         """
 
         # Define command-line arguments using argparse

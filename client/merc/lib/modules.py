@@ -83,7 +83,9 @@ Return to main menu
 
     def do_reload(self, _args):
         """
-Reloads all the modules and regenerates the list of classes 
+Reloads all the modules and regenerates the list of classes.
+
+Developer note: When developing a new module or changing code, remember to reload before running it in order to make the code changes take effect
         """
 
         # Build up the list of modules
@@ -101,6 +103,8 @@ Reloads all the modules and regenerates the list of classes
         """
 List all available modules with optional filter
 usage: list [--filter <filter>]
+
+Note: it is possible to use -f instead of --filter as shorthand
         """
 
         # Define command-line arguments using argparse
@@ -130,6 +134,8 @@ usage: list [--filter <filter>]
         """
 Run a custom module
 usage: run module [--args arg=value [arg=value ...]]
+
+These modules are developed by various members of the community, please feel free to contribute new modules! To find out more information about a module, use "info module" 
         """
 
         # Define command-line arguments using argparse
@@ -180,6 +186,8 @@ usage: run module [--args arg=value [arg=value ...]]
         """
 Get information about a custom module
 usage: info module
+
+Type "list" to get a list of all available modules 
         """
 
         # Define command-line arguments using argparse

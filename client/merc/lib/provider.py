@@ -22,6 +22,13 @@ Return to main menu
         """
 Get the columns of the specified content uri
 usage: columns uri
+
+--------------------------------
+Example - finding the columns on content://settings/secure
+--------------------------------
+*mercury#provider> columns content://settings/secure
+
+_id | name | value
         """
 
         # Define command-line arguments using argparse
@@ -51,6 +58,39 @@ usage: query [--projection <column> [<column> ...]] [--selection <rows>]
              [--selectionArgs <arg> [<arg> ...]] [--sortOrder <order>]
              [--showColumns <true/false>]
              Uri
+             
+The general structure of a content URI is:
+content://authority/table
+
+--------------------------------
+Example - querying the settings content provider
+--------------------------------
+*mercury#provider> query content://settings/secure
+
+_id | name | value
+.....
+
+5 | assisted_gps_enabled | 1
+
+9 | wifi_networks_available_notification_on | 1
+
+10 | sys_storage_full_threshold_bytes | 2097152
+
+11 | sys_storage_threshold_percentage | 10
+
+12 | preferred_network_mode | 3
+
+13 | cdma_cell_broadcast_sms | 1
+
+14 | preferred_cdma_subscription | 1
+
+15 | mock_location | 0
+
+17 | backup_transport | com.google.android.backup/.BackupTransportService
+
+18 | throttle_polling_sec | 600
+
+...
         """
 
         # Define command-line arguments using argparse
@@ -79,6 +119,13 @@ usage: query [--projection <column> [<column> ...]] [--selection <rows>]
         """
 Read from the specified content uri using openInputStream
 usage: read Uri
+
+--------------------------------
+Example - attempting a directory traversal on a content provider that supports file reading
+--------------------------------
+*mercury#provider> read content://settings/secure/../../../../../../../../../../../system/etc/hosts
+
+No files supported by provider at content://settings/secure/../../../../../../../../../../../system/etc/hosts
         """
 
         # Define command-line arguments using argparse
@@ -204,8 +251,55 @@ usage: update [--string column=data [column=data ...]]
 
     def do_info(self, args):
         """
-Get information about exported content providers with optional filter
+Get information about exported content providers with optional filters. . It is possible to search for keywords in content provider information and permissions using the filters.
 usage: info [--filter <filter>] [--permissions <filter>]
+
+--------------------------------
+Example - finding all content provider with the keyword "settings" in them
+--------------------------------
+*mercury#provider> info -f settings
+
+Package name: com.google.android.gsf
+Authority: com.google.settings
+Required Permission - Read: null
+Required Permission - Write: com.google.android.providers.settings.permission.WRITE_GSETTINGS
+Grant Uri Permissions: false
+Multiprocess allowed: false
+
+Package name: com.android.providers.settings
+Authority: settings
+Required Permission - Read: null
+Required Permission - Write: android.permission.WRITE_SETTINGS
+Grant Uri Permissions: false
+Multiprocess allowed: false
+
+--------------------------------
+Example - finding all content providers that do not require any permissions to read from them or write to them
+--------------------------------
+*mercury#provider> info -p null
+
+Package name: com.google.android.gsf
+Authority: com.google.settings
+Required Permission - Read: null
+Required Permission - Write: com.google.android.providers.settings.permission.WRITE_GSETTINGS
+Grant Uri Permissions: false
+Multiprocess allowed: false
+
+Package name: com.android.providers.settings
+Authority: settings
+Required Permission - Read: null
+Required Permission - Write: android.permission.WRITE_SETTINGS
+Grant Uri Permissions: false
+Multiprocess allowed: false
+
+Package name: com.google.android.apps.uploader
+Authority: com.google.android.apps.uploader
+Required Permission - Read: null
+Required Permission - Write: null
+Grant Uri Permissions: false
+Multiprocess allowed: false
+
+...
         """
 
         # Define command-line arguments using argparse
@@ -231,8 +325,21 @@ usage: info [--filter <filter>] [--permissions <filter>]
 
     def do_finduri(self, args):
         """
-Find content uri strings in a package
+Find content uri strings that are referenced in a package
 usage: finduri packageName
+
+--------------------------------
+Example - finding all content URI's referenced in the browser package
+--------------------------------
+*mercury#provider> finduri com.android.browser
+
+/system/app/Browser.apk:
+Contains no classes.dex
+
+/system/app/Browser.odex:
+content://com.google.android.partnersetup.rlzappprovider/
+content://com.google.settings/partner
+
         """
 
         # Define command-line arguments using argparse

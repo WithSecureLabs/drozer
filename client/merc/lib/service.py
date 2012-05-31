@@ -21,8 +21,17 @@ Return to main menu
 
     def do_info(self, args):
         """
-Get information about exported services
-usage: info [--filter <filter>] [--permission <filter>]
+Get information about exported services with optional filters. . It is possible to search for keywords in service information and permissions using the filters.
+usage: info [--filter <filter>] [--permissions <filter>]
+
+--------------------------------
+Example - finding all services with the keyword "bluetooth" in them
+--------------------------------
+*mercury#service> info -f bluetooth
+
+Package name: com.android.bluetooth
+Service: com.android.bluetooth.pbap.BluetoothPbapService
+Required Permission: null
         """
 
         # Define command-line arguments using argparse

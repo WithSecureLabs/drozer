@@ -23,6 +23,28 @@ Return to main menu
         """
 Get information about exported broadcast receivers
 usage: info [--filter <filter>]
+
+Note: it is possible to use -f instead of --filter as shorthand
+
+--------------------------------
+Example - finding which broadcast receivers have the word "bluetooth" in them
+--------------------------------
+*mercury#broadcast> info -f bluetooth
+
+Package name: com.android.bluetooth
+Receiver: com.android.bluetooth.opp.BluetoothOppReceiver
+
+Package name: com.android.bluetooth
+Receiver: com.android.bluetooth.pbap.BluetoothPbapReceiver
+
+Package name: com.android.settings
+Receiver: com.android.settings.bluetooth.DockEventReceiver
+
+Package name: com.android.settings
+Receiver: com.android.settings.bluetooth.BluetoothPairingRequest
+
+Package name: com.android.settings
+Receiver: com.android.settings.bluetooth.BluetoothPermissionRequest
         """
 
         # Define command-line arguments using argparse
@@ -42,7 +64,7 @@ usage: info [--filter <filter>]
 
     def do_send(self, args):
         """
-Send a broadcast with an intent
+Send a broadcast with the formulated intent.
 usage: send [--action <action>] [--category <category> [<category> ...]]
             [--component package class] [--data <data>]
             [--flags <0x...>] [--mimetype <mimetype>]
@@ -55,6 +77,13 @@ usage: send [--action <action>] [--category <category> [<category> ...]]
             [--extraserializable key=value [key=value ...]]
             [--extrashort key=value [key=value ...]]
             [--extrastring key=value [key=value ...]]
+            
+--------------------------------
+Example - sending a BOOT_COMPLETED broadcast that we do not have the permissions for
+--------------------------------
+*mercury#broadcast> send --action android.intent.action.BOOT_COMPLETED
+
+Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMPLETED from pid=1828, uid=10116
         """
 
         # Define command-line arguments using argparse

@@ -22,7 +22,7 @@ Return to main menu
 
     def do_persistent(self, args):
         """
-Execute Linux commands in a persistent shell within the context of Mercury
+Execute Linux commands in a persistent shell within the context of Mercury. The use of the word "persistent" means that a connection is maintained to the same shell session. This means that the state of the shell persists. If root were to be obtained on this shell, it would persist across the life of the shell connection.
 usage: persistent [--new]
         """
 
@@ -52,7 +52,9 @@ usage: persistent [--new]
 
     def do_oneoff(self, _args):
         """
-Execute Linux commands one at a time (no persistent shell is maintained) within the context of Mercury
+Execute Linux commands one at a time (no persistent shell is maintained) within the context of Mercury. The state of the current working directory is maintained for convenience, but this does not actually persist in the shell session.
+
+Put in simpler terms: a command is received -> new shell session is opened -> command is executed -> reply is received -> shell session is closed
         """
 
         cwd = "/data/data/com.mwr.mercury"

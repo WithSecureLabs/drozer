@@ -23,6 +23,14 @@ Return to main menu
         """
 Download a file from the device
 usage: download filepath downloadfolder
+
+--------------------------------
+Example - downloading a file to the Desktop
+--------------------------------
+*mercury#tools> download /mnt/sdcard/test.txt /home/mwrlabs/Desktop/
+
+File downloaded successfully
+MD5 = 3fae15887320940b88df79fe01e62bd8
         """
 
         # Define command-line arguments using argparse
@@ -68,6 +76,14 @@ usage: download filepath downloadfolder
         """
 Upload a file to the device
 usage: upload [--uploadFolder <uploadFolder>] localPath
+
+--------------------------------
+Example - uploading a file from the Desktop to the Mercury data directory
+--------------------------------
+*mercury#tools> upload /home/tyrone/Desktop/upload.txt
+
+File uploaded successfully to /data/data/com.mwr.mercury/
+MD5: 3fae15887320940b88df79fe01e62bd8
         """
 
         # Define command-line arguments using argparse
@@ -119,6 +135,14 @@ usage: upload [--uploadFolder <uploadFolder>] localPath
         """
 Get size and MD5 of specified file on the device
 usage: fileinfo path
+
+--------------------------------
+Example - getting information about a file on the Android device
+--------------------------------
+*mercury#tools> fileinfo /data/data/com.mwr.mercury/test.txt
+
+Size (bytes) = 182208
+MD5 = 3fae15887320940b88df79fe01e62bd8
         """
 
         # Define command-line arguments using argparse
@@ -145,6 +169,15 @@ usage: fileinfo path
         """
 List all actions/categories/extras with optional search filter
 usage: intents [--filter <filter>]
+
+--------------------------------
+Example - getting all the intents actions with the keyword "call" in them
+--------------------------------
+*mercury#tools> intents -f call
+
+android.intent.action.CALL
+android.intent.action.CALL_BUTTON
+android.intent.action.NEW_OUTGOING_CALL
         """
 
         # Define command-line arguments using argparse

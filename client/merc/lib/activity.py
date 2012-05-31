@@ -19,7 +19,7 @@ class Activity(BaseCmd):
 
     def do_start(self, args):
         """
-Start an activity with an intent
+Start an activity with the formulated intent.
 usage: start [--action <action>] [--category <category> [<category> ...]]
              [--component package class] [--data <data>]
              [--flags <0x...>] [--mimetype <mimetype>]
@@ -32,6 +32,20 @@ usage: start [--action <action>] [--category <category> [<category> ...]]
              [--extraserializable key=value [key=value ...]]
              [--extrashort key=value [key=value ...]]
              [--extrastring key=value [key=value ...]]
+
+--------------------------------
+Example - starting the browser activity with an explicit intent
+--------------------------------
+*mercury#activity> start --component com.android.browser com.android.browser.BrowserActivity --flags 0x10000000
+
+Activity started with Intent { flg=0x10000000 cmp=com.android.browser/.BrowserActivity }
+
+--------------------------------
+Example - starting a browser activity with an implicit intent
+--------------------------------
+*mercury#activity> start --action android.intent.action.VIEW --data http://www.google.com --flags 0x10000000
+
+Activity started with Intent { act=android.intent.action.VIEW dat=http://www.google.com flg=0x10000000 }
         """
 
         # Define command-line arguments using argparse
@@ -93,7 +107,7 @@ usage: start [--action <action>] [--category <category> [<category> ...]]
 
     def do_match(self, args):
         """
-Find which apps can handle the given intent
+Find which activities on the device can handle the formulated intent
 usage: match [--action <action>] [--category <category> [<category> ...]]
              [--component package class] [--data <data>]
              [--flags <0x...>] [--mimetype <mimetype>]
@@ -106,6 +120,16 @@ usage: match [--action <action>] [--category <category> [<category> ...]]
              [--extraserializable key=value [key=value ...]]
              [--extrashort key=value [key=value ...]]
              [--extrastring key=value [key=value ...]]
+
+--------------------------------
+Example - finding activities that can handle web addresses
+--------------------------------
+*mercury#activity> match --action android.intent.action.VIEW --data http://www.google.com
+
+Intent { act=android.intent.action.VIEW dat=http://www.google.com }:
+
+Package name: com.android.browser
+Target activity: com.android.browser.BrowserActivity
         """
 
         # Define command-line arguments using argparse
@@ -164,8 +188,30 @@ usage: match [--action <action>] [--category <category> [<category> ...]]
 
     def do_info(self, args):
         """
-Get information about exported activities
+Get information about exported activities on the device
 usage: info [--filter <filter>]
+
+Note: it is possible to use -f instead of --filter as shorthand
+
+--------------------------------
+Example - finding which activities are exported by the Android browser package
+--------------------------------
+*mercury#activity> info -f com.android.browser
+
+Package name: com.android.browser
+Activity: com.android.browser.BrowserActivity
+
+Package name: com.android.browser
+Activity: com.android.browser.CombinedBookmarkHistoryActivity
+
+Package name: com.android.browser
+Activity: com.android.browser.ShortcutBookmarksPage
+
+Package name: com.android.browser
+Activity: com.android.browser.BookmarkSearch
+
+Package name: com.android.browser
+Activity: com.android.browser.AddBookmarkPage
         """
 
         # Define command-line arguments using argparse
@@ -187,6 +233,14 @@ usage: info [--filter <filter>]
         """
 Get the launch intent of the given package
 usage: launchintent packageName
+
+--------------------------------
+Example - getting the main activity of the Android browser package
+--------------------------------
+
+*mercury#activity> launchintent com.android.browser
+
+Intent { act=android.intent.action.MAIN flg=0x10000000 cmp=com.android.browser/.BrowserActivity }
         """
 
         # Define command-line arguments using argparse
