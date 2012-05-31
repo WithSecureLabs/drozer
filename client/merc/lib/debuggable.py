@@ -35,7 +35,12 @@ Note: it is possible to use -f instead of --filter as shorthand
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
             splitargs = parser.parse_args(shlex.split(args))
 
-            print self.session.executeCommand("debuggable", "info", {'filter':splitargs.filter} if splitargs.filter else None).getPaddedErrorOrData()
+            response = self.session.executeCommand("debuggable", "info", {'filter':splitargs.filter} if splitargs.filter else None).getPaddedErrorOrData()
+
+            if response.strip() == "":
+                print "\nNo debuggable applications found\n"
+            else:
+                print response
 
         # FIXME: Choose specific exceptions to catch
         except:
