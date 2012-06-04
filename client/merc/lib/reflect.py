@@ -86,7 +86,13 @@ class Reflect(object):
         response = self._transceive(etree.tostring(transmission, encoding = 'UTF-8'))
 
         if response:
-            respelem = etree.fromstring(response).find('return-value')
+            respelem = etree.fromstring(response).find('reflect/return-value')
+
+            # Check we got back what we expected
+            if not respelem:
+                raise IOError("Transmission XML response does not contain return-value")
+
+            # Process it based on whether it was a success or failure
             if respelem.get('type') == 'success' and len(respelem) == 1:
                 return ElementToReflectedType(respelem[0], self)
             elif respelem.get('type') == 'success' and len(respelem) != 1:
