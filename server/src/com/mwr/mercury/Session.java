@@ -45,8 +45,9 @@ public class Session
 			while (!input.ready());
 			
 			//Read from socket
-			String content = input.readLine();
-			
+			//String content = input.readLine();
+			String content = readTransmission(input);
+					
 			//Maintain whether connection is still connected or not
 			if (content == null)
 				connected = false;
@@ -61,6 +62,19 @@ public class Session
 		}
 	}
 	
+	private String readTransmission(BufferedReader in) throws IOException
+	{
+		String out = "";
+		int cur = in.read();
+		while(cur == '\n' || cur  == '\r' || cur == ' ') cur = in.read();
+		while(true) {
+			out += (char)cur;
+			if(out.endsWith("</transmission>"))
+				return out;
+			cur = in.read();
+		}
+	}
+
 	//Write to session - return success
 	public boolean send(String data, boolean base64)
 	{
