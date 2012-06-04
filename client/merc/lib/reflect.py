@@ -55,8 +55,6 @@ class Reflect(object):
             return data
 
         except (socket.error, KeyboardInterrupt):
-            import pdb
-            pdb.set_trace()
             # If we fail for a reason we know, return nothing
             try:
                 self.session.closeSocket()
