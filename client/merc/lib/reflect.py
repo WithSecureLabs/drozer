@@ -41,11 +41,10 @@ class Reflect(object):
 
             # Receive until the socket is closed
             buf = self.session.socketConn.recv(1024)
-            print repr(buf)
             output = [buf]
             while buf:
                 buf = self.session.socketConn.recv(1024)
-                output.append(buffer)
+                output.append(buf)
             data = "".join(output)
 
             # Close socket
