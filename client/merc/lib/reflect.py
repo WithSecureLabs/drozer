@@ -5,8 +5,16 @@
 import math
 import socket
 import common
+import logging
 import functools
 import xml.etree.cElementTree as etree
+
+logging.basicConfig(name = 'Reflect', level = logging.DEBUG)
+logsend = logging.getLogger(" -> ")
+logrecv = logging.getLogger(" <- ")
+
+class JavaReflectionException(Exception):
+    pass
 
 class Reflect(object):
 
@@ -82,8 +90,11 @@ class Reflect(object):
             for arg in args[numargs:]:
                 addelem.append(ReflectedTypeFactory(arg, self).to_element())
 
+        logsend.debug(etree.tostring(transmission, encoding = 'UTF-8'))
+
         # We must specify the encoding, or we won't get the <?xml ?> declaration
         response = self._transceive(etree.tostring(transmission, encoding = 'UTF-8'))
+        logrecv.debug(response)
 
         if response:
             respelem = etree.fromstring(response).find('reflect/return-value')
@@ -98,7 +109,7 @@ class Reflect(object):
             elif respelem.get('type') == 'success' and len(respelem) != 1:
                 raise TypeError("Success response does not have exactly one response element")
             else:
-                raise BaseException(respelem.get('exception', 'Unknown error occurred'))
+                raise JavaReflectionException(respelem.get('errormsg', 'Unknown error occurred'))
         else:
             raise IOError(1, 'Empty response retrieved from action')
 
