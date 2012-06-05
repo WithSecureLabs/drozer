@@ -3,6 +3,7 @@ package com.mwr.mercury.reflect;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 public class Reflector
 {
@@ -144,8 +145,17 @@ public class Reflector
 	{
 		Class[] ret = new Class[arguments.length];
 		int i = 0;
+		// byte, short, int, long, float, double, boolean, char
 		for(Object arg : arguments) {
-			ret[i++] = arg.getClass();
+			if(arg instanceof Integer) ret[i++] = Integer.TYPE;
+			else if(arg instanceof Short) ret[i++] = Short.TYPE;
+			else if(arg instanceof Byte) ret[i++] = Byte.TYPE;
+			else if(arg instanceof Long) ret[i++] = Long.TYPE;
+			else if(arg instanceof Float) ret[i++] = Float.TYPE;
+			else if(arg instanceof Double) ret[i++] = Double.TYPE;
+			else if(arg instanceof Boolean) ret[i++] = Boolean.TYPE;
+			else if(arg instanceof Character) ret[i++] = Character.TYPE;
+			else ret[i++] = arg.getClass();
 		}
 		return ret;
 	}
@@ -153,15 +163,15 @@ public class Reflector
 	public Object invoke(Object obj, String methodName, Object[] a) throws Exception
 	{
 		Class cls = null;
-		if(obj instanceof Class) {
+		Class[] p = getParameterType(a);
+		if(obj instanceof Class && isStatic(obj, methodName, p)) {
 			// static method
 			cls = (Class)obj;
 			obj = null;
 		} else {
 			cls = obj.getClass();
 		}
-		Class[] p = getParameterType(a);
-		Method m = cls.getMethod(methodName, p);
+		Method m = getMethod(cls, methodName, p);
 		switch(a.length) {
 		case 0:
 			return m.invoke(obj);
@@ -197,16 +207,62 @@ public class Reflector
 			Object[] arguments) throws Exception
 	{
 		Class cls = null;
-		if(obj instanceof Class) {
+		Class[] p = getParameterType(arguments);
+		if(obj instanceof Class && isStatic(obj, methodName, p)) {
 			// static method
 			cls = (Class)obj;
 			obj = null;
 		} else {
 			cls = obj.getClass();
 		}
-		Class[] p = getParameterType(arguments);
-		Method m = cls.getMethod(methodName, p);
+		Method m = getMethod(cls, methodName, p);
 		return m.getReturnType().isPrimitive();
+	}
+
+	private boolean isStatic(Object obj, String methodName, Class[] arguments)
+	{
+		Method m = null;
+		try {
+			m = getMethod((Class) obj, methodName, arguments);
+		} catch(NoSuchMethodException e) {
+			return false;
+		}
+		if(Modifier.isStatic(m.getModifiers()))
+			return true;
+		return false;
+	}
+
+	private Method getMethod(Class c, String m, Class[] a) throws SecurityException, NoSuchMethodException
+	{
+		switch(a.length) {
+		case 0:
+			return c.getMethod(m, null);
+		case 1:
+			return c.getMethod(m,a[0]);
+		case 2:
+			return c.getMethod(m,a[0], a[1]);
+		case 3:
+			return c.getMethod(m,a[0],a[1],a[2]);
+		case 4:
+			return c.getMethod(m,a[0],a[1],a[2],a[3]);
+		case 5:
+			return c.getMethod(m,a[0],a[1],a[2],a[3],a[4]);
+		case 6:
+			return c.getMethod(m,a[0],a[1],a[2],a[3],a[4],a[5]);
+		case 7:
+			return c.getMethod(m,a[0],a[1],a[2],a[3],a[4],a[5],a[6]);
+		case 8:
+			return c.getMethod(m,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
+		case 9:
+			return c.getMethod(m,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8]);
+		case 10:
+			return c.getMethod(m,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9]);
+		case 11:
+			return c.getMethod(m,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10]);
+		case 12:
+			return c.getMethod(m,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11]);
+		}
+		return null;
 	}
 
 }

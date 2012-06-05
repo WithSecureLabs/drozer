@@ -83,6 +83,8 @@ public class ReflectParser
 			return parseDeleteAll();
 		} else if(name.equals("getprop")) {
 			return parseGetProp(node);
+		} else if(name.equals("setprop")) {
+			return parseSetProp(node);
 		} else if(name.equals("construct")) {
 			return parseConstruct(node);
 		} else if(name.equals("invoke")) {
@@ -91,6 +93,32 @@ public class ReflectParser
 			// TODO: return error
 			return true;
 		}
+	}
+
+	private boolean parseSetProp(Node action)
+	{
+		NodeList nodes = action.getChildNodes();
+		if(nodes.item(0).getNodeName().equals("objref")) {
+			String objRef = parseObjRef(nodes.item(0));
+			Object obj = objStore.get(objRef);
+			if(nodes.item(1).getNodeName().equals("string")) {
+				String methodName = nodes.item(1).getTextContent();
+				/*
+				if( nodes.getLength() > 2 ) {
+					Object argument = this.parseArgument(nodes.item(2));
+					Object rv = reflector.setProperty(obj, )
+					this.sendValue(rv, primitive); // assuming that an object constructor never returns a primitive
+				} else {
+					//TODO: error on no arguments
+				}
+				*/
+			} else {
+				//TODO: error on no name
+			}			
+		} else {
+			//TODO: error on no objref
+		}
+		return true;
 	}
 
 	private boolean parseConstruct(Node action) throws Exception
