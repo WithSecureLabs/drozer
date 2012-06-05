@@ -118,13 +118,13 @@ def ReflectedTypeFactory(obj, reflectobj):
     if isinstance(obj, ReflectedType):
         return obj
     elif isinstance(obj, long):
-        return ReflectedPrimative("long", obj, reflect = reflectobj)
+        return Reflectedprimitive("long", obj, reflect = reflectobj)
     elif isinstance(obj, int):
-        return ReflectedPrimative("int", obj, reflect = reflectobj)
+        return Reflectedprimitive("int", obj, reflect = reflectobj)
     elif isinstance(obj, float):
-        return ReflectedPrimative("float", obj, reflect = reflectobj)
+        return Reflectedprimitive("float", obj, reflect = reflectobj)
     elif isinstance(obj, bool):
-        return ReflectedPrimative("bool", obj, reflect = reflectobj)
+        return Reflectedprimitive("bool", obj, reflect = reflectobj)
     elif isinstance(obj, str):
         return ReflectedString(obj, reflect = reflectobj)
     elif hasattr(obj, '__init__'):
@@ -133,8 +133,8 @@ def ReflectedTypeFactory(obj, reflectobj):
 
 def ElementToReflectedType(elem, reflectobj):
     """Returns a ReflectedType from an XML element"""
-    if elem.tag == 'primative':
-        return ReflectedPrimative(elem.get('type'), elem.text, reflect = reflectobj)
+    if elem.tag == 'primitive':
+        return Reflectedprimitive(elem.get('type'), elem.text, reflect = reflectobj)
     elif elem.tag == 'string':
         return ReflectedString(elem.text, reflect = reflectobj)
     elif elem.tag == 'array':
@@ -156,8 +156,8 @@ class ReflectedType(object):
 
     def _gettype(self, obj):
         """Determines the string representation of a ReflectedType"""
-        if isinstance(obj, ReflectedPrimative):
-            return obj.primative_type
+        if isinstance(obj, Reflectedprimitive):
+            return obj.primitive_type
         elif isinstance(obj, ReflectedArray):
             return 'array'
         elif isinstance(obj, ReflectedString):
@@ -170,8 +170,8 @@ class ReflectedType(object):
         """Returns an etree XML Element of the object"""
         raise NotImplementedError
 
-class ReflectedPrimative(ReflectedType):
-    """Class to handle Java primative objects"""
+class Reflectedprimitive(ReflectedType):
+    """Class to handle Java primitive objects"""
 
     def __init__(self, primtype, native, *args, **kwargs):
         ReflectedType.__init__(self, *args, **kwargs)
@@ -181,7 +181,7 @@ class ReflectedPrimative(ReflectedType):
 
     def _validate(self, primtype, native):
         if primtype not in ['byte', 'short', 'int', 'long', 'float', 'double', 'bool', 'char']:
-            raise TypeError("Specified type (" + primtype + ") is not a Java primative")
+            raise TypeError("Specified type (" + primtype + ") is not a Java primitive")
         if primtype == 'byte':
             if not isinstance(native, str) and len(native) == 1:
                 raise TypeError("Byte type requires single character string native equivalent")
@@ -205,16 +205,16 @@ class ReflectedPrimative(ReflectedType):
                 raise TypeError("Char type requires single character unicode native equivalent")
 
     def to_element(self):
-        elem = etree.Element('primative', type = self._type)
+        elem = etree.Element('primitive', type = self._type)
         elem.text = unicode(self._native)
         return elem
 
     @property
-    def primative_type(self):
+    def primitive_type(self):
         return self._type
 
-    @primative_type.setter
-    def primative_type(self, value):
+    @primitive_type.setter
+    def primitive_type(self, value):
         self._validate(value, self._native)
         self._type = value
 
