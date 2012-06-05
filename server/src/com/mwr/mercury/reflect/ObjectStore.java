@@ -5,12 +5,21 @@ import java.util.HashMap;
 public class ObjectStore
 {
 	private HashMap<Integer, Object> hashMap;
+	private static ObjectStore instance = null;
 
-	public ObjectStore() {
+	protected ObjectStore() {
 		hashMap = new HashMap<Integer, Object>();		
 	}
 	
+	public static ObjectStore getInstance() {
+		if(instance == null) {
+			instance = new ObjectStore();
+		}
+		return instance;
+	}
+	
 	public String add(Object value) {
+		// TODO: check whether it exists already
 		this.hashMap.put(value.hashCode(), value);
 		return value.hashCode() + "";
 	}
