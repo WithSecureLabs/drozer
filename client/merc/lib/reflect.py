@@ -25,10 +25,11 @@ class Reflect(object):
                   ("delete", 1, False),
                   ("deleteall", 0, False),
                   ("resolve", 1, False),
+                  ("getctx", 0, False)
                   ]
 
     # So pylint doesn't complain when it can't resolve dynamic attributes
-    invoke = construct = resolve = getprop = setprop = delete = deleteall = object
+    invoke = construct = resolve = getprop = setprop = getctx = delete = deleteall = object
 
     def __init__(self, session = None):
         if session == None:

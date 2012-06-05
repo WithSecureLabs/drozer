@@ -159,4 +159,9 @@ public class Responder
 		return "<array type=\""+type+"\">" + out + "</array>";
 	}
 
+	public Object getContext()
+	{
+		return this.session.applicationContext;
+	}
+
 }

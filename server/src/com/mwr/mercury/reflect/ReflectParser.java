@@ -89,9 +89,18 @@ public class ReflectParser
 			return parseConstruct(node);
 		} else if(name.equals("invoke")) {
 			return parseInvoke(node);
+		} else if(name.equals("getctx")) {
+			return parseGetCtx(node);
 		} else {
 			throw new ParserException("action '"+name+"' not implemented.");
 		}
+	}
+
+	private boolean parseGetCtx(Node action)
+	{
+		Object rv = this.responder.getContext();
+		this.sendValue(rv, false);
+		return true;
 	}
 
 	private boolean parseSetProp(Node action) throws Exception
