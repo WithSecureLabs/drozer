@@ -118,13 +118,13 @@ def ReflectedTypeFactory(obj, reflectobj):
     if isinstance(obj, ReflectedType):
         return obj
     elif isinstance(obj, long):
-        return Reflectedprimitive("long", obj, reflect = reflectobj)
+        return ReflectedPrimitive("long", obj, reflect = reflectobj)
     elif isinstance(obj, int):
-        return Reflectedprimitive("int", obj, reflect = reflectobj)
+        return ReflectedPrimitive("int", obj, reflect = reflectobj)
     elif isinstance(obj, float):
-        return Reflectedprimitive("float", obj, reflect = reflectobj)
+        return ReflectedPrimitive("float", obj, reflect = reflectobj)
     elif isinstance(obj, bool):
-        return Reflectedprimitive("bool", obj, reflect = reflectobj)
+        return ReflectedPrimitive("bool", obj, reflect = reflectobj)
     elif isinstance(obj, str):
         return ReflectedString(obj, reflect = reflectobj)
     elif hasattr(obj, '__init__'):
@@ -156,7 +156,7 @@ class ReflectedType(object):
 
     def _gettype(self, obj):
         """Determines the string representation of a ReflectedType"""
-        if isinstance(obj, Reflectedprimitive):
+        if isinstance(obj, ReflectedPrimitive):
             return obj.primitive_type
         elif isinstance(obj, ReflectedArray):
             return 'array'
@@ -170,7 +170,7 @@ class ReflectedType(object):
         """Returns an etree XML Element of the object"""
         raise NotImplementedError
 
-class Reflectedprimitive(ReflectedType):
+class ReflectedPrimitive(ReflectedType):
     """Class to handle Java primitive objects"""
 
     def __init__(self, primtype, native, *args, **kwargs):
