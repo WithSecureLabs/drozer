@@ -230,6 +230,12 @@ class ReflectedString(ReflectedType):
         elem.text = unicode(self._native)
         return elem
 
+    def __str__(self):
+        return str(self._native)
+
+    def __unicode__(self):
+        return unicode(self._native)
+
 class ReflectedArray(ReflectedType):
     """Class to handle Java arrays"""
 
