@@ -129,6 +129,8 @@ def ReflectedTypeFactory(obj, reflectobj):
         return ReflectedString(obj, reflect = reflectobj)
     elif hasattr(obj, '__init__'):
         return ReflectedArray(obj, reflect = reflectobj)
+    elif obj == None:
+        return ReflectedNull(reflect = reflectobj)
     return None
 
 def ElementToReflectedType(elem, reflectobj):
@@ -144,6 +146,8 @@ def ElementToReflectedType(elem, reflectobj):
         return ReflectedArray(array, reflect = reflectobj)
     elif elem.tag == 'objref':
         return ReflectedObjref(elem.text, reflect = reflectobj)
+    elif elem.tag == 'null':
+        return ReflectedNull(reflect = reflectobj)
     return None
 
 class ReflectedType(object):
@@ -164,11 +168,24 @@ class ReflectedType(object):
             return 'string'
         elif isinstance(obj, ReflectedObjref):
             return 'objref'
+        elif obj == None:
+            return 'null'
         return 'unknown'
 
     def to_element(self):
         """Returns an etree XML Element of the object"""
         raise NotImplementedError
+
+class ReflectedNull(ReflectedType):
+
+    def to_element(self):
+        return etree.Element('null')
+
+    def __eq__(self, other):
+        return other == None
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
 class ReflectedPrimitive(ReflectedType):
     """Class to handle Java primitive objects"""
