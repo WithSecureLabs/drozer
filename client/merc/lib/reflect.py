@@ -297,6 +297,7 @@ class ReflectedObjref(ReflectedType):
             return property(functools.partial(self._fieldgetter, attr), functools.partial(self._fieldsetter, attr))
         if attr in self._methodnames:
             return functools.partial(self._invoker, attr)
+        raise AttributeError("Not found")
 
     def _fieldgetter(self, name):
         self._reflect.getprop(self, name)
