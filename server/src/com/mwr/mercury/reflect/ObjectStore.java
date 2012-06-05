@@ -19,7 +19,6 @@ public class ObjectStore
 	}
 	
 	public String add(Object value) {
-		// TODO: check whether it exists already
 		this.hashMap.put(value.hashCode(), value);
 		return value.hashCode() + "";
 	}

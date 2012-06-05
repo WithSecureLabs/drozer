@@ -37,6 +37,7 @@ public class Responder
 	{
 		String message = e.toString();
 		String ref = createObjRef(objRef);
+		//TODO: encode
 		String response = "<return-value type=\"error\" errormsg=\""+message+"\">"+ref+"</return-value>";
 		send(response);
 	}

@@ -90,33 +90,29 @@ public class ReflectParser
 		} else if(name.equals("invoke")) {
 			return parseInvoke(node);
 		} else {
-			// TODO: return error
-			return true;
+			throw new ParserException("action '"+name+"' not implemented.");
 		}
 	}
 
-	private boolean parseSetProp(Node action)
+	private boolean parseSetProp(Node action) throws Exception
 	{
 		NodeList nodes = action.getChildNodes();
 		if(nodes.item(0).getNodeName().equals("objref")) {
 			String objRef = parseObjRef(nodes.item(0));
 			Object obj = objStore.get(objRef);
 			if(nodes.item(1).getNodeName().equals("string")) {
-				String methodName = nodes.item(1).getTextContent();
-				/*
-				if( nodes.getLength() > 2 ) {
+				String name = nodes.item(1).getTextContent();
+				if(nodes.getLength() > 2) {
 					Object argument = this.parseArgument(nodes.item(2));
-					Object rv = reflector.setProperty(obj, )
-					this.sendValue(rv, primitive); // assuming that an object constructor never returns a primitive
+					reflector.setProperty(obj, name, argument);
 				} else {
-					//TODO: error on no arguments
+					throw new ParserException("No argument in setprop");
 				}
-				*/
 			} else {
-				//TODO: error on no name
+				throw new ParserException("No field name in setprop");
 			}			
 		} else {
-			//TODO: error on no objref
+			throw new ParserException("No objref in setprop");
 		}
 		return true;
 	}
@@ -132,10 +128,10 @@ public class ReflectParser
 				Object rv = reflector.construct((Class)obj, arguments);
 				this.sendValue(rv, false); // assuming that an object constructor never returns a primitive
 			} else {
-				//TODO: error on no arguments
+				throw new ParserException("No arguments in construct");
 			}
 		} else {
-			//TODO: error on no objref
+			throw new ParserException("no objref in construct");
 		}
 		return true;
 	}
@@ -154,13 +150,13 @@ public class ReflectParser
 					Object rv = reflector.invoke(obj, methodName, arguments);
 					this.sendValue(rv, primitive); // assuming that an object constructor never returns a primitive
 				} else {
-					//TODO: error on no arguments
+					throw new ParserException("No arguments in invoke");
 				}
 			} else {
-				//TODO: error on no name
+				throw new ParserException("No method name in invoke");
 			}			
 		} else {
-			//TODO: error on no objref
+			throw new ParserException("no objref in invoke");
 		}
 		return true;
 	}
@@ -262,10 +258,10 @@ public class ReflectParser
 				sendValue(retObj, primitive);
 			}
 			else {
-				//TODO: error on no string
+				throw new ParserException("No field name in getprop");
 			}
 		} else {
-			// TODO: error on no objref
+			throw new ParserException("No objref in getprop");
 		}
 		return true;
 	}
@@ -292,7 +288,7 @@ public class ReflectParser
 		return true;
 	}
 
-	private boolean parseResolve(Node action) throws ClassNotFoundException
+	private boolean parseResolve(Node action) throws ClassNotFoundException, ParserException
 	{
 		NodeList nodes = action.getChildNodes();
 		for(int i=0; i<nodes.getLength(); i++) {
@@ -305,11 +301,10 @@ public class ReflectParser
 				return true;
 			}
 		}
-		//TODO: return error
-		return true;
+		throw new ParserException("No class name in resolve");
 	}
 	
-	private boolean parseDelete(Node action)
+	private boolean parseDelete(Node action) throws ParserException
 	{
 		NodeList nodes = action.getChildNodes();
 		for(int i=0; i<nodes.getLength(); i++) {
@@ -319,8 +314,7 @@ public class ReflectParser
 				objStore.remove(s);
 			}
 		}
-		//TODO: return error
-		return true;
+		throw new ParserException("No objref in delete");
 	}
 
 	private String parseObjRef(Node node)

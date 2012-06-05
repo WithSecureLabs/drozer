@@ -265,4 +265,15 @@ public class Reflector
 		return null;
 	}
 
+	public void setProperty(Object obj, String name, Object argument) throws IllegalArgumentException, SecurityException, IllegalAccessException, NoSuchFieldException
+	{
+		if(obj instanceof Class) {
+			// static field
+			((Class) obj).getField(name).set(null, argument);
+		} else {
+			Field field = obj.getClass().getField(name);
+			field.set(obj, argument);
+		}
+	}
+
 }
