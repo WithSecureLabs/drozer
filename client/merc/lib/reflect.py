@@ -9,7 +9,7 @@ import logging
 import functools
 import xml.etree.cElementTree as etree
 
-logging.basicConfig(name = 'Reflect', level = logging.DEBUG)
+logging.basicConfig(name = 'Reflect', level = logging.WARNING)
 logsend = logging.getLogger(" -> ")
 logrecv = logging.getLogger(" <- ")
 
@@ -113,6 +113,9 @@ class Reflect(object):
                 raise JavaReflectionException(respelem.get('errormsg', 'Unknown error occurred'))
         else:
             raise IOError(1, 'Empty response retrieved from action')
+
+    def new(self, cls, *args):
+        return self.construct(self.resolve(cls), *args)
 
 def ReflectedTypeFactory(obj, reflectobj):
     """Returns a (best guess) ReflectedType from a native type"""
@@ -309,19 +312,28 @@ class ReflectedObjref(ReflectedType):
     def __getattr__(self, attr):
         """Overrides the getattr function to support fields and methods"""
         # Check that the field/method lists have been retrieved
+        if attr.startswith('_'):
+            return object.__getattribute__(self, attr)
+
+        # Ensure the sets are filled
         self._get_fields()
         self._get_methods()
+
+        # Determine what to do
         if attr in self._fieldnames:
-            return property(functools.partial(self._fieldgetter, attr), functools.partial(self._fieldsetter, attr))
+            return self._reflect.getprop(self, attr)
         if attr in self._methodnames:
             return functools.partial(self._invoker, attr)
+
+        # If we can't come up with anything, then error out
         raise AttributeError("Not found")
 
-    def _fieldgetter(self, name):
-        self._reflect.getprop(self, name)
+    def __setattr__(self, attr, value):
+        if not attr.startswith('_') and attr in self._fieldnames:
+            self._reflect.setprop(attr, value)
+        else:
+            object.__setattr__(self, attr, value)
 
-    def _fieldsetter(self, name, value):
-        self._reflect.setprop(self, name, value)
 
     def _invoker(self, attr, *args, **kwargs):
         return self._reflect.invoke(self, attr, *args, **kwargs)
