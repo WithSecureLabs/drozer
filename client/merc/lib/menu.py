@@ -13,6 +13,7 @@ from provider import Provider
 from packages import Packages
 from broadcast import Broadcast
 from debuggable import Debuggable
+from native import Native
 
 class Menu(BaseCmd):
 
@@ -87,4 +88,11 @@ Make use of general purpose tools that are useful
 Get information about packages installed on the device
         """
         subconsole = Packages(self.session)
+        subconsole.cmdloop()
+
+    def do_native(self, _args):
+        """
+Get information about packages installed on the device with native code components
+        """
+        subconsole = Native(self.session)
         subconsole.cmdloop()
