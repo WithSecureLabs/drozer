@@ -180,11 +180,12 @@ public class Core
 	
 	public static void unzip(List<ArgumentWrapper> argsArray, Session currentSession){
 		//Get path from arguments
+		String filename = Common.getParamString(argsArray, "filename");
 		String path = Common.getParamString(argsArray, "path");
 		String destination = Common.getParamString(argsArray, "destination");
 		
 		//Unzip file
-		boolean success = Common.unzipClassesDex(path, destination);
+		boolean success = Common.unzipFile(filename, path, destination);
 		
 		if (success)
 			currentSession.sendFullTransmission("", "");

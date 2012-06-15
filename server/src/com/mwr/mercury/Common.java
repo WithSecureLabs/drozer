@@ -367,10 +367,11 @@ public class Common
 	}
 
 	//Extract the src file to dest - return success
-	public static boolean unzipClassesDex(String src, String dest)
+	public static boolean unzipFile(String filename, String src, String dest)
 	{
 		final int BUFFER_SIZE = 4096;
 		boolean success = false;
+		String fname = filename.toUpperCase();
 		  
 		BufferedOutputStream bufferedOutputStream = null;
 		FileInputStream fileInputStream;
@@ -383,7 +384,7 @@ public class Common
 			while ((zipEntry = zipInputStream.getNextEntry()) != null)
 			{
 				String zipEntryName = zipEntry.getName();
-				if (zipEntryName.toUpperCase().equals("CLASSES.DEX"))
+				if (zipEntryName.toUpperCase().equals(fname))
 				{
 					File file = new File(dest + zipEntryName);
 					byte buffer[] = new byte[BUFFER_SIZE];
