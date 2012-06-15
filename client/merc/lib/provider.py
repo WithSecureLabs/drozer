@@ -363,7 +363,7 @@ content://com.google.settings/partner
 
                 if (".apk" in line):
                     print line + ":"
-                    if self.session.executeCommand("core", "unzip", {'path':line, 'destination':'/data/data/com.mwr.mercury/'}).isError():
+                    if self.session.executeCommand("core", "unzip", {'filename':'classes.dex', 'path':line, 'destination':'/data/data/com.mwr.mercury/'}).isError():
 
                         print "Contains no classes.dex\n"
 
