@@ -569,4 +569,31 @@ public class Provider
 
 		currentSession.endTransmission();
 	}
+
+public static void finduri(List<ArgumentWrapper> argsArray, Session currentSession)
+{
+	//Get path from arguments
+	String path = Common.getParamString(argsArray, "path");
+	
+	ArrayList<String> lines = Common.strings(path);
+	Iterator<String> it = lines.iterator();
+	
+	currentSession.startTransmission();
+	currentSession.startResponse();
+	currentSession.startData();
+	
+	while (it.hasNext())
+	{
+		String next = it.next();
+		
+		if (next.toUpperCase().contains("CONTENT://") && !next.toUpperCase().equals("CONTENT://"))
+			currentSession.send(next + "\n", true); //Send content uri with newline
+	}
+	
+	currentSession.endData();
+	currentSession.noError();
+	currentSession.endResponse();
+	currentSession.endTransmission();
+}
+
 }

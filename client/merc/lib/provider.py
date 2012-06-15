@@ -370,7 +370,7 @@ content://com.google.settings/partner
                     else:
 
                         strings = self.session.executeCommand("provider", "finduri", {'path':'/data/data/com.mwr.mercury/classes.dex'}).data
-
+                        
                         for string in strings.split():
                             if (("CONTENT://" in string.upper()) and ("CONTENT://" != string.upper())):
                                 print string[string.upper().find("CONTENT"):]
