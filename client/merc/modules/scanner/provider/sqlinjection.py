@@ -38,7 +38,7 @@ Credit: Rob M && Tyrone Erasmus - MWR Labs"""
             for line in path.split():
 
                 if (".apk" in line):
-                    if session.executeCommand("core", "unzip", {'path':line, 'destination':'/data/data/com.mwr.mercury/'}).isError():
+                    if session.executeCommand("core", "unzip", {'filename':'classes.dex', 'path':line, 'destination':'/data/data/com.mwr.mercury/'}).isError():
                         pass
                     else:
 
