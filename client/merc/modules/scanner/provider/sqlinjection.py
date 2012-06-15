@@ -1,5 +1,5 @@
 from merc.lib.modules import Module
-import re, string
+import re
 
 class sqlinjection(Module):
     """Description: Find SQL injection vulnerabilities in content providers
@@ -71,7 +71,7 @@ Credit: Rob M && Tyrone Erasmus - MWR Labs"""
                 print "Injection point:", session.color.red("projection") + " - " + uri
                 
                 if uri not in projectionList:
-                        projectionList.append(uri)
+                    projectionList.append(uri)
             else:
                 if "unrecognized token:" in selectioninject.error:
                     print "Injection point:", session.color.yellow("selection") + " - " + uri

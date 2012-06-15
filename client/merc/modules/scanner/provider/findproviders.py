@@ -1,5 +1,5 @@
 from merc.lib.modules import Module
-import re, string
+import re
 
 class ProviderScan(Module):
     """Usage: run scanner.provider.providerscan --arg <filter>
