@@ -129,13 +129,22 @@ class Session:
             return False
 
     def sendData(self, data):
+        if not self.socketConn:
+            self.connectSocket()
+        # print "Sending", repr(data)
         self.socketConn.sendall(data)
+        # print "Sent data"
 
     def receiveData(self):
-        return self.socketConn.recv(1024)
+        # print "Receiving data"
+        recved = self.socketConn.recv(1024)
+        # print "Received", repr(recved)
+        return recved
+
 
     def closeSocket(self):
         self.socketConn.close()
+        self.socketConn = None
 
 
 
@@ -311,9 +320,6 @@ class Session:
 
         try:
 
-            # Open socket
-            self.connectSocket()
-
             # Convert command to XML and send
             self.sendData(self.XMLifyCommand(section, function, args_dict) + "\n")
 
@@ -322,10 +328,9 @@ class Session:
             receivedData = self.receiveData()
             while receivedData:
                 responseBuffer = responseBuffer + receivedData
+                if responseBuffer.lower().endswith('</transmission>'):
+                    break
                 receivedData = self.receiveData()
-
-            # Close socket
-            self.closeSocket()
 
             # Parse response from server
             # parsedResponse = self.UnXMLifyResponseRegex(responseBuffer) # Can use this as well but no noticeable performance gain

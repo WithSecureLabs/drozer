@@ -148,14 +148,14 @@ public class Session
 		send("</transmission>", false);
 		
 		//Set connected to false so that server does not keep listening on this conn
-		connected = false;
+		// connected = false;
 		
 		//Kill socket
-		try
-		{
-			clientSocket.close();
-		}
-		catch (IOException e) {}
+		//try
+		//{
+		//	clientSocket.close();
+		//}
+		//catch (IOException e) {}
 	}
 	
 	//Send a full transmission without worrying about structure

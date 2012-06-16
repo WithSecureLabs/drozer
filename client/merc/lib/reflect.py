@@ -42,22 +42,20 @@ class Reflect(object):
     def _transceive(self, data):
         """Transcieves a reflection message"""
         try:
-            # Open socket
-            self.session.connectSocket()
-
             # Convert command to XML and send
-            self.session.socketConn.sendall(data)
+            self.session.sendData(data)
 
             # Receive until the socket is closed
-            buf = self.session.socketConn.recv(1024)
+            buf = self.session.receiveData()
             output = [buf]
             while buf:
-                buf = self.session.socketConn.recv(1024)
+                buf = self.session.receiveData()
                 output.append(buf)
+                # FIXME: the ending tag may be broken across two bufs,
+                # should really checkout output, but then can't do efficient concat
+                if buf.lower().endswith('</transmission>'):
+                    break
             data = "".join(output)
-
-            # Close socket
-            self.session.closeSocket()
 
             # Parse response from server
             return data
