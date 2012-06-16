@@ -299,6 +299,7 @@ class ReflectedObjref(ReflectedType):
     def __init__(self, objref, *args, **kwargs):
         ReflectedType.__init__(self, *args, **kwargs)
         self._objref = objref
+        self._class = None
         self._methodnames = set()
         self._fieldnames = set()
 
@@ -313,18 +314,29 @@ class ReflectedObjref(ReflectedType):
         if attr.startswith('_'):
             return object.__getattribute__(self, attr)
 
-        # Ensure the sets are filled
-        self._get_fields()
-        self._get_methods()
-
-        # Determine what to do
+        # Check if we already know what to do
         if attr in self._fieldnames:
             return self._reflect.getprop(self, attr)
         if attr in self._methodnames:
             return functools.partial(self._invoker, attr)
 
+        # Get the class, we'll be reusing it
+        if not self._class:
+            self._class = self._reflect.invoke(self, 'getClass')
+
+        try:
+            test = self._class._invoker('getField', attr)
+        except JavaReflectionException, e:
+            test = False
+        # To allow exceptions to be caught in recovering the field
+        if test:
+            self._fieldnames.add(attr)
+            return self._reflect.getprop(self, attr)
+
+        return functools.partial(self._invoker, attr)
+
         # If we can't come up with anything, then error out
-        raise AttributeError("Not found")
+        raise AttributeError("Attribute " + attr + " not found")
 
     def __setattr__(self, attr, value):
         if not attr.startswith('_') and attr in self._fieldnames:
@@ -334,14 +346,18 @@ class ReflectedObjref(ReflectedType):
 
 
     def _invoker(self, attr, *args, **kwargs):
-        return self._reflect.invoke(self, attr, *args, **kwargs)
+        result = self._reflect.invoke(self, attr, *args, **kwargs)
+        self._methodnames.add(attr)
+        return result
 
     def _get_fields(self):
         if not self._fieldnames:
             cls = self._reflect.invoke(self, 'getClass')
             fields = self._reflect.invoke(cls, 'getFields')
             for field in fields:
-                self._fieldnames.add(str(self._reflect.invoke(field, 'getName')))
+                name = self._reflect.invoke(field, 'getName')
+                if name:
+                    self._fieldnames.add(str(name))
 
     def _get_methods(self):
         if not self._methodnames:
