@@ -282,7 +282,7 @@ public class ReflectParser
 		} else if(retObj.getClass().isArray() && retObj instanceof Object[]) {
 			responder.sendArray((Object[])retObj);
 		} else if(retObj.getClass().isArray()) {
-			responder.sendPrimitiveArray((Object[])retObj);
+			responder.sendPrimitiveArray(retObj);
 		} else if(!primitive) {
 			String retObjRef = objStore.add(retObj);
 			responder.sendObjRef(retObjRef);
