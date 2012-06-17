@@ -202,8 +202,8 @@ class ReflectedPrimitive(ReflectedType):
         if primtype not in ['byte', 'short', 'int', 'long', 'float', 'double', 'bool', 'char']:
             raise TypeError("Specified type (" + primtype + ") is not a Java primitive")
         if primtype == 'byte':
-            if not isinstance(native, str) and len(native) == 1:
-                raise TypeError("Byte type requires single character string native equivalent")
+            if not isinstance(native, str) and native > 127 or native < -128:
+                raise TypeError("Byte type requires integer value between 127 and -128")
         elif primtype == 'short':
             if not isinstance(native, int) and native < math.pow(2, 15) and native >= -(math.pow(2, 15)):
                 raise TypeError("Short type not an integer or outside bounds")
