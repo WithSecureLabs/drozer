@@ -131,16 +131,10 @@ class Session:
     def sendData(self, data):
         if not self.socketConn:
             self.connectSocket()
-        # print "Sending", repr(data)
         self.socketConn.sendall(data)
-        # print "Sent data"
 
     def receiveData(self):
-        # print "Receiving data"
-        recved = self.socketConn.recv(1024)
-        # print "Received", repr(recved)
-        return recved
-
+        return self.socketConn.recv(1024)
 
     def closeSocket(self):
         self.socketConn.close()
