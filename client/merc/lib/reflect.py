@@ -129,10 +129,10 @@ def ReflectedTypeFactory(obj, reflectobj):
         return ReflectedPrimitive("bool", obj, reflect = reflectobj)
     elif isinstance(obj, str):
         return ReflectedString(obj, reflect = reflectobj)
+    elif obj is None:
+        return ReflectedNull(reflect = reflectobj)
     elif hasattr(obj, '__init__'):
         return ReflectedArray(obj, reflect = reflectobj)
-    elif obj == None:
-        return ReflectedNull(reflect = reflectobj)
     return None
 
 def ElementToReflectedType(elem, reflectobj):
