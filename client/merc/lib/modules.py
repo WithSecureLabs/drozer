@@ -150,10 +150,10 @@ These modules are developed by various members of the community, please feel fre
 
             # Compile stated arguments to send to execute
             args = vars(splitargs)['args']
-            
+
             # Convert to a dict
             args_dict = {}
-            
+
             if args:
                 for arg in args:
                     split = arg.split('=')
@@ -174,14 +174,14 @@ These modules are developed by various members of the community, please feel fre
             pass
 
     def complete_run(self, _text, line, _begidx, _endidx):
-        
+
         # Autocompletion on modules
         return [
                 mod for mod in sorted(self.modules)
                  if mod.startswith(_text)
             ]
-        
-        
+
+
     def do_info(self, args):
         """
 Get information about a custom module
@@ -214,7 +214,7 @@ Type "list" to get a list of all available modules
             pass
 
     def complete_info(self, _text, line, _begidx, _endidx):
-        
+
         # Autocompletion on modules
         return [
                 mod for mod in sorted(self.modules)
