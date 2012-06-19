@@ -9,7 +9,11 @@ import logging
 import functools
 import xml.etree.cElementTree as etree
 
-logging.basicConfig(name = 'Reflect', level = logging.WARNING)
+logginglevel = logging.WARNING
+if False:
+    logginglevel = logging.DEBUG
+
+logging.basicConfig(name = 'Reflect', level = logginglevel) # logging.DEBUG
 logsend = logging.getLogger(" -> ")
 logrecv = logging.getLogger(" <- ")
 
