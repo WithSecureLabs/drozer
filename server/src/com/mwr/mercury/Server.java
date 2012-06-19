@@ -37,7 +37,7 @@ public class Server extends Thread
 	@Override
 	public void run()
 	{
-		
+		// Debug.startMethodTracing("merc");
 		//Open Mercury persistent shell
 		Common.mercuryShell = new Shell();
 		
@@ -56,6 +56,7 @@ public class Server extends Thread
 				Log.e("mercury", e.getMessage());
 			}
 		}
+		// Debug.stopMethodTracing();
 	}
 
 	//Stop server

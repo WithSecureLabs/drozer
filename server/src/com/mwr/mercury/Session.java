@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class Session
 {
-	private BufferedReader input;
+	private BufferedBracketReader input;
 	private PrintWriter output;
 	private Socket clientSocket;  
 	public boolean connected;
@@ -28,7 +28,8 @@ public class Session
 		
 		try
 		{
-			input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()), 8192);
+			//input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()), 8192);
+			input = new BufferedBracketReader(new InputStreamReader(clientSocket.getInputStream()));
 			output = new PrintWriter(clientSocket.getOutputStream(), true);
 		}
 		catch (Exception e) {}
@@ -42,7 +43,7 @@ public class Session
 		try
 		{
 			//Wait until ready
-			while (!input.ready());
+			//while (!input.ready());
 			
 			//Read from socket
 			//String content = input.readLine();
@@ -62,16 +63,35 @@ public class Session
 		}
 	}
 	
-	private String readTransmission(BufferedReader in) throws IOException
+	private String readTransmission(BufferedBracketReader in) throws IOException
 	{
+		//String out = "";
+		//StringBuilder sb = new StringBuilder(512);
+		//int cur = in.read();
+		//while(cur == '\n' || cur  == '\r' || cur == ' ') cur = in.read();
 		String out = "";
-		int cur = in.read();
-		while(cur == '\n' || cur  == '\r' || cur == ' ') cur = in.read();
+		in.skipWs();
 		while(true) {
-			out += (char)cur;
-			if(out.endsWith("</transmission>"))
-				return out;
+			//Log.d("RECV", "before");
+			String r = in.readChunk();
+			//Log.d("RECV", "after");
+			if(r!=null) {
+				//Log.d("RECV", r);
+				out += r;
+				if(out.endsWith("</transmission>")) {
+					return out;
+				}
+			}
+			/*
+			sb.append((char)cur);
+			 
+			if (cur == (char)'>') {
+				String out = sb.toString();
+				if(out.endsWith("</transmission>"))
+					return out;
+			}
 			cur = in.read();
+			*/
 		}
 	}
 
