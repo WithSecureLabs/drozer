@@ -2,6 +2,7 @@ package com.mwr.mercury.reflect;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -171,36 +172,40 @@ public class Reflector
 		} else {
 			cls = obj.getClass();
 		}
-		Method m = getMethod(cls, methodName, p);
-		switch(a.length) {
-		case 0:
-			return m.invoke(obj);
-		case 1:
-			return m.invoke(obj,a[0]);
-		case 2:
-			return m.invoke(obj,a[0], a[1]);
-		case 3:
-			return m.invoke(obj,a[0],a[1],a[2]);
-		case 4:
-			return m.invoke(obj,a[0],a[1],a[2],a[3]);
-		case 5:
-			return m.invoke(obj,a[0],a[1],a[2],a[3],a[4]);
-		case 6:
-			return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5]);
-		case 7:
-			return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6]);
-		case 8:
-			return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
-		case 9:
-			return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8]);
-		case 10:
-			return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9]);
-		case 11:
-			return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10]);
-		case 12:
-			return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11]);
+		try{
+			Method m = getMethod(cls, methodName, p);
+			switch(a.length) {
+			case 0:
+				return m.invoke(obj);
+			case 1:
+				return m.invoke(obj,a[0]);
+			case 2:
+				return m.invoke(obj,a[0], a[1]);
+			case 3:
+				return m.invoke(obj,a[0],a[1],a[2]);
+			case 4:
+				return m.invoke(obj,a[0],a[1],a[2],a[3]);
+			case 5:
+				return m.invoke(obj,a[0],a[1],a[2],a[3],a[4]);
+			case 6:
+				return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5]);
+			case 7:
+				return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6]);
+			case 8:
+				return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
+			case 9:
+				return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8]);
+			case 10:
+				return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9]);
+			case 11:
+				return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10]);
+			case 12:
+				return m.invoke(obj,a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11]);
+			}
+			return null;
+		} catch (InvocationTargetException e) {
+			throw (Exception) e.getCause();
 		}
-		return null;
 	}
 
 	public boolean doesReturnPrimitive(Object obj, String methodName,
