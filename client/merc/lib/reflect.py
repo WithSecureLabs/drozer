@@ -10,7 +10,7 @@ import functools
 import xml.etree.cElementTree as etree
 
 logginglevel = logging.WARNING
-if False:
+if True:
     logginglevel = logging.DEBUG
 
 logging.basicConfig(name = 'Reflect', level = logginglevel) # logging.DEBUG
@@ -29,11 +29,12 @@ class Reflect(object):
                   ("delete", 1, False),
                   ("deleteall", 0, False),
                   ("resolve", 1, False),
-                  ("getctx", 0, False)
+                  ("getctx", 0, False),
+                  ("classload", 1, False),
                   ]
 
     # So pylint doesn't complain when it can't resolve dynamic attributes
-    invoke = construct = resolve = getprop = setprop = getctx = delete = deleteall = object
+    invoke = construct = resolve = getprop = setprop = getctx = delete = deleteall = classload = object
 
     def __init__(self, session = None):
         if session == None:

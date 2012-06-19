@@ -1,5 +1,7 @@
 package com.mwr.mercury.reflect;
 
+import android.content.Context;
+
 import com.mwr.mercury.Session;
 
 public class Responder
@@ -159,7 +161,7 @@ public class Responder
 		return "<array type=\""+type+"\">" + out + "</array>";
 	}
 
-	public Object getContext()
+	public Context getContext()
 	{
 		return this.session.applicationContext;
 	}

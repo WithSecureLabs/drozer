@@ -1,7 +1,10 @@
 package com.mwr.mercury.reflect;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +19,14 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.content.Context;
+import android.util.Base64;
+import android.util.Log;
+
 import com.mwr.mercury.Session;
+
+import dalvik.system.DexClassLoader;
+import dalvik.system.PathClassLoader;
 
 public class ReflectParser
 {
@@ -91,6 +101,8 @@ public class ReflectParser
 			return parseInvoke(node);
 		} else if(name.equals("getctx")) {
 			return parseGetCtx(node);
+		} else if(name.equals("classload")) {
+			return parseClassLoad(node);
 		} else {
 			throw new ParserException("action '"+name+"' not implemented.");
 		}
@@ -103,6 +115,34 @@ public class ReflectParser
 		return true;
 	}
 
+	private boolean parseClassLoad(Node action) throws Exception {
+		NodeList nodes = action.getChildNodes();
+		if (nodes.item(0).getNodeName().equals("string")) {
+			Context ctx = this.responder.getContext();
+			String path = ctx.getCacheDir().getAbsolutePath();
+			byte[] databytes = Base64.decode(nodes.item(0).getTextContent(), Base64.DEFAULT);
+			
+			try {
+				File tempapk = new File(path + "/temp.apk");
+				tempapk.delete();
+			} finally {}
+			FileOutputStream fos = new FileOutputStream(path + "/temp.apk");
+			fos.write(databytes);
+			fos.close();
+			
+			ClassLoader l = new DexClassLoader(path + "/temp.apk",
+								path,
+								null,
+                				ClassLoader.getSystemClassLoader());
+			
+			Object rv = l;
+			this.sendValue(rv, false);
+		} else {
+			throw new ParserException("No argument classdata in loadclass");
+		}
+		return true;
+	}
+	
 	private boolean parseSetProp(Node action) throws Exception
 	{
 		NodeList nodes = action.getChildNodes();
