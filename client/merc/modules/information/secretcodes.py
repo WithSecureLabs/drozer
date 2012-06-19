@@ -24,7 +24,7 @@ Credit: Mike Auty - MWR Labs"""
         packagesinfo = session.executeCommand("packages", "info", {}).getPaddedErrorOrData()
         packages = re.findall('(?<=Package name: ).+', packagesinfo)
 
-        f = open(os.path.join(__file__, "secretcodes.apk"), "rb")
+        f = open(os.path.join(os.path.dirname(__file__), "secretcodes.apk"), "rb")
         classdata = f.read()
         f.close()
 
