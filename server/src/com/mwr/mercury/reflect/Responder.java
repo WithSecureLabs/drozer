@@ -122,6 +122,11 @@ public class Responder
 			for(byte e: (byte[])primArray) {
 				out += createPrimitive(e);
 			}
+		} else if(primArray instanceof String[]) {
+			type = "string";
+			for(String e: (String[])primArray) {
+				out += createString(e);
+			}
 		} else if(primArray instanceof short[]) {
 			type = "short";
 			for(short e: (short[])primArray) {

@@ -319,6 +319,8 @@ public class ReflectParser
 	{
 		if(retObj.getClass().equals(String.class)) {
 			responder.sendString((String) retObj);
+		} else if(retObj.getClass().isArray() && retObj instanceof String[]) {
+			responder.sendPrimitiveArray((String[])retObj);
 		} else if(retObj.getClass().isArray() && retObj instanceof Object[]) {
 			responder.sendArray((Object[])retObj);
 		} else if(retObj.getClass().isArray()) {
