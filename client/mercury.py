@@ -85,7 +85,7 @@ Use adb forward tcp:31415 tcp:31415 when using an emulator or usb-connected devi
                 print "\n**Network Error** Could not connect to " + sessionip + ":" + str(sessionport) + "\n"
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             print sys.exc_info()[0]
 
 
