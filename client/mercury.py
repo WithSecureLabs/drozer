@@ -149,7 +149,7 @@ Check if there is an updated release available from http://labs.mwrinfosecurity.
                 display += "Size (bytes): " + update_version_size + "\n"
                 display += "MD5: " + update_version_checksum
 
-        except:
+        except Exception:
             display = "Failed to retrieve update information. Please visit http://labs.mwrinfosecurity.com to find information about the latest release."
 
         print "\n" + display + "\n"

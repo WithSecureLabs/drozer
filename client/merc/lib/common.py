@@ -115,7 +115,7 @@ class Session:
         try:
             self.socketConn.close()
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     # Returns socket connected status = True/False
@@ -357,7 +357,7 @@ class Session:
             # Delete file
             os.unlink(localpath)
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
         fileContentsToMD5 = ""

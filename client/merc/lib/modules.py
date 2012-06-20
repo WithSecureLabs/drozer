@@ -127,7 +127,7 @@ Note: it is possible to use -f instead of --filter as shorthand
             print ""
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_run(self, args):
@@ -210,7 +210,7 @@ Type "list" to get a list of all available modules
 
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def complete_info(self, _text, line, _begidx, _endidx):

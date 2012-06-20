@@ -50,7 +50,7 @@ MD5 = 3fae15887320940b88df79fe01e62bd8
                 print "\nFile downloaded successfully\nMD5 = " + response.data + "\n"
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def complete_download(self, _text, line, _begidx, _endidx):
@@ -109,7 +109,7 @@ MD5: 3fae15887320940b88df79fe01e62bd8
                 print "\nFile uploaded successfully to " + uploadDir + "\nMD5: " + response.data + "\n"
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def complete_upload(self, _text, line, _begidx, _endidx):
@@ -162,7 +162,7 @@ MD5 = 3fae15887320940b88df79fe01e62bd8
                 print "MD5 = " + self.session.executeCommand("core", "fileMD5", {"path":splitargs.path}).data + "\n"
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_intents(self, args):
@@ -198,5 +198,5 @@ android.intent.action.NEW_OUTGOING_CALL
             print ""
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
