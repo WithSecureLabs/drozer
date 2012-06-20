@@ -36,7 +36,7 @@ class SessionThread extends Thread
 			String received = currentSession.receive();
 			
 			//Pass off command to be handled
-			if (received.length() > 0) //Check that it is not null
+			if (received != null && received.length() > 0) //Check that it is not null
 				if(!parser.parse(received))
 					handleCommand(received);
 		}

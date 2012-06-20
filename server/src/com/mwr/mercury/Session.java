@@ -57,9 +57,10 @@ public class Session
 			
 			return content;
 		}
-		catch (Exception e)
+		catch (IOException e)
 		{
-			return e.toString();
+			connected = false;
+			return null;
 		}
 	}
 	
