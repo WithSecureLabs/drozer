@@ -233,6 +233,10 @@ class ReflectedPrimitive(ReflectedType):
         return elem
 
     @property
+    def native(self):
+        return self._native
+
+    @property
     def primitive_type(self):
         return self._type
 

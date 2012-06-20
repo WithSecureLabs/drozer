@@ -36,7 +36,7 @@ Credit: Mike Auty - MWR Labs"""
         ctx = r.getctx()
         pml = ctx.getPackageManager().getInstalledPackages(0)
 
-        for i in range(int(pml.size()._native)):
+        for i in range(int(pml.size().native)):
             package = pml.get(i).packageName
             print "Package:", package
             codelist = obj.main(ctx, package)
