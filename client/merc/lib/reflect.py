@@ -304,8 +304,8 @@ class ReflectedObjref(ReflectedType):
         ReflectedType.__init__(self, *args, **kwargs)
         self._objref = objref
         self._class = None
-        self._methodnames = set()
         self._fieldnames = set()
+        self._notfieldnames = set()
 
     def to_element(self):
         elem = etree.Element('objref')
@@ -321,26 +321,26 @@ class ReflectedObjref(ReflectedType):
         # Check if we already know what to do
         if attr in self._fieldnames:
             return self._reflect.getprop(self, attr)
-        if attr in self._methodnames:
-            return functools.partial(self._invoker, attr)
 
-        # Get the class, we'll be reusing it
-        if not self._class:
-            self._class = self._reflect.invoke(self, 'getClass')
+        # Have we checked if this is a field before
+        if attr not in self._notfieldnames:
+            # Get the class, we'll be reusing it
+            if not self._class:
+                self._class = self._reflect.invoke(self, 'getClass')
 
-        try:
-            test = self._class._invoker('getField', attr)
-        except JavaReflectionException, e:
-            test = False
-        # To allow exceptions to be caught in recovering the field
-        if test:
-            self._fieldnames.add(attr)
-            return self._reflect.getprop(self, attr)
+            try:
+                test = self._class._invoker('getField', attr)
+            except JavaReflectionException, _e:
+                test = False
+            # To allow exceptions to be caught in recovering the field
+            if test:
+                self._fieldnames.add(attr)
+                return self._reflect.getprop(self, attr)
+            else:
+                self._notfieldnames.add(attr)
 
+        # It wasn't a field, we've recorded that, so hand back an invoker
         return functools.partial(self._invoker, attr)
-
-        # If we can't come up with anything, then error out
-        raise AttributeError("Attribute " + attr + " not found")
 
     def __setattr__(self, attr, value):
         if not attr.startswith('_') and attr in self._fieldnames:
@@ -351,7 +351,7 @@ class ReflectedObjref(ReflectedType):
 
     def _invoker(self, attr, *args, **kwargs):
         result = self._reflect.invoke(self, attr, *args, **kwargs)
-        self._methodnames.add(attr)
+        self._notfieldnames.add(attr)
         return result
 
     def _get_fields(self):
@@ -368,7 +368,7 @@ class ReflectedObjref(ReflectedType):
             cls = self._reflect.invoke(self, 'getClass')
             methods = self._reflect.invoke(cls, 'getMethods')
             for method in methods:
-                self._methodnames.add(str(self._reflect.invoke(method, 'getName')))
+                self._notfieldnames.add(str(self._reflect.invoke(method, 'getName')))
 
 if __name__ == '__main__':
     refl = Reflect()
