@@ -21,21 +21,23 @@ Credit: Mike Auty - MWR Labs"""
             dx --dex --output file.apk file.class
         """
 
-        packagesinfo = session.executeCommand("packages", "info", {}).getPaddedErrorOrData()
-        packages = re.findall('(?<=Package name: ).+', packagesinfo)
+        # packagesinfo = session.executeCommand("packages", "info", {}).getPaddedErrorOrData()
+        # packages = re.findall('(?<=Package name: ).+', packagesinfo)
 
         f = open(os.path.join(os.path.dirname(__file__), "secretcodes.apk"), "rb")
         classdata = f.read()
         f.close()
 
-        r = Reflect(session)
+        r = Reflect(session, debug = False)
         classloader = r.classload(base64.b64encode(classdata))
-
         cls = classloader.loadClass("ManifestReader")
+        obj = r.construct(cls)
 
         ctx = r.getctx()
-        obj = r.construct(cls)
-        for package in packages:
+        pml = ctx.getPackageManager().getInstalledPackages(0)
+
+        for i in range(int(pml.size()._native)):
+            package = pml.get(i).packageName
             print "Package:", package
             codelist = obj.main(ctx, package)
             for i in codelist:
