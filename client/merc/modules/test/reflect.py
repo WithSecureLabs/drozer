@@ -20,7 +20,7 @@ Credit: Mike Auty - MWR Labs"""
 
         r = Reflect(session)
         ctx = r.getctx()
-        pm = ctx.getPackageManager()
+        #pm = ctx.getPackageManager()
 
         #intent = r.construct(r.resolve('android.content.Intent'), "android.provider.Telephony.SECRET_CODE")
         #receivers = pm.queryBroadcastReceivers(intent, 0)
