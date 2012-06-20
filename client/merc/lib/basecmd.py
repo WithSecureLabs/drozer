@@ -3,6 +3,7 @@
 # License: Refer to the README in the root directory
 #
 
+import sys
 import cmd
 
 class BaseCmd(cmd.Cmd):
@@ -24,6 +25,14 @@ class BaseCmd(cmd.Cmd):
         """
         ## The only reason to define this method is for the help text in the doc string
         cmd.Cmd.do_help(self, args)
+
+    ## Command definition to support quitting in any function ##
+    def do_exit(self, _args):
+        """
+'exit quits mercury'
+        """
+        # Leave immediately, do not pass go, do not collect $200
+        sys.exit(0)
 
     ## Override methods in Cmd object ##
     def preloop(self):
