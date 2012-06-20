@@ -170,8 +170,8 @@ These modules are developed by various members of the community, please feel fre
                 print "\nFailed to execute module\n"
 
         # FIXME: Choose specific exceptions to catch
-        except Exception:
-            pass
+        except Exception, e:
+            print str(e)
 
     def complete_run(self, _text, line, _begidx, _endidx):
 
