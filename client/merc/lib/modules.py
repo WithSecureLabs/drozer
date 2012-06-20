@@ -171,7 +171,7 @@ These modules are developed by various members of the community, please feel fre
 
         # FIXME: Choose specific exceptions to catch
         except Exception, e:
-            print str(e)
+            print "Exception:", str(e)
 
     def complete_run(self, _text, line, _begidx, _endidx):
 
