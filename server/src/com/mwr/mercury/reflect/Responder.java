@@ -1,6 +1,12 @@
 package com.mwr.mercury.reflect;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
+import org.xmlpull.v1.XmlSerializer;
+
 import android.content.Context;
+import android.util.Xml;
 
 import com.mwr.mercury.Session;
 
@@ -39,9 +45,24 @@ public class Responder
 	{
 		String message = e.toString();
 		String ref = createObjRef(objRef);
-		//TODO: encode
-		String response = "<return-value type=\"error\" errormsg=\""+message+"\">"+ref+"</return-value>";
-		send(response);
+		// Encode
+		XmlSerializer serializer = Xml.newSerializer();
+		StringWriter writer = new StringWriter();
+		String result = "";
+		try {
+			serializer.setOutput(writer);
+			serializer.startTag("", "return-value");
+			serializer.attribute("", "type", "error");
+			serializer.attribute("", "errormsg", message);
+			serializer.text("placeholder");
+			serializer.endTag("", "return-value");
+			serializer.endDocument();
+			result = writer.toString();
+			result = result.replaceAll("placeholder", ref);
+		} catch (IOException f) {
+			result = "<return-value type=\"error\" errormsg=\""+message+"\">"+ref+"</return-value>";
+		}
+		send(result);
 	}
 
 	public void sendPrimitive(Object obj)
@@ -70,10 +91,25 @@ public class Responder
 		} else if(obj.getClass().equals(Boolean.class)) {
 			type="boolean";
 		} else if(obj.getClass().equals(Character.class)) {
-			//TODO encode
 			type="char";
 		}
-		return "<primitive type=\""+type+"\">"+value+"</primitive>";
+
+		// Encode
+		XmlSerializer serializer = Xml.newSerializer();
+		StringWriter writer = new StringWriter();
+		String result = "";
+		try {
+			serializer.setOutput(writer);
+			serializer.startTag("", "primitive");
+			serializer.attribute("", "type", type);
+			serializer.text(value);
+			serializer.endTag("", "primitive");
+			serializer.endDocument();
+			result = writer.toString();
+		} catch (IOException e) {
+			result = "<primitive type=\""+type+"\">"+value+"</primitive>";
+		}
+		return result;
 	}
 
 	public void sendString(String s)
@@ -84,8 +120,20 @@ public class Responder
 
 	private String createString(String s)
 	{
-		//TODO encode
-		return "<string>"+s+"</string>";
+		XmlSerializer serializer = Xml.newSerializer();
+		StringWriter writer = new StringWriter();
+		String result = "";
+		try {
+			serializer.setOutput(writer);
+			serializer.startTag("", "string");
+			serializer.text(s);
+			serializer.endTag("", "string");
+			serializer.endDocument();
+			result = writer.toString();
+		} catch (IOException e) {
+			result = "<string>" + s + "</string>";
+		}
+		return result;
 	}
 
 	public void sendArray(Object[] objArray)
