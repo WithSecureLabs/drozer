@@ -9,11 +9,7 @@ import logging
 import functools
 import xml.etree.cElementTree as etree
 
-logginglevel = logging.WARNING
-if True:
-    logginglevel = logging.DEBUG
-
-logging.basicConfig(name = 'Reflect', level = logginglevel) # logging.DEBUG
+logging.basicConfig(name = 'Reflect', level = logging.DEBUG)
 logsend = logging.getLogger(" -> ")
 logrecv = logging.getLogger(" <- ")
 
@@ -36,10 +32,11 @@ class Reflect(object):
     # So pylint doesn't complain when it can't resolve dynamic attributes
     invoke = construct = resolve = getprop = setprop = getctx = delete = deleteall = classload = object
 
-    def __init__(self, session = None):
+    def __init__(self, session = None, debug = False):
         if session == None:
             session = common.Session('127.0.0.1', 31415, None)
         self.session = session
+        self._debug = debug
 
         for funclist in self._functions:
             setattr(self, funclist[0], functools.partial(self._action, *funclist)) #pylint: disable-msg=W0142
@@ -94,11 +91,13 @@ class Reflect(object):
             for arg in args[numargs:]:
                 addelem.append(ReflectedTypeFactory(arg, self).to_element())
 
-        logsend.debug(etree.tostring(transmission, encoding = 'UTF-8'))
+        if self._debug:
+            logsend.debug(etree.tostring(transmission, encoding = 'UTF-8'))
 
         # We must specify the encoding, or we won't get the <?xml ?> declaration
         response = self._transceive(etree.tostring(transmission, encoding = 'UTF-8'))
-        logrecv.debug(response)
+        if self._debug:
+            logrecv.debug(response)
 
         if response:
             respelem = etree.fromstring(response).find('reflect/return-value')
