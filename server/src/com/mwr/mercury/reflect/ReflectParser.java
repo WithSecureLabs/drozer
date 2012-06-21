@@ -1,10 +1,11 @@
+// License: Refer to the README in the root directory
+
 package com.mwr.mercury.reflect;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +22,10 @@ import org.xml.sax.SAXException;
 
 import android.content.Context;
 import android.util.Base64;
-import android.util.Log;
 
 import com.mwr.mercury.Session;
 
 import dalvik.system.DexClassLoader;
-import dalvik.system.PathClassLoader;
 
 public class ReflectParser
 {

@@ -1,3 +1,5 @@
+// License: Refer to the README in the root directory
+
 package com.mwr.mercury.reflect;
 
 import java.io.IOException;

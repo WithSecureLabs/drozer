@@ -1,3 +1,5 @@
+// License: Refer to the README in the root directory
+
 package com.mwr.mercury.reflect;
 
 import java.lang.reflect.Constructor;
@@ -241,7 +243,7 @@ public class Reflector
 	{
 		switch(a.length) {
 		case 0:
-			return c.getMethod(m, null);
+			return c.getMethod(m, (Class[]) null);
 		case 1:
 			return c.getMethod(m,a[0]);
 		case 2:
