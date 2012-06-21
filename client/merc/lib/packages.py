@@ -81,7 +81,7 @@ Permissions: com.android.vending.billing.IN_APP_NOTIFY.permission.C2D_MESSAGE; c
             print self.session.executeCommand("packages", "info", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_shareduid(self, args):
@@ -128,7 +128,7 @@ Accumulated permissions: com.motorola.blur.setupprovider.Permissions.ACCESS_ACCO
             print self.session.executeCommand("packages", "shareduid", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_attacksurface(self, args):
@@ -159,5 +159,5 @@ Example - finding the attack surface of the built-in browser
             print self.session.executeCommand("packages", "attacksurface", {'packageName':splitargs.packageName}).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass

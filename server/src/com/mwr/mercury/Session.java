@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class Session
 {
-	private BufferedReader input;
+	private BufferedBracketReader input;
 	private PrintWriter output;
 	private Socket clientSocket;  
 	public boolean connected;
@@ -28,7 +28,8 @@ public class Session
 		
 		try
 		{
-			input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()), 8192);
+			//input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()), 8192);
+			input = new BufferedBracketReader(new InputStreamReader(clientSocket.getInputStream()));
 			output = new PrintWriter(clientSocket.getOutputStream(), true);
 		}
 		catch (Exception e) {}
@@ -42,11 +43,12 @@ public class Session
 		try
 		{
 			//Wait until ready
-			while (!input.ready());
+			//while (!input.ready());
 			
 			//Read from socket
-			String content = input.readLine();
-			
+			//String content = input.readLine();
+			String content = readTransmission(input);
+					
 			//Maintain whether connection is still connected or not
 			if (content == null)
 				connected = false;
@@ -55,12 +57,45 @@ public class Session
 			
 			return content;
 		}
-		catch (Exception e)
+		catch (IOException e)
 		{
-			return e.toString();
+			connected = false;
+			return null;
 		}
 	}
 	
+	private String readTransmission(BufferedBracketReader in) throws IOException
+	{
+		//String out = "";
+		//StringBuilder sb = new StringBuilder(512);
+		//int cur = in.read();
+		//while(cur == '\n' || cur  == '\r' || cur == ' ') cur = in.read();
+		String out = "";
+		in.skipWs();
+		while(true) {
+			//Log.d("RECV", "before");
+			String r = in.readChunk();
+			//Log.d("RECV", "after");
+			if(r!=null) {
+				//Log.d("RECV", r);
+				out += r;
+				if(out.endsWith("</transmission>")) {
+					return out;
+				}
+			}
+			/*
+			sb.append((char)cur);
+			 
+			if (cur == (char)'>') {
+				String out = sb.toString();
+				if(out.endsWith("</transmission>"))
+					return out;
+			}
+			cur = in.read();
+			*/
+		}
+	}
+
 	//Write to session - return success
 	public boolean send(String data, boolean base64)
 	{
@@ -134,14 +169,14 @@ public class Session
 		send("</transmission>", false);
 		
 		//Set connected to false so that server does not keep listening on this conn
-		connected = false;
+		// connected = false;
 		
 		//Kill socket
-		try
-		{
-			clientSocket.close();
-		}
-		catch (IOException e) {}
+		//try
+		//{
+		//	clientSocket.close();
+		//}
+		//catch (IOException e) {}
 	}
 	
 	//Send a full transmission without worrying about structure

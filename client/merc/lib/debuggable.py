@@ -43,5 +43,5 @@ Note: it is possible to use -f instead of --filter as shorthand
                 print response
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass

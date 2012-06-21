@@ -59,7 +59,7 @@ Receiver: com.android.settings.bluetooth.BluetoothPermissionRequest
             print self.session.executeCommand("broadcast", "info", {'filter':splitargs.filter} if splitargs.filter else None).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_send(self, args):
@@ -121,7 +121,7 @@ Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMP
             print self.session.executeCommand("broadcast", "send", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def complete_send(self, _text, line, _begidx, _endidx):

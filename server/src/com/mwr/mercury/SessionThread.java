@@ -4,16 +4,20 @@ package com.mwr.mercury;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import com.mwr.mercury.reflect.ReflectParser;
+
 import android.util.Log;
 
 class SessionThread extends Thread
 {
 	Session currentSession;
+	ReflectParser parser;
   
 	//Assign session variables
 	SessionThread(Session session)
 	{
 		currentSession = session;
+		parser = new ReflectParser(session);
 	}
 	
 	@Override
@@ -32,8 +36,9 @@ class SessionThread extends Thread
 			String received = currentSession.receive();
 			
 			//Pass off command to be handled
-			if (received.length() > 0) //Check that it is not null
-				handleCommand(received);
+			if (received != null && received.length() > 0) //Check that it is not null
+				if(!parser.parse(received))
+					handleCommand(received);
 		}
 		Log.e("mercury", "Exiting thread");
 	}
