@@ -83,7 +83,7 @@ Activity started with Intent { act=android.intent.action.VIEW dat=http://www.goo
             print self.session.executeCommand("activity", "start", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
 
@@ -167,7 +167,7 @@ Target activity: com.android.browser.BrowserActivity
             print self.session.executeCommand("activity", "match", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
 
@@ -226,7 +226,7 @@ Activity: com.android.browser.AddBookmarkPage
             print self.session.executeCommand("activity", "info", {'filter':splitargs.filter} if splitargs.filter else None).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_launchintent(self, args):
@@ -255,6 +255,6 @@ Intent { act=android.intent.action.MAIN flg=0x10000000 cmp=com.android.browser/.
             print self.session.executeCommand("activity", "launchintent", {'packageName':splitargs.packageName}).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 

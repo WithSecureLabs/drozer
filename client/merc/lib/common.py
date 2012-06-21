@@ -115,7 +115,7 @@ class Session:
         try:
             self.socketConn.close()
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     # Returns socket connected status = True/False
@@ -129,6 +129,8 @@ class Session:
             return False
 
     def sendData(self, data):
+        if not self.socketConn:
+            self.connectSocket()
         self.socketConn.sendall(data)
 
     def receiveData(self):
@@ -136,6 +138,7 @@ class Session:
 
     def closeSocket(self):
         self.socketConn.close()
+        self.socketConn = None
 
 
 
@@ -311,9 +314,6 @@ class Session:
 
         try:
 
-            # Open socket
-            self.connectSocket()
-
             # Convert command to XML and send
             self.sendData(self.XMLifyCommand(section, function, args_dict) + "\n")
 
@@ -322,10 +322,9 @@ class Session:
             receivedData = self.receiveData()
             while receivedData:
                 responseBuffer = responseBuffer + receivedData
+                if responseBuffer.lower().endswith('</transmission>'):
+                    break
                 receivedData = self.receiveData()
-
-            # Close socket
-            self.closeSocket()
 
             # Parse response from server
             # parsedResponse = self.UnXMLifyResponseRegex(responseBuffer) # Can use this as well but no noticeable performance gain
@@ -358,7 +357,7 @@ class Session:
             # Delete file
             os.unlink(localpath)
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
         fileContentsToMD5 = ""

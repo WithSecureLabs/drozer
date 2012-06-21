@@ -48,7 +48,7 @@ _id | name | value
             print self.session.executeCommand("provider", "columns", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_query(self, args):
@@ -112,7 +112,7 @@ _id | name | value
             print self.session.executeCommand("provider", "query", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
         
     def do_read(self, args):
@@ -142,7 +142,7 @@ No files supported by provider at content://settings/secure/../../../../../../..
             print self.session.executeCommand("provider", "read", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
 
@@ -180,7 +180,7 @@ usage: insert [--string column=data [column=data ...]]
             print self.session.executeCommand("provider", "insert", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_delete(self, args):
@@ -205,7 +205,7 @@ usage: delete [--where <where>] [--selectionArgs <arg> [<arg> ...]] Uri
             print self.session.executeCommand("provider", "delete", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_update(self, args):
@@ -245,7 +245,7 @@ usage: update [--string column=data [column=data ...]]
             print self.session.executeCommand("provider", "update", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
 
@@ -319,7 +319,7 @@ Multiprocess allowed: false
             print self.session.executeCommand("provider", "info", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
 
@@ -393,5 +393,5 @@ content://com.google.settings/partner
 
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass

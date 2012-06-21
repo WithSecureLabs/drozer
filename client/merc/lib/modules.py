@@ -127,7 +127,7 @@ Note: it is possible to use -f instead of --filter as shorthand
             print ""
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_run(self, args):
@@ -150,10 +150,10 @@ These modules are developed by various members of the community, please feel fre
 
             # Compile stated arguments to send to execute
             args = vars(splitargs)['args']
-            
+
             # Convert to a dict
             args_dict = {}
-            
+
             if args:
                 for arg in args:
                     split = arg.split('=')
@@ -170,18 +170,18 @@ These modules are developed by various members of the community, please feel fre
                 print "\nFailed to execute module\n"
 
         # FIXME: Choose specific exceptions to catch
-        except:
-            pass
+        except Exception, e:
+            print "Exception:", str(e)
 
     def complete_run(self, _text, line, _begidx, _endidx):
-        
+
         # Autocompletion on modules
         return [
                 mod for mod in sorted(self.modules)
                  if mod.startswith(_text)
             ]
-        
-        
+
+
     def do_info(self, args):
         """
 Get information about a custom module
@@ -210,11 +210,11 @@ Type "list" to get a list of all available modules
 
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def complete_info(self, _text, line, _begidx, _endidx):
-        
+
         # Autocompletion on modules
         return [
                 mod for mod in sorted(self.modules)

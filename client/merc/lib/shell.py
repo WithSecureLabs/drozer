@@ -47,7 +47,7 @@ usage: persistent [--new]
                 prompt = raw_input().replace("$BB", "/data/data/com.mwr.mercury/busybox")
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def do_oneoff(self, _args):
@@ -84,7 +84,7 @@ Put in simpler terms: a command is received -> new shell session is opened -> co
                 prompt = raw_input("oneoffshell:" + cwd + "$ ").replace("$BB", "/data/data/com.mwr.mercury/busybox")
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
 

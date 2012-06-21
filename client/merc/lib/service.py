@@ -51,7 +51,7 @@ Required Permission: null
             print self.session.executeCommand("service", "info", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
 
@@ -107,7 +107,7 @@ usage: start [--action <action>] [--category <category> [<category> ...]]
             print self.session.executeCommand("service", "start", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
 
@@ -177,7 +177,7 @@ usage: stop [--action <action>] [--category <category> [<category> ...]]
             print self.session.executeCommand("service", "stop", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
-        except:
+        except Exception:
             pass
 
     def complete_stop(self, _text, line, _begidx, _endidx):
