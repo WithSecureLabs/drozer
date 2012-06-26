@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex
+import shlex
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 
 class Packages(BaseCmd):
 
@@ -65,7 +66,7 @@ Permissions: com.android.vending.billing.IN_APP_NOTIFY.permission.C2D_MESSAGE; c
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'info', add_help = False)
+        parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
         parser.add_argument('--permissions', '-p', metavar = '<filter>')
 
@@ -114,7 +115,7 @@ Accumulated permissions: com.motorola.blur.setupprovider.Permissions.ACCESS_ACCO
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'shareduid', add_help = False)
+        parser = BaseArgumentParser(prog = 'shareduid', add_help = False)
         parser.add_argument('--uid', '-u', metavar = '<uid>')
 
         try:
@@ -148,7 +149,7 @@ Example - finding the attack surface of the built-in browser
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'attacksurface', add_help = False)
+        parser = BaseArgumentParser(prog = 'attacksurface', add_help = False)
         parser.add_argument('packageName')
 
         try:

@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex
+import shlex
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 
 class Provider(BaseCmd):
 
@@ -32,7 +33,7 @@ _id | name | value
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'columns', add_help = False)
+        parser = BaseArgumentParser(prog = 'columns', add_help = False)
         parser.add_argument('uri')
 
         try:
@@ -94,7 +95,7 @@ _id | name | value
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'query', add_help = False)
+        parser = BaseArgumentParser(prog = 'query', add_help = False)
         parser.add_argument('--projection', '-p', nargs = '+', metavar = '<column>')
         parser.add_argument('--selection', '-s', metavar = '<rows>')
         parser.add_argument('--selectionArgs', '-sa', nargs = '+', metavar = '<arg>')
@@ -129,7 +130,7 @@ No files supported by provider at content://settings/secure/../../../../../../..
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'read', add_help = False)
+        parser = BaseArgumentParser(prog = 'read', add_help = False)
         parser.add_argument('Uri')
 
         try:
@@ -160,7 +161,7 @@ usage: insert [--string column=data [column=data ...]]
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'insert', add_help = False)
+        parser = BaseArgumentParser(prog = 'insert', add_help = False)
         parser.add_argument('--string', '-s', nargs = '+', metavar = 'column=data')
         parser.add_argument('--boolean', '-b', nargs = '+', metavar = 'column=data')
         parser.add_argument('--integer', '-i', nargs = '+', metavar = 'column=data')
@@ -190,7 +191,7 @@ usage: delete [--where <where>] [--selectionArgs <arg> [<arg> ...]] Uri
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'delete', add_help = False)
+        parser = BaseArgumentParser(prog = 'delete', add_help = False)
         parser.add_argument('--where', '-w', metavar = '<where>')
         parser.add_argument('--selectionArgs', '-sa', nargs = '+', metavar = '<arg>')
         parser.add_argument('Uri')
@@ -223,7 +224,7 @@ usage: update [--string column=data [column=data ...]]
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'update', add_help = False)
+        parser = BaseArgumentParser(prog = 'update', add_help = False)
         parser.add_argument('--string', '-s', nargs = '+', metavar = 'column=data')
         parser.add_argument('--boolean', '-b', nargs = '+', metavar = 'column=data')
         parser.add_argument('--integer', '-i', nargs = '+', metavar = 'column=data')
@@ -303,7 +304,7 @@ Multiprocess allowed: false
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'info', add_help = False)
+        parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
         parser.add_argument('--permissions', '-p', metavar = '<filter>')
 
@@ -343,7 +344,7 @@ content://com.google.settings/partner
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'finduri', add_help = False)
+        parser = BaseArgumentParser(prog = 'finduri', add_help = False)
         parser.add_argument('packageName')
 
         try:

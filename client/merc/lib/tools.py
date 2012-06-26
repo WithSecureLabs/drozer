@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex, os
+import shlex, os
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 from common import intentDictionary
 
 class Tools(BaseCmd):
@@ -34,7 +35,7 @@ MD5 = 3fae15887320940b88df79fe01e62bd8
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'download', add_help = False)
+        parser = BaseArgumentParser(prog = 'download', add_help = False)
         parser.add_argument('path')
         parser.add_argument('downloadfolder')
 
@@ -87,7 +88,7 @@ MD5: 3fae15887320940b88df79fe01e62bd8
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'upload', add_help = False)
+        parser = BaseArgumentParser(prog = 'upload', add_help = False)
         parser.add_argument('localPath')
         parser.add_argument('--uploadFolder', '-u', metavar = '<uploadFolder>')
 
@@ -146,7 +147,7 @@ MD5 = 3fae15887320940b88df79fe01e62bd8
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'fileinfo', add_help = False)
+        parser = BaseArgumentParser(prog = 'fileinfo', add_help = False)
         parser.add_argument('path')
 
         try:
@@ -181,7 +182,7 @@ android.intent.action.NEW_OUTGOING_CALL
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'intents', add_help = False)
+        parser = BaseArgumentParser(prog = 'intents', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
 
         try:

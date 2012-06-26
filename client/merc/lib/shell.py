@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex, sys
+import shlex, sys
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 
 class Shell(BaseCmd):
 
@@ -27,7 +28,7 @@ usage: persistent [--new]
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'persistent', add_help = False)
+        parser = BaseArgumentParser(prog = 'persistent', add_help = False)
         parser.add_argument('--new', '-n', action = 'store_const', const = True)
 
         try:

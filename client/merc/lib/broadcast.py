@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex
+import shlex
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 from common import intentDictionary
 
 class Broadcast(BaseCmd):
@@ -48,7 +49,7 @@ Receiver: com.android.settings.bluetooth.BluetoothPermissionRequest
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'info', add_help = False)
+        parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
 
         try:
@@ -87,7 +88,7 @@ Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMP
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'send', add_help = False)
+        parser = BaseArgumentParser(prog = 'send', add_help = False)
         parser.add_argument('--action', '-a', metavar = '<action>')
         parser.add_argument('--category', '-c', nargs = '+', metavar = '<category>')
         parser.add_argument('--component', '-co', nargs = 2, metavar = ('package', 'class'))
