@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex
+import shlex
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 
 class Native(BaseCmd):
 
@@ -27,7 +28,7 @@ Note: it is possible to use -f instead of --filter as shorthand
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'info', add_help = False)
+        parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
 
         try:

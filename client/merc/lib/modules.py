@@ -4,8 +4,9 @@
 #
 
 import os.path, sys
-import argparse, shlex
+import shlex
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 
 class Module(object):
 
@@ -108,7 +109,7 @@ Note: it is possible to use -f instead of --filter as shorthand
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'list', add_help = False)
+        parser = BaseArgumentParser(prog = 'list', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
 
         try:
@@ -139,7 +140,7 @@ These modules are developed by various members of the community, please feel fre
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'run', add_help = False)
+        parser = BaseArgumentParser(prog = 'run', add_help = False)
         parser.add_argument('module')
         parser.add_argument('--args', '-a', nargs = '+', metavar = 'arg=value')
 
@@ -191,7 +192,7 @@ Type "list" to get a list of all available modules
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'info', add_help = False)
+        parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('module')
 
         try:

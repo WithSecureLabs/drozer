@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex
+import shlex
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 from common import intentDictionary
 
 class Activity(BaseCmd):
@@ -49,7 +50,7 @@ Activity started with Intent { act=android.intent.action.VIEW dat=http://www.goo
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'start', add_help = False)
+        parser = BaseArgumentParser(prog = 'start', add_help = False)
         parser.add_argument('--action', '-a', metavar = '<action>')
         parser.add_argument('--category', '-c', nargs = '+', metavar = '<category>')
         parser.add_argument('--component', '-co', nargs = 2, metavar = ('package', 'class'))
@@ -133,7 +134,7 @@ Target activity: com.android.browser.BrowserActivity
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'start', add_help = False)
+        parser = BaseArgumentParser(prog = 'start', add_help = False)
         parser.add_argument('--action', '-a', metavar = '<action>')
         parser.add_argument('--category', '-c', nargs = '+', metavar = '<category>')
         parser.add_argument('--component', '-co', nargs = 2, metavar = ('package', 'class'))
@@ -215,7 +216,7 @@ Activity: com.android.browser.AddBookmarkPage
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'info', add_help = False)
+        parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
 
         try:
@@ -244,7 +245,7 @@ Intent { act=android.intent.action.MAIN flg=0x10000000 cmp=com.android.browser/.
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'launchintent', add_help = False)
+        parser = BaseArgumentParser(prog = 'launchintent', add_help = False)
         parser.add_argument('packageName')
 
         try:
