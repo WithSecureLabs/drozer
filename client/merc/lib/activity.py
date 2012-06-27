@@ -33,6 +33,7 @@ usage: start [--action <action>] [--category <category> [<category> ...]]
              [--extraserializable key=value [key=value ...]]
              [--extrashort key=value [key=value ...]]
              [--extrastring key=value [key=value ...]]
+             [--output <filename>]
 
 --------------------------------
 Example - starting the browser activity with an explicit intent
@@ -121,6 +122,7 @@ usage: match [--action <action>] [--category <category> [<category> ...]]
              [--extraserializable key=value [key=value ...]]
              [--extrashort key=value [key=value ...]]
              [--extrastring key=value [key=value ...]]
+             [--output <filename>]
 
 --------------------------------
 Example - finding activities that can handle web addresses
@@ -190,7 +192,7 @@ Target activity: com.android.browser.BrowserActivity
     def do_info(self, args):
         """
 Get information about exported activities on the device
-usage: info [--filter <filter>]
+usage: info [--filter <filter>] [--output <filename>]
 
 Note: it is possible to use -f instead of --filter as shorthand
 

@@ -23,7 +23,7 @@ Return to main menu
     def do_info(self, args):
         """
 Get information about exported broadcast receivers
-usage: info [--filter <filter>]
+usage: info [--filter <filter>] [--output <filename>]
 
 Note: it is possible to use -f instead of --filter as shorthand
 
@@ -78,6 +78,7 @@ usage: send [--action <action>] [--category <category> [<category> ...]]
             [--extraserializable key=value [key=value ...]]
             [--extrashort key=value [key=value ...]]
             [--extrastring key=value [key=value ...]]
+            [--output <filename>]
             
 --------------------------------
 Example - sending a BOOT_COMPLETED broadcast that we do not have the permissions for

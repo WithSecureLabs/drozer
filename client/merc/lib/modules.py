@@ -134,7 +134,7 @@ Note: it is possible to use -f instead of --filter as shorthand
     def do_run(self, args):
         """
 Run a custom module
-usage: run module [--args arg=value [arg=value ...]]
+usage: run module [--args arg=value [arg=value ...]] [--output <filename>]
 
 These modules are developed by various members of the community, please feel free to contribute new modules! To find out more information about a module, use "info module" 
         """

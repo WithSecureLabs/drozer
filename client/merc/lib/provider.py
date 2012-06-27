@@ -22,7 +22,7 @@ Return to main menu
     def do_columns(self, args):
         """
 Get the columns of the specified content uri
-usage: columns uri
+usage: columns uri [--output <filename>]
 
 --------------------------------
 Example - finding the columns on content://settings/secure
@@ -59,6 +59,7 @@ usage: query [--projection <column> [<column> ...]] [--selection <rows>]
              [--selectionArgs <arg> [<arg> ...]] [--sortOrder <order>]
              [--showColumns <true/false>]
              Uri
+             [--output <filename>]
              
 The general structure of a content URI is:
 content://authority/table
@@ -119,7 +120,7 @@ _id | name | value
     def do_read(self, args):
         """
 Read from the specified content uri using openInputStream
-usage: read Uri
+usage: read Uri [--output <filename>]
 
 --------------------------------
 Example - attempting a directory traversal on a content provider that supports file reading
@@ -158,6 +159,7 @@ usage: insert [--string column=data [column=data ...]]
               [--long column=data [column=data ...]]
               [--short column=data [column=data ...]]
               Uri
+              [--output <filename>]
         """
 
         # Define command-line arguments using argparse
@@ -187,7 +189,8 @@ usage: insert [--string column=data [column=data ...]]
     def do_delete(self, args):
         """
 Delete from the specified content uri
-usage: delete [--where <where>] [--selectionArgs <arg> [<arg> ...]] Uri
+usage: delete [--where <where>] [--selectionArgs <arg> [<arg> ...]] Uri 
+              [--output <filename>]
         """
 
         # Define command-line arguments using argparse
@@ -221,6 +224,7 @@ usage: update [--string column=data [column=data ...]]
               [--short column=data [column=data ...]] [--where <where>]
               [--selectionArgs args]
               Uri
+              [--output <filename>]
         """
 
         # Define command-line arguments using argparse
@@ -253,7 +257,7 @@ usage: update [--string column=data [column=data ...]]
     def do_info(self, args):
         """
 Get information about exported content providers with optional filters. . It is possible to search for keywords in content provider information and permissions using the filters.
-usage: info [--filter <filter>] [--permissions <filter>]
+usage: info [--filter <filter>] [--permissions <filter>] [--output <filename>]
 
 --------------------------------
 Example - finding all content provider with the keyword "settings" in them
@@ -327,7 +331,7 @@ Multiprocess allowed: false
     def do_finduri(self, args):
         """
 Find content uri strings that are referenced in a package
-usage: finduri packageName
+usage: finduri packageName [--output <filename>]
 
 --------------------------------
 Example - finding all content URI's referenced in the browser package

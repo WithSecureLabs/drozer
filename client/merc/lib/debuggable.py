@@ -22,7 +22,7 @@ Return to menu
     def do_info(self, args):
         """
 Show information about debuggable apps on the device with optional filter
-usage: info [--filter <filter>]
+usage: info [--filter <filter>] [--output <filename>]
 
 Note: it is possible to use -f instead of --filter as shorthand
         """

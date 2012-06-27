@@ -23,7 +23,7 @@ Return to main menu
     def do_info(self, args):
         """
 Get information about exported services with optional filters. . It is possible to search for keywords in service information and permissions using the filters.
-usage: info [--filter <filter>] [--permissions <filter>]
+usage: info [--filter <filter>] [--permissions <filter>] [--output <filename>]
 
 --------------------------------
 Example - finding all services with the keyword "bluetooth" in them
@@ -71,6 +71,7 @@ usage: start [--action <action>] [--category <category> [<category> ...]]
              [--extraserializable key=value [key=value ...]]
              [--extrashort key=value [key=value ...]]
              [--extrastring key=value [key=value ...]]
+             [--output <filename>]
         """
 
         # Define command-line arguments using argparse
@@ -141,6 +142,7 @@ usage: stop [--action <action>] [--category <category> [<category> ...]]
              [--extraserializable key=value [key=value ...]]
              [--extrashort key=value [key=value ...]]
              [--extrastring key=value [key=value ...]]
+             [--output <filename>]
         """
 
         # Define command-line arguments using argparse
