@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex
+import shlex
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 from common import intentDictionary
 
 class Broadcast(BaseCmd):
@@ -22,7 +23,7 @@ Return to main menu
     def do_info(self, args):
         """
 Get information about exported broadcast receivers
-usage: info [--filter <filter>]
+usage: info [--filter <filter>] [--output <filename>]
 
 Note: it is possible to use -f instead of --filter as shorthand
 
@@ -48,7 +49,7 @@ Receiver: com.android.settings.bluetooth.BluetoothPermissionRequest
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'info', add_help = False)
+        parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
 
         try:
@@ -77,6 +78,7 @@ usage: send [--action <action>] [--category <category> [<category> ...]]
             [--extraserializable key=value [key=value ...]]
             [--extrashort key=value [key=value ...]]
             [--extrastring key=value [key=value ...]]
+            [--output <filename>]
             
 --------------------------------
 Example - sending a BOOT_COMPLETED broadcast that we do not have the permissions for
@@ -87,7 +89,7 @@ Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMP
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'send', add_help = False)
+        parser = BaseArgumentParser(prog = 'send', add_help = False)
         parser.add_argument('--action', '-a', metavar = '<action>')
         parser.add_argument('--category', '-c', nargs = '+', metavar = '<category>')
         parser.add_argument('--component', '-co', nargs = 2, metavar = ('package', 'class'))

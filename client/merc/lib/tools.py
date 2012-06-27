@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex, os
+import shlex, os
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 from common import intentDictionary
 
 class Tools(BaseCmd):
@@ -22,7 +23,7 @@ Return to main menu
     def do_download(self, args):
         """
 Download a file from the device
-usage: download filepath downloadfolder
+usage: download filepath downloadfolder [--output <filename>]
 
 --------------------------------
 Example - downloading a file to the Desktop
@@ -34,7 +35,7 @@ MD5 = 3fae15887320940b88df79fe01e62bd8
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'download', add_help = False)
+        parser = BaseArgumentParser(prog = 'download', add_help = False)
         parser.add_argument('path')
         parser.add_argument('downloadfolder')
 
@@ -75,7 +76,7 @@ MD5 = 3fae15887320940b88df79fe01e62bd8
     def do_upload(self, args):
         """
 Upload a file to the device
-usage: upload [--uploadFolder <uploadFolder>] localPath
+usage: upload [--uploadFolder <uploadFolder>] localPath [--output <filename>]
 
 --------------------------------
 Example - uploading a file from the Desktop to the Mercury data directory
@@ -87,7 +88,7 @@ MD5: 3fae15887320940b88df79fe01e62bd8
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'upload', add_help = False)
+        parser = BaseArgumentParser(prog = 'upload', add_help = False)
         parser.add_argument('localPath')
         parser.add_argument('--uploadFolder', '-u', metavar = '<uploadFolder>')
 
@@ -134,7 +135,7 @@ MD5: 3fae15887320940b88df79fe01e62bd8
     def do_fileinfo(self, args):
         """
 Get size and MD5 of specified file on the device
-usage: fileinfo path
+usage: fileinfo path [--output <filename>]
 
 --------------------------------
 Example - getting information about a file on the Android device
@@ -146,7 +147,7 @@ MD5 = 3fae15887320940b88df79fe01e62bd8
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'fileinfo', add_help = False)
+        parser = BaseArgumentParser(prog = 'fileinfo', add_help = False)
         parser.add_argument('path')
 
         try:
@@ -168,7 +169,7 @@ MD5 = 3fae15887320940b88df79fe01e62bd8
     def do_intents(self, args):
         """
 List all actions/categories/extras with optional search filter
-usage: intents [--filter <filter>]
+usage: intents [--filter <filter>] [--output <filename>]
 
 --------------------------------
 Example - getting all the intents actions with the keyword "call" in them
@@ -181,7 +182,7 @@ android.intent.action.NEW_OUTGOING_CALL
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'intents', add_help = False)
+        parser = BaseArgumentParser(prog = 'intents', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
 
         try:

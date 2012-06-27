@@ -5,6 +5,8 @@
 
 import sys
 import cmd
+import argparse
+from common import FileWriter
 
 class BaseCmd(cmd.Cmd):
 
@@ -66,6 +68,8 @@ before execution (for example, variable substitution) do it here.
 If you want to stop the console, return something that evaluates to true.
 If you want to do some post command processing, do it here.
         """
+        # After the command is executed, redirect the output stream to the standard
+        sys.stdout = sys.__stdout__
         return stop
 
     def emptyline(self):
@@ -79,3 +83,34 @@ Do nothing on empty input line
 Called on an input line when the command prefix is not recognized.
         """
         print "Command not found\n"
+
+
+class BaseArgumentParser(object):
+    """
+Class to replace "argparse.ArgumentParser" in order to enable user to save
+an output of a command to a file
+Added by Luander <luander.r@samsung.com>
+    """
+    def __init__(self, *args, **kwargs):
+        self.parser = argparse.ArgumentParser(**kwargs)
+
+        # Adds a standard argument supported by any command
+        self.parser.add_argument('--output', '-o', metavar = '<file>')
+
+    def add_argument(self, *args, **kwargs):
+        """
+add_argument(dest, ..., name=value, ...)
+add_argument(option_string, option_string, ..., name=value, ...)
+        """
+        self.parser.add_argument(*args)
+
+    def parse_args(self, args=None):
+        """
+Command line argument parsing methods
+        """
+        arguments = self.parser.parse_args(args)
+        # If the (--output, -o) argument is set, then save the output a specified file
+        if arguments.output:
+            sys.stdout = FileWriter(arguments.output)
+
+        return arguments

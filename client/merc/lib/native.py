@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex
+import shlex
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 
 class Native(BaseCmd):
 
@@ -21,13 +22,13 @@ Return to menu
     def do_info(self, args):
         """
 Show information about apps on the device containing native code with optional filter
-usage: info [--filter <filter>]
+usage: info [--filter <filter>] [--output <filename>]
 
 Note: it is possible to use -f instead of --filter as shorthand
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'info', add_help = False)
+        parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
 
         try:
