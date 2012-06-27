@@ -92,7 +92,7 @@ an output of a command to a file
 Added by Luander <luander.r@samsung.com>
     """
     def __init__(self, *args, **kwargs):
-        self.parser = argparse.ArgumentParser(self, kwargs)
+        self.parser = argparse.ArgumentParser(**kwargs)
 
         # Adds a standard argument supported by any command
         self.parser.add_argument('--output', '-o', metavar = '<file>')
