@@ -108,9 +108,13 @@ add_argument(option_string, option_string, ..., name=value, ...)
         """
 Command line argument parsing methods
         """
-        arguments = self.parser.parse_args(args)
-        # If the (--output, -o) argument is set, then save the output a specified file
-        if arguments.output:
-            sys.stdout = FileWriter(arguments.output)
+        try:
+            arguments = self.parser.parse_args(args)
+            # If the (--output, -o) argument is set, then save the output a specified file
+            if arguments.output:
+                sys.stdout = FileWriter(arguments.output)
+                
+        except:
+            arguments = None
 
         return arguments
