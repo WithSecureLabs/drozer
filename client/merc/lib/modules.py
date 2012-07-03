@@ -151,6 +151,9 @@ These modules are developed by various members of the community, please feel fre
 
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
             splitargs = parser.parse_args(shlex.split(args))
+            
+            if not splitargs:
+                return
 
             # Compile stated arguments to send to execute
             args = vars(splitargs)['args']
