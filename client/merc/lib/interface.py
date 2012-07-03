@@ -103,13 +103,14 @@ add_argument(option_string, option_string, ..., name=value, ...)
         """
         self.parser.add_argument(*args, **kwargs)
 
-    def parse_args(self, args=None):
+    def parse_args(self, args=None, outputToFileOption=False):
         """
 Command line argument parsing methods
         """
         
         # Adds a standard argument supported by any command
-        self.parser.add_argument('--output', '-o', metavar = '<file>')
+        if outputToFileOption == True:
+            self.parser.add_argument('--output', '-o', metavar = '<file>')
         
         # If an argument with a help indicator comes in then display usage
         if (("-h" in args) or ("--help" in args)):
