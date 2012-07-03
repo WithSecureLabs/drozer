@@ -24,6 +24,8 @@ class BaseCmd(cmd.Cmd):
     def do_help(self, args):
         """
 'help <command>' or '? <command>' gives help on <command>
+
+For usage instructions on a command, type <command> -h or <command> --help
         """
         ## The only reason to define this method is for the help text in the doc string
         cmd.Cmd.do_help(self, args)
@@ -94,9 +96,6 @@ Added by Luander <luander.r@samsung.com>
     def __init__(self, *args, **kwargs):
         self.parser = argparse.ArgumentParser(**kwargs)
 
-        # Adds a standard argument supported by any command
-        self.parser.add_argument('--output', '-o', metavar = '<file>')
-
     def add_argument(self, *args, **kwargs):
         """
 add_argument(dest, ..., name=value, ...)
@@ -108,9 +107,21 @@ add_argument(option_string, option_string, ..., name=value, ...)
         """
 Command line argument parsing methods
         """
+        
+        # Adds a standard argument supported by any command
+        self.parser.add_argument('--output', '-o', metavar = '<file>')
+        
+        # If the arguments coming in end with a help indicator then display usage
+        if (("-h" in args) or ("--help" in args)):
+            print ""
+            self.parser.print_usage(None)
+            print ""
+            return None
+        
         try:
             arguments = self.parser.parse_args(args)
-            # If the (--output, -o) argument is set, then save the output a specified file
+            
+            # If the (--output, -o) argument is set, then save the output to a specified file
             if arguments.output:
                 sys.stdout = FileWriter(arguments.output)
                 
