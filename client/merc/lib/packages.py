@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex
+import shlex
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 
 class Packages(BaseCmd):
 
@@ -21,7 +22,7 @@ Return to main menu
     def do_info(self, args):
         """
 List all installed packages on the device with optional filters. It is possible to search for keywords in package information and permissions using the filters.
-usage: info [--filter <filter>] [--permissions <filter>]
+usage: info [--filter <filter>] [--permissions <filter>] [--output <filename>]
 
 --------------------------------
 Example - finding which packages contain the keyword "browser" in their information
@@ -65,7 +66,7 @@ Permissions: com.android.vending.billing.IN_APP_NOTIFY.permission.C2D_MESSAGE; c
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'info', add_help = False)
+        parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
         parser.add_argument('--permissions', '-p', metavar = '<filter>')
 
@@ -87,7 +88,7 @@ Permissions: com.android.vending.billing.IN_APP_NOTIFY.permission.C2D_MESSAGE; c
     def do_shareduid(self, args):
         """
 Get which packages share a UID
-usage: shareduid [--uid <uid>]
+usage: shareduid [--uid <uid>] [--output <filename>]
 
 --------------------------------
 Example - finding all the packages that have the shared-UID of 10011
@@ -114,7 +115,7 @@ Accumulated permissions: com.motorola.blur.setupprovider.Permissions.ACCESS_ACCO
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'shareduid', add_help = False)
+        parser = BaseArgumentParser(prog = 'shareduid', add_help = False)
         parser.add_argument('--uid', '-u', metavar = '<uid>')
 
         try:
@@ -134,7 +135,7 @@ Accumulated permissions: com.motorola.blur.setupprovider.Permissions.ACCESS_ACCO
     def do_attacksurface(self, args):
         """
 Examine the attack surface of the given package
-usage: attacksurface packageName
+usage: attacksurface packageName [--output <filename>]
 
 --------------------------------
 Example - finding the attack surface of the built-in browser
@@ -148,7 +149,7 @@ Example - finding the attack surface of the built-in browser
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'attacksurface', add_help = False)
+        parser = BaseArgumentParser(prog = 'attacksurface', add_help = False)
         parser.add_argument('packageName')
 
         try:

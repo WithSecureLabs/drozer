@@ -83,7 +83,8 @@ public class Packages
 								filter.toUpperCase())
 						|| dataDir.toUpperCase().contains(filter.toUpperCase())
 						|| publicSourceDir.toUpperCase().contains(
-								filter.toUpperCase());
+								filter.toUpperCase())
+						|| (uid.toString().equals(filter));
 
 			boolean relevantPermissions = permissions != "";
 			if (relevantPermissions)

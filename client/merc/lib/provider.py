@@ -3,8 +3,9 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex
+import shlex
 from basecmd import BaseCmd
+from basecmd import BaseArgumentParser
 
 class Provider(BaseCmd):
 
@@ -21,7 +22,7 @@ Return to main menu
     def do_columns(self, args):
         """
 Get the columns of the specified content uri
-usage: columns uri
+usage: columns uri [--output <filename>]
 
 --------------------------------
 Example - finding the columns on content://settings/secure
@@ -32,7 +33,7 @@ _id | name | value
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'columns', add_help = False)
+        parser = BaseArgumentParser(prog = 'columns', add_help = False)
         parser.add_argument('uri')
 
         try:
@@ -58,6 +59,7 @@ usage: query [--projection <column> [<column> ...]] [--selection <rows>]
              [--selectionArgs <arg> [<arg> ...]] [--sortOrder <order>]
              [--showColumns <true/false>]
              Uri
+             [--output <filename>]
              
 The general structure of a content URI is:
 content://authority/table
@@ -94,7 +96,7 @@ _id | name | value
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'query', add_help = False)
+        parser = BaseArgumentParser(prog = 'query', add_help = False)
         parser.add_argument('--projection', '-p', nargs = '+', metavar = '<column>')
         parser.add_argument('--selection', '-s', metavar = '<rows>')
         parser.add_argument('--selectionArgs', '-sa', nargs = '+', metavar = '<arg>')
@@ -118,7 +120,7 @@ _id | name | value
     def do_read(self, args):
         """
 Read from the specified content uri using openInputStream
-usage: read Uri
+usage: read Uri [--output <filename>]
 
 --------------------------------
 Example - attempting a directory traversal on a content provider that supports file reading
@@ -129,7 +131,7 @@ No files supported by provider at content://settings/secure/../../../../../../..
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'read', add_help = False)
+        parser = BaseArgumentParser(prog = 'read', add_help = False)
         parser.add_argument('Uri')
 
         try:
@@ -157,10 +159,11 @@ usage: insert [--string column=data [column=data ...]]
               [--long column=data [column=data ...]]
               [--short column=data [column=data ...]]
               Uri
+              [--output <filename>]
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'insert', add_help = False)
+        parser = BaseArgumentParser(prog = 'insert', add_help = False)
         parser.add_argument('--string', '-s', nargs = '+', metavar = 'column=data')
         parser.add_argument('--boolean', '-b', nargs = '+', metavar = 'column=data')
         parser.add_argument('--integer', '-i', nargs = '+', metavar = 'column=data')
@@ -186,11 +189,12 @@ usage: insert [--string column=data [column=data ...]]
     def do_delete(self, args):
         """
 Delete from the specified content uri
-usage: delete [--where <where>] [--selectionArgs <arg> [<arg> ...]] Uri
+usage: delete [--where <where>] [--selectionArgs <arg> [<arg> ...]] Uri 
+              [--output <filename>]
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'delete', add_help = False)
+        parser = BaseArgumentParser(prog = 'delete', add_help = False)
         parser.add_argument('--where', '-w', metavar = '<where>')
         parser.add_argument('--selectionArgs', '-sa', nargs = '+', metavar = '<arg>')
         parser.add_argument('Uri')
@@ -220,10 +224,11 @@ usage: update [--string column=data [column=data ...]]
               [--short column=data [column=data ...]] [--where <where>]
               [--selectionArgs args]
               Uri
+              [--output <filename>]
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'update', add_help = False)
+        parser = BaseArgumentParser(prog = 'update', add_help = False)
         parser.add_argument('--string', '-s', nargs = '+', metavar = 'column=data')
         parser.add_argument('--boolean', '-b', nargs = '+', metavar = 'column=data')
         parser.add_argument('--integer', '-i', nargs = '+', metavar = 'column=data')
@@ -252,7 +257,7 @@ usage: update [--string column=data [column=data ...]]
     def do_info(self, args):
         """
 Get information about exported content providers with optional filters. . It is possible to search for keywords in content provider information and permissions using the filters.
-usage: info [--filter <filter>] [--permissions <filter>]
+usage: info [--filter <filter>] [--permissions <filter>] [--output <filename>]
 
 --------------------------------
 Example - finding all content provider with the keyword "settings" in them
@@ -303,7 +308,7 @@ Multiprocess allowed: false
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'info', add_help = False)
+        parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
         parser.add_argument('--permissions', '-p', metavar = '<filter>')
 
@@ -326,7 +331,7 @@ Multiprocess allowed: false
     def do_finduri(self, args):
         """
 Find content uri strings that are referenced in a package
-usage: finduri packageName
+usage: finduri packageName [--output <filename>]
 
 --------------------------------
 Example - finding all content URI's referenced in the browser package
@@ -343,7 +348,7 @@ content://com.google.settings/partner
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'finduri', add_help = False)
+        parser = BaseArgumentParser(prog = 'finduri', add_help = False)
         parser.add_argument('packageName')
 
         try:
