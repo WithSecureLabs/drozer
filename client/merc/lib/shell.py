@@ -29,6 +29,8 @@ usage: persistent [--new]
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'persistent', add_help = False)
         parser.add_argument('--new', '-n', action = 'store_const', const = True)
+        
+        parser.setOutputToFileOption()
 
         try:
 
