@@ -5,7 +5,7 @@
 
 from shell import Shell
 from tools import Tools
-from basecmd import BaseCmd
+from interface import BaseCmd, BaseArgumentParser
 from service import Service
 from modules import Modules
 from activity import Activity

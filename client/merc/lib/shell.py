@@ -4,7 +4,7 @@
 #
 
 import argparse, shlex, sys
-from basecmd import BaseCmd
+from interface import BaseCmd, BaseArgumentParser
 
 class Shell(BaseCmd):
 

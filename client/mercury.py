@@ -5,7 +5,7 @@
 
 import argparse, shlex, sys, urllib2
 from xml.dom.minidom import parseString
-from merc.lib.basecmd import BaseCmd
+from merc.lib.interface import BaseCmd, BaseArgumentParser
 from merc.lib.common import Session, mercury_version
 from merc.lib.menu import Menu
 

@@ -5,8 +5,7 @@
 
 import os.path, sys
 import shlex
-from basecmd import BaseCmd
-from basecmd import BaseArgumentParser
+from interface import BaseCmd, BaseArgumentParser
 
 class Module(object):
 

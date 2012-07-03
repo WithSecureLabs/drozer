@@ -85,8 +85,8 @@ Do nothing on empty input line
 Called on an input line when the command prefix is not recognized.
         """
         print "Command not found\n"
-
-
+        
+        
 class BaseArgumentParser(object):
     """
 Class to replace "argparse.ArgumentParser" in order to enable user to save
@@ -111,7 +111,7 @@ Command line argument parsing methods
         # Adds a standard argument supported by any command
         self.parser.add_argument('--output', '-o', metavar = '<file>')
         
-        # If the arguments coming in end with a help indicator then display usage
+        # If an argument with a help indicator comes in then display usage
         if (("-h" in args) or ("--help" in args)):
             print ""
             self.parser.print_usage(None)
@@ -129,3 +129,5 @@ Command line argument parsing methods
             arguments = None
 
         return arguments
+    
+
