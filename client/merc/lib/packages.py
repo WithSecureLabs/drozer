@@ -68,7 +68,8 @@ Permissions: com.android.vending.billing.IN_APP_NOTIFY.permission.C2D_MESSAGE; c
         parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
         parser.add_argument('--permissions', '-p', metavar = '<filter>')
-
+        
+        parser.setOutputToFileOption()
 
         try:
 
@@ -116,6 +117,8 @@ Accumulated permissions: com.motorola.blur.setupprovider.Permissions.ACCESS_ACCO
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'shareduid', add_help = False)
         parser.add_argument('--uid', '-u', metavar = '<uid>')
+        
+        parser.setOutputToFileOption()
 
         try:
 
@@ -150,6 +153,8 @@ Example - finding the attack surface of the built-in browser
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'attacksurface', add_help = False)
         parser.add_argument('packageName')
+        
+        parser.setOutputToFileOption()
 
         try:
 

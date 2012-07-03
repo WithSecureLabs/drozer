@@ -110,6 +110,8 @@ Note: it is possible to use -f instead of --filter as shorthand
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'list', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
+        
+        parser.setOutputToFileOption()
 
         try:
 
@@ -142,6 +144,8 @@ These modules are developed by various members of the community, please feel fre
         parser = BaseArgumentParser(prog = 'run', add_help = False)
         parser.add_argument('module')
         parser.add_argument('--args', '-a', nargs = '+', metavar = 'arg=value')
+        
+        parser.setOutputToFileOption()
 
         try:
 
@@ -193,6 +197,8 @@ Type "list" to get a list of all available modules
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('module')
+        
+        parser.setOutputToFileOption()
 
         try:
 

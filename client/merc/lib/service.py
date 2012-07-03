@@ -38,6 +38,8 @@ Required Permission: null
         parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
         parser.add_argument('--permissions', '-p', metavar = '<filter>')
+        
+        parser.setOutputToFileOption()
 
         try:
 

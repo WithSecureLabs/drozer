@@ -95,6 +95,7 @@ Added by Luander <luander.r@samsung.com>
     """
     def __init__(self, *args, **kwargs):
         self.parser = argparse.ArgumentParser(**kwargs)
+        self.outputToFileOption = False
 
     def add_argument(self, *args, **kwargs):
         """
@@ -102,14 +103,20 @@ add_argument(dest, ..., name=value, ...)
 add_argument(option_string, option_string, ..., name=value, ...)
         """
         self.parser.add_argument(*args, **kwargs)
+        
+    def setOutputToFileOption(self):
+        """
+Enable the option to output the result of this command to a file
+        """
+        self.outputToFileOption = True
 
-    def parse_args(self, args=None, outputToFileOption=False):
+    def parse_args(self, args=None):
         """
 Command line argument parsing methods
         """
-        
-        # Adds a standard argument supported by any command
-        if outputToFileOption == True:
+
+        # Adds an argument to output to a file
+        if self.outputToFileOption:
             self.parser.add_argument('--output', '-o', metavar = '<file>')
         
         # If an argument with a help indicator comes in then display usage
