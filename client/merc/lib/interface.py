@@ -122,20 +122,21 @@ Command line argument parsing methods
         # If an argument with a help indicator comes in then display usage
         if (("-h" in args) or ("--help" in args)):
             print ""
-            self.parser.print_usage(None)
+            self.parser.print_usage()
             print ""
-            return None
-        
-        try:
-            arguments = self.parser.parse_args(args)
-            
-            # If the (--output, -o) argument is set, then save the output to a specified file
-            if arguments.output:
-                sys.stdout = FileWriter(arguments.output)
-                
-        except:
-            arguments = None
+        else:
 
-        return arguments
+            try:
+                arguments = self.parser.parse_args(args)
+                
+                # If the (--output, -o) argument is set, then save the output to a specified file
+                if self.outputToFileOption:
+                    if arguments.output:
+                        sys.stdout = FileWriter(arguments.output)
+                    
+            except:
+                arguments = None
+            finally:
+                return arguments
     
 
