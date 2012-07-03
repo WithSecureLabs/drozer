@@ -59,12 +59,13 @@ Use adb forward tcp:31415 tcp:31415 when using an emulator or usb-connected devi
         parser = BaseArgumentParser(prog = 'connect', add_help = False)
         parser.add_argument('ip')
         parser.add_argument('--port', '-p', metavar = '<port>')
-        
-        parser.setOutputToFileOption()
 
         try:
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
             splitargs = parser.parse_args(shlex.split(args))
+            
+            if splitargs == None:
+                return
 
             # Get session ip
             sessionip = splitargs.ip
