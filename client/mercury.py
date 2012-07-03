@@ -64,7 +64,7 @@ Use adb forward tcp:31415 tcp:31415 when using an emulator or usb-connected devi
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
             splitargs = parser.parse_args(shlex.split(args))
             
-            if splitargs == None:
+            if not splitargs:
                 return
 
             # Get session ip
