@@ -102,7 +102,7 @@ Added by Luander <luander.r@samsung.com>
 add_argument(dest, ..., name=value, ...)
 add_argument(option_string, option_string, ..., name=value, ...)
         """
-        self.parser.add_argument(*args)
+        self.parser.add_argument(*args, **kwargs)
 
     def parse_args(self, args=None):
         """
