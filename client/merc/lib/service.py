@@ -4,8 +4,7 @@
 #
 
 import shlex
-from basecmd import BaseCmd
-from basecmd import BaseArgumentParser
+from interface import BaseCmd, BaseArgumentParser
 from common import intentDictionary
 
 class Service(BaseCmd):
@@ -39,6 +38,8 @@ Required Permission: null
         parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
         parser.add_argument('--permissions', '-p', metavar = '<filter>')
+        
+        parser.setOutputToFileOption()
 
         try:
 

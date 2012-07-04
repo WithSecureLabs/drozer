@@ -4,8 +4,7 @@
 #
 
 import shlex
-from basecmd import BaseCmd
-from basecmd import BaseArgumentParser
+from interface import BaseCmd, BaseArgumentParser
 
 class Provider(BaseCmd):
 
@@ -35,6 +34,8 @@ _id | name | value
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'columns', add_help = False)
         parser.add_argument('uri')
+        
+        parser.setOutputToFileOption()
 
         try:
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
@@ -103,6 +104,8 @@ _id | name | value
         parser.add_argument('--sortOrder', '-so', metavar = '<order>')
         parser.add_argument('--showColumns', '-nc', metavar = '<true/false>')
         parser.add_argument('Uri')
+        
+        parser.setOutputToFileOption()
 
         try:
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
@@ -133,6 +136,8 @@ No files supported by provider at content://settings/secure/../../../../../../..
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'read', add_help = False)
         parser.add_argument('Uri')
+        
+        parser.setOutputToFileOption()
 
         try:
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
@@ -311,6 +316,8 @@ Multiprocess allowed: false
         parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
         parser.add_argument('--permissions', '-p', metavar = '<filter>')
+        
+        parser.setOutputToFileOption()
 
 
         try:
@@ -350,6 +357,8 @@ content://com.google.settings/partner
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'finduri', add_help = False)
         parser.add_argument('packageName')
+        
+        parser.setOutputToFileOption()
 
         try:
 

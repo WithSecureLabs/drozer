@@ -3,11 +3,13 @@
 # License: Refer to the README in the root directory
 #
 
-import argparse, shlex, sys, urllib2
-from xml.dom.minidom import parseString
-from merc.lib.basecmd import BaseCmd
 from merc.lib.common import Session, mercury_version
+from merc.lib.interface import BaseCmd, BaseArgumentParser
 from merc.lib.menu import Menu
+from xml.dom.minidom import parseString
+import shlex
+import urllib2
+import sys
 
 class Mercury(BaseCmd):
 
@@ -68,13 +70,16 @@ Use adb forward tcp:31415 tcp:31415 when using an emulator or usb-connected devi
         """
 
         # Define command-line arguments using argparse
-        parser = argparse.ArgumentParser(prog = 'connect', add_help = False)
+        parser = BaseArgumentParser(prog = 'connect', add_help = False)
         parser.add_argument('ip')
         parser.add_argument('--port', '-p', metavar = '<port>')
 
         try:
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
             splitargs = parser.parse_args(shlex.split(args))
+            
+            if not splitargs:
+                return
 
             # Get session ip
             sessionip = splitargs.ip

@@ -4,8 +4,7 @@
 #
 
 import shlex, os
-from basecmd import BaseCmd
-from basecmd import BaseArgumentParser
+from interface import BaseCmd, BaseArgumentParser
 from common import intentDictionary
 
 class Tools(BaseCmd):
@@ -149,6 +148,8 @@ MD5 = 3fae15887320940b88df79fe01e62bd8
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'fileinfo', add_help = False)
         parser.add_argument('path')
+        
+        parser.setOutputToFileOption()
 
         try:
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
@@ -184,11 +185,13 @@ android.intent.action.NEW_OUTGOING_CALL
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'intents', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
+        
+        parser.setOutputToFileOption()
 
         try:
 
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
-            splitargs = parser.parse_args(shlex.split(args))
+            splitargs = parser.parse_args(shlex.split(args),)
 
             print ""
 

@@ -4,8 +4,7 @@
 #
 
 import shlex
-from basecmd import BaseCmd
-from basecmd import BaseArgumentParser
+from interface import BaseCmd, BaseArgumentParser
 from common import intentDictionary
 
 class Activity(BaseCmd):
@@ -152,6 +151,8 @@ Target activity: com.android.browser.BrowserActivity
         parser.add_argument('--extraserializable', '-ese', nargs = '+', metavar = 'key=value')
         parser.add_argument('--extrashort', '-esh', nargs = '+', metavar = 'key=value')
         parser.add_argument('--extrastring', '-es', nargs = '+', metavar = 'key=value')
+        
+        parser.setOutputToFileOption()
 
 
         try:
@@ -220,6 +221,8 @@ Activity: com.android.browser.AddBookmarkPage
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
+        
+        parser.setOutputToFileOption()
 
         try:
 
@@ -249,6 +252,8 @@ Intent { act=android.intent.action.MAIN flg=0x10000000 cmp=com.android.browser/.
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'launchintent', add_help = False)
         parser.add_argument('packageName')
+        
+        parser.setOutputToFileOption()
 
         try:
 

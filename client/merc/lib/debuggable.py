@@ -4,8 +4,7 @@
 #
 
 import shlex
-from basecmd import BaseCmd
-from basecmd import BaseArgumentParser
+from interface import BaseCmd, BaseArgumentParser
 
 class Debuggable(BaseCmd):
 
@@ -30,6 +29,8 @@ Note: it is possible to use -f instead of --filter as shorthand
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
+        
+        parser.setOutputToFileOption()
 
         try:
 

@@ -11,7 +11,6 @@ import base64
 import types
 import md5
 import sys
-
 from xml.dom.minidom import parseString
 
 # Mercury version
@@ -36,48 +35,6 @@ Added by Luander <luander.r@samsung.com>
     def write(self, message):
         self.terminal.write(message)
         self.log.write(message)
-
-class Color:
-    """Write coloured text on linux terminal,
-       Write normal text on Windows Command Prompt.
-       Added by Luander <luander.r@samsung.com>
-    """
-    RED = "\033[91m"
-    GREEN = "\033[92m"
-    YELLOW = "\033[93m"
-    BLUE = "\033[94m"
-    PURPLE = "\033[95m"
-    ENDC = "\033[0m"
-
-    def red(self, text):
-        if (os.name == "posix"):
-            return self.RED + text + self.ENDC
-        else:
-            return text
-
-    def green(self, text):
-        if (os.name == "posix"):
-            return self.GREEN + text + self.ENDC
-        else:
-            return text
-
-    def yellow(self, text):
-        if (os.name == "posix"):
-            return self.YELLOW + text + self.ENDC
-        else:
-            return text
-
-    def blue(self, text):
-        if (os.name == "posix"):
-            return self.BLUE + text + self.ENDC
-        else:
-            return text
-
-    def purple(self, text):
-        if (os.name == "posix"):
-            return self.PURPLE + text + self.ENDC
-        else:
-            return text
 
 class Response:
     """Response class"""
@@ -124,7 +81,7 @@ class Session:
         self.direction = direction
         self.socketConn = None
         # Field to manage colors on linux terminal, see #Colors for more information
-        self.color = Color()
+        self.color = UIColor()
 
     def __del__(self):
         try:
@@ -421,3 +378,49 @@ class Session:
 
         # Get the MD5 of the uploaded file
         return self.executeCommand("core", "fileMD5", {'path':fullPath})
+
+class UIColor(object):
+    """
+Write coloured text on linux terminal,
+Write normal text on Windows Command Prompt.
+Added by Luander <luander.r@samsung.com>
+    """
+    
+    def __init__(self):
+        self.enabled = True if (os.name == "posix") else False
+        self.RED = "\033[91m"
+        self.GREEN = "\033[92m"
+        self.YELLOW = "\033[93m"
+        self.BLUE = "\033[94m"
+        self.PURPLE = "\033[95m"
+        self.ENDC = "\033[0m"
+
+    def red(self, text):
+        if self.enabled:
+            return self.RED + text + self.ENDC
+        else:
+            return text
+
+    def green(self, text):
+        if self.enabled:
+            return self.GREEN + text + self.ENDC
+        else:
+            return text
+
+    def yellow(self, text):
+        if self.enabled:
+            return self.YELLOW + text + self.ENDC
+        else:
+            return text
+
+    def blue(self, text):
+        if self.enabled:
+            return self.BLUE + text + self.ENDC
+        else:
+            return text
+
+    def purple(self, text):
+        if self.enabled:
+            return self.PURPLE + text + self.ENDC
+        else:
+            return text
