@@ -12,6 +12,20 @@ from merc.lib.menu import Menu
 class Mercury(BaseCmd):
 
     def __init__(self):
+        #if len(sys.argv) > 1 and len(sys.argv) <= 2:
+        #sys.stdin = open(sys.argv.pop())
+
+        parser = argparse.ArgumentParser(prog = 'resource', add_help = False)
+        parser.add_argument('--resource', '-r', metavar = '<resource>')
+
+        sys.argv.remove(sys.argv[0])
+
+        splitargs = parser.parse_args(sys.argv)
+
+        resourceFile = splitargs.resource
+        if resourceFile is not None:
+            sys.stdin = open(resourceFile)
+
         BaseCmd.__init__(self, None)
         self.prompt = "mercury> "
         self.intro = """
@@ -157,5 +171,8 @@ Check if there is an updated release available from http://labs.mwrinfosecurity.
 
 if __name__ == '__main__':
 
-    console = Mercury()
-    console.cmdloop()
+    try:
+        console = Mercury()
+        console.cmdloop()
+    except IOError:
+        print 'Error on opening resource file.'
