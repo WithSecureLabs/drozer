@@ -14,6 +14,24 @@ import sys
 class Mercury(BaseCmd):
 
     def __init__(self):
+        """
+When using a resource file as input, remember to always end the file with "exit" command,
+otherwise Mercury will enter in an infinite loop.
+        """
+        parser = BaseArgumentParser(prog = 'mercury.py', add_help = False)
+        parser.add_argument('--resource', '-r', metavar = '<resource>')
+
+        sys.argv.remove(sys.argv[0])
+
+        splitargs = parser.parse_args(sys.argv)
+
+        if splitargs is not None:
+            resourceFile = splitargs.resource
+            if resourceFile is not None:
+                sys.stdin = open(resourceFile)
+        else:
+            raise AttributeError()
+
         BaseCmd.__init__(self, None)
         self.prompt = "mercury> "
         self.intro = """
@@ -162,5 +180,11 @@ Check if there is an updated release available from http://labs.mwrinfosecurity.
 
 if __name__ == '__main__':
 
-    console = Mercury()
-    console.cmdloop()
+    try:
+        console = Mercury()
+        console.cmdloop()
+    except IOError:
+        print 'Error on opening resource file.'
+    except AttributeError:
+        pass
+
