@@ -163,7 +163,7 @@ Check if there is an updated release available from http://labs.mwrinfosecurity.
 
             # Check if current version is the latest
             if mercury_version == update_version_number:
-                display = "You are currently running the latest release."
+                display = "You are currently running the latest release.\nFor development versions please visit https://github.com/mwrlabs/mercury"
             else:
                 display = "There is an update available with the following information:\n"
                 display += "Version: " + update_version_number + "\n"
