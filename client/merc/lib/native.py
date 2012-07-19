@@ -21,7 +21,7 @@ Return to menu
     def do_info(self, args):
         """
 Show information about apps on the device containing native code with optional filter
-usage: info [--filter <filter>] [--output <filename>]
+usage: info [--filter <filter>] [--output <file>]
 
 Note: it is possible to use -f instead of --filter as shorthand
         """

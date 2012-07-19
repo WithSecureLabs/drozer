@@ -21,7 +21,7 @@ Return to main menu
     def do_info(self, args):
         """
 List all installed packages on the device with optional filters. It is possible to search for keywords in package information and permissions using the filters.
-usage: info [--filter <filter>] [--permissions <filter>] [--output <filename>]
+usage: info [--filter <filter>] [--permissions <filter>] [--output <file>]
 
 --------------------------------
 Example - finding which packages contain the keyword "browser" in their information
@@ -88,7 +88,7 @@ Permissions: com.android.vending.billing.IN_APP_NOTIFY.permission.C2D_MESSAGE; c
     def do_shareduid(self, args):
         """
 Get which packages share a UID
-usage: shareduid [--uid <uid>] [--output <filename>]
+usage: shareduid [--uid <uid>] [--output <file>]
 
 --------------------------------
 Example - finding all the packages that have the shared-UID of 10011
@@ -137,7 +137,7 @@ Accumulated permissions: com.motorola.blur.setupprovider.Permissions.ACCESS_ACCO
     def do_attacksurface(self, args):
         """
 Examine the attack surface of the given package
-usage: attacksurface packageName [--output <filename>]
+usage: attacksurface [--output <file>] packageName
 
 --------------------------------
 Example - finding the attack surface of the built-in browser

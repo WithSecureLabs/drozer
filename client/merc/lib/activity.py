@@ -32,7 +32,6 @@ usage: start [--action <action>] [--category <category> [<category> ...]]
              [--extraserializable key=value [key=value ...]]
              [--extrashort key=value [key=value ...]]
              [--extrastring key=value [key=value ...]]
-             [--output <filename>]
 
 --------------------------------
 Example - starting the browser activity with an explicit intent
@@ -120,8 +119,7 @@ usage: match [--action <action>] [--category <category> [<category> ...]]
              [--extralong key=value [key=value ...]]
              [--extraserializable key=value [key=value ...]]
              [--extrashort key=value [key=value ...]]
-             [--extrastring key=value [key=value ...]]
-             [--output <filename>]
+             [--extrastring key=value [key=value ...]] [--output <file>]
 
 --------------------------------
 Example - finding activities that can handle web addresses
@@ -193,7 +191,7 @@ Target activity: com.android.browser.BrowserActivity
     def do_info(self, args):
         """
 Get information about exported activities on the device
-usage: info [--filter <filter>] [--output <filename>]
+usage: info [--filter <filter>] [--output <file>]
 
 Note: it is possible to use -f instead of --filter as shorthand
 
@@ -238,7 +236,7 @@ Activity: com.android.browser.AddBookmarkPage
     def do_launchintent(self, args):
         """
 Get the launch intent of the given package
-usage: launchintent packageName
+usage: launchintent [--output <file>] packageName
 
 --------------------------------
 Example - getting the main activity of the Android browser package

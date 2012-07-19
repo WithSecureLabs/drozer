@@ -102,7 +102,7 @@ Developer note: When developing a new module or changing code, remember to reloa
     def do_list(self, args):
         """
 List all available modules with optional filter
-usage: list [--filter <filter>]
+usage: list [--filter <filter>] [--output <file>]
 
 Note: it is possible to use -f instead of --filter as shorthand
         """
@@ -135,7 +135,7 @@ Note: it is possible to use -f instead of --filter as shorthand
     def do_run(self, args):
         """
 Run a custom module
-usage: run module [--args arg=value [arg=value ...]] [--output <filename>]
+usage: run [--args arg=value [arg=value ...]] [--output <file>] module
 
 These modules are developed by various members of the community, please feel free to contribute new modules! To find out more information about a module, use "info module" 
         """

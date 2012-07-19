@@ -22,7 +22,7 @@ Return to main menu
     def do_info(self, args):
         """
 Get information about exported services with optional filters. . It is possible to search for keywords in service information and permissions using the filters.
-usage: info [--filter <filter>] [--permissions <filter>] [--output <filename>]
+usage: info [--filter <filter>] [--permissions <filter>] [--output <file>]
 
 --------------------------------
 Example - finding all services with the keyword "bluetooth" in them
@@ -61,8 +61,8 @@ Required Permission: null
         """
 Start a service with an intent
 usage: start [--action <action>] [--category <category> [<category> ...]]
-             [--component package class] [--data <data>]
-             [--flags <0x...>] [--mimetype <mimetype>]
+             [--component package class] [--data <data>] [--flags <0x...>]
+             [--mimetype <mimetype>]
              [--extraboolean key=value [key=value ...]]
              [--extrabyte key=value [key=value ...]]
              [--extradouble key=value [key=value ...]]
@@ -72,7 +72,7 @@ usage: start [--action <action>] [--category <category> [<category> ...]]
              [--extraserializable key=value [key=value ...]]
              [--extrashort key=value [key=value ...]]
              [--extrastring key=value [key=value ...]]
-             [--output <filename>]
+
         """
 
         # Define command-line arguments using argparse
@@ -132,18 +132,17 @@ usage: start [--action <action>] [--category <category> [<category> ...]]
         """
 Stop a service with an intent
 usage: stop [--action <action>] [--category <category> [<category> ...]]
-             [--component package class] [--data <data>]
-             [--flags <0x...>] [--mimetype <mimetype>]
-             [--extraboolean key=value [key=value ...]]
-             [--extrabyte key=value [key=value ...]]
-             [--extradouble key=value [key=value ...]]
-             [--extrafloat key=value [key=value ...]]
-             [--extrainteger key=value [key=value ...]]
-             [--extralong key=value [key=value ...]]
-             [--extraserializable key=value [key=value ...]]
-             [--extrashort key=value [key=value ...]]
-             [--extrastring key=value [key=value ...]]
-             [--output <filename>]
+            [--component package class] [--data <data>] [--flags <0x...>]
+            [--mimetype <mimetype>] [--extraboolean key=value [key=value ...]]
+            [--extrabyte key=value [key=value ...]]
+            [--extradouble key=value [key=value ...]]
+            [--extrafloat key=value [key=value ...]]
+            [--extrainteger key=value [key=value ...]]
+            [--extralong key=value [key=value ...]]
+            [--extraserializable key=value [key=value ...]]
+            [--extrashort key=value [key=value ...]]
+            [--extrastring key=value [key=value ...]]
+
         """
 
         # Define command-line arguments using argparse

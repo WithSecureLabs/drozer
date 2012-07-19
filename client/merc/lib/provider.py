@@ -21,7 +21,7 @@ Return to main menu
     def do_columns(self, args):
         """
 Get the columns of the specified content uri
-usage: columns uri [--output <filename>]
+usage: columns [--output <file>] uri
 
 --------------------------------
 Example - finding the columns on content://settings/secure
@@ -58,9 +58,9 @@ _id | name | value
 Query the specified content provider
 usage: query [--projection <column> [<column> ...]] [--selection <rows>]
              [--selectionArgs <arg> [<arg> ...]] [--sortOrder <order>]
-             [--showColumns <true/false>]
+             [--showColumns <true/false>] [--output <file>]
              Uri
-             [--output <filename>]
+
              
 The general structure of a content URI is:
 content://authority/table
@@ -123,10 +123,10 @@ _id | name | value
     def do_read(self, args):
         """
 Read from the specified content uri using openInputStream
-usage: read Uri [--output <filename>]
+usage: read [--output <file>] Uri
 
 --------------------------------
-Example - attempting a directory traversal on a content provider that supports file reading
+Example - attempting a directory traversal on a content provider that does not support file reading
 --------------------------------
 *mercury#provider> read content://settings/secure/../../../../../../../../../../../system/etc/hosts
 
@@ -156,15 +156,20 @@ No files supported by provider at content://settings/secure/../../../../../../..
     def do_insert(self, args):
         """
 Insert into the specified content uri
-usage: insert [--string column=data [column=data ...]]
+usage: insert Uri [--string column=data [column=data ...]]
               [--boolean column=data [column=data ...]]
               [--integer column=data [column=data ...]]
               [--double column=data [column=data ...]]
               [--float column=data [column=data ...]]
               [--long column=data [column=data ...]]
               [--short column=data [column=data ...]]
-              Uri
-              [--output <filename>]
+              
+----------------------------------------------------------------
+Example - insert a new item into a content provider
+----------------------------------------------------------------
+*mercury#provider> insert content://com.vulnerable.im/messages --string date=1331763850325 type=0 --integer _id=7
+
+content://com.vulnerable.im/messages/3
         """
 
         # Define command-line arguments using argparse
@@ -194,8 +199,7 @@ usage: insert [--string column=data [column=data ...]]
     def do_delete(self, args):
         """
 Delete from the specified content uri
-usage: delete [--where <where>] [--selectionArgs <arg> [<arg> ...]] Uri 
-              [--output <filename>]
+usage: delete Uri [--where <where>] [--selectionArgs <arg> [<arg> ...]]
         """
 
         # Define command-line arguments using argparse
@@ -220,16 +224,22 @@ usage: delete [--where <where>] [--selectionArgs <arg> [<arg> ...]] Uri
     def do_update(self, args):
         """
 Update the specified content uri
-usage: update [--string column=data [column=data ...]]
+usage: update Uri [--string column=data [column=data ...]]
               [--boolean column=data [column=data ...]]
               [--integer column=data [column=data ...]]
               [--double column=data [column=data ...]]
               [--float column=data [column=data ...]]
               [--long column=data [column=data ...]]
               [--short column=data [column=data ...]] [--where <where>]
-              [--selectionArgs args]
-              Uri
-              [--output <filename>]
+              [--selectionArgs <arg> [<arg> ...]]
+              
+----------------------------------------------------------------
+Example - updating an item in a content provider
+----------------------------------------------------------------
+*mercury#provider> update content://com.vulnerable.im/messages --string date=1331930604655 contact=lolzcopter41 account=3 body="Hi" --where _id=3
+
+
+1 rows have been updated.
         """
 
         # Define command-line arguments using argparse
@@ -262,7 +272,7 @@ usage: update [--string column=data [column=data ...]]
     def do_info(self, args):
         """
 Get information about exported content providers with optional filters. . It is possible to search for keywords in content provider information and permissions using the filters.
-usage: info [--filter <filter>] [--permissions <filter>] [--output <filename>]
+usage: info [--filter <filter>] [--permissions <filter>] [--output <file>]
 
 --------------------------------
 Example - finding all content provider with the keyword "settings" in them
@@ -338,11 +348,11 @@ Multiprocess allowed: false
     def do_finduri(self, args):
         """
 Find content uri strings that are referenced in a package
-usage: finduri packageName [--output <filename>]
+usage: finduri [--output <file>] packageName
 
---------------------------------
+----------------------------------------------------------------
 Example - finding all content URI's referenced in the browser package
---------------------------------
+----------------------------------------------------------------
 *mercury#provider> finduri com.android.browser
 
 /system/app/Browser.apk:
@@ -351,7 +361,6 @@ Contains no classes.dex
 /system/app/Browser.odex:
 content://com.google.android.partnersetup.rlzappprovider/
 content://com.google.settings/partner
-
         """
 
         # Define command-line arguments using argparse
