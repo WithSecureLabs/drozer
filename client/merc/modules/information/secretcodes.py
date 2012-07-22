@@ -1,6 +1,5 @@
 
 import os
-import re
 import base64
 
 from merc.lib.modules import Module
@@ -30,15 +29,15 @@ Credit: Mike Auty - MWR Labs"""
 
         r = Reflect(session, debug = False)
         classloader = r.classload(base64.b64encode(classdata))
-        cls = classloader.loadClass("ManifestReader")
+        cls = classloader.loadClass("ManifestReader") #pylint: disable-msg=E1101
         obj = r.construct(cls)
 
         ctx = r.getctx()
-        pml = ctx.getPackageManager().getInstalledPackages(0)
+        pml = ctx.getPackageManager().getInstalledPackages(0) #pylint: disable-msg=E1101
 
         for i in range(int(pml.size().native)):
             package = pml.get(i).packageName
             print "Package:", package
-            codelist = obj.main(ctx, package)
+            codelist = obj.main(ctx, package) #pylint: disable-msg=E1101
             for i in codelist:
                 print "  ", i
