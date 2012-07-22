@@ -240,8 +240,8 @@ class ReflectedPrimitive(ReflectedType):
     def primitive_type(self):
         return self._type
 
-    @primitive_type.setter
-    def primitive_type(self, value):
+    @primitive_type.setter #pylint: disable-msg=E1101
+    def primitive_type(self, value): #pylint: disable-msg=E0102
         self._validate(value, self._native)
         self._type = value
 
