@@ -48,7 +48,7 @@ public class Broadcast
 					
 					//Check if a filter was used
 					if (filter.length() > 0)
-						relevantFilter = package_.packageName.contains(filter) || receivers[i].name.contains(filter);
+						relevantFilter = package_.packageName.toUpperCase().contains(filter.toUpperCase()) || receivers[i].name.toUpperCase().contains(filter.toUpperCase());
 					
 					//Check if a permission filter was used
 					try
@@ -58,7 +58,7 @@ public class Broadcast
 							if (permissions.toUpperCase().equals("NULL"))
 								relevantPermissions = (receivers[i].permission == null);
 							else
-								relevantPermissions = receivers[i].permission.contains(permissions);
+								relevantPermissions = receivers[i].permission.toUpperCase().contains(permissions.toUpperCase());
 						}
 					} catch (Throwable t) {}
 					

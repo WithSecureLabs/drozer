@@ -36,7 +36,7 @@ public class Native
 			ApplicationInfo app = package_.applicationInfo;
 			
 			//Apply filter
-			if ((app.packageName.contains(filter) || app.processName.contains(filter) || filter == ""))
+			if ((app.packageName.toUpperCase().contains(filter.toUpperCase()) || app.processName.toUpperCase().contains(filter.toUpperCase()) || filter == ""))
             {
 				native_found = false;
 				output_temp = "Package name: " + app.packageName + "\n";

@@ -30,7 +30,7 @@ public class Debuggable
 			ApplicationInfo app = package_.applicationInfo;
 			
 			//Focus on debuggable apps only and apply filter
-			if (((app.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) && (app.packageName.contains(filter) || app.processName.contains(filter) || filter == ""))
+			if (((app.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) && (app.packageName.toUpperCase().contains(filter.toUpperCase()) || app.processName.toUpperCase().contains(filter.toUpperCase()) || filter == ""))
             {
 				returnValue += "Package name: " + app.packageName + "\n";
 				returnValue += "UID: " + app.uid + "\n";

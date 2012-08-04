@@ -45,7 +45,7 @@ public class Service
 					
 					//Check if a filter was used
 					if (filter.length() > 0)
-						relevantFilter = package_.packageName.contains(filter) || services[i].name.contains(filter);
+						relevantFilter = package_.packageName.toUpperCase().contains(filter.toUpperCase()) || services[i].name.toUpperCase().contains(filter.toUpperCase());
 					
 					//Check if a permission filter was used
 					try
@@ -55,7 +55,7 @@ public class Service
 							if (permissions.toUpperCase().equals("NULL"))
 								relevantPermissions = (services[i].permission == null);
 							else
-								relevantPermissions = services[i].permission.contains(permissions);
+								relevantPermissions = services[i].permission.toUpperCase().contains(permissions.toUpperCase());
 						}
 					} catch (Throwable t) {}
 					

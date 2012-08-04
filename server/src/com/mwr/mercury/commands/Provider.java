@@ -107,10 +107,10 @@ public class Provider
 						relevantPermissions = (providerReadPermission == null)
 								|| (providerWritePermission == null);
 					else
-						relevantPermissions = providerReadPermission
-								.contains(permissions)
-								|| providerWritePermission
-										.contains(permissions);
+						relevantPermissions = providerReadPermission.toUpperCase()
+								.contains(permissions.toUpperCase())
+								|| providerWritePermission.toUpperCase()
+										.contains(permissions.toUpperCase());
 				}
 			}
 			catch (Throwable t)

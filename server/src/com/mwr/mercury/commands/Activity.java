@@ -45,7 +45,7 @@ public class Activity
 					if (activities[i].exported == true)
 					{
 						boolean filterPresent = filter.length() != 0;
-						boolean filterRelevant = pack.packageName.contains(filter) || activities[i].name.contains(filter);
+						boolean filterRelevant = pack.packageName.toUpperCase().contains(filter.toUpperCase()) || activities[i].name.toUpperCase().contains(filter.toUpperCase());
 						
 						if ((filterPresent && filterRelevant) || !filterPresent)
 						{
