@@ -22,9 +22,7 @@ Return to main menu
     def do_info(self, args):
         """
 Get information about exported broadcast receivers
-usage: info [--filter <filter>] [--output <file>]
-
-Note: it is possible to use -f instead of --filter as shorthand
+usage: info [--filter <filter>] [--permissions <filter>] [--output <file>]
 
 --------------------------------
 Example - finding which broadcast receivers have the word "bluetooth" in them
@@ -33,23 +31,27 @@ Example - finding which broadcast receivers have the word "bluetooth" in them
 
 Package name: com.android.bluetooth
 Receiver: com.android.bluetooth.opp.BluetoothOppReceiver
+Required Permission: null
 
 Package name: com.android.bluetooth
 Receiver: com.android.bluetooth.pbap.BluetoothPbapReceiver
+Required Permission: null
 
-Package name: com.android.settings
-Receiver: com.android.settings.bluetooth.DockEventReceiver
+Package name: com.android.bluetooth
+Receiver: com.android.bluetooth.sap.BluetoothSapReceiver
+Required Permission: null
 
-Package name: com.android.settings
-Receiver: com.android.settings.bluetooth.BluetoothPairingRequest
+Package name: com.android.bluetooth
+Receiver: com.android.bluetooth.sap.BluetoothSapNotification
+Required Permission: null
 
-Package name: com.android.settings
-Receiver: com.android.settings.bluetooth.BluetoothPermissionRequest
+...
         """
 
         # Define command-line arguments using argparse
         parser = BaseArgumentParser(prog = 'info', add_help = False)
         parser.add_argument('--filter', '-f', metavar = '<filter>')
+        parser.add_argument('--permissions', '-p', metavar = '<filter>')
         
         parser.setOutputToFileOption()
 
@@ -58,7 +60,11 @@ Receiver: com.android.settings.bluetooth.BluetoothPermissionRequest
             # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
             splitargs = parser.parse_args(shlex.split(args))
 
-            print self.session.executeCommand("broadcast", "info", {'filter':splitargs.filter} if splitargs.filter else None).getPaddedErrorOrData()
+            # Compile stated arguments to send to executeCommand
+            request = vars(splitargs)
+
+            #print self.session.executeCommand("service", "info", {'filter':splitargs.filter} if splitargs.filter else None).getPaddedErrorOrData()
+            print self.session.executeCommand("broadcast", "info", request).getPaddedErrorOrData()
 
         # FIXME: Choose specific exceptions to catch
         except Exception:
