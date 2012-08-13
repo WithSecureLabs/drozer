@@ -84,7 +84,11 @@ Do nothing on empty input line
         """
 Called on an input line when the command prefix is not recognized.
         """
-        print "Command not found\n"
+        # Add an alias for "back" using ".."
+        if line == "..":
+            return -1
+        else:
+            print "Command not found\n"
         
         
 class BaseArgumentParser(object):
