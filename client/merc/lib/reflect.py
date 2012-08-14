@@ -334,7 +334,7 @@ class ReflectedObjref(ReflectedType):
 
             try:
                 test = self._class._invoker('getField', attr)
-            except JavaReflectionException, _e:
+            except JavaReflectionException:
                 test = False
             # To allow exceptions to be caught in recovering the field
             if test:
