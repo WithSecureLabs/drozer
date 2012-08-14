@@ -241,7 +241,7 @@ class ReflectedPrimitive(ReflectedType):
         return self._type
 
     @primitive_type.setter
-    def set_primitive_type(self, value):
+    def primitive_type(self, value):
         self._validate(value, self._native)
         self._type = value
 
