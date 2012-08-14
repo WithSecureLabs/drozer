@@ -372,7 +372,7 @@ class Session:
         bytesRead = f.read(20480)    # Read 20KB chunks
         while len(bytesRead) > 0:
             # Send these chunks to the server
-            _response = self.executeCommand("core", "upload", {'path':fullPath, 'data':bytesRead})
+            self.executeCommand("core", "upload", {'path':fullPath, 'data':bytesRead})
             bytesRead = f.read(20480)    # Read 20KB chunks
         f.close()
 

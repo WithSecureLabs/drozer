@@ -38,12 +38,12 @@ usage: persistent [--new]
             splitargs = parser.parse_args(shlex.split(args))
 
             if splitargs.new:
-                _newShell = self.session.executeCommand("shell", "newMercuryShell", None)
+                self.session.executeCommand("shell", "newMercuryShell", None)
 
 
             prompt = ""
             while (prompt.upper() != "BACK"):
-                _write = self.session.executeCommand("shell", "executeMercuryShell", {'args':prompt})
+                self.session.executeCommand("shell", "executeMercuryShell", {'args':prompt})
                 read = self.session.executeCommand("shell", "readMercuryShell", None)
                 sys.stdout.write(read.getErrorOrData().replace(prompt, "", 1).strip() + " ")
                 prompt = raw_input().replace("$BB", "/data/data/com.mwr.mercury/busybox")
