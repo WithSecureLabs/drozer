@@ -1,6 +1,5 @@
 
 import os
-import re
 import base64
 
 from merc.lib.modules import Module
