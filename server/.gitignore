@@ -2,3 +2,4 @@ bin/
 gen/
 obj/
 !bin/mercury-server.apk
+local.properties
