@@ -240,8 +240,8 @@ class ReflectedPrimitive(ReflectedType):
     def primitive_type(self):
         return self._type
 
-    @primitive_type.setter #pylint: disable-msg=E1101
-    def primitive_type(self, value): #pylint: disable-msg=E0102
+    @primitive_type.setter
+    def set_primitive_type(self, value):
         self._validate(value, self._native)
         self._type = value
 
@@ -334,7 +334,7 @@ class ReflectedObjref(ReflectedType):
 
             try:
                 test = self._class._invoker('getField', attr)
-            except JavaReflectionException, _e:
+            except JavaReflectionException:
                 test = False
             # To allow exceptions to be caught in recovering the field
             if test:
