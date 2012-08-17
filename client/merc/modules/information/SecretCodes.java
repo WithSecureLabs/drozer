@@ -10,7 +10,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.content.res.XmlResourceParser;
 
-public class ManifestReader
+public class SecretCodes
 {	
 	public String[] main(Application ctx, String pkg) throws NameNotFoundException, IOException, XmlPullParserException {
 

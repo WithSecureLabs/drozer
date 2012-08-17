@@ -29,7 +29,7 @@ Credit: Mike Auty - MWR Labs"""
 
         r = Reflect(session, debug = False)
         classloader = r.classload(base64.b64encode(classdata))
-        cls = classloader.loadClass("ManifestReader") #pylint: disable-msg=E1101
+        cls = classloader.loadClass("SecretCodes") #pylint: disable-msg=E1101
         obj = r.construct(cls)
 
         ctx = r.getctx()
