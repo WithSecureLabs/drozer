@@ -26,7 +26,7 @@ fee (directly or indirectly) for the licence or use of the MWR Code
 
 This License does not apply to the following component:
 
-- The Terminal Emulator libraries located at /server/jni/Android.mk /server/jni/termExec.cpp and /server/src/com/mwr/mercury/Exec.java
+- The Terminal Emulator libraries located at /server/jni/libjackpal/ and /server/src/com/mwr/mercury/Exec.java
 
 The public GitHub source repository can be found at:
 https://github.com/mwrlabs/mercury
@@ -34,4 +34,4 @@ https://github.com/mwrlabs/mercury
 Questions and suggestions can be sent to:
 mercury[at]mwrinfosecurity.com
 
-Follow Mercury on Twitter  - twitter.com/#!/droidhg
+Follow Mercury on Twitter  - @droidhg
