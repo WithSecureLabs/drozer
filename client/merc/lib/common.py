@@ -14,7 +14,7 @@ import sys
 from xml.dom.minidom import parseString
 
 # Mercury version
-mercury_version = "1.0"
+mercury_version = "1.1"
 
 # Debugging mode
 debug_mode = False
