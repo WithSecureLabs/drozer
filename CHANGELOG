@@ -5,3 +5,17 @@ v1.0 / 2012-03-16
 =====================
 
 * Initial release
+
+=====================
+v1.0 / 2012-08-20
+=====================
+
+* Now works with Ice Cream Sandwich and Jelly Bean
+* Added many new modules e.g. vulnerability scanners, root exploits, third party and OEM pilfer modules
+* Bug fixes and optimisations
+* Added features to existing functionality
+* Added better in-line help and other user interface improvements
+* New reflection interface with classloader. Meaning dynamic execution of Android at runtime, see the post on "Reflection Interface":<link to Mikes article>
+* Command output can be saved to file
+* Resource files can be loaded to automate Mercury input
+* More documentation  - User guide and developer wiki
