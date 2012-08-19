@@ -2,9 +2,11 @@
 
 package com.mwr.mercury.commands;
 
-import com.mwr.mercury.ArgumentWrapper;
-import com.mwr.mercury.Common;
-import com.mwr.mercury.Session;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.xmlpull.v1.XmlPullParser;
 
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
@@ -12,10 +14,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ServiceInfo;
+import android.content.res.AssetManager;
+import android.content.res.XmlResourceParser;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import com.mwr.mercury.ArgumentWrapper;
+import com.mwr.mercury.Common;
+import com.mwr.mercury.Session;
 
 public class Packages
 {
@@ -341,5 +345,61 @@ public class Packages
 		// Send to client
 		currentSession.sendFullTransmission(packagePath, "");
 	}
+	
+	
+	//Return the manifest of the package in XML text
+	public static void manifest(List<ArgumentWrapper> argsArray,
+			Session currentSession)
+	{
+		// Get all the parameters
+		String packageName = Common.getParamString(argsArray, "packageName");
+
+		try
+		{
+
+			//Open the AndroidManifest.xml of given package
+			AssetManager am = currentSession.applicationContext.createPackageContext(packageName, 0).getAssets();
+	        XmlResourceParser xml = am.openXmlResourceParser("AndroidManifest.xml");
+
+	        StringBuilder output = new StringBuilder();
+	        
+	        //XML parsing
+	        while (xml.next() != XmlPullParser.END_DOCUMENT) {
+	        	switch (xml.getEventType()) {
+	        		case XmlPullParser.START_TAG:
+	        			output.append("<");
+	        			output.append(xml.getName());
+	        			for (int i = 0; i < xml.getAttributeCount(); i++) {
+	        				output.append(" ");
+	        				output.append(xml.getAttributeName(i));
+	        				output.append("=\"");
+	        				output.append(xml.getAttributeValue(i));
+	        				output.append("\"");
+	        			}
+	        			output.append(">\n");
+	        			break;
+	        		case XmlPullParser.END_TAG:
+	        			output.append("</");
+	        			output.append(xml.getName());
+	        			output.append(">\n");
+	        			break;
+	        		case XmlPullParser.TEXT:
+	        			output.append(xml.getText());
+	        			output.append("\n");
+	        			break;
+	        		default:
+	        			break;
+	        	}
+	        }
+
+			currentSession.sendFullTransmission(output.toString(), "");
+
+		}
+		catch (Throwable t)
+		{
+			currentSession.sendFullTransmission("", t.getMessage());
+		}
+	}
+
 
 }

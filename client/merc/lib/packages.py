@@ -166,3 +166,52 @@ Example - finding the attack surface of the built-in browser
         # FIXME: Choose specific exceptions to catch
         except Exception:
             pass
+
+
+    def do_manifest(self, args):
+        """
+Examine the AndroidManifest.xml of the given package
+usage: manifest [--output <file>] packageName
+
+-------------------------------------------------------------------
+Example - getting the manifest of Mercury and outputting to a file
+-------------------------------------------------------------------
+*mercury#packages> manifest com.mwr.mercury -o /home/test/Desktop/AM-mercury.xml
+
+<manifest versionCode="2" versionName="1.1" package="com.mwr.mercury">
+<uses-sdk minSdkVersion="8" targetSdkVersion="4">
+</uses-sdk>
+<uses-permission name="android.permission.INTERNET">
+</uses-permission>
+<application label="@2130968576" icon="@2130837504" debuggable="true">
+<activity label="@2130968576" name=".Main">
+<intent-filter>
+<action name="android.intent.action.MAIN">
+</action>
+<category name="android.intent.category.LAUNCHER">
+</category>
+</intent-filter>
+</activity>
+<service name=".ServerService" enabled="true">
+</service>
+</application>
+</manifest>
+
+        """
+
+        # Define command-line arguments using argparse
+        parser = BaseArgumentParser(prog = 'manifest', add_help = False)
+        parser.add_argument('packageName')
+        
+        parser.setOutputToFileOption()
+
+        try:
+
+            # Split arguments using shlex - this means that parameters with spaces can be used - escape " characters inside with \
+            splitargs = parser.parse_args(shlex.split(args))
+
+            print self.session.executeCommand("packages", "manifest", {'packageName':splitargs.packageName}).getPaddedErrorOrData()
+
+        # FIXME: Choose specific exceptions to catch
+        except Exception:
+            pass
