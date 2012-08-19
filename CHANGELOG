@@ -15,7 +15,7 @@ v1.0 / 2012-08-20
 * Bug fixes and optimisations
 * Added features to existing functionality
 * Added better in-line help and other user interface improvements
-* New reflection interface with classloader. Meaning dynamic execution of Android at runtime, see the post on "Reflection Interface":<link to Mikes article>
+* New reflection interface with classloader. Execution of new Android code at runtime!
 * Command output can be saved to file
 * Resource files can be loaded to automate Mercury input
 * More documentation  - User guide and developer wiki
