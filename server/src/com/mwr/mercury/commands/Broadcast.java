@@ -129,7 +129,7 @@ public class Broadcast
 			currentSession.sendFullTransmission("", t.getMessage());
 		}
 	}
-	
+
 	// Added in order to get the actions of each broadcast receiver
 	// Change added by Luander Ribeiro <luander.r@samsung.com>
 	// in Aug 27 - 2012
@@ -141,62 +141,60 @@ public class Broadcast
 	 */
 	private static List<String> findReceiverActions(Session currentSession, ActivityInfo receivers)
 	{
-		
 		List<String> actions = new ArrayList<String>();
 		try
 		{
 			AssetManager am = currentSession.applicationContext.createPackageContext(receivers.packageName, 0).getAssets();
 			XmlResourceParser xml = am.openXmlResourceParser("AndroidManifest.xml");
-			
+
 			//XML parsing
-	        while (xml.next() != XmlPullParser.END_DOCUMENT) {
-	        	switch (xml.getEventType()) {
-	        		case XmlPullParser.START_TAG:
-	        			// Find receiver tag to start looking for intent filters
-						if ("receiver".equals(xml.getName()))
+			while (xml.next() != XmlPullParser.END_DOCUMENT) {
+				switch (xml.getEventType()) {
+				case XmlPullParser.START_TAG:
+					// Find receiver tag to start looking for intent filters
+					if ("receiver".equals(xml.getName()))
+					{
+						String receiverName = searchXmlAttr(xml, "android:name");
+						if (receiverName.length() == 0)
 						{
-							for (int j = 0; j < xml.getAttributeCount(); j++)
-							{
-								String name = xml.getAttributeName(j);
-								String value = xml.getAttributeValue(j);
-								// If the tag name matches with receiver, search for its intent filters
-								if (("android:name".equals(name) || 
-									"name".equals(name)) &&
-									receivers.name.equals(value))
+							receiverName = searchXmlAttr(xml, "name");
+						}
+						// If the tag name matches with receiver, search for its intent filters
+						if (receiverName.length() > 0 &&
+								receivers.name.endsWith(receiverName))
+						{
+							//iterate until receiver END_TAG
+							while(xml.next() != XmlPullParser.END_TAG) {
+								if (xml.getEventType() == XmlPullParser.START_TAG &&
+										"intent-filter".equals(xml.getName()))
 								{
-									// Jump to intent-filter tag
-									xml.next();
-									// Jump to first action tag
-									xml.next();
-									
-									// While is not end of the "intent-filter" TAG
-									boolean isEndTag = xml.getEventType() == XmlPullParser.END_TAG;
-									while (!isEndTag && !"intent-filter".equals(xml.getName()))
-									{
-										if ("action".equals(xml.getName()))
+									//iterate until intent-filter END_TAG
+									while(xml.next() != XmlPullParser.END_TAG) {
+										if (xml.getEventType() == XmlPullParser.START_TAG &&
+												"action".equals(xml.getName()))
 										{
-											if (xml.getAttributeCount() > 0 && ("name".equals(xml.getAttributeName(0)) || 
-												"android:name".equals(xml.getAttributeName(0))))
-											{
-												// Add action to the list
-												String action = xml.getAttributeValue(0);
+											String action = searchXmlAttr(xml, "android:name");
+											if (action.length() == 0)
+												action = searchXmlAttr(xml, "name");
+											if (action.length() > 0)
 												actions.add(action);
-											}											
+											//iterate until action END_TAG
+											while(xml.next() != XmlPullParser.END_TAG);										
 										}
-										xml.next();
-									}
+									} 
 								}
 							}
 						}
-	        			break;
-	        		case XmlPullParser.END_TAG:
-	        			break;
-	        		case XmlPullParser.TEXT:
-	        			break;
-	        		default:
-	        			break;
-	        	}
-	        }
+					}
+					break;
+				case XmlPullParser.END_TAG:
+					break;
+				case XmlPullParser.TEXT:
+					break;
+				default:
+					break;
+				}
+			}
 		}
 		catch (NameNotFoundException e){}
 		catch (IOException e){}
@@ -206,5 +204,21 @@ public class Broadcast
 			e.printStackTrace();
 		}
 		return actions;
+	}
+	
+	//Searches for an attribute in "XML tag"
+	private static String searchXmlAttr(XmlResourceParser xml, String attrName) 
+	{
+		for (int j = 0; j < xml.getAttributeCount(); j++)
+		{
+			String name = xml.getAttributeName(j);
+			String value = xml.getAttributeValue(j);
+			// If the tag name matches with receiver, search for its intent filters
+			if (attrName.equals(name)) 
+			{
+				return value;
+			}
+		}
+		return "";
 	}
 }
