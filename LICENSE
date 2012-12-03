@@ -1,33 +1,48 @@
-(c) MWR InfoSecurity 2012
+MWR Code License v1
+===================
 
+Copyright (C) 2012 MWR InfoSecurity.
 
-Modifications as indicated at the top of source files and any files that are compiled throughout this work indicate where modifications and
-additional code has been created by MWR InfoSecurity Limited (‘MWR’) and on which copyright is owned by MWR.
+Modifications as indicated at the top of source files and any files that are compiled throughout this work indicate where modifications and additional code has been created by MWR InfoSecurity Limited ('MWR') and on which copyright is owned by MWR.
+
 The relevant licence remains in place in respect of all other code re-distributed or modified as permitted by the licenses.
-MWR InfoSecurity Ltd is a licencee of such code under the terms of the Licence and entitled to further licence such code
-subject to the terms of the licence.
 
- 
+MWR InfoSecurity Ltd is a licencee of such code under the terms of the Licence and entitled to further licence such code subject to the terms of the licence.
 
 Details of the MWR Code licence are as follows:
 
-1. The licence is limited to the grant to the End User of a non-exclusive, non-transferable license to allow the End User only
-to use the MWR Code solely for the purpose of undertaking security assessments for the purpose of identifying
-vulnerabilities to improve software security. Such a licence shall automatically expire 12 months after download.
+  1.  The licence is limited to the grant to the End User of a non-exclusive,
+      non-transferable license to allow the End User only to use the MWR Code
+      solely for the purpose of undertaking security assessments for the
+      purpose of identifying vulnerabilities to improve software security. Such
+      a licence shall automatically expire 12 months after download.
 
-2. The MWR Code is provided on an 'as-is’ basis , without warranties or conditions of any kind, express or implied,
-including without limitation any implied warranties or conditions of merchantability, fitness for a particular purpose,
-non-infringement and any warranties arising by statute or otherwise in law.
+  2.  The MWR Code is provided on an 'as-is' basis, without warranties or
+      conditions of any kind, express or implied, including without limitation
+      any implied warranties or conditions of merchantability, fitness for a
+      particular purpose, non-infringement and any warranties arising by
+      statute or otherwise in law.
 
-3. An End User shall not include any distributor or re-seller or other person intending to assign, transfer, dispose, deal
-or sub-licence the MWR Code to any other person and any person other than an End User shall not be entitled to
-modify decompile reproduce reverse engineer or otherwise deal with the MWR Code, nor charge any other person a
-fee (directly or indirectly) for the licence or use of the MWR Code
+  3.  An End User shall not include any distributor or re-seller or other
+      person intending to assign, transfer, dispose, deal or sub-licence the
+      MWR Code to any other person and any person other than an End User shall
+      not be entitled to modify decompile reproduce reverse engineer or
+      otherwise deal with the MWR Code, nor charge any other person a fee
+      (directly or indirectly) for the licence or use of the MWR Code.
 
 This License does not apply to the following component:
 
-- The Terminal Emulator libraries located at /server/jni/libjackpal/ and /server/src/com/mwr/mercury/Exec.java
+  -   BusyBox located at
+      /src/mwr/droidhg/modules/tools/setup/busybox
 
 The public GitHub source repository can be found at:
-https://github.com/mwrlabs/mercury
- 
+
+  https://github.com/mwrlabs/mercury
+
+Comments, Questions and Suggestions can be sent to:
+
+  mercury[at]mwrinfosecurity.com
+
+Follow the Mercury Project on Twitter:
+
+  @droidhg

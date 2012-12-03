@@ -1,0 +1,74 @@
+Installing Mercury Console
+==========================
+
+The Mercury Console and Server should be installed on your PC. They are implemented
+using Python, and have a few dependencies that must be met.
+
+It is recommended that you use Python 2.7 to run Mercury.
+
+Follow the instructions for your platform.
+
+
+Linux
+-----
+
+Install dependencies:
+
+    On Debian-based Systems:
+
+        $ apt-get install build-essential python-dev
+
+    On Fedora-based Systems:
+
+        $ yum install make gcc gcc-c++ python-devel
+
+Install Python setuptools:
+
+    $ wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg
+    $ sh setuptools-0.6c11-py2.7.egg
+
+Install the Google Protobufs library:
+
+    $ easy_install --allow-hosts pypi.python.org protobuf
+
+Install Mercury:
+
+    $ easy_install mercury-2.0.0-py2.7.egg
+
+To test the installation:
+
+    $ mercury
+    usage: mercury [COMMAND]
+
+    $
+
+
+Windows
+-------
+
+Install Dependencies:
+
+    Python:     http://www.python.org/download/
+    setuptools: http://pypi.python.org/pypi/setuptools/0.6c11
+
+Install dependencies:
+
+    > C:\Python27\Scripts\easy_install.exe --allow-hosts pypi.python.org protobuf
+    > C:\Python27\Scripts\easy_install.exe twisted==10.2.0
+    > C:\Python27\Scripts\easy_install.exe pyreadline
+
+Run the Mercury installer.
+
+To test the installation:
+
+    > C:\Python27\python.exe  C:\Python27\Scripts\mercury-console
+    usage: mercury-console
+    mercury-console: error: too few arguments
+
+    >
+
+
+Mac OS
+------
+
+No instructions yet.
