@@ -1,0 +1,27 @@
+from mwr.droidhg.modules import common, Module
+
+class DeviceInfo(Module, common.ClassLoader, common.FileSystem, common.Shell):
+    
+    name = "Gets device information"
+    description = "Gets device information"
+    examples = ""
+    author = "Tyrone (@mwrlabs)"
+    date = "2012-11-06"
+    license = "MWR Code License"
+    path = ["information"]
+
+    def execute(self, arguments):
+        self.stdout.write("-----------------------------------------\n")
+        self.stdout.write("/proc/version\n")
+        self.stdout.write("-----------------------------------------\n")
+        self.stdout.write(str(self.readFile("/proc/version")) + "\n\n")
+
+        self.stdout.write("-----------------------------------------\n")
+        self.stdout.write("/system/build.prop\n")
+        self.stdout.write("-----------------------------------------\n")
+        self.stdout.write(str(self.readFile("/system/build.prop")) + "\n\n")
+
+        self.stdout.write("-----------------------------------------\n")
+        self.stdout.write("getprop\n")
+        self.stdout.write("-----------------------------------------\n\n")
+        self.stdout.write(str(self.shellExec("getprop")) + "\n")
