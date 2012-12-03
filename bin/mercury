@@ -1,0 +1,44 @@
+#!/usr/bin/python
+
+import subprocess
+import sys
+
+Commands = {    'console': 'start the Mercury console',
+                'server': 'start a Mercury server' }
+
+def print_usage():
+    print """               ..                    ..:.
+              ..I..                  .I..
+               ..I.    . . .... .  ..I=
+                 .I...I?IIIIIIIII~..II
+                 .?I?IIIIIIIIIIIIIIII..
+              .,IIIIIIIIIIIIIIIIIIIIIII+.
+           ...IIIIIIIIIIIIIIIIIIIIIIIIIII:.
+           .IIIIIIIIIIIIIIIIIIIIIIIIIIIIIII..
+         ..IIIIII,..,IIIIIIIIIIIII,..,IIIIII.
+         .?IIIIIII..IIIIIIIIIIIIIII..IIIIIIII.
+         ,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII.
+        .IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII.
+        .IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII:
+        .IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+        the Heavy Metal that poisoned the Droid"""
+    print
+    print "usage: mercury [COMMAND]"
+    print
+    print "Run `mercury [COMMAND] --help` for more usage information."
+    print
+    print "Commands:"
+    for command in Commands:
+        print "  %15s  %s" % (command, Commands[command])
+    print
+
+if len(sys.argv) > 1:
+    if sys.argv[1] in Commands:
+        process = __file__ + "-" + sys.argv[1]
+        
+        subprocess.call([sys.executable, process] + sys.argv[2::])
+    else:
+        print "unknown command:", sys.argv[1]
+        print_usage()
+else:
+    print_usage()
