@@ -2,8 +2,8 @@ from mwr.droidhg.modules import common, Module
 
 class Download(Module, common.ClassLoader, common.FileSystem):
 
-    name = "Upload a File"
-    description = "Upload a File"
+    name = "Download a File"
+    description = "Download a file from the Android device to your PC"
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
@@ -31,7 +31,7 @@ class Download(Module, common.ClassLoader, common.FileSystem):
 class Size(Module, common.FileSystem):
 
     name = "Size of File"
-    description = "Size of File"
+    description = "Calculate the size of file on the Android device"
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
@@ -79,7 +79,7 @@ class MD5Sum(Module, common.ClassLoader, common.FileSystem):
 class Upload(Module, common.FileSystem):
 
     name = "Upload a File"
-    description = "Upload a File"
+    description = "Upload a file from your PC to the Android device"
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
