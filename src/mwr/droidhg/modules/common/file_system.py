@@ -1,4 +1,5 @@
 import binascii
+import os
 
 from mwr.common.list import chunk
 
@@ -35,6 +36,9 @@ class FileSystem(object):
         data = self.readFile(source, block_size=block_size)
 
         if data:
+            if os.path.isdir(destination):
+                destination = os.path.sep.join([destination, source.split("/")[-1]])
+                
             output = open(destination, 'w')
             output.write(str(data))
             output.close()

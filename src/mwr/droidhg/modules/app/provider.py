@@ -1,3 +1,5 @@
+import os
+
 from mwr.droidhg.modules import common, Module
 
 class Columns(Module, common.Provider, common.TableFormatter):
@@ -76,6 +78,9 @@ class Download(Module, common.ClassLoader, common.Provider):
 
     def execute(self, arguments):
         data = self.contentResolver().read(arguments.uri)
+        
+        if os.path.isdir(arguments.destination):
+            arguments.destination = os.path.sep.join([arguments.destination, arguments.uri.split("/")[-1]])
         
         output = open(arguments.destination, 'w')
         output.write(str(data))
