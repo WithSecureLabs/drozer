@@ -324,11 +324,11 @@ class Session(cmd.Cmd):
 
     def do_shell(self, args):
         """
-        usage: `! COMMAND` or `shell COMMAND`
+        usage: `! [COMMAND]` or `shell [COMMAND]`
 
         Execute a Linux command in the context of Mercury.
 
-        Shorthand for `run shell.exec COMMAND`.
+        If a COMMAND is specified, this is shorthand for `run shell.exec COMMAND`. Otherwise, it will launch an interactive shell.
 
         Example:
 
@@ -340,7 +340,10 @@ class Session(cmd.Cmd):
         The working directory of your shell will be the Mercury Agent root folder.
         """
 
-        return self.do_run(".shell.exec \"%s\"" % args)
+        if len(args) > 0:
+            return self.do_run(".shell.exec \"%s\"" % args)
+        else:
+            return self.do_run(".shell.start")
 
     def sendAndReceive(self, message):
         """
