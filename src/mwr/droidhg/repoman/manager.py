@@ -42,6 +42,18 @@ class Manager:
             print "  {:<15}  {}".format(command.replace("do_", ""),
                 getattr(self, command).__doc__.strip())
         print
+        
+    def do_install(self, arguments):
+        """install a new module"""
+    
+    def do_list(self, arguments):
+        """list all installed modules, and their path"""
+        
+    def do_remote(self, arguments):
+        """manage the source repositories, from which you install modules"""
+        
+    def do_repository(self, arguments):
+        """manage module repositories, on your local system"""
 
     def __commands(self):
         """
