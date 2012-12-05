@@ -29,16 +29,18 @@ class ReflectedType(object):
 
         if isinstance(argument, ReflectedType):
             return argument
-        if argument.type == Message.Argument.PRIMITIVE:
-            return ReflectedPrimitive.fromArgument(argument, reflector)
-        elif argument.type == Message.Argument.STRING:
-            return ReflectedString(argument.string, reflector=reflector)
         elif argument.type == Message.Argument.ARRAY:
             return ReflectedArray.fromArgument(argument, reflector=reflector)
         elif argument.type == Message.Argument.OBJECT:
             return ReflectedObject(argument.object.reference, reflector=reflector)
+        elif argument.type == Message.Argument.DATA:
+            return ReflectedBinary(argument.data, reflector=reflector)
         elif argument.type == Message.Argument.NULL:
             return ReflectedNull(reflector=reflector)
+        elif argument.type == Message.Argument.PRIMITIVE:
+            return ReflectedPrimitive.fromArgument(argument, reflector)
+        elif argument.type == Message.Argument.STRING:
+            return ReflectedString(argument.string, reflector=reflector)
         else:
             return None
 
@@ -955,3 +957,6 @@ class ReflectedString(ReflectedType):
 
     def __str__(self):
         return self._native
+
+class ReflectedBinary(ReflectedString):
+    pass
