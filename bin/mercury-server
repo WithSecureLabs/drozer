@@ -11,7 +11,7 @@ from mwr.droidhg.server import DroidHgServer, heartbeat
 logger.setLevel(logging.DEBUG)
 logger.addStreamHandler()
 
-parser = argparse.ArgumentParser(description='Start a droidhg Server, to route agent and console connections.')
+parser = argparse.ArgumentParser(description='Start a Mercury Server, to route agent and console connections.')
 parser.add_argument("--log", default=None, help="specify the log file to write to")
 parser.add_argument("--no-http", default=False, action="store_true", help="do not start the integrated HTTP server")
 parser.add_argument("--port", default=31415, metavar="PORT", type=int, help="specify the port on which to bind the server")
