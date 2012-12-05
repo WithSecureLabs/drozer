@@ -51,6 +51,38 @@ class Delete(Module, common.Provider):
 
         self.stdout.write("Done.")
 
+class Download(Module, common.ClassLoader, common.Provider):
+
+    name = "Download a file from a Content Provider"
+    description = "Read from the specified content uri using openInputStream, and download to the local file system"
+    examples = """Download, using directory traversal on a content provider:
+
+    mercury> run app.provider.download content://vulnerable.provider/../../../system/etc/hosts /tmp/hostsfile
+    Written 25 bytes"""
+    author = "MWR InfoSecurity (@mwrlabs)"
+    date = "2012-11-06"
+    license = "MWR Code License"
+    path = ["app", "provider"]
+
+    def add_arguments(self, parser):
+        parser.add_argument("uri", nargs="?", help="the content provider URI to read a file through")
+        parser.add_argument("destination", nargs="?")
+
+    def complete(self, text, line, begidx, endidx):
+        if not " " in line or begidx < line.index(" "):
+            return common.path_completion.on_agent(text)
+        else:
+            return common.path_completion.on_console(text)
+
+    def execute(self, arguments):
+        data = self.contentResolver().read(arguments.uri)
+        
+        output = open(arguments.destination, 'w')
+        output.write(str(data))
+        output.close()
+
+        self.stdout.write("Written %d bytes\n" % len(data))
+        
 class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
     name = "Find Content Provider URIs"
