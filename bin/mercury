@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 Commands = {    'console': 'start the Mercury console',
+                'module': 'manage Mercury modules and repositories',
                 'server': 'start a Mercury server' }
 
 def print_logo():
