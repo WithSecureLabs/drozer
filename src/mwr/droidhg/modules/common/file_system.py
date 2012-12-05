@@ -27,12 +27,12 @@ class FileSystem(object):
         else:
             return None
 
-    def downloadFile(self, source, destination):
+    def downloadFile(self, source, destination, block_size=65536):
         """
         Copy a file from the Agent's file system to the local one.
         """
 
-        data = self.readFile(source)
+        data = self.readFile(source, block_size=block_size)
 
         if data:
             output = open(destination, 'w')
@@ -78,7 +78,7 @@ class FileSystem(object):
         else:
             return None
 
-    def readFile(self, source):
+    def readFile(self, source, block_size=65536):
         """
         Read a file from the Agent's file system, and return the data.
         """
@@ -90,18 +90,26 @@ class FileSystem(object):
         if file_io.exists() == True:
             file_stream = self.new("java.io.FileInputStream", file_io)
 
-            return ByteStreamReader.read(file_stream)
+            data = ""
+            
+            while True:
+                block = ByteStreamReader.read(file_stream, 0, block_size)
+                
+                if len(block) > 0:
+                    data += str(block)
+                else:
+                    return data
         else:
             return None
 
-    def uploadFile(self, source, destination):
+    def uploadFile(self, source, destination, block_size=65536):
         """
         Copy a file from the local file system to the Agent's.
         """
 
-        return self.writeFile(destination, open(source, 'rb').read())
+        return self.writeFile(destination, open(source, 'rb').read(), block_size=block_size)
 
-    def writeFile(self, destination, data):
+    def writeFile(self, destination, data, block_size=65536):
         """
         Write data into a file on the Agent's file system.
         """
@@ -113,7 +121,7 @@ class FileSystem(object):
         if file_io.exists() != True:
             file_stream = self.new("java.io.FileOutputStream", destination)
 
-            for c in chunk(data, 500000):
+            for c in chunk(data, block_size):
                 ByteStreamWriter.writeHexStream(file_stream, binascii.hexlify(c))
 
             file_stream.close()
