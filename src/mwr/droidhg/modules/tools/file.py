@@ -76,7 +76,7 @@ class MD5Sum(Module, common.ClassLoader, common.FileSystem):
         else:
             self.stderr.write("Could not calculate the md5 checksum. The file may not exist.\n")
 
-class Upload(Module, common.FileSystem):
+class Upload(Module, common.ClassLoader, common.FileSystem):
 
     name = "Upload a File"
     description = "Upload a file from your PC to the Android device"
