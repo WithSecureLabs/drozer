@@ -56,8 +56,13 @@ class ClassLoader(object):
             apk_path = os.path.join(os.path.dirname(__file__), "..", *source_or_relative_path.split("/"))
             
             file_handle = open(apk_path, 'rb')
-            # TODO: check if there is more source to read
-            source = file_handle.read()
+            data = file_handle.read()
+            source = data
+            
+            while data != "":
+                data = file_handle.read()
+                source += data
+
             file_handle.close()
         else:
             source = source_or_relative_path
