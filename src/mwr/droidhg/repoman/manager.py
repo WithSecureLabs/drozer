@@ -2,6 +2,7 @@ import argparse
 
 from mwr.common import console
 from mwr.common.text import wrap
+from mwr.droidhg.repoman.installer import ModuleInstaller
 from mwr.droidhg.repoman.repositories import Repository, NotEmptyException, UnknownRepository
 
 class ModuleManager(object):
@@ -48,7 +49,20 @@ class ModuleManager(object):
         
     def do_install(self, arguments):
         """install a new module"""
-    
+        
+        repository = self.__choose_repo()
+        
+        if repository != None:
+            installer = ModuleInstaller(repository)
+            modules = installer.install(arguments.options)
+                        
+            print
+            print "Successfully installed %d modules." % len(modules['success'])
+            print "Failed to install %d:" % len(modules['fail'])
+            for module in modules['fail']:
+                print "  %s" % module
+            print
+            
     def do_list(self, arguments):
         """list all installed modules, and their path"""
         
@@ -61,6 +75,40 @@ class ModuleManager(object):
         """manage module repositories, on your local system"""
         
         RepositoryManager().run(arguments.options)
+    
+    def __choose_repo(self):
+        """
+        Return the path of a repository, either the only repo or presenting the user
+        with a choice.
+        """
+        
+        repositories = Repository.all()
+        
+        if len(repositories) == 1:
+            return repositories[0]
+        elif len(repositories) == 0:
+            print "You do not have a Mercury module repository. Please create one, then try again."
+            
+            return None
+        else:
+            print "You have %d Mercury module repositories. Which would you like to install into?\n" % len(repositories)
+            for i in range(len(repositories)):
+                print "  %5d  %s" % (i+1, repositories[i])
+            print
+            
+            while(True):
+                print "repo>",
+                try:
+                    idx = int(raw_input().strip())
+                
+                    if idx >= 1 and idx <= len(repositories):
+                        print
+                        
+                        return repositories[idx-1]
+                    else:
+                        raise ValueError(idx)
+                except ValueError:
+                    print "Not a valid selection. Please enter a number between 1 and %d." % len(repositories)
 
     def __commands(self):
         """
@@ -108,7 +156,7 @@ class ModuleManager(object):
 
             for line in name:
                 print ("%%-%ds  %%-%ds" % (width['label'], width['desc'])) % ("", line)
-
+        
     def __showUsage(self, message):
         """
         Print usage information.
