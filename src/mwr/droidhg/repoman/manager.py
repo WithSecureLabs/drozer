@@ -1,5 +1,7 @@
 import argparse
 
+from mwr.droidhg.repoman.repositories import Repository
+
 class Manager(object):
     """
     mercury module [command]
@@ -53,6 +55,8 @@ class Manager(object):
         
     def do_repository(self, arguments):
         """manage module repositories, on your local system"""
+        
+        self.__list_repositories()
 
     def __commands(self):
         """
@@ -77,6 +81,20 @@ class Manager(object):
                 raise UsageError("unknown command: " + command)
         except IndexError:
             raise UsageError("incorrect usage")
+        
+    def __list_repositories(self):
+        """
+        Print a list of Mercury repositories (a) on the local system, and
+        (b) registered as remotes.
+        """
+        
+        print "Local repositories:"
+        for repo in Repository.all():
+            print "  %s" % repo
+        print
+        
+        print "Remote repositories:"
+        print
 
     def __showUsage(self, message):
         """
