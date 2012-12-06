@@ -6,6 +6,13 @@ class Configuration(object):
     __config = None
     
     @classmethod
+    def delete(cls, section, key):
+        cls.__ensure_config()
+        
+        cls.__config.remove_option(section, key)
+        cls.__config.write(open(cls.path(), 'w'))
+    
+    @classmethod
     def get(cls, section, key):
         cls.__ensure_config()
         
@@ -23,6 +30,13 @@ class Configuration(object):
     @classmethod
     def path(cls):
         return os.path.sep.join([os.path.expanduser("~"), ".mercury_config"])
+    
+    @classmethod
+    def set(cls, section, key, value):
+        cls.__ensure_config()
+        
+        cls.__config.set(section, key, value)
+        cls.__config.write(open(cls.path(), 'w'))
         
     @classmethod
     def __ensure_config(cls):
