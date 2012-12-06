@@ -5,6 +5,7 @@ import sys
 from mwr.common import console
 from mwr.common.text import wrap
 from mwr.droidhg.reflection import ReflectedType
+from mwr.droidhg.repoman import Repository
 
 class ModuleLoader(object):
 
@@ -69,6 +70,7 @@ class ModuleLoader(object):
         modules = {}
         
         for path in self.__paths():
+            print path
             for dirpath, _dirnames, filenames in os.walk(path):
                 for filename in filenames:
                     module_path = os.path.join(dirpath[len(path) + len(os.path.sep):], filename)
@@ -93,7 +95,7 @@ class ModuleLoader(object):
         those specified in the DROIDHG_MODULE_PATH environment variable.
         """
 
-        return self.__module_paths + ":" + os.getenv("DROIDHG_MODULE_PATH", "")
+        return self.__module_paths + ":" + Repository.droidhg_modules_path()
         
     def __paths(self):
         """
