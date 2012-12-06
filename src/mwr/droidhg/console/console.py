@@ -8,10 +8,12 @@ from mwr.droidhg.console.session import Session, DebugSession
 
 class Console:
     """
-    Starts a new Mercury Console to interact with a remote agent.
+    Starts a new Mercury Console to interact with an Agent.
 
-    The Console can connect to an Agent directly, if its adb server is enabled, or through
-    a Mercury Server.
+    The Mercury Console connects to an Agent and allows you to interact with the
+    system from the context of the agent application on the device. The console
+    can connect directly to an agent, if its embedded server is enabled, or through
+    a Mercury Server that the agent is connected to.
     """
 
     def __init__(self):
