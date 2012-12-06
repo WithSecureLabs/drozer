@@ -16,7 +16,6 @@ class ModuleManager(object):
         self.__parser.add_argument("command", default=None,
             help="the command to execute, try `commands` to see all available")
         self.__parser.add_argument("options", nargs='*')
-        self.__server = None
 
     def run(self, argv=None):
         """
@@ -105,7 +104,6 @@ class RepositoryManager(object):
         self.__parser = argparse.ArgumentParser(description=self.__doc__.strip())
         self.__parser.add_argument("command", default=None,
             help="the command to execute, try `commands` to see all available")
-        self.__server = None
 
     def run(self, argv=None):
         """
