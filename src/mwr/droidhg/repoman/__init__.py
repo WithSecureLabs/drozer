@@ -1,2 +1,2 @@
-from manager import Manager
+from manager import ModuleManager, RepositoryManager
 from repositories import Repository
