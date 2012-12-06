@@ -1,6 +1,6 @@
 import unittest
 
-from mwr_test.droidhg import android_test, console, modules, reflection
+from mwr_test.droidhg import android_test, console, modules, reflection, repoman
 from mwr_test.droidhg.api import builders, frame_test
 
 all_tests = unittest.TestSuite((
@@ -42,6 +42,8 @@ all_tests = unittest.TestSuite((
   reflection.reflected_primitive_test.ReflectedPrimitiveTestSuite(),
   reflection.reflected_type_test.ReflectedTypeTestSuite(),
   reflection.reflector_test.ReflectorTestSuite(),
+  
+  repoman.repository_test.RepositoryTestSuite(),
 
   android_test.IntentTestSuite() ))
   #device_test
