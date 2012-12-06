@@ -70,7 +70,6 @@ class ModuleLoader(object):
         modules = {}
         
         for path in self.__paths():
-            print path
             for dirpath, _dirnames, filenames in os.walk(path):
                 for filename in filenames:
                     module_path = os.path.join(dirpath[len(path) + len(os.path.sep):], filename)
