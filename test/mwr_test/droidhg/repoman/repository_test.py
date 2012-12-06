@@ -15,6 +15,9 @@ class RepositoryTestCase(unittest.TestCase):
         
         return config
     
+    def mockConfigWithoutRepos(self):
+        return ConfigParser.SafeConfigParser()
+    
     def testItShouldRetrieveNoAdditionalRepositories(self):
         Configuration._Configuration__config = self.mockConfigWithRepos([])
         
@@ -24,6 +27,11 @@ class RepositoryTestCase(unittest.TestCase):
         Configuration._Configuration__config = self.mockConfigWithRepos(['/usr/local/mercury/modules'])
         
         assert Repository.all() == ['/usr/local/mercury/modules']
+    
+    def testItShouldRetrieveAllWithoutAConfigFile(self):
+        Configuration._Configuration__config = self.mockConfigWithoutRepos()
+        
+        assert Repository.all() == []
     
     def testItShouldBuildDroidhgModulesPathAsDefault(self):
         Configuration._Configuration__config = self.mockConfigWithRepos([])
@@ -39,15 +47,22 @@ class RepositoryTestCase(unittest.TestCase):
         Configuration._Configuration__config = self.mockConfigWithRepos(['/usr/local/mercury/modules', '/tmp/modules'])
         
         assert Repository.droidhg_modules_path() == "/usr/local/mercury/modules:/tmp/modules"
+        
+    def testItShouldBuildDroidhgModulesPathWithoutAConfigFile(self):
+        Configuration._Configuration__config = self.mockConfigWithoutRepos()
+        
+        assert Repository.droidhg_modules_path() == ""
     
 def RepositoryTestSuite():
     suite = unittest.TestSuite()
 
     suite.addTest(RepositoryTestCase("testItShouldRetrieveNoAdditionalRepositories"))
     suite.addTest(RepositoryTestCase("testItShouldRetrieveAnAdditionalRepository"))
+    suite.addTest(RepositoryTestCase("testItShouldRetrieveAllWithoutAConfigFile"))
     suite.addTest(RepositoryTestCase("testItShouldBuildDroidhgModulesPathAsDefault"))
     suite.addTest(RepositoryTestCase("testItShouldBuildDroidhgModulesPathWithAnAdditionalRepository"))
     suite.addTest(RepositoryTestCase("testItShouldBuildDroidhgModulesPathWithTwoAdditionalRepository"))
+    suite.addTest(RepositoryTestCase("testItShouldBuildDroidhgModulesPathWithoutAConfigFile"))
 
     return suite
   
