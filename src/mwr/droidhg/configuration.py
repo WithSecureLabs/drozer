@@ -29,6 +29,6 @@ class Configuration(object):
         if cls.__config == None:
             cls.__config = ConfigParser.SafeConfigParser()
             
-            if os.path.exists(cls.config_path()):
-                cls.__config.read(cls.config_path())
+            if os.path.exists(cls.path()):
+                cls.__config.read(cls.path())
                 
