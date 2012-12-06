@@ -31,7 +31,7 @@ class Repository(object):
             open(os.path.join(path, "__init__.py"), 'w').close()
             open(os.path.join(path, ".mercury_repository"), 'w').close()
         
-            Configuration.set('repositories', path, path)
+            cls.enable(path)
         else:
             raise NotEmptyException(path)
     
@@ -46,9 +46,13 @@ class Repository(object):
         if cls.is_repo(path):
             shutil.rmtree(path)
             
-            Configuration.delete('repositories', path)
+            cls.disable(path)
         else:
             raise UnknownRepository(path)
+        
+    @classmethod
+    def disable(cls, path):
+        Configuration.delete('repositories', path)
         
     @classmethod
     def droidhg_modules_path(cls):
@@ -58,6 +62,10 @@ class Repository(object):
         """
         
         return ":".join(cls.all())
+    
+    @classmethod
+    def enable(cls, path):
+        Configuration.set('repositories', path, path)
     
     @classmethod
     def is_repo(cls, path):

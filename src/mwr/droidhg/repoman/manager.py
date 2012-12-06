@@ -191,6 +191,36 @@ class RepositoryManager(object):
                 print "The target (%s) is not a Mercury module repository.\n" % path
         else:
             print "usage: mercury module repository delete /path/to/repository\n"
+                
+    def do_disable(self, arguments):
+        """hide a Module repository, without deleting its contents"""
+        
+        if len(arguments.options) == 1:
+            path = arguments.options[0]
+            
+            try:
+                Repository.disable(path)
+                
+                print "Hidden repository at %s.\n" % path
+            except UnknownRepository:
+                print "The target (%s) is not a Mercury module repository.\n" % path
+        else:
+            print "usage: mercury module repository disable /path/to/repository\n"
+    
+    def do_enable(self, arguments):
+        """enable a previously disabled Module repository"""
+        
+        if len(arguments.options) == 1:
+            path = arguments.options[0]
+            
+            try:
+                Repository.enable(path)
+                
+                print "Enabled repository at %s.\n" % path
+            except UnknownRepository:
+                print "The target (%s) is not a Mercury module repository.\n" % path
+        else:
+            print "usage: mercury module repository enable /path/to/repository\n"
         
     def do_list(self, arguments):
         """list all repositories, both local and remote"""
