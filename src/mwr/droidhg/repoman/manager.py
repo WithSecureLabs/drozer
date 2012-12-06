@@ -2,7 +2,7 @@ import argparse
 
 from mwr.common import console
 from mwr.common.text import wrap
-from mwr.droidhg.repoman.repositories import Repository, NotEmptyException
+from mwr.droidhg.repoman.repositories import Repository, NotEmptyException, UnknownRepository
 
 class ModuleManager(object):
     """
@@ -170,11 +170,27 @@ class RepositoryManager(object):
             
             try:
                 Repository.create(path)
+                
                 print "Initialised repository at %s.\n" % path
             except NotEmptyException:
                 print "The target (%s) already exists.\n" % path
         else:
             print "usage: mercury module repository create /path/to/repository\n"
+    
+    def do_delete(self, arguments):
+        """remove a Mercury module repository"""
+        
+        if len(arguments.options) == 1:
+            path = arguments.options[0]
+            
+            try:
+                Repository.delete(path)
+                
+                print "Removed repository at %s.\n" % path
+            except UnknownRepository:
+                print "The target (%s) is not a Mercury module repository.\n" % path
+        else:
+            print "usage: mercury module repository delete /path/to/repository\n"
         
     def do_list(self, arguments):
         """list all repositories, both local and remote"""
