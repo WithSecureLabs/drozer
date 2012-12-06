@@ -1,6 +1,7 @@
 import ConfigParser
 import unittest
 
+from mwr.droidhg.configuration import Configuration
 from mwr.droidhg.repoman import Repository
 
 class RepositoryTestCase(unittest.TestCase):
@@ -15,27 +16,27 @@ class RepositoryTestCase(unittest.TestCase):
         return config
     
     def testItShouldRetrieveNoAdditionalRepositories(self):
-        Repository._Repository__config = self.mockConfigWithRepos([])
+        Configuration._Configuration__config = self.mockConfigWithRepos([])
         
         assert Repository.all() == []
     
     def testItShouldRetrieveAnAdditionalRepository(self):
-        Repository._Repository__config = self.mockConfigWithRepos(['/usr/local/mercury/modules'])
+        Configuration._Configuration__config = self.mockConfigWithRepos(['/usr/local/mercury/modules'])
         
         assert Repository.all() == ['/usr/local/mercury/modules']
     
     def testItShouldBuildDroidhgModulesPathAsDefault(self):
-        Repository._Repository__config = self.mockConfigWithRepos([])
+        Configuration._Configuration__config = self.mockConfigWithRepos([])
         
         assert Repository.droidhg_modules_path() == ""
     
     def testItShouldBuildDroidhgModulesPathWithAnAdditionalRepository(self):
-        Repository._Repository__config = self.mockConfigWithRepos(['/usr/local/mercury/modules'])
+        Configuration._Configuration__config = self.mockConfigWithRepos(['/usr/local/mercury/modules'])
         
         assert Repository.droidhg_modules_path() == "/usr/local/mercury/modules"
         
     def testItShouldBuildDroidhgModulesPathWithTwoAdditionalRepository(self):
-        Repository._Repository__config = self.mockConfigWithRepos(['/usr/local/mercury/modules', '/tmp/modules'])
+        Configuration._Configuration__config = self.mockConfigWithRepos(['/usr/local/mercury/modules', '/tmp/modules'])
         
         assert Repository.droidhg_modules_path() == "/usr/local/mercury/modules:/tmp/modules"
     
