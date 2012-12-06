@@ -2,7 +2,7 @@ import argparse
 
 from mwr.common import console
 from mwr.common.text import wrap
-from mwr.droidhg.repoman.repositories import Repository
+from mwr.droidhg.repoman.repositories import Repository, NotEmptyException
 
 class ModuleManager(object):
     """
@@ -131,6 +131,7 @@ class RepositoryManager(object):
         self.__parser = argparse.ArgumentParser(description=self.__doc__.strip())
         self.__parser.add_argument("command", default=None,
             help="the command to execute, try `commands` to see all available")
+        self.__parser.add_argument("options", nargs='*')
 
     def run(self, argv=None):
         """
@@ -160,6 +161,20 @@ class RepositoryManager(object):
             print "  {:<15}  {}".format(command.replace("do_", ""),
                 getattr(self, command).__doc__.strip())
         print
+        
+    def do_create(self, arguments):
+        """create a new Mercury module repository"""
+        
+        if len(arguments.options) == 1:
+            path = arguments.options[0]
+            
+            try:
+                Repository.create(path)
+                print "Initialised repository at %s.\n" % path
+            except NotEmptyException:
+                print "The target (%s) already exists.\n" % path
+        else:
+            print "usage: mercury module repository create /path/to/repository\n"
         
     def do_list(self, arguments):
         """list all repositories, both local and remote"""
@@ -199,9 +214,6 @@ class RepositoryManager(object):
         print "Local repositories:"
         for repo in Repository.all():
             print "  %s" % repo
-        print
-        
-        print "Remote repositories:"
         print
 
     def __showUsage(self, message):
