@@ -1,5 +1,7 @@
 import argparse
 
+from mwr.common import console
+from mwr.common.text import wrap
 from mwr.droidhg.repoman.repositories import Repository
 
 class ModuleManager(object):
@@ -50,6 +52,8 @@ class ModuleManager(object):
     def do_list(self, arguments):
         """list all installed modules, and their path"""
         
+        self.__list_modules()
+        
     def do_remote(self, arguments):
         """manage the source repositories, from which you install modules"""
         
@@ -81,6 +85,29 @@ class ModuleManager(object):
                 raise UsageError("unknown command: " + command)
         except IndexError:
             raise UsageError("incorrect usage")
+    
+    def __list_modules(self):
+        """
+        Get a list of all loaded modules.
+        """
+        
+        from mwr.droidhg.modules.base import Module
+        
+        width = { 'gutter': 2, 'total': console.getSize()[0] }
+        width['label'] = width['total'] / 3
+        width['desc'] = width['total'] - (width['gutter'] + width['label'])
+
+        for module in Module.all():
+            name = wrap(Module.get(module).name, width['desc']).split("\n")
+
+            if len(module) > width['label']:
+                print ("%%-%ds" % width['label']) % module 
+                print ("%%-%ds  %%-%ds" % (width['label'], width['desc'])) % ("", name.pop(0))
+            else:
+                print ("%%-%ds  %%-%ds" % (width['label'], width['desc'])) % (module, name.pop(0))
+
+            for line in name:
+                print ("%%-%ds  %%-%ds" % (width['label'], width['desc'])) % ("", line)
 
     def __showUsage(self, message):
         """
