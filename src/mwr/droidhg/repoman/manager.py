@@ -1,7 +1,6 @@
 import argparse
-import sys
 
-class Manager:
+class Manager(object):
     """
     mercury module [command]
     
