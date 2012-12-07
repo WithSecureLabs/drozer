@@ -480,6 +480,17 @@ class DebugSession(Session):
 
         self.intro = "Mercury Console (debug mode)"
         self.prompt = "mercury> "
+        
+    def do_reload(self, args):
+        """
+        usage: reload
+        
+        Load a fresh copy of all modules from disk.
+        """
+        
+        Module.reload()
+        
+        print "Done.\n"
 
     def handleException(self, e):
         """
