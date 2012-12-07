@@ -28,7 +28,13 @@ class Configuration(object):
         
         cls.__ensure_config()
         
-        return cls.__config.get(section, key)
+        try:
+            if cls.__config.has_section(section):
+                return cls.__config.get(section, key)
+            else:
+                return None
+        except ConfigParser.NoOptionError:
+            return None
     
     @classmethod
     def get_all_keys(cls, section):
