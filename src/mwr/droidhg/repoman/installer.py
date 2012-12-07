@@ -51,7 +51,7 @@ class ModuleInstaller(object):
         index = self.__get_combined_index()
         
         if module.find("*") >= 0:
-            return filter(lambda m: re.match(module.replace("*", ".+"), m) != None, index)
+            return filter(lambda m: re.match(".*" + module.replace("*", ".*") + ".*", m) != None, index)
         else:
             return filter(lambda m: m == module, index)
     
