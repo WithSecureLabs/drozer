@@ -1,4 +1,6 @@
+import cStringIO
 import os
+import zipfile
 
 from mwr.common import fs
 
@@ -29,6 +31,20 @@ class ModuleInstaller(object):
                 status['fail'][module] = str(e) 
         
         return status
+    
+    def __create_package(self, package):
+        """
+        Create a Python package within the repository.
+        """
+        
+        if not os.path.exists(package):
+            os.makedirs(package)
+            # we must make sure that there is an __init__.py is every directory
+            # that we have just created, otherwise Python will complain about
+            # missing modules
+            self.__ensure_packages(package)
+        
+        return package
     
     def __emit(self, path):
         """
@@ -96,8 +112,7 @@ class ModuleInstaller(object):
         if source.find("mwr.droidhg.modules") >= 0:
             return self.__unpack_module_raw(module, source)
         else:
-            print "zipped source"
-            return False
+            return self.__unpack_module_zip(module, source)
         
         return True
     
@@ -109,14 +124,8 @@ class ModuleInstaller(object):
         
         path = module.split(".")
         
-        package = os.path.join(self.repository, *path[0:-1])
-        # create the folder to write into
-        if not os.path.exists(package):
-            os.makedirs(package)
-            # we must make sure that there is an __init__.py is every directory
-            # that we have just created, otherwise Python will complain about
-            # missing modules
-            self.__ensure_packages(package)
+        # create a Python package to write the module into
+        package = self.__create_package(os.path.join(self.repository, *path[0:-1]))
         
         # calculate the path where we will write the module
         path = os.path.join(package, path[-1] + ".py")
@@ -128,7 +137,33 @@ class ModuleInstaller(object):
             return True
         else:
             raise InstallError("Failed to write module to repository.")
-            
+        
+    def __unpack_module_zip(self, module, source):
+        """
+        Handles unpacking a module and installing it, if the source is a zipped
+        archive.
+        """
+        
+        path = module.split(".")[0:-1]
+        # when extracting the path, we drop the last segment, because it'll be '.zip'
+        
+        # create a Python package to write the module into
+        package = self.__create_package(os.path.join(self.repository, *path))
+        
+        # get a list of files within the archives
+        archive = zipfile.ZipFile(cStringIO.StringIO(source))
+        files = archive.infolist()
+        # ensure we are not about to overwrite any existing files
+        if True in map(lambda f: os.path.exists(os.path.join(package, f.filename)), files):
+            raise InstallError("Installing this module would overwrite one-or-more files in your repository.")
+        # extract each file, in turn
+        try:
+            for f in files:
+                archive.extract(f, package)
+        except IOError:
+            raise InstallError("Fatal error whilst unpacking the zip archive.")
+        
+        return True
             
 class InstallError(Exception):
     pass
