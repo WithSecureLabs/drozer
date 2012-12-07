@@ -78,6 +78,11 @@ class ModuleManager(object):
         """manage module repositories, on your local system"""
         
         RepositoryManager().run(arguments.options)
+        
+    def do_search(self, arguments):
+        """search for modules"""
+
+        self.__search_remotes(arguments.options[0])
     
     def __choose_repo(self):
         """
@@ -145,6 +150,17 @@ class ModuleManager(object):
         from mwr.droidhg.modules.base import Module
         
         console.format_dict(dict(map(lambda m: [m, Module.get(m).name], Module.all())))
+    
+    def __search_remotes(self, term):
+        installer = ModuleInstaller(None)
+        modules = installer.search_index(term)
+        
+        if len(modules) > 0:
+            for module in modules:
+                print module
+            print
+        else:
+            print "No modules found.\n"
         
     def __showUsage(self, message):
         """

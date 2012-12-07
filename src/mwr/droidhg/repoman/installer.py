@@ -25,7 +25,7 @@ class ModuleInstaller(object):
                 _modules = [pattern]
             else:
                 fetch = self.__read_remote_module
-                _modules = self.__search_index(pattern)
+                _modules = self.search_index(pattern)
             
             for module in _modules:
                 print "Processing %s..." % module,
@@ -41,6 +41,19 @@ class ModuleInstaller(object):
                     status['fail'][module] = str(e) 
         
         return status
+    
+    def search_index(self, module):
+        """
+        Search the combined index view from all remotes based on a search pattern
+        with optional wildcards.
+        """
+        
+        index = self.__get_combined_index()
+        
+        if module.find("*") >= 0:
+            return filter(lambda m: re.match(module.replace("*", ".+"), m) != None, index)
+        else:
+            return filter(lambda m: m == module, index)
     
     def __create_package(self, package):
         """
@@ -125,19 +138,6 @@ class ModuleInstaller(object):
                 return source
         
         return None
-    
-    def __search_index(self, module):
-        """
-        Search the combined index view from all remotes based on a search pattern
-        with optional wildcards.
-        """
-        
-        index = self.__get_combined_index()
-        
-        if module.find("*") >= 0:
-            return filter(lambda m: re.match(module.replace("*", ".+"), m) != None, index)
-        else:
-            return filter(lambda m: m == module, index)
     
     def __unpack_module(self, module, source):
         """
