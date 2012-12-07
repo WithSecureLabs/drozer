@@ -1,5 +1,6 @@
 import cStringIO
 import os
+import re
 import zipfile
 
 from mwr.common import fs
@@ -18,18 +19,26 @@ class ModuleInstaller(object):
         
         status = { 'success': [], 'fail': {} }
 
-        for module in modules:
-            print "Processing %s..." % module,
+        for pattern in modules:
+            if pattern.find("/") >= 0 or pattern.find("\\") >= 0:
+                fetch = self.__read_local_module
+                _modules = [pattern]
+            else:
+                fetch = self.__read_remote_module
+                _modules = self.__search_index(pattern)
             
-            try:
-                self.__install_module(module)
-                print "Done."
+            for module in _modules:
+                print "Processing %s..." % module,
                 
-                status['success'].append(module)
-            except InstallError as e:
-                print "Failed."
-                
-                status['fail'][module] = str(e) 
+                try:
+                    self.__install_module(fetch, module)
+                    print "Done."
+                    
+                    status['success'].append(module)
+                except InstallError as e:
+                    print "Failed."
+                    
+                    status['fail'][module] = str(e) 
         
         return status
     
@@ -64,16 +73,29 @@ class ModuleInstaller(object):
         
         for i in range(len(directories)):
             self.__emit(os.path.join(self.repository, *directories[0:i+1] + ["__init__.py"]))
+    
+    def __get_combined_index(self):
+        """
+        Fetches INDEX files from all known remotes, and builds a combined INDEX
+        listing of all available modules.
+        """
+        
+        index = set([])
+        
+        for url in Remote.all():
+            source = Remote.get(url).download("INDEX")
+            
+            if source != None:
+                index = index.union(source.split("\n"))
+        
+        return filter(lambda m: m != None and m != "", index)
 
-    def __install_module(self, module):
+    def __install_module(self, fetch, module):
         """
         Install a module into a repository.
         """
 
-        if module.find("/") >= 0 or module.find("\\") >= 0:
-            source = self.__read_local_module(module)
-        else:
-            source = self.__read_remote_module(module)
+        source = fetch(module)
         
         # check that we successfully read source for the module, otherwise there
         # isn't much more we can do here
@@ -103,6 +125,19 @@ class ModuleInstaller(object):
                 return source
         
         return None
+    
+    def __search_index(self, module):
+        """
+        Search the combined index view from all remotes based on a search pattern
+        with optional wildcards.
+        """
+        
+        index = self.__get_combined_index()
+        
+        if module.find("*") >= 0:
+            return filter(lambda m: re.match(module.replace("*", ".+"), m) != None, index)
+        else:
+            return filter(lambda m: m == module, index)
     
     def __unpack_module(self, module, source):
         """
