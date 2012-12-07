@@ -9,6 +9,9 @@ class Remote(object):
     get information about available modules and download their source.
     """
     
+    def __init__(self, url):
+        self.url = url
+        
     @classmethod
     def all(cls):
         """
@@ -38,6 +41,19 @@ class Remote(object):
             Configuration.delete('remotes', url)
         else:
             raise UnknownRemote(url)
+    
+    @classmethod
+    def get(cls, url):
+        """
+        Get an instance of Remote, initialised with the remote settings.
+        """
+        
+        url = Configuration.get('remotes', url)
+        
+        if url != None:
+            return cls(url)
+        else:
+            return None
             
             
 class UnknownRemote(Exception):
