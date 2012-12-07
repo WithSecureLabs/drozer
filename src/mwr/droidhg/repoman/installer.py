@@ -3,6 +3,7 @@ import os
 import zipfile
 
 from mwr.common import fs
+from mwr.droidhg.repoman.remotes import Remote
 
 class ModuleInstaller(object):
     
@@ -92,6 +93,14 @@ class ModuleInstaller(object):
         """
         Read a module file from a remote, and return the source.
         """
+        
+        for url in Remote.all():
+            source = Remote.get(url).download(module)
+            
+            # if we found the source, we return straight away - this allows us to
+            # install the module from the first source that we come across
+            if source != None:
+                return source
         
         return None
     
