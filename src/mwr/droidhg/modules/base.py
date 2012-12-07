@@ -54,12 +54,15 @@ class ModuleLoader(object):
 
         for i in modules.keys():
             if modules[i] is not None:
-                __import__(modules[i])
-                # Reload the module in case the source has changed. We don't
-                # need to be careful over i, because the import must have
-                # been successful to get here.
-                if modules[i] in sys.modules:
-                    reload(sys.modules[modules[i]])
+                try:
+                    __import__(modules[i])
+                    # Reload the module in case the source has changed. We don't
+                    # need to be careful over i, because the import must have
+                    # been successful to get here.
+                    if modules[i] in sys.modules:
+                        reload(sys.modules[modules[i]])
+                except ImportError:
+                    sys.stderr.write("Skipping source file at %s. Unable to load Python module.\n" % modules[i])
 
     def __locate(self):
         """
