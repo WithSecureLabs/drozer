@@ -254,6 +254,14 @@ class Module(object):
         """
 
         return self.__reflector
+    
+    @classmethod
+    def reload(cls):
+        """
+        Reload all modules.
+        """
+        
+        cls.__loader.load(cls)
         
     def run(self, args):
         """
