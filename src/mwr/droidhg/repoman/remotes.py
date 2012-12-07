@@ -1,3 +1,7 @@
+import httplib
+import StringIO
+import urllib2
+
 from mwr.droidhg.configuration import Configuration
 
 class Remote(object):
@@ -54,8 +58,43 @@ class Remote(object):
             return cls(url)
         else:
             return None
+    
+    def download(self, module):
+        """
+        Download a module from the remote, if it exists.
+        """
+        
+        try:
+            return self.getPath(module)
+        except urllib2.HTTPError:
+            # such as not found: there is no module to download
+            return None
+        except urllib2.URLError:
+            # such as connection refused: the server simply isn't there
+            return None
+    
+    def getPath(self, path):
+        """
+        Fetch a file from the remote.
+        """
+        
+        r = urllib2.urlopen(self.url + path)
+        socket = FakeSocket(r.read())
+        r.close()
+        
+        response = httplib.HTTPResponse(socket)
+        response.begin()
+        data = response.read()
+        response.close()
+        
+        return data
             
-            
+        
+class FakeSocket(StringIO.StringIO):
+    
+    def makefile(self, *args, **kwargs):
+        return self
+    
 class UnknownRemote(Exception):
     
     def __init__(self, url):
