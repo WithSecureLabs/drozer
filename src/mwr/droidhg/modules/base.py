@@ -310,7 +310,7 @@ class Module(object):
             description = description + "Credit: " + ", ".join(self.__class__.author) + "\n"
         description = description + "License: " + self.__class__.license + "\n\n"
 
-        return wrap(description, width=console.getSize()[0])
+        return wrap(description, width=console.get_size()[0])
 
     def __parse_error(self, message):
         """
