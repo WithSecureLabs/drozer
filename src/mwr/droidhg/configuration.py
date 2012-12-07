@@ -79,6 +79,9 @@ class Configuration(object):
         
         cls.__ensure_config()
         
+        if not cls.__config.has_section(section):
+            cls.__config.add_section(section)
+        
         cls.__config.set(section, key, value)
         cls.__config.write(open(cls.path(), 'w'))
         
