@@ -180,7 +180,7 @@ class Session(cmd.Cmd):
                     try:
                         doc = getattr(self, 'do_' + argv[0]).__doc__
                         if doc:
-                            self.stdout.write("%s\n" % wrap(textwrap.dedent(str(doc)).strip(), width=console.getSize()[0]))
+                            self.stdout.write("%s\n" % wrap(textwrap.dedent(str(doc)).strip(), width=console.get_size()[0]))
                             return
                     except AttributeError:
                         pass
@@ -226,22 +226,7 @@ class Session(cmd.Cmd):
 
         term = len(argv) > 0 and argv[0] or None
 
-        # recalculate the sizing, depending on the size of the user's terminal window
-        width = { 'gutter': 2, 'total': console.getSize()[0] }
-        width['label'] = width['total'] / 3
-        width['desc'] = width['total'] - (width['gutter'] + width['label'])
-
-        for module in filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules()):
-            name = wrap(Module.get(module).name, width['desc']).split("\n")
-
-            if len(module[len(self.__base):]) > width['label']:
-                self.stdout.write(("{:<%d}\n" % width['label']).format(module[len(self.__base):]))
-                self.stdout.write(("{:<%d}  {:<%d}\n" % (width['label'], width['desc'])).format("", name.pop(0)))
-            else:
-                self.stdout.write(("{:<%d}  {:<%d}\n" % (width['label'], width['desc'])).format(module[len(self.__base):], name.pop(0)))
-
-            for line in name:
-                self.stdout.write(("{:<%d}  {:<%d}\n" % (width['label'], width['desc'])).format("", line))
+        console.format_dict(dict(map(lambda m: [m, Module.get(m).name], filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules()))))
 
     def do_load(self, args):
         """

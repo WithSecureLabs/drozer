@@ -2,11 +2,37 @@ import os
 import platform
 import struct
 
+from mwr.common import text
+
 # Utility methods for calculating the size of a console.
 #
 # src: http://stackoverflow.com/questions/566746/how-to-get-console-window-width-in-python
 
-def getSize():
+def format_dict(values):
+    width = { 'gutter': 2, 'total': get_size()[0] }
+    width['key'] = width['total'] / 3
+    width['value'] = width['total'] - (width['gutter'] + width['key'])
+    
+    template_key_only = "%%-%ds" % width['key'] 
+    template = "%%-%ds%%%ds%%-%ds" % (width['key'], width['gutter'], width['value'])
+
+    keys = values.keys()
+    keys.sort()
+    
+    for key in keys:
+        value = text.wrap(values[key], width['value']).split("\n")
+        
+        if len(key) > width['key']:
+            print template_key_only % (key) 
+            print template % ("", "", value.pop(0))
+        else:
+            print template % (key, "", value.pop(0))
+        
+        for line in value:
+            print template % ("", "", line)
+            
+
+def get_size():
     """
     Attempt to discover the dimensions of a terminal window.
     """
