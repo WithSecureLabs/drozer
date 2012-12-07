@@ -93,6 +93,7 @@ class Configuration(object):
         
         if cls.__config == None:
             cls.__config = ConfigParser.SafeConfigParser()
+            cls.__config.optionxform = lambda optionstr: optionstr.replace(":", "|")
             
             if os.path.exists(cls.path()):
                 cls.__config.read(cls.path())
