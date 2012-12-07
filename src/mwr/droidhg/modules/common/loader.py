@@ -11,13 +11,13 @@ class ClassLoader(object):
     from the local system into the Dalvik VM on the Agent.
     """
 
-    def getClassLoader(self, source_or_relative_path):
+    def getClassLoader(self, source_or_relative_path, relative_to=None):
         """
         Gets a DexClassLoader on the agent, given compiled source or an apk
         file from the local system.
         """
-        
-        source = self.__getSource(source_or_relative_path)
+
+        source = self.__getSource(source_or_relative_path, relative_to=relative_to)
 
         path = self.__getCachePath()
         file_name = binascii.hexlify(hashlib.md5(source).digest()) + ".apk"
@@ -34,13 +34,13 @@ class ClassLoader(object):
         
         return self.new('dalvik.system.DexClassLoader', file_path, path, None, self.klass('java.lang.ClassLoader').getSystemClassLoader())
 
-    def loadClass(self, source, klass):
+    def loadClass(self, source, klass, relative_to=None):
         """
         Load a Class from a local apk file (source) on the running Dalvik VM.
         """
         
         if not ".".join([source, klass]) in Module._Module__klasses:
-            Module._Module__klasses[".".join([source, klass])] = self.getClassLoader(source).loadClass(klass)
+            Module._Module__klasses[".".join([source, klass])] = self.getClassLoader(source, relative_to=relative_to).loadClass(klass)
             
         return Module._Module__klasses[".".join([source, klass])]
 
@@ -51,13 +51,18 @@ class ClassLoader(object):
 
         return self.getContext().getCacheDir().getAbsolutePath().native()
 
-    def __getSource(self, source_or_relative_path):
+    def __getSource(self, source_or_relative_path, relative_to=None):
         """
         Get source, either from an apk file or passed directly.
         """
 
         if source_or_relative_path.endswith(".apk"):
-            apk_path = os.path.join(os.path.dirname(__file__), "..", *source_or_relative_path.split("/"))
+            if relative_to == None:
+                relative_to = os.path.join(os.path.dirname(__file__), "..")
+            elif relative_to.find(".py") >= 0 or relative_to.find(".pyc") >= 0:
+                relative_to = os.path.dirname(relative_to)
+                
+            apk_path = os.path.join(relative_to, *source_or_relative_path.split("/"))
             
             file_handle = open(apk_path, 'rb')
             data = file_handle.read()
