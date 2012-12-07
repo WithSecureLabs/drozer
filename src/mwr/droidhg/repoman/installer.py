@@ -13,19 +13,20 @@ class ModuleInstaller(object):
         a dictionary of status information.
         """
         
-        status = { 'success': [], 'fail': [] }
+        status = { 'success': [], 'fail': {} }
 
         for module in modules:
             print "Processing %s..." % module,
             
-            if self.__install_module(module):
+            try:
+                self.__install_module(module)
                 print "Done."
                 
                 status['success'].append(module)
-            else:
+            except InstallError as e:
                 print "Failed."
                 
-                status['fail'].append(module)
+                status['fail'][module] = str(e) 
         
         return status
     
@@ -60,7 +61,7 @@ class ModuleInstaller(object):
         # check that we successfully read source for the module, otherwise there
         # isn't much more we can do here
         if source == None:
-            return False
+            raise InstallError("Failed to get module for '%s'." % module)
         
         return self.__unpack_module(os.path.basename(module), source)
 
@@ -90,30 +91,44 @@ class ModuleInstaller(object):
         unzip a zip file into that folder
         """
         
-        path = module.split(".")
-        
         # we assume the file is raw Python is we can read the package name that
         # Module should be imported from
         if source.find("mwr.droidhg.modules") >= 0:
-            package = os.path.join(self.repository, *path[0:-1])
-            # create the folder to write into
-            if not os.path.exists(package):
-                os.makedirs(package)
-                # we must make sure that there is an __init__.py is every directory
-                # that we have just created, otherwise Python will complain about
-                # missing modules
-                self.__ensure_packages(package)
-            
-            # calculate the path where we will write the module
-            path = os.path.join(package, path[-1] + ".py")
-            # ensure that we are not about to overwrite an existing module
-            if os.path.exists(path):
-                return False
-            # write the module file into the package
-            return fs.write(path, source) != None
+            return self.__unpack_module_raw(module, source)
         else:
             print "zipped source"
             return False
         
         return True
     
+    def __unpack_module_raw(self, module, source):
+        """
+        Handles unpacking a module and installing it, if the source is a Python
+        module.
+        """
+        
+        path = module.split(".")
+        
+        package = os.path.join(self.repository, *path[0:-1])
+        # create the folder to write into
+        if not os.path.exists(package):
+            os.makedirs(package)
+            # we must make sure that there is an __init__.py is every directory
+            # that we have just created, otherwise Python will complain about
+            # missing modules
+            self.__ensure_packages(package)
+        
+        # calculate the path where we will write the module
+        path = os.path.join(package, path[-1] + ".py")
+        # ensure that we are not about to overwrite an existing module
+        if os.path.exists(path):
+            raise InstallError("The target (%s) already exists in the repository." % module)
+        # write the module file into the package
+        if fs.write(path, source) != None:
+            return True
+        else:
+            raise InstallError("Failed to write module to repository.")
+            
+            
+class InstallError(Exception):
+    pass

@@ -61,6 +61,7 @@ class ModuleManager(object):
             print "Failed to install %d:" % len(modules['fail'])
             for module in modules['fail']:
                 print "  %s" % module
+                print "    %s" % modules['fail'][module]
             print
             
     def do_list(self, arguments):
