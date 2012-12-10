@@ -48,7 +48,10 @@ class Size(Module, common.FileSystem):
         size = self.fileSize(arguments.target)
 
         if size != None:
-            self.stdout.write("%d bytes\n" % size)
+            if size > 1024:
+                self.stdout.write("%s (%d bytes)\n" % (self.format_file_size(size), size))
+            else:
+                self.stdout.write("%s\n" % (self.format_file_size(size)))
         else:
             self.stderr.write("Could not determine file size. The file may not exist.\n")
 

@@ -67,7 +67,19 @@ class FileSystem(object):
             return file_io.length()
         else:
             return None
-
+    
+    def format_file_size(self, size):
+        for x in ['bytes','KiB','MiB','GiB']:
+            if size < 1024.0 and size > -1024.0:
+                if x != "bytes":
+                    return "%.1f %s" % (size, x)
+                else:
+                    return "%d %s" % (size, x)
+            
+            size /= 1024.0
+            
+        return "%3.1f%s" % (size, 'TiB')
+        
     def md5sum(self, source):
         """
         Calculate the MD5 checksum of a file on the Agent's file system.
