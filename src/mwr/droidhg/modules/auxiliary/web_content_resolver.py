@@ -11,7 +11,7 @@ class WebContentResolver(Module, common.PackageManager, common.Provider):
 
     name = "Start a Web Service interface to Content Providers."
     description = "Start a Web Service interface to Content Providers. This allows you to use web application testing capabilities and tools to test content providers."
-    examples = """mercury> run auxiliary.webcontentresolver
+    examples = """mercury> run auxiliary.webcontentresolver [PORT]
 
     WebContentResolver started on port 8080.
     Ctrl+C to Stop"""
@@ -50,39 +50,54 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
 
+        # grab the requested path, and parse it
         url = urlparse.urlparse(self.path)
-
+        # split out the path component into an array
         path = [ x for x in url.path.split('/') if x ]
-
+        # parse the trailing url parameters
         params = urlparse.parse_qs(url.query)
-        request = {}
 
         try:
             if not path or path[0] == 'list':
-                # TODO: support filter/permissions params 
-                #for param in ['filter', 'permissions']:
-                #    request[param] = params.get(param, [None])[0]
-
-                output = self.__provider_list()
+                # if / or /list, produce a list of all known content provider uris
+                output = self.__provider_list(filters=params.get('filter', [None])[0], permissions=params.get('permissions', [None])[0])
 
                 self.wfile.write(self.header + output + self.footer)
             elif path[0] == 'query':
-                # TODO: apply projection, selection, selectionArgs, sortOrder, showColumns
-                #for param in ['uri', 'projection', 'selection', 'selectionArgs', 'sortOrder', 'showColumns']:
-                #    request[param] = params.get(param, [None])[0]
-
+                # if /query, build a query against the specified content uri, with
+                # the projection and selection
                 output = self.__query(params.get('uri', [None])[0], params.get('projection', [None])[0], params.get('selection', [None])[0], params.get('selectionArgs', [None])[0], params.get('selectionSort', [None])[0])
 
                 self.wfile.write(self.header + output + self.footer)
             else:
+                # if the path is not recognised, print usage information
                 self.wfile.write(self.header + self.usage() + self.footer)
         except ReflectionException as e:
+            # handle any ReflectionExceptions here, and show the error message in the
+            # user's browser - this will help them to build their query
             self.wfile.write(self.header + self.__format_exception(e) + self.footer)
+    
+    def __eligible_path_permission(self, permissions, path):
+        return permissions == None or \
+            permissions.lower() == "null" and (path.getReadPermission() == None or path.getWritePermission() == None) or \
+            path.getReadPermission() != None and permissions.lower() in path.getReadPermission().lower() or \
+            path.getWritePermission() != None and permissions.lower() in path.getWritePermission().lower()
+             
+    def __eligible_provider(self, permissions, provider):
+        return permissions == None or \
+            permissions.lower() == "null" and (provider.readPermission == None or provider.writePermission == None) or \
+            provider.readPermission != None and permissions.lower() in provider.readPermission.lower() or \
+            provider.writePermission != None and permissions.lower() in provider.writePermission.lower() or \
+            provider.pathPermissions != None and True in map(lambda path: self.__eligible_path_permission(permissions, path), provider.pathPermissions)
 
     def __format_exception(self, e):
         return "<h1>" + str(e.__class__) + "</h1><p>" + e.message + "</p>"
 
-    def __provider_list(self):
+    def __provider_list(self, filters=None, permissions=None):
+        """
+        Print out a (filtered) list of Content Providers.
+        """
+        
         output = """<table><tr><th>Package</th>
                                <th colspan="2">Authorities</th>
                                <th>Read permission</th>
@@ -94,7 +109,7 @@ class Handler(BaseHTTPRequestHandler):
             return "<a href='%s'>%s</a>" % (path, display)
 
         def linkcontent(url, display=None):
-            return link("/query?uri=content://%s&projection=&selection=&selectionSort=&showColumns=" % url, display or url)
+            return link("/query?uri=content://%s&projection=&selection=&selectionSort=" % url, display or url)
 
         def linkfilter(url, display=None):
             return link("/?filter=%s" % url, display or url)
@@ -103,28 +118,35 @@ class Handler(BaseHTTPRequestHandler):
             return link("/?permissions=%s" % url, display or url)
 
         for package in self.module.packageManager().getPackages(common.PackageManager.GET_PROVIDERS):
-            if package.providers != None:
+            if package.providers != None and (filters == None or filters.lower() in package.packageName.lower()):
                 for provider in package.providers:
 
-                    # Give the general values first
-                    authorities = provider.authority.split(";")
-                    output += "<tr><td>%s</td>" % linkfilter(provider.packageName)
-                    output += "<td colspan='2'>%s</td>" % "<br/>".join([linkcontent(a) for a in authorities])
-                    output += "<td>%s</td>" % linkperm(provider.readPermission)
-                    output += "<td>%s</td>" % linkperm(provider.writePermission)
-                    output += "<td>%s</td></tr>" % provider.multiprocess
+                    if self.__eligible_provider(permissions, provider):
+                        # Give the general values first
+                        authorities = provider.authority.split(";")
+                        output += "<tr><td>%s</td>" % linkfilter(provider.packageName)
+                        output += "<td colspan='2'>%s</td>" % "<br/>".join([linkcontent(a) for a in authorities])
+                        output += "<td>%s</td>" % linkperm(provider.readPermission)
+                        output += "<td>%s</td>" % linkperm(provider.writePermission)
+                        output += "<td>%s</td></tr>" % provider.multiprocess
 
-                    if provider.pathPermissions != None:
-                        for permission in provider.pathPermissions:
-                            output += "<tr><td>&nbsp;</td><td>&nbsp;</td>"
-                            output += "<td>%s</td>" % linkcontent("%s%s" % (authorities[0], permission.getPath()), permission.getPath())
-                            output += "<td>%s</td>" % linkperm(permission.getReadPermission())
-                            output += "<td>%s</td>" % linkperm(permission.getReadPermission())
-                            output += "<td>&nbsp;</td></tr>"
+                        if provider.pathPermissions != None:
+                            for permission in provider.pathPermissions:
+                                if self.__eligible_path_permission(permissions, permission):
+                                    output += "<tr><td>&nbsp;</td><td>&nbsp;</td>"
+                                    output += "<td>%s</td>" % linkcontent("%s%s" % (authorities[0], permission.getPath()), permission.getPath())
+                                    output += "<td>%s</td>" % linkperm(permission.getReadPermission())
+                                    output += "<td>%s</td>" % linkperm(permission.getWritePermission())
+                                    output += "<td>&nbsp;</td></tr>"
         output += "</table>"
         return output
 
     def __query(self, uri, projection=None, selection=None, selectionArgs=None, sortOrder=None):
+        """
+        Query a Content Provider, with a projection and selection passed through the
+        web interface.
+        """
+        
         cursor = self.module.contentResolver().query(uri, projection != None and projection.split(",") or None, selection, selectionArgs != None and selectionArgs.split(",") or None, sortOrder)
         output = "<table><thead><tr>"
 
@@ -149,14 +171,21 @@ class Handler(BaseHTTPRequestHandler):
             return "Unable to query %s." % uri
 
     def usage(self):
+        """
+        Create HTML-formatted usage information for WebContentResolver.
+        """
+        
         return """
-<p>Usage instructions:</p>
+<p>WebContentProvider starts a Web Service interface to access Content Providers.</p>
+<p>With WebContentProvider, you can use web application testing capabilities and tools to test content providers.</p>
+
+<h2>Usage instructions:</h2>
 
 <ul>
 <li>To access a list of providers:
-  <a href="http://localhost:8080/list">http://localhost:8080/providers</a></li>
+  <a href="http://localhost:%d/list">http://localhost:%s/providers</a></li>
 
 <li>To access a particular provider:
-  http://localhost:8080/query?projection=<projection>&selection=<selection>&selectionArgs=<selectionArgs>&sortOrder=</li>
+  http://localhost:%d/query?uri=<uri>&projection=<projection>&selection=<selection>&selectionArgs=<selectionArgs>&sortOrder=</li>
 </ul>
-"""
+""" % (self.server.server_port, self.server.server_port, self.server.server_port)
