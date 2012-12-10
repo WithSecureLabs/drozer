@@ -244,7 +244,7 @@ class SharedUID(Module, common.PackageManager):
 
         if arguments.uid == None:
             for package in self.packageManager().getPackages(common.PackageManager.GET_PERMISSIONS):
-                uids.add(package.applicationInfo.uid)
+                uids.add(int(package.applicationInfo.uid))
         else:
             uids.add(int(arguments.uid))
 
