@@ -16,7 +16,7 @@ class Download(Module, common.ClassLoader, common.FileSystem):
 
     def complete(self, text, line, begidx, endidx):
         if not " " in line or begidx < line.index(" "):
-            return common.path_completion.on_agent(text)
+            return common.path_completion.on_agent(text, self)
         else:
             return common.path_completion.on_console(text)
 
@@ -97,7 +97,7 @@ class Upload(Module, common.ClassLoader, common.FileSystem):
         if not " " in line or begidx < line.index(" "):
             return common.path_completion.on_console(text)
         else:
-            return common.path_completion.on_agent(text)
+            return common.path_completion.on_agent(text, self)
 
     def execute(self, arguments):
         length = self.uploadFile(arguments.source, arguments.destination)
