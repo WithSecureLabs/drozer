@@ -79,6 +79,25 @@ class FileSystem(object):
             size /= 1024.0
             
         return "%3.1f%s" % (size, 'TiB')
+
+    def isDirectory(self, target):
+        """
+        Test whether a target exists, and is a directory.
+        """
+        
+        file_io = self.new("java.io.File", target)
+        
+        return file_io.exists() and file_io.isDirectory()
+
+    def isFile(self, target):
+        """
+        Test whether a target exists, and is a normal file.
+        """
+        
+        file_io = self.new("java.io.File", target)
+        
+        return file_io.exists() and file_io.isFile()
+        
         
     def md5sum(self, source):
         """
@@ -122,6 +141,9 @@ class FileSystem(object):
         """
         Copy a file from the local file system to the Agent's.
         """
+        
+        if self.isDirectory(destination):
+            destination = "/".join([destination, source.split(os.path.sep)[-1]])
 
         return self.writeFile(destination, open(source, 'rb').read(), block_size=block_size)
 
