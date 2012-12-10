@@ -8,13 +8,13 @@ class SecretCodes(Module, common.ClassLoader, common.PackageManager):
     author = "Mike (@mwrlabs)"
     date = "2012-11-06"
     license = "MWR Code License"
-    path = ["information"]
+    path = ["scanner", "misc"]
 
     def add_arguments(self, parser):
         parser.add_argument("-v", "--verbose", action="store_true", default=False, help="be verbose")
 
     def execute(self, arguments):
-        SecretCodes = self.loadClass("information/SecretCodes.apk", "SecretCodes")
+        SecretCodes = self.loadClass("scanner/misc/SecretCodes.apk", "SecretCodes")
 
         packages = self.packageManager().installedPackages(0)
 
