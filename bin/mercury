@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import os
+import platform
 import subprocess
 import sys
 
@@ -36,7 +38,10 @@ if len(sys.argv) > 1:
     if sys.argv[1] in Commands:
         process = __file__ + "-" + sys.argv[1]
         
-        subprocess.call([sys.executable, process] + sys.argv[2::])
+        if platform.system() != 'Windows':
+            os.execv(sys.executable, [sys.executable, process] + sys.argv[2::])
+        else:
+            subprocess.call([sys.executable, process] + sys.argv[2::])
     else:
         print "unknown command:", sys.argv[1]
         print_usage()
