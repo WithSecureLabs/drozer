@@ -148,9 +148,9 @@ class LaunchIntent(Module, common.PackageManager):
         intent = self.packageManager().getLaunchIntentForPackage(arguments.package)
 
         if intent != None:
-            self.stdout.write(str(intent.toString()))
+            self.stdout.write("%s\n\n" % str(intent.toString()))
         else:
-            self.stdout.write("No Launch Intent found.")
+            self.stdout.write("No Launch Intent found.\n\n")
 
 class List(Module, common.PackageManager):
 
