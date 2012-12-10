@@ -98,6 +98,14 @@ class FileSystem(object):
         
         return file_io.exists() and file_io.isFile()
         
+    def listFiles(self, target):
+        """
+        Gets a list of all files in the folder target.
+        """
+        
+        file_io = self.new("java.io.File", target)
+        
+        return file_io.list()
         
     def md5sum(self, source):
         """
