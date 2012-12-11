@@ -8,23 +8,25 @@ import sys
 Commands = {    'console': 'start the Mercury console',
                 'server': 'start a Mercury server' }
 
-def print_usage():
-    print """               ..                    ..:.
-              ..I..                  .I..
-               ..I.    . . .... .  ..I=
-                 .I...I?IIIIIIIII~..II
-                 .?I?IIIIIIIIIIIIIIII..
-              .,IIIIIIIIIIIIIIIIIIIIIII+.
-           ...IIIIIIIIIIIIIIIIIIIIIIIIIII:.
-           .IIIIIIIIIIIIIIIIIIIIIIIIIIIIIII..
-         ..IIIIII,..,IIIIIIIIIIIII,..,IIIIII.
-         .?IIIIIII..IIIIIIIIIIIIIII..IIIIIIII.
-         ,IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII.
-        .IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII.
-        .IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII:
-        .IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-        the Heavy Metal that poisoned the Droid"""
+def print_logo():
+    print """
+            ..                    ..:.
+           ..t..                  .h..
+            ..e..  . ....... .  ..he
+              av..ymetalthatpoi..so
+              .nedthedroidtheheavy.
+           .,metalthatpoisonedthedro+.
+         ..idtheheavymetalthatpoisonedt:.
+        .hedroidtheheavymetalthatpoisone..
+      ..dthedr,..,oidtheheavyme,..,taltha.
+      .tpoisone..dthedroidthehea..vymetalt.
+      ,hatpoisonedthedroidtheheavymetalthat.
+     .poisonedthedroidtheheavymetalthatpois.
+     .onedthedroidtheheavymetalthatpoisoned:
+     .thedroidtheheavymetalthatpoisonedthed."""
     print
+    
+def print_usage():
     print "usage: mercury [COMMAND]"
     print
     print "Run `mercury [COMMAND] --help` for more usage information."
@@ -38,12 +40,15 @@ if len(sys.argv) > 1:
     if sys.argv[1] in Commands:
         process = __file__ + "-" + sys.argv[1]
         
+    	print_logo()
         if platform.system() != 'Windows':
             os.execv(sys.executable, [sys.executable, process] + sys.argv[2::])
         else:
             subprocess.call([sys.executable, process] + sys.argv[2::])
     else:
+    	print_logo()
         print "unknown command:", sys.argv[1]
         print_usage()
 else:
+    print_logo()
     print_usage()
