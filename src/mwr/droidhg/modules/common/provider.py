@@ -162,7 +162,8 @@ class Provider(object):
 
         if package.providers != None:
             for provider in package.providers:
-                uris.add("content://%s" % provider.authority)
+                if provider.authority != None:
+                    uris.add("content://%s" % provider.authority)
         for (path, content_uris) in self.findContentUris(package.packageName):
             if len(content_uris) > 0:
                 for uri in content_uris:
