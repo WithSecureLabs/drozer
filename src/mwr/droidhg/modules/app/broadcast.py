@@ -65,8 +65,13 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
     def __print_receiver(self, receiver):
             self.stdout.write("  Receiver: %s\n" % receiver.name)
             self.stdout.write("    Intent Filters:\n")
-            for intent_filter in self.__find_receiver_actions(receiver):
-                self.stdout.write("      action: %s\n" % intent_filter)
+            receiver_actions = self.__find_receiver_actions(receiver)
+            
+            if len(receiver_actions) > 0:
+                for intent_filter in receiver_actions:
+                    self.stdout.write("      action: %s\n" % intent_filter)
+            else:
+                self.stdout.write("      None.\n")
             self.stdout.write("    Permission: %s\n" % receiver.permission)
 
     def __find_receiver_actions(self, receiver):
