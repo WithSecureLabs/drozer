@@ -298,7 +298,6 @@ class Query(Module, common.Provider, common.TableFormatter):
         parser.add_argument("--selection", default=None, metavar="<rows>")
         parser.add_argument("--selection-args", default=None, metavar="<arg>", nargs="*")
         parser.add_argument("--order", default=None, metavar="<order>")
-        parser.add_argument("--show-headers", action="store_true", default=False)
         parser.add_argument("--vertical", action="store_true", default=False)
 
     def execute(self, arguments):
@@ -307,7 +306,7 @@ class Query(Module, common.Provider, common.TableFormatter):
         if c != None:
             rows = self.getResultSet(c)
 
-            self.print_table(rows, show_headers=arguments.show_headers, vertical=arguments.vertical)
+            self.print_table(rows, show_headers=True, vertical=arguments.vertical)
         else:
             self.stdout.write("Unknown Error.\n")
 
