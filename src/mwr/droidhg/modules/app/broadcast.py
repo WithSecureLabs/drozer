@@ -26,6 +26,7 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
         parser.add_argument("-a", "--package", default=None, help="specify the package to inspect")
         parser.add_argument("-f", "--filter", default=None, help="specify filter conditions")
         parser.add_argument("-p", "--permission", default=None, help="specify permission conditions")
+        parser.add_argument("-i", "--show-intent-filters", action="store_true", default=False, help="specify whether to include intent filters")
         parser.add_argument("-u", "--unexported", action="store_true", default=False, help="include receivers that are not exported")
         parser.add_argument("-v", "--verbose", action="store_true", default=False, help="be verbose")
 
@@ -50,28 +51,31 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
 
             if not arguments.unexported:
                 for receiver in exported_receivers:
-                    self.__print_receiver(receiver)
+                    self.__print_receiver(receiver, arguments.show_intent_filters)
             else:
                 self.stdout.write("  Exported Receivers:\n")
                 for receiver in exported_receivers:
-                    self.stdout.write("  Hidden Receivers:\n")
+                    self.__print_receiver(receiver, arguments.show_intent_filters)
+                self.stdout.write("  Hidden Receivers:\n")
                 for receiver in hidden_receivers:
-                    self.__print_receiver(receiver)
+                    self.__print_receiver(receiver, arguments.show_intent_filters)
             self.stdout.write("\n")
         elif arguments.package or arguments.verbose:
             self.stdout.write("Package: %s\n" % package.packageName)
             self.stdout.write("  No matching receivers.\n\n")
 
-    def __print_receiver(self, receiver):
+    def __print_receiver(self, receiver, include_intent_filters=False):
             self.stdout.write("  Receiver: %s\n" % receiver.name)
-            self.stdout.write("    Intent Filters:\n")
-            receiver_actions = self.__find_receiver_actions(receiver)
             
-            if len(receiver_actions) > 0:
-                for intent_filter in receiver_actions:
-                    self.stdout.write("      action: %s\n" % intent_filter)
-            else:
-                self.stdout.write("      None.\n")
+            if include_intent_filters:
+                self.stdout.write("    Intent Filters:\n")
+                receiver_actions = self.__find_receiver_actions(receiver)
+                
+                if len(receiver_actions) > 0:
+                    for intent_filter in receiver_actions:
+                        self.stdout.write("      action: %s\n" % intent_filter)
+                else:
+                    self.stdout.write("      None.\n")
             self.stdout.write("    Permission: %s\n" % receiver.permission)
 
     def __find_receiver_actions(self, receiver):
