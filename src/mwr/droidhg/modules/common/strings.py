@@ -10,6 +10,11 @@ class Strings(object):
         """
 
         StringsKlass = self.klass("com.mwr.droidhg.util.Strings")
-
-        return StringsKlass.get(path).split("\n")
         
+        strings = StringsKlass.get(path)
+
+        if strings == None:
+            return []
+        else:
+            return strings.split("\n")
+            
