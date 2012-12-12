@@ -21,7 +21,7 @@ class Server:
         self.__socket = socket.socket()
 
         try:
-            self.__socket.settimeout(30.0)
+            self.__socket.settimeout(90.0)
             self.__socket.connect(self.__getEndpoint(arguments))
         except socket.error as e:
             print "error connecting to server:", e.strerror.lower()
