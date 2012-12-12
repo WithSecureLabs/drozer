@@ -116,6 +116,10 @@ class Provider(object):
                     strings = self.getStrings(dex_file.getAbsolutePath())
 
                     dex_file.delete()
+                
+                # look for an odex file too, because some system packages do not
+                # list these in sourceDir
+                strings += self.getStrings(path.replace(".apk", ".odex")) 
             elif (".odex" in path):
                 strings = self.getStrings(path)
             
