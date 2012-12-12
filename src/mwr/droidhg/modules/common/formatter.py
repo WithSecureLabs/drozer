@@ -41,6 +41,7 @@ class TableFormatter(object):
             for i in range(len(r)):
                 self.stdout.write((" {:<" + str(widths[i]) + "} |").format(r[i]))
             self.stdout.write("\n")
+        self.stdout.write("\n")
 
     def print_table_vertical(self, rows):
         """
@@ -60,3 +61,4 @@ class TableFormatter(object):
             for i in range(len(headers)):
                 self.stdout.write(("{:>" + str(width) + "}  {}\n").format(headers[i], row[i]))
             self.stdout.write("\n")
+        self.stdout.write("\n")
