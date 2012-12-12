@@ -11,7 +11,7 @@ class Info(Module, common.Filters, common.PackageManager):
     Package: com.android.browser
       No exported services.
 
-List exported services with no permissions required:
+List exported services with no permissions required to interact with it:
 
     mercury> run app.service.info -p null
     Package: com.android.email
