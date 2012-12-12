@@ -172,7 +172,7 @@ Finding content providers that do not require permissions to read/write:
             self.__get_providers(arguments, package)
 
     def __get_providers(self, arguments, package):
-        providers = self.match_filter(package.providers, 'name', arguments.filter)
+        providers = self.match_filter(package.providers, 'authority', arguments.filter)
 
         if arguments.permission != None:
             r_providers = self.match_filter(providers, 'readPermission', arguments.permission)
