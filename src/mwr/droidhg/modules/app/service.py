@@ -3,7 +3,7 @@ from mwr.droidhg.modules import common, Module
 
 class Info(Module, common.Filters, common.PackageManager):
 
-    name = "List exported services"
+    name = "Get information about exported services"
     description = "Gets information about exported services."
     examples = """List services exported by the Browser:
 

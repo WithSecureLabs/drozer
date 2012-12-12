@@ -2,7 +2,7 @@ from mwr.droidhg.modules import common, Module
 
 class AttackSurface(Module, common.Filters, common.PackageManager):
 
-    name = "Attack Surface"
+    name = "Get attack surface of package"
     description = "Examine the attack surface of an installed package."
     examples = """Finding the attack surface of the built-in browser
 
@@ -43,7 +43,7 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
 
 class Info(Module, common.Filters, common.PackageManager):
 
-    name = "List Packages"
+    name = "Get information about installed packages"
     description = "List all installed packages on the device with optional filters. Specify optional keywords to search for in the package information, or granted permissions."
     examples = """Finding all packages with the keyword "browser" in their name:
 
@@ -128,7 +128,7 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
 
 class LaunchIntent(Module, common.PackageManager):
 
-    name = "Launch Intent"
+    name = "Get launch intent of package"
     description = "Get the launch intent of an installed package."
     examples = """Finding the launch intent of the Android browser package:
 
@@ -181,7 +181,7 @@ class List(Module, common.PackageManager):
 
 class Manifest(Module, common.Assets, common.ClassLoader):
 
-    name = "Manifest"
+    name = "Get AndroidManifest.xml of package"
     description = "Retrieves AndroidManifest.xml from an installed package."
     examples = """Getting the manifest for Mercury
 
@@ -208,8 +208,8 @@ class Manifest(Module, common.Assets, common.ClassLoader):
 
 class SharedUID(Module, common.PackageManager):
 
-    name = "Shared UIDs"
-    description = "Finds packages that share a UID, and the accumulated permissions."
+    name = "Look for packages with shared UIDs"
+    description = "Finds packages that have shared UIDs and gives their accumulated permissions."
     examples = """Finding packages that share the UID 10011
 
     mercury> run app.package.shareduid -u 10011

@@ -2,7 +2,7 @@ from mwr.droidhg.modules import common, Module
 
 class Debuggable(Module, common.Filters, common.PackageManager):
 
-    name = "Debuggable Packages"
+    name = "Find debuggable packages"
     description = "Lists packages which are debuggable."
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"

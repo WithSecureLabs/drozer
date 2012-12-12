@@ -3,8 +3,8 @@ from mwr.droidhg.modules import common, Module
 
 class ForIntent(Module, common.PackageManager):
 
-    name = "Find Activities that support an Intent"
-    description = "Find activities the handle a formulated intent"
+    name = "Find activities that can handle the given intent"
+    description = "Find activities that can handle the formulated intent"
     examples = """Find activities that can handle web addresses:
 
     mercury> run app.activity.forintent
@@ -29,7 +29,7 @@ class ForIntent(Module, common.PackageManager):
                 activity_info = activity.activityInfo
 
                 self.stdout.write("Package: %s\n" % activity_info.packageName)
-                self.stdout.write("  %s\n" % activity_info.name)
+                self.stdout.write("  %s\n\n" % activity_info.name)
         else:
             self.stderr.write("invalid intent: one of action or component must be set\n")
 
@@ -94,7 +94,7 @@ class Info(Module, common.Filters, common.PackageManager):
 class Start(Module):
 
     name = "Start an Activity"
-    description = "Starts an Activity, by passing an Intent."
+    description = "Starts an Activity using the formulated intent."
     examples = """Start the Browser with an explicit intent:
 
     mercury> run app.activity.start

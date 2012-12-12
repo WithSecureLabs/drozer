@@ -5,7 +5,7 @@ from mwr.droidhg.modules import common, Module
 
 class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.PackageManager):
 
-    name = "Broadcast Receiver Information"
+    name = "Get information about broadcast receivers"
     description = "Get information about exported broadcast receivers."
     examples = """Get receivers exported by the platform:
 
@@ -82,7 +82,7 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
 
 class Send(Module):
 
-    name = "Send Broadcast Message"
+    name = "Send broadcast using an intent"
     description = "Sends an intent to broadcast receivers."
     examples = """Attempt to send the BOOT_COMPLETED broadcast message:
 

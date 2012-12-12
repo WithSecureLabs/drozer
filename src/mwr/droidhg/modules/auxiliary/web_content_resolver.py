@@ -9,7 +9,7 @@ from mwr.droidhg.reflection import ReflectionException
 
 class WebContentResolver(Module, common.PackageManager, common.Provider):
 
-    name = "Start a Web Service interface to Content Providers."
+    name = "Start a web service interface to content providers."
     description = "Start a Web Service interface to Content Providers. This allows you to use web application testing capabilities and tools to test content providers."
     examples = """mercury> run auxiliary.webcontentresolver [PORT]
 

@@ -30,7 +30,7 @@ class Download(Module, common.ClassLoader, common.FileSystem):
 
 class Size(Module, common.FileSystem):
 
-    name = "Size of File"
+    name = "Get size of file"
     description = "Calculate the size of file on the Android device"
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
@@ -57,7 +57,7 @@ class Size(Module, common.FileSystem):
 
 class MD5Sum(Module, common.ClassLoader, common.FileSystem):
 
-    name = "md5 Checksum of File"
+    name = "Get md5 Checksum of file"
     description = "md5 Checksum of File"
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"

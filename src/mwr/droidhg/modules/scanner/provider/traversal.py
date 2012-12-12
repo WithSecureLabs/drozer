@@ -3,7 +3,7 @@ from mwr.droidhg.reflection import ReflectionException
 
 class Traversal(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
-    name = "Finds content providers with basic directory traversal vulnerabilities."
+    name = "Test content providers for basic directory traversal vulnerabilities."
     description = "Finds content providers with basic directory traversal vulnerabilities."
     examples = ""
     author = "Nils (@mwrlabs)"

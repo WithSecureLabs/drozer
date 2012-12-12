@@ -2,7 +2,7 @@ from mwr.droidhg.modules import common, Module
 
 class DeviceInfo(Module, common.ClassLoader, common.FileSystem, common.Shell):
     
-    name = "Gets device information"
+    name = "Get verbose device information"
     description = "Gets device information"
     examples = ""
     author = "Tyrone (@mwrlabs)"

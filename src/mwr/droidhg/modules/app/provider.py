@@ -4,7 +4,7 @@ from mwr.droidhg.modules import common, Module
 
 class Columns(Module, common.Provider, common.TableFormatter):
 
-    name = "List Columns"
+    name = "List columns in content provider"
     description = "List the columns in the specified content provider URI."
     examples = """List the columns of content://settings/secure
 
@@ -31,7 +31,7 @@ class Columns(Module, common.Provider, common.TableFormatter):
 
 class Delete(Module, common.Provider):
 
-    name = "Delete from Content Provider"
+    name = "Delete from a content provider"
     description = "Delete from the specified content provider URI."
     examples = """Delete from content://settings/secure, with name condition:
 
@@ -55,7 +55,7 @@ class Delete(Module, common.Provider):
 
 class Download(Module, common.ClassLoader, common.Provider):
 
-    name = "Download a file from a Content Provider"
+    name = "Download a file from a content provider that supports files"
     description = "Read from the specified content uri using openInputStream, and download to the local file system"
     examples = """Download, using directory traversal on a content provider:
 
@@ -90,7 +90,7 @@ class Download(Module, common.ClassLoader, common.Provider):
         
 class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
-    name = "Find Content Provider URIs"
+    name = "Find referenced content URIs in a package"
     description = "Finds content provider URIs by searching for strings in a package."
     examples = """Find content provider URIs in the Browser:
 
@@ -116,7 +116,7 @@ class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManag
 
 class Info(Module, common.Filters, common.PackageManager):
 
-    name = "List Providers"
+    name = "Get information about exported content providers"
     description = "List information about exported content providers, with optional filters."
     examples = """Find content provider with the keyword "settings" in them:
 
@@ -276,7 +276,7 @@ class Insert(Module, common.Provider):
         
 class Query(Module, common.Provider, common.TableFormatter):
 
-    name = "Query Provider"
+    name = "Query a content provider"
     description = "Query a content provider"
     examples = """Querying the settings content provider:
 
@@ -313,7 +313,7 @@ class Query(Module, common.Provider, common.TableFormatter):
 
 class Read(Module, common.ClassLoader, common.Provider):
 
-    name = "Read from a Query Provider"
+    name = "Read from a content provider that supports files"
     description = "Read from the specified content uri using openInputStream"
     examples = """Attempt directory traversal on a content provider:
 
@@ -332,7 +332,7 @@ class Read(Module, common.ClassLoader, common.Provider):
         
 class Update(Module, common.Provider):
 
-    name = "Update a Record"
+    name = "Update a record in a content provider"
     description = "Update the specified content provider URI"
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"

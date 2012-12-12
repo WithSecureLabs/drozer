@@ -2,7 +2,7 @@ from mwr.droidhg.modules import common, Module
 
 class SecretCodes(Module, common.ClassLoader, common.PackageManager):
     
-    name = "Secret Codes"
+    name = "Search for secret codes that can be used from the dialer"
     description = "Finds Secret Codes from all installed packages."
     examples = ""
     author = "Mike (@mwrlabs)"

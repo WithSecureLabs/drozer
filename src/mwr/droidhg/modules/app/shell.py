@@ -2,7 +2,7 @@ from mwr.droidhg.modules import Module
 
 class Start(Module):
 
-    name = "Execute Linux commands in a shell."
+    name = "Enter into an interactive Linux shell."
     description = "Execute Linux commands in a shell in the context of droidhg."
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"

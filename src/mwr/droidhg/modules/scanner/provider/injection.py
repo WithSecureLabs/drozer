@@ -3,7 +3,7 @@ from mwr.droidhg.reflection import ReflectionException
 
 class Injection(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
-    name = "Search for content providers with SQL Injection vulnerabilities."
+    name = "Test content providers for SQL injection vulnerabilities."
     description = "Search for content providers with SQL Injection vulnerabilities."
     examples = ""
     author = "Rob (@mwrlabs)"

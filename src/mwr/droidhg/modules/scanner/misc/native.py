@@ -2,7 +2,7 @@ from mwr.droidhg.modules import common, Module
 
 class Native(Module, common.ClassLoader, common.Filters, common.PackageManager):
 
-    name = "Native Packages"
+    name = "Find native components included in packages"
     description = "Lists packages which use native code."
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
