@@ -14,14 +14,15 @@ class DeviceInfo(Module, common.ClassLoader, common.FileSystem, common.Shell):
         self.stdout.write("-----------------------------------------\n")
         self.stdout.write("/proc/version\n")
         self.stdout.write("-----------------------------------------\n")
-        self.stdout.write(str(self.readFile("/proc/version")) + "\n\n")
+        self.stdout.write(self.readFile("/proc/version") + "\n\n")
 
         self.stdout.write("-----------------------------------------\n")
         self.stdout.write("/system/build.prop\n")
         self.stdout.write("-----------------------------------------\n")
-        self.stdout.write(str(self.readFile("/system/build.prop")) + "\n\n")
+        self.stdout.write(self.readFile("/system/build.prop") + "\n\n")
 
         self.stdout.write("-----------------------------------------\n")
         self.stdout.write("getprop\n")
         self.stdout.write("-----------------------------------------\n\n")
-        self.stdout.write(str(self.shellExec("getprop")) + "\n")
+        self.stdout.write(self.shellExec("getprop") + "\n")
+        
