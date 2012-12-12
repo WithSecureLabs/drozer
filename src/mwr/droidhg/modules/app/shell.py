@@ -3,7 +3,7 @@ from mwr.droidhg.modules import Module
 class Start(Module):
 
     name = "Enter into an interactive Linux shell."
-    description = "Execute Linux commands in a shell in the context of droidhg."
+    description = "Execute Linux commands in a shell in the context of Mercury."
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
@@ -28,8 +28,8 @@ class Start(Module):
 
 class Exec(Module):
 
-    name = "Execute a Linux command."
-    description = "Execute a Linux command in the context of droidhg."
+    name = "Execute a single Linux command."
+    description = "Execute a single Linux command from the context of Mercury."
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
