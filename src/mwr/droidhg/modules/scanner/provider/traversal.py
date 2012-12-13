@@ -15,14 +15,10 @@ class Traversal(Module, common.ClassLoader, common.FileSystem, common.PackageMan
         parser.add_argument("package_or_uri", help="specify a package to search for content uris", metavar="package or uri", nargs="?")
 
     def execute(self, arguments):
-        if arguments.package_or_uri == None:
-            self.stderr.write("Specify a Content Provider URI or Package to test.\n")
-            return
-
         vulnerable = set([])
         uris = set([])
 
-        if arguments.package_or_uri.startswith("content://"):
+        if arguments.package_or_uri != None and arguments.package_or_uri.startswith("content://"):
             uris.add(arguments.package_or_uri)
 
             self.__test_uri(arguments.package_or_uri, vulnerable)

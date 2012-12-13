@@ -15,13 +15,9 @@ class Injection(Module, common.ClassLoader, common.FileSystem, common.PackageMan
         parser.add_argument("package_or_uri", help="specify a package to search", metavar="package or uri", nargs="?")
         
     def execute(self, arguments):
-        if arguments.package_or_uri == None:
-            self.stderr.write("Specify a Content Provider URI or Package to test.\n")
-            return
-
         vulnerable = { 'projection': set([]), 'selection': set([]), 'uris': set([]) }
-        
-        if arguments.package_or_uri.startswith("content://"):
+    
+        if arguments.package_or_uri != None and arguments.package_or_uri.startswith("content://"):
             self.__test_uri(arguments.package_or_uri, vulnerable)
         else:
             for uri in self.findAllContentUris(arguments.package_or_uri):
