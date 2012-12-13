@@ -2,6 +2,7 @@ import binascii
 import hashlib
 import os
 
+from mwr.droidhg.modules.base import Module
 from mwr.droidhg.reflection import ReflectedPrimitive
 
 class ClassLoader(object):
@@ -15,7 +16,7 @@ class ClassLoader(object):
         Gets a DexClassLoader on the agent, given compiled source or an apk
         file from the local system.
         """
-
+        
         source = self.__getSource(source_or_relative_path)
 
         path = self.__getCachePath()
@@ -37,8 +38,11 @@ class ClassLoader(object):
         """
         Load a Class from a local apk file (source) on the running Dalvik VM.
         """
-
-        return self.getClassLoader(source).loadClass(klass)
+        
+        if not ".".join([source, klass]) in Module._Module__klasses:
+            Module._Module__klasses[".".join([source, klass])] = self.getClassLoader(source).loadClass(klass)
+            
+        return Module._Module__klasses[".".join([source, klass])]
 
     def __getCachePath(self):
         """
