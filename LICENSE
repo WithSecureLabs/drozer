@@ -1,48 +1,98 @@
-MWR Code License v1
-===================
+Copyright (c) 2012, MWR InfoSecurity Limited. All rights reserved.
 
-Copyright (C) 2012 MWR InfoSecurity.
+FOR CONTRIBUTORS
 
-Modifications as indicated at the top of source files and any files that are compiled throughout this work indicate where modifications and additional code has been created by MWR InfoSecurity Limited ('MWR') and on which copyright is owned by MWR.
+Any contribution you make will be subject to a short-form online Contributor
+Agreement and your registration. For information on how to register as a
+Mercury contributor, please access the Contributor home page at:
+mwr.to/mercurycontributors.
 
-The relevant licence remains in place in respect of all other code re-distributed or modified as permitted by the licenses.
+The copyright on the Mercury suite of software is held by MWR InfoSecurity
+Limited ("MWR") but is released on an open-source basis for contributions under
+the following BSD terms:
 
-MWR InfoSecurity Ltd is a licencee of such code under the terms of the Licence and entitled to further licence such code subject to the terms of the licence.
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
 
-Details of the MWR Code licence are as follows:
+  1.  Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+  2.  Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+  3.  All advertising materials mentioning features or use of this software
+      must display the following acknowledgement: "This product includes
+      software developed by MWR InfoSecurity Limited."
+  4.  Neither the name of MWR InfoSecurity Limited nor the names of its
+      contributors may be used to endorse or promote products derived from this
+      software without specific prior written permission.
 
-  1.  The licence is limited to the grant to the End User of a non-exclusive,
-      non-transferable license to allow the End User only to use the MWR Code
-      solely for the purpose of undertaking security assessments for the
-      purpose of identifying vulnerabilities to improve software security. Such
-      a licence shall automatically expire 12 months after download.
+This licence does not apply to the following components:
 
-  2.  The MWR Code is provided on an 'as-is' basis, without warranties or
-      conditions of any kind, express or implied, including without limitation
-      any implied warranties or conditions of merchantability, fitness for a
-      particular purpose, non-infringement and any warranties arising by
-      statute or otherwise in law.
+   -  BusyBox located at /src/mwr/droidhg/modules/tools/setup/busybox
+      Released under a GPLv2 License, and available to download from:
+      http://www.busybox.net/
 
-  3.  An End User shall not include any distributor or re-seller or other
-      person intending to assign, transfer, dispose, deal or sub-licence the
-      MWR Code to any other person and any person other than an End User shall
-      not be entitled to modify decompile reproduce reverse engineer or
-      otherwise deal with the MWR Code, nor charge any other person a fee
-      (directly or indirectly) for the licence or use of the MWR Code.
+For clarity, the entire agreement between us will be governed by:
 
-This License does not apply to the following component:
+  1.  The above  BSD terms and copyright notice 
+  2.  The Mercury Licence Agreement http://www.mwrinfosecurity.com/eula save as
+      varied by the above BSD licence terms, which includes important
+      statements regarding the responsible use of the software and limitations
+      on our liability to you, summarised in the disclaimer below.
+  3.  The Contributor Agreement submitted  with each contribution to the
+      exclusion of any other promises, representations or agreement.
 
-  -   BusyBox located at
-      /src/mwr/droidhg/modules/tools/setup/busybox
 
-The public GitHub source repository can be found at:
+FOR END-USERS
 
-  https://github.com/mwrlabs/mercury
+The Mercury software is subject to the MWR End-User Licence Agreement. Please
+visit http://www.mwrinfosecurity.com/eula to download a copy of this Agreement.
 
-Comments, Questions and Suggestions can be sent to:
 
-  mercury[at]mwrinfosecurity.com
+DISCLAIMER
 
-Follow the Mercury Project on Twitter:
+ALL DOWNLOADING OF ANY SOFTWARE AVAILABLE ON THIS SITE IS SUBJECT TO THE
+LIABILITY LIMTIATIONS SET OUT IN OUR END-USER LICENCE AGREEMENT (SEE LINK
+ABOVE) WHICH IS SUMMARISED IN THE FOLLOWING DISCLAIMER.PLEASE READ THIS
+CAREFULLY BEFORE YOU DOWNLOAD ANY SOFTWARE.
 
-  @droidhg
+The Mercury software is in an early stage of development and can only be
+released on an open source basis if recipients download the software at their
+own risk and on an “as is” basis. This means that no warranty is given that the
+software:-
+
+   -  will be error free, bug free or virus free;
+   -  is of merchantable or satisfactory quality, is fit for any particular
+      purpose, or complies with any sample or description;
+   -  will not cause a risk or increased risk to the security of any IT
+      systems (hardware or software) or to the safety of any persons; or
+   -  has been subject to any searches or investigations into the existence of
+      any third party rights or any of the intellectual property in the
+      software is or will be valid or subsisting.
+
+It also means that the recipient acknowledges:
+
+   -  that the software is, as a penetration testing tool, designed to exploit
+      weaknesses in security systems in ways that MWR cannot foresee or have
+      any duty of care to control or manage and that therefore it is for the
+      recipient to take care in the particular environment in which the
+      software is used or developed and that accordingly, MWR shall not be
+      liable, to the fullest extent permitted by law, for any costs, claims,
+      fees expenses, losses or other liabilities, whether arising out of MWR's
+      tort, breach of contract or statutory duty or any other head of claim.
+   -  that neither party shall be liable to the other for any loss of profit,
+      revenue, reputation, opportunity or goodwill, loss of or corruption to
+      data or for any indirect or consequential loss or damage
+   -  that, in downloading the software, it does not do so in reliance on any
+      representation, warranty or other provision and any conditions,
+      warranties or other terms implied by statute or common law are excluded
+      from this Agreement to the fullest extent permitted by law.
+
+The above disclaimer and licensing of the software in general is subject to
+English Law and the exclusive jurisdiction of the English Courts.
+
+
+CONTACT INFORMATION
+
+If you have any questions regarding this website, please contact
+mercury@mwrinfosecurity.com.

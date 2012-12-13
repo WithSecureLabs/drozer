@@ -21,3 +21,20 @@ License
 -------
 
 Mercury is released under the MWR Code License v1. See LICENSE for full details.
+
+
+Contacting the Project
+----------------------
+
+The public source repository for Mercury is hosted on GitHub:
+
+  https://github.com/mwrlabs/mercury
+
+Bug reports, feature requests, comments and questions can be submitted through the GitHub Issues feature, or sent to:
+
+  mercury [at] mwrinfosecurity.com
+
+Follow the Mercury Project on Twitter:
+
+  @droidhg
+
