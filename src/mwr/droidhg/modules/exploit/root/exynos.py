@@ -11,7 +11,7 @@ This module uses the vulnerability and exploit provided in http://forum.xda-deve
 The provided exploit makes use of the fact that /dev/exynos-mem is marked as globally RW and so can be exploited from the context of any application to obtain a root shell on the device.
 """
     examples = """
-    mercury> run exploit.privesc.exynosroot
+    mercury> run exploit.root.exynos
     [*] Uploading exynos-abuse
     [*] Upload successful
     [*] chmod 770 exynos-abuse
