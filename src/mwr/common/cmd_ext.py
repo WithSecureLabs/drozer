@@ -76,9 +76,17 @@ class Cmd(cmd.Cmd):
                             line = 'EOF'
                         else:
                             line = line.rstrip('\r\n')
-                line = self.precmd(line)
-                stop = self.onecmd(line)
-                stop = self.postcmd(stop, line)
+                            
+                try:
+                    line = self.precmd(line)
+                    stop = self.onecmd(line)
+                    stop = self.postcmd(stop, line)
+                except ValueError as e:
+                    if e.message == "No closing quotation":
+                        self.stderr.write("Failed to parse your command, because there were unmatched quotation marks.\n")
+                        self.stderr.write("Did you want a single ' or \"? You need to escape it (\\' or \\\") or surround it with the other type of quotation marks (\"'\" or '\"').\n\n")
+                    else:
+                        raise
             self.postloop()
         finally:
             if self.use_rawinput and self.completekey:
