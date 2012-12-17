@@ -32,6 +32,7 @@ class Session(cmd.Cmd):
         self.__server = server
         self.__session_id = session_id
 
+        self.active = True
         self.aliases = { "ls": "list" }
         self.intro = "Mercury Console"
         self.history_file = ".mercury_history"
@@ -150,7 +151,10 @@ class Session(cmd.Cmd):
         Terminate your Mercury session.
         """
         
-        self.__server.stopSession(self.__session_id)
+        if self.active:
+            self.__server.stopSession(self.__session_id)
+            
+            self.active = False
 
         return True
 
