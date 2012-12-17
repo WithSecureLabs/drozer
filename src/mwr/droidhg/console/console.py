@@ -88,7 +88,7 @@ class Console:
             except KeyboardInterrupt:
                 print
                 print "Caught SIGINT, terminating your session."
-
+            finally:
                 session.do_exit("")
         else:
             print "error:", response.system_response.error_message
