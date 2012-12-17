@@ -1,6 +1,6 @@
-from mwr.droidhg.modules import Module
+from mwr.droidhg.modules import common, Module
 
-class Start(Module):
+class Start(Module, common.ClassLoader, common.Shell):
 
     name = "Enter into an interactive Linux shell."
     description = "Execute Linux commands in a shell in the context of Mercury."
@@ -14,19 +14,9 @@ class Start(Module):
       pass
 
     def execute(self, arguments):
-        shell = self.new("com.mwr.droidhg.shell.Shell")
+        self.shellStart()
 
-        prompt = ""
-        while (prompt.upper() != "EXIT"):
-            shell.write(prompt)
-            response = shell.read()
-            self.stdout.write(response.strip())
-            self.stdout.write(" ")
-            prompt = raw_input().replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox")
-        
-        shell.close()
-
-class Exec(Module):
+class Exec(Module, common.ClassLoader, common.Shell):
 
     name = "Execute a single Linux command."
     description = "Execute a single Linux command from the context of Mercury."
@@ -44,10 +34,4 @@ class Exec(Module):
             print "No command specified."
             return
             
-        shell = self.new("com.mwr.droidhg.shell.Shell")
-
-        shell.write(arguments.command.replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox"))
-        response = shell.read()
-        self.stdout.write(response.strip() + "\n")
-        
-        shell.close()
+        self.stdout.write("%s\n" % self.shellExec(arguments.command))
