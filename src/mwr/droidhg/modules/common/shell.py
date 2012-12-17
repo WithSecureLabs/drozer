@@ -11,4 +11,22 @@ class Shell(object):
 
         ShellWrapper = self.loadClass("common/ShellWrapper.apk", "ShellWrapper")
 
-        return ShellWrapper.execute(command)
+        return ShellWrapper.execute(command.replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox"))
+    
+    def shellStart(self, command=""):
+        """
+        Create an interactive Linux shell on the Agent, optionally passing the
+        first command.
+        """
+        
+        shell = self.new("com.mwr.droidhg.shell.Shell")
+        
+        while (command.upper() != "EXIT"):
+            shell.write(command)
+            response = shell.read()
+            self.stdout.write(response.strip())
+            self.stdout.write(" ")
+            command = raw_input().replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox")
+        
+        shell.close()
+        
