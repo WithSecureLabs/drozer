@@ -237,10 +237,14 @@ class Cmd(cmd.Cmd):
         (line, destination) = line.split(">", 1)
 
         if len(destination) > 0:
-            self.__output_redirected = self.stdout
-            self.stdout = self.__build_tee(self.stdout, destination)
+            try:
+                self.__output_redirected = self.stdout
+                self.stdout = self.__build_tee(self.stdout, destination)
+            except IOError as e:
+                self.stderr.write("Error processing your redirection target: " + e.strerror + ".e\n")
+                return ""
         else:
-            self.stderr.write("no redirection target specified\n")
+            self.stderr.write("No redirection target specified.\n")
             return ""
 
         return line
