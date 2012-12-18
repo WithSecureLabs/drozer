@@ -79,7 +79,7 @@ class ModuleManager(object):
     def do_search(self, arguments):
         """search for modules"""
 
-        self.__search_remotes(arguments.options[0])
+        self.__search_remotes(len(arguments.options) > 0 and arguments.options[0] or "")
     
     def __choose_repo(self):
         """
