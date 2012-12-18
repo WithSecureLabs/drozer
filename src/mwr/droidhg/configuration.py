@@ -61,6 +61,16 @@ class Configuration(object):
             return map(lambda k: cls.__config.get(section, k), cls.__config.options(section))
         else:
             return []
+        
+    @classmethod
+    def has_section(cls, section):
+        """
+        Test whether or not a configuration file has a particular section.
+        """
+        
+        cls.__ensure_config()
+        
+        return cls.__config.has_section(section)
             
     @classmethod
     def path(cls):

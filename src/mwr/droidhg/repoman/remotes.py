@@ -19,9 +19,15 @@ class Remote(object):
     @classmethod
     def all(cls):
         """
-        Returns all known Mercury remotes. 
+        Returns all known Mercury remotes.
+        
+        If the [remotes] section does not exist in the configuration file, we
+        create it and add a default repository.
         """
         
+        if not Configuration.has_section('remotes'):
+            cls.create("https://raw.github.com/mwrlabs/mercury-modules/repository/")
+            
         return Configuration.get_all_values('remotes')
         
     @classmethod
