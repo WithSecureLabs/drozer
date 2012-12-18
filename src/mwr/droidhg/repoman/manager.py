@@ -1,9 +1,11 @@
 import argparse
+import os
 
 from mwr.common import console
 from mwr.droidhg.repoman.installer import ModuleInstaller
 from mwr.droidhg.repoman.remotes import Remote, UnknownRemote
 from mwr.droidhg.repoman.repositories import Repository, NotEmptyException, UnknownRepository
+from mwr.droidhg.repoman.repository_builder import RepositoryBuilder
 
 class ModuleManager(object):
     """
@@ -391,6 +393,11 @@ class RepositoryManager(object):
         """list all repositories, both local and remote"""
         
         self.__list_repositories()
+        
+    def do_make(self, arguments):
+        """build a repository, from a Python package"""
+        
+        RepositoryBuilder(os.getcwd(), os.sep.join([os.getcwd(), "..", "repository"])).build()
 
     def __commands(self):
         """
