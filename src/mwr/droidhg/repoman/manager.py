@@ -1,4 +1,5 @@
 import os
+import sys
 
 from mwr.common import cli
 from mwr.droidhg.repoman.installer import ModuleInstaller
@@ -232,7 +233,11 @@ class RepositoryManager(cli.Base):
     def do_make(self, arguments):
         """build a repository, from a Python package"""
         
-        RepositoryBuilder(os.getcwd(), os.sep.join([os.getcwd(), "..", "repository"])).build()
+        if len(arguments.options) != 1:
+            print "you must specify the target"
+            sys.exit(-1)
+            
+        RepositoryBuilder(os.getcwd(), arguments.options[0]).build()
         
     def __list_repositories(self):
         """
