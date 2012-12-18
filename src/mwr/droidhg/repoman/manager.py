@@ -1,13 +1,12 @@
-import argparse
 import os
 
-from mwr.common import console
+from mwr.common import cli
 from mwr.droidhg.repoman.installer import ModuleInstaller
 from mwr.droidhg.repoman.remotes import Remote, UnknownRemote
 from mwr.droidhg.repoman.repositories import Repository, NotEmptyException, UnknownRepository
 from mwr.droidhg.repoman.repository_builder import RepositoryBuilder
 
-class ModuleManager(object):
+class ModuleManager(cli.Base):
     """
     mercury module [command]
     
@@ -17,37 +16,9 @@ class ModuleManager(object):
     """
 
     def __init__(self):
-        self.__parser = argparse.ArgumentParser(description=self.__doc__.strip())
-        self.__parser.add_argument("command", default=None,
-            help="the command to execute, try `commands` to see all available")
-        self.__parser.add_argument("options", nargs='*')
-
-    def run(self, argv=None):
-        """
-        Run is the main entry point of the console, called by the runtime. It
-        parses the command-line arguments, and invokes an appropriate handler.
-        """
-
-        if argv == None:
-            argv = []
-
-        arguments = self.__parser.parse_args(argv)
-
-        try:
-            self.__invokeCommand(arguments)
-        except UsageError as e:
-            self.__showUsage(e.message)
-
-    def do_commands(self, arguments):
-        """shows a list of all console commands"""
-
-        print "Usage:", self.__doc__.strip()
-        print
-        print "Commands:"
-        for command in self.__commands():
-            print "  {:<15}  {}".format(command.replace("do_", ""),
-                getattr(self, command).__doc__.strip())
-        print
+        cli.Base.__init__(self)
+        
+        self._parser.add_argument("options", nargs='*')
         
     def do_install(self, arguments):
         """install a new module"""
@@ -114,30 +85,6 @@ class ModuleManager(object):
                         raise ValueError(idx)
                 except ValueError:
                     print "Not a valid selection. Please enter a number between 1 and %d." % len(repositories)
-
-    def __commands(self):
-        """
-        Get a list of supported commands to console, by searching for any
-        method beginning with do_.
-        """
-
-        return filter(lambda f: f.startswith("do_") and\
-            getattr(self, f).__doc__ is not None, dir(self))
-
-    def __invokeCommand(self, arguments):
-        """
-        Execute a console command, given the command-line arguments.
-        """
-
-        try:
-            command = arguments.command
-
-            if "do_" + command in dir(self):
-                getattr(self, "do_" + command)(arguments)
-            else:
-                raise UsageError("unknown command: " + command)
-        except IndexError:
-            raise UsageError("incorrect usage")
     
     def __search_remotes(self, term):
         """
@@ -153,18 +100,9 @@ class ModuleManager(object):
             print
         else:
             print "No modules found.\n"
-        
-    def __showUsage(self, message):
-        """
-        Print usage information.
-        """
-
-        print "console:", message
-        print
-        print self.__parser.format_help()
 
 
-class RemoteManager(object):
+class RemoteManager(cli.Base):
     """
     mercury module remote [command]
     
@@ -172,39 +110,9 @@ class RemoteManager(object):
     """
 
     def __init__(self):
-        self.__parser = argparse.ArgumentParser(description=self.__doc__.strip())
-        self.__parser.add_argument("command", default=None,
-            help="the command to execute, try `commands` to see all available")
-        self.__parser.add_argument("options", nargs='*')
-
-    def run(self, argv=None):
-        """
-        Run is the main entry point of the console, called by the runtime. It
-        parses the command-line arguments, and invokes an appropriate handler.
-        """
-
-        if argv == None:
-            argv = []
-        if argv == []:
-            argv.append("list")
-
-        arguments = self.__parser.parse_args(argv)
-
-        try:
-            self.__invokeCommand(arguments)
-        except UsageError as e:
-            self.__showUsage(e.message)
-
-    def do_commands(self, arguments):
-        """shows a list of all console commands"""
-
-        print "Usage:", self.__doc__.strip()
-        print
-        print "Commands:"
-        for command in self.__commands():
-            print "  {:<15}  {}".format(command.replace("do_", ""),
-                getattr(self, command).__doc__.strip())
-        print
+        cli.Base.__init__(self)
+        
+        self._parser.add_argument("options", nargs='*')
         
     def do_create(self, arguments):
         """create a new remote module repository"""
@@ -240,42 +148,9 @@ class RemoteManager(object):
         for url in Remote.all():
             print "  %s" % url
         print
-
-    def __commands(self):
-        """
-        Get a list of supported commands to console, by searching for any
-        method beginning with do_.
-        """
-
-        return filter(lambda f: f.startswith("do_") and\
-            getattr(self, f).__doc__ is not None, dir(self))
-
-    def __invokeCommand(self, arguments):
-        """
-        Execute a console command, given the command-line arguments.
-        """
-
-        try:
-            command = arguments.command
-
-            if "do_" + command in dir(self):
-                getattr(self, "do_" + command)(arguments)
-            else:
-                raise UsageError("unknown command: " + command)
-        except IndexError:
-            raise UsageError("incorrect usage")
+                
         
-    def __showUsage(self, message):
-        """
-        Print usage information.
-        """
-
-        print "console:", message
-        print
-        print self.__parser.format_help()
-        
-        
-class RepositoryManager(object):
+class RepositoryManager(cli.Base):
     """
     mercury module repository [command]
     
@@ -285,39 +160,9 @@ class RepositoryManager(object):
     """
 
     def __init__(self):
-        self.__parser = argparse.ArgumentParser(description=self.__doc__.strip())
-        self.__parser.add_argument("command", default=None,
-            help="the command to execute, try `commands` to see all available")
-        self.__parser.add_argument("options", nargs='*')
-
-    def run(self, argv=None):
-        """
-        Run is the main entry point of the console, called by the runtime. It
-        parses the command-line arguments, and invokes an appropriate handler.
-        """
-
-        if argv == None:
-            argv = []
-        if argv == []:
-            argv.append("list")
-
-        arguments = self.__parser.parse_args(argv)
-
-        try:
-            self.__invokeCommand(arguments)
-        except UsageError as e:
-            self.__showUsage(e.message)
-
-    def do_commands(self, arguments):
-        """shows a list of all console commands"""
-
-        print "Usage:", self.__doc__.strip()
-        print
-        print "Commands:"
-        for command in self.__commands():
-            print "  {:<15}  {}".format(command.replace("do_", ""),
-                getattr(self, command).__doc__.strip())
-        print
+        cli.Base.__init__(self)
+        
+        self._parser.add_argument("options", nargs='*')
         
     def do_create(self, arguments):
         """create a new Mercury module repository"""
@@ -388,30 +233,6 @@ class RepositoryManager(object):
         """build a repository, from a Python package"""
         
         RepositoryBuilder(os.getcwd(), os.sep.join([os.getcwd(), "..", "repository"])).build()
-
-    def __commands(self):
-        """
-        Get a list of supported commands to console, by searching for any
-        method beginning with do_.
-        """
-
-        return filter(lambda f: f.startswith("do_") and\
-            getattr(self, f).__doc__ is not None, dir(self))
-
-    def __invokeCommand(self, arguments):
-        """
-        Execute a console command, given the command-line arguments.
-        """
-
-        try:
-            command = arguments.command
-
-            if "do_" + command in dir(self):
-                getattr(self, "do_" + command)(arguments)
-            else:
-                raise UsageError("unknown command: " + command)
-        except IndexError:
-            raise UsageError("incorrect usage")
         
     def __list_repositories(self):
         """
@@ -423,20 +244,4 @@ class RepositoryManager(object):
         for repo in Repository.all():
             print "  %s" % repo
         print
-
-    def __showUsage(self, message):
-        """
-        Print usage information.
-        """
-
-        print "console:", message
-        print
-        print self.__parser.format_help()
-
-class UsageError(Exception):
-    """
-    UsageError exception is thrown if an invalid set of parameters is passed
-    to a console method, through __invokeCommand().
-    """
-
-    pass
+        
