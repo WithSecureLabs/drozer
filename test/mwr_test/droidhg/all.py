@@ -45,6 +45,7 @@ all_tests = unittest.TestSuite((
   
   repoman.installer_test.ModuleInstallerTestSuite(),
   repoman.remote_test.RemoteTestSuite(),
+  repoman.repository_builder_test.RepositoryBuilderTestSuite(),
   repoman.repository_test.RepositoryTestSuite(),
 
   android_test.IntentTestSuite() ))
