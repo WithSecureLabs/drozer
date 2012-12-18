@@ -14,7 +14,7 @@ class Remote(object):
     """
     
     def __init__(self, url):
-        self.url = url
+        self.url = url.endswith("/") and url or url + "/"
         
     @classmethod
     def all(cls):
@@ -40,6 +40,10 @@ class Remote(object):
         
         if cls.get(url) == None:
             Configuration.set('remotes', url, url)
+            
+            return True
+        else:
+            return False
     
     @classmethod
     def delete(cls, url):
@@ -49,6 +53,8 @@ class Remote(object):
         
         if cls.get(url) != None:
             Configuration.delete('remotes', url)
+            
+            return True
         else:
             raise UnknownRemote(url)
     
@@ -64,6 +70,13 @@ class Remote(object):
             return cls(url)
         else:
             return None
+    
+    def buildPath(self, path):
+        """
+        Build a full URL for a given path on this remote.
+        """
+        
+        return self.url + path
     
     def download(self, module):
         """
@@ -84,7 +97,7 @@ class Remote(object):
         Fetch a file from the remote.
         """
         
-        r = urllib2.urlopen(self.url + path)
+        r = urllib2.urlopen(self.buildPath(path))
         socket = FakeSocket(r.read())
         r.close()
         
