@@ -1,10 +1,13 @@
 import argparse
+import textwrap
 import sys
 
 class Base(object):
 
     def __init__(self):
-        self._parser = argparse.ArgumentParser(description="\n".join(self.__doc__.strip().split("\n")[1:]), usage=self.__doc__.strip().split("\n")[0])
+        doc_text = textwrap.dedent(self.__doc__).strip().split("\n")
+        
+        self._parser = argparse.ArgumentParser(description="\n".join(doc_text[1:]), usage=doc_text[0])
         self._parser.add_argument("command", default=None,
             help="the command to execute, try `commands` to see all available")
         
