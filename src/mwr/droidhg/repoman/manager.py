@@ -65,11 +65,6 @@ class ModuleManager(object):
                 print "  %s" % module
                 print "    %s" % modules['fail'][module]
             print
-            
-    def do_list(self, arguments):
-        """list all installed modules, and their path"""
-        
-        self.__list_modules()
         
     def do_remote(self, arguments):
         """manage the source repositories, from which you install modules"""
@@ -144,16 +139,11 @@ class ModuleManager(object):
         except IndexError:
             raise UsageError("incorrect usage")
     
-    def __list_modules(self):
-        """
-        Get a list of all loaded modules.
-        """
-        
-        from mwr.droidhg.modules.base import Module
-        
-        console.format_dict(dict(map(lambda m: [m, Module.get(m).name], Module.all())))
-    
     def __search_remotes(self, term):
+        """
+        Search for modules, on remote repositories.
+        """
+        
         installer = ModuleInstaller(None)
         modules = installer.search_index(term)
         
