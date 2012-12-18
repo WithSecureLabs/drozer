@@ -50,10 +50,7 @@ class ModuleInstaller(object):
         
         index = self.__get_combined_index()
         
-        if module.find("*") >= 0:
-            return filter(lambda m: re.match(".*" + module.replace("*", ".*") + ".*", m) != None, index)
-        else:
-            return filter(lambda m: m == module, index)
+        return filter(lambda m: re.match(".*" + module.replace("*", ".*") + ".*", m) != None, index)
     
     def __create_package(self, package):
         """
@@ -151,12 +148,18 @@ class ModuleInstaller(object):
         unzip a zip file into that folder
         """
         
-        # we assume the file is raw Python is we can read the package name that
-        # Module should be imported from
-        if source.find("mwr.droidhg.modules") >= 0:
-            return self.__unpack_module_raw(module, source)
-        else:
+        # we test for the presence of a zip header in the source, which we *should*
+        # never see in a raw Python file:
+        #
+        #   0000000 4b50 0403 0014 0000 0000 4122 4192 d6b7
+        #   0000010 8e47 117c 0000 117c 0000 000c 0000 7865
+        #
+        # Because the bytes are in little-endian order, we actually must look for
+        # the bytes 50 4b 03 04.
+        if source[0:4] == "\x50\x4b\x03\x04":
             return self.__unpack_module_zip(module, source)
+        else:
+            return self.__unpack_module_raw(module, source)
         
         return True
     
