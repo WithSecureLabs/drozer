@@ -44,15 +44,23 @@ class Repository(object):
         """
         
         if cls.is_repo(path):
-            shutil.rmtree(path)
-            
             cls.disable(path)
+            
+            shutil.rmtree(path)
         else:
             raise UnknownRepository(path)
         
     @classmethod
     def disable(cls, path):
-        Configuration.delete('repositories', path)
+        """
+        Remove a Mercury module repository from the collection, but leave the file
+        system intact.
+        """
+        
+        if cls.is_repo(path):
+            Configuration.delete('repositories', path)
+        else:
+            raise UnknownRepository(path)
         
     @classmethod
     def droidhg_modules_path(cls):
@@ -65,7 +73,15 @@ class Repository(object):
     
     @classmethod
     def enable(cls, path):
-        Configuration.set('repositories', path, path)
+        """
+        Re-add a Mercury module repository to the collection, that was created manually
+        or has previously been removed with #disable().
+        """
+        
+        if cls.looks_like_repo(path):
+            Configuration.set('repositories', path, path)
+        else:
+            raise UnknownRepository(path)
     
     @classmethod
     def is_repo(cls, path):
@@ -73,8 +89,15 @@ class Repository(object):
         Tests if a path represents a Mercury repository.
         """
         
-        return path in cls.all() and \
-            os.path.exists(path) and \
+        return path in cls.all() and cls.looks_like_repo(path)
+    
+    @classmethod
+    def looks_like_repo(cls, path):
+        """
+        Tests if a path looks like a Mercury repository.
+        """
+        
+        return os.path.exists(path) and \
             os.path.exists(os.path.join(path, "__init__.py"))  and \
             os.path.exists(os.path.join(path, ".mercury_repository")) 
         
