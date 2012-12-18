@@ -105,7 +105,7 @@ class SourcePackage(Source):
         archive = zipfile.ZipFile(os.path.sep.join([target, self.name()]), 'w')
         
         for f in self.contents:
-            if not f == ".mercury_package":
+            if not f.endswith(".pyc") and not f in [".mercury_package", "__init__.py"]:
                 print " - zipping %s..." % f
                  
                 archive.write(os.path.sep.join([self.path, f]), f)
