@@ -20,6 +20,7 @@ all_tests = unittest.TestSuite((
   #console.sequencer_test
   #console.server_test
 
+  modules.import_conflict_resolver_test.ImportConflictResolverTestSuite(),
   modules.module_base_test.ModuleTestSuite(),
   #modules.common.assets
   #modules.common.busy_box
