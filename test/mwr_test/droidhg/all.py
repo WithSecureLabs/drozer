@@ -43,6 +43,7 @@ all_tests = unittest.TestSuite((
   reflection.reflected_type_test.ReflectedTypeTestSuite(),
   reflection.reflector_test.ReflectorTestSuite(),
   
+  repoman.installer_test.ModuleInstallerTestSuite(),
   repoman.remote_test.RemoteTestSuite(),
   repoman.repository_test.RepositoryTestSuite(),
 
