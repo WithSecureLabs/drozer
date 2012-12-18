@@ -8,7 +8,7 @@ from mwr.droidhg.repoman.repository_builder import RepositoryBuilder
 
 class ModuleManager(cli.Base):
     """
-    mercury module [command]
+    mercury module [COMMAND]
     
     Run the Mercury Module and Repository Manager.
 
@@ -104,7 +104,7 @@ class ModuleManager(cli.Base):
 
 class RemoteManager(cli.Base):
     """
-    mercury module remote [command]
+    mercury module remote [COMMAND] [OPTIONS]
     
     Run the remote part of the Mercury Module and Repository Manager.
     """
@@ -152,7 +152,7 @@ class RemoteManager(cli.Base):
         
 class RepositoryManager(cli.Base):
     """
-    mercury module repository [command]
+    mercury module repository [COMMAND] [OPTIONS]
     
     Run the repository part of the Mercury Module and Repository Manager.
 

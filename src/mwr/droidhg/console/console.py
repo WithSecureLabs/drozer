@@ -9,6 +9,8 @@ from mwr.droidhg.console.session import Session, DebugSession
 
 class Console(cli.Base):
     """
+    mercury console [OPTIONS] COMMAND
+    
     Starts a new Mercury Console to interact with an Agent.
 
     The Mercury Console connects to an Agent and allows you to interact with the
