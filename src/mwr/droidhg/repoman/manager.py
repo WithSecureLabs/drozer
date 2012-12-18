@@ -115,8 +115,8 @@ class RemoteManager(cli.Base):
         
         self._parser.add_argument("options", nargs='*')
         
-    def do_create(self, arguments):
-        """create a new remote module repository"""
+    def do_add(self, arguments):
+        """add a new remote module repository"""
         
         if len(arguments.options) == 1:
             url = arguments.options[0]
@@ -127,7 +127,7 @@ class RemoteManager(cli.Base):
         else:
             print "usage: mercury module remote create http://path.to.repository/\n"
     
-    def do_delete(self, arguments):
+    def do_remove(self, arguments):
         """remove a remote module repository"""
         
         if len(arguments.options) == 1:
