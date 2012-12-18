@@ -50,7 +50,7 @@ class ModuleInstaller(object):
         
         index = self.__get_combined_index()
         
-        return filter(lambda m: re.match(".*" + module.replace("*", ".*") + ".*", m) != None, index)
+        return sorted(filter(lambda m: re.match(".*" + module.replace("*", ".*") + ".*", m) != None, index))
     
     def __create_package(self, package):
         """
