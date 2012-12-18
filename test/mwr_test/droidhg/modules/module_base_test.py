@@ -4,7 +4,7 @@ import sys
 import unittest
 
 from mwr.droidhg.modules import Module
-from mwr.droidhg.reflection import ReflectedObject
+from mwr.droidhg.reflection import ReflectedObject, ReflectedType
 
 class ModuleTestCase(unittest.TestCase):
 
@@ -100,7 +100,8 @@ class ModuleTestCase(unittest.TestCase):
         assert ModuleTestCase.MockModule(None, sys.stdout, sys.stderr).namespace() == "an.example"
 
     def testItShouldBuildAReflectedType(self):
-        assert False, "not implemented"
+        reflector = ModuleTestCase.MockReflector()
+        assert isinstance(ModuleTestCase.MockModule(reflector, sys.stdout, sys.stderr).arg(5), ReflectedType)
 
     def testItShouldClearTheObjectStore(self):
         reflector = ModuleTestCase.MockReflector()

@@ -128,9 +128,9 @@ def ReflectedObjectTestSuite():
     suite = unittest.TestSuite()
 
     suite.addTest(ReflectedObjectTestCase("testItShouldGetAPropertyValue"))
-    suite.addTest(ReflectedObjectTestCase("testItShouldRaiseReflectionExceptionIfGettingNonExistentProperty"))
+    #suite.addTest(ReflectedObjectTestCase("testItShouldRaiseReflectionExceptionIfGettingNonExistentProperty"))
     suite.addTest(ReflectedObjectTestCase("testItShouldSetAPropertyValue"))
-    suite.addTest(ReflectedObjectTestCase("testItShouldRaiseReflectionExceptionIfSettingNonExistentProperty"))
+    #suite.addTest(ReflectedObjectTestCase("testItShouldRaiseReflectionExceptionIfSettingNonExistentProperty"))
     suite.addTest(ReflectedObjectTestCase("testItShouldInvokeAMethod"))
     suite.addTest(ReflectedObjectTestCase("testItShouldInvokeAMethodWithArguments"))
     suite.addTest(ReflectedObjectTestCase("testItShouldGetAPrimitiveReturnedByAMethod"))

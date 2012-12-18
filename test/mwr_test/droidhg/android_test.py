@@ -133,7 +133,6 @@ class IntentTestCase(unittest.TestCase):
 
         intent.buildIn(module)
 
-        print reflector.invoked
         assert reflector.invoked[0][1] == "putString"
         assert reflector.invoked[0][2][0] == "myString"
         assert reflector.invoked[0][2][1] == "Hello, World!"
@@ -202,13 +201,31 @@ class IntentTestCase(unittest.TestCase):
     #    - mimetype
 
     def testItShouldBeValidIfTheActionIsSet(self):
-        assert False, "not implemented"
+        reflector = IntentTestCase.MockReflector()
+        reflector.construct_returns = ReflectedObject(999, reflector=reflector)
+        module = IntentTestCase.MockModule(reflector)
+
+        intent = Intent(action="android.intent.action.VIEW")
+        
+        assert intent.isValid()
 
     def testItShouldBeValidIfTheComponentIsSet(self):
-        assert False, "not implemented"
+        reflector = IntentTestCase.MockReflector()
+        reflector.construct_returns = ReflectedObject(999, reflector=reflector)
+        module = IntentTestCase.MockModule(reflector)
+
+        intent = Intent(component="com.android.browser com.android.browser.BrowserActivity")
+        
+        assert intent.isValid()
 
     def testItShouldNotBeValidIfNoActionOrComponentIsSet(self):
-        assert False, "not implemented"
+        reflector = IntentTestCase.MockReflector()
+        reflector.construct_returns = ReflectedObject(999, reflector=reflector)
+        module = IntentTestCase.MockModule(reflector)
+
+        intent = Intent()
+        
+        assert not intent.isValid()
     
 
 def IntentTestSuite():
