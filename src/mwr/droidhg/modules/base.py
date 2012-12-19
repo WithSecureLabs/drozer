@@ -189,6 +189,12 @@ class Module(object):
     the reflector.
     """
 
+    name = "Un-named Module"
+    description = ""
+    examples = ""
+    author = "Unspecified"
+    date = "1970-01-01"
+    license = "Unspecified"
     path = []
 
     __klasses = {}
