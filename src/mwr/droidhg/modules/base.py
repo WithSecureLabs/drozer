@@ -343,7 +343,14 @@ class Module(object):
         if(arguments.help):
             return parser.print_help()
         else:
-            result = self.execute(arguments)
+            if hasattr(self, 'execute'):
+                result = self.execute(arguments)
+            else:
+                self.stderr.write("Mercury doesn't know how to do that :(\n")
+                self.stderr.write("The %s module does not define an execute() method.\n\n" % self.fqmn())
+                
+                result = None
+                
             self.clearObjectStore()
 
             return result
