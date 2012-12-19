@@ -7,11 +7,15 @@ class ImportConflictResolverTestCase(unittest.TestCase):
     
     class MyModule(object):
         
+        date = "2012-12-20"
+        
         @classmethod
         def fqmn(cls):
             return "app.package.info"
     
     class MyOtherModule(object):
+        
+        date = "2012-12-21"
         
         @classmethod
         def fqmn(cls):
@@ -24,8 +28,8 @@ class ImportConflictResolverTestCase(unittest.TestCase):
         assert ImportConflictResolver().resolve(ImportConflictResolverTestCase.MyModule, package.Info) == package.Info
     
     def testItShouldKeepDeterministicallyKeepExtensions(self):
-        assert ImportConflictResolver().resolve(ImportConflictResolverTestCase.MyModule, ImportConflictResolverTestCase.MyOtherModule) == ImportConflictResolverTestCase.MyModule
-        assert ImportConflictResolver().resolve(ImportConflictResolverTestCase.MyOtherModule, ImportConflictResolverTestCase.MyModule) == ImportConflictResolverTestCase.MyModule
+        assert ImportConflictResolver().resolve(ImportConflictResolverTestCase.MyModule, ImportConflictResolverTestCase.MyOtherModule) == ImportConflictResolverTestCase.MyOtherModule
+        assert ImportConflictResolver().resolve(ImportConflictResolverTestCase.MyOtherModule, ImportConflictResolverTestCase.MyModule) == ImportConflictResolverTestCase.MyOtherModule
 
 
 def ImportConflictResolverTestSuite():
