@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+import time
 
 from mwr.common import console
 from mwr.common.text import wrap
@@ -12,15 +13,26 @@ class ImportConflictResolver(object):
     def resolve(self, existing, new):
         if new.__name__ != existing.__name__ or new.__module__ != existing.__module__:
             # the klasses do not refer to the same type; we prefer standard  modules
-            # over extensions
-            if existing.__module__.startswith("mwr.droidhg.modules."):
-                sys.stderr.write("Import Conflict: more than one definition for %s. Keeping %s.\n" % (new.fqmn(), existing))
-                
-                return existing
+            # over extensions and newer modules over old
+            if new.__module__.startswith("mwr.droidhg.modules.") and not existing.__module__.startswith("mwr.droidhg.modules."):
+                replace = True
+            elif existing.__module__.startswith("mwr.droidhg.modules.") and not new.__module__.startswith("mwr.droidhg.modules."):
+                replace = False
+            elif time.strptime(existing.date, "%Y-%m-%d") < time.strptime(new.date, "%Y-%m-%d"):
+                replace = True
             else:
+                replace = False
+            
+            # at this point, we should have decided whether we want to replace the module
+            # or not
+            if replace:
                 sys.stderr.write("Import Conflict: more than one definition for %s. Replacing %s with %s.\n" % (new.fqmn() , existing, new))
                 
                 return new
+            else:
+                sys.stderr.write("Import Conflict: more than one definition for %s. Keeping %s.\n" % (new.fqmn(), existing))
+                
+                return existing
         else:
             # both klasses refer to the same type, just have different class
             # handles for some reason: we probably loaded a .py and a .pyc
