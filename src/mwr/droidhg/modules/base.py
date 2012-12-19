@@ -9,8 +9,18 @@ from mwr.droidhg.reflection import ReflectedType
 from mwr.droidhg.repoman import Repository
 
 class ImportConflictResolver(object):
+    """
+    The ImportConflictResolver defines rules that can be applied to determine which
+    module to keep in the event that two-or-more modules try to register the same
+    name.
+    """
     
     def resolve(self, existing, new):
+        """
+        resolve() accepts two modules, the existing module and the new module. It decides
+        which to keep, and returns that module. 
+        """
+        
         if new.__name__ != existing.__name__ or new.__module__ != existing.__module__:
             # the klasses do not refer to the same type; we prefer standard  modules
             # over extensions and newer modules over old
