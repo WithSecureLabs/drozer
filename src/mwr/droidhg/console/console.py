@@ -25,7 +25,9 @@ class Console(cli.Base):
         self._parser.add_argument("device", default=None, nargs='?',
             help="the unique identifier of the Agent to connect to")
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]",
-            help="specify")
+            help="specify the address and port of the Mercury server")
+        self._parser.add_argument("--ssl", action="store_true", default=False,
+            help="connect with SSL")
         self._parser.add_argument("--debug", action="store_true", default=False,
             help="enable debug mode")
         self._parser.add_argument("-c", "--command", default=None, dest="onecmd",
