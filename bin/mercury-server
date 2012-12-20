@@ -3,7 +3,7 @@
 import argparse
 import logging
 from twisted import internet
-from twisted.internet import task
+from twisted.internet import ssl, task
 
 from mwr.common import logger
 from mwr.droidhg.server import DroidHgServer, heartbeat
@@ -16,6 +16,7 @@ parser.add_argument("--log", default=None, help="specify the log file to write t
 parser.add_argument("--no-http", default=False, action="store_true", help="do not start the integrated HTTP server")
 parser.add_argument("--port", default=31415, metavar="PORT", type=int, help="specify the port on which to bind the server")
 parser.add_argument("--ping-interval", default=15, metavar="SECS", type=int, help="the interval at which to ping connected agents")
+parser.add_argument("--ssl", action="store_true", default=False, help="enable SSL")
 
 arguments = parser.parse_args()
 
@@ -26,5 +27,12 @@ task.LoopingCall(heartbeat).start(arguments.ping_interval)
 
 print "Starting Mercury server, listening on 0.0.0.0:%d" % arguments.port
 
-internet.reactor.listenTCP(arguments.port, DroidHgServer(not arguments.no_http))
+if arguments.ssl:
+    internet.reactor.listenSSL(arguments.port,
+                               DroidHgServer(not arguments.no_http),
+                               ssl.DefaultOpenSSLContextFactory('../../scratch/ssl/mercury.key', '../../scratch/ssl/mercury.crt'))
+else:
+    internet.reactor.listenTCP(arguments.port,
+                               DroidHgServer(not arguments.no_http))
+
 internet.reactor.run()
