@@ -62,6 +62,8 @@ class Base(object):
             self.__invokeCommand(arguments)
         except UsageError as e:
             self.__showUsage(e.message)
+        except Exception as e:
+            self.handle_error(e)
         
     def do_commands(self, arguments):
         """shows a list of all console commands"""
@@ -70,6 +72,12 @@ class Base(object):
         print
         print "available commands:"
         print self.__get_commands_help()
+        
+    def handle_error(self, throwable):
+        """default error handler: shows an exception message, before terminating"""
+        
+        sys.stderr.write("%s\n\n" % throwable)
+        sys.exit(-1)
 
     def __commands(self):
         """

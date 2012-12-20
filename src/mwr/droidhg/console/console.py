@@ -93,6 +93,16 @@ class Console(cli.Base):
         response = self.__getServer(arguments).listSessions()
 
         print SystemResponseFormatter.format(response)
+        
+    def handle_error(self, throwable):
+        """error handler: shows an exception message, before terminating"""
+        
+        if str(throwable) == "connection reset by peer":
+            sys.stderr.write("The Mercury server is not available. Please double check the address and port.\n\n")
+        if str(throwable) == "'NoneType' object has no attribute 'id'":
+            sys.stderr.write("Expected a response from the server, but there was none.\nThe server may be unavailable, or may be expecting you to connect using SSL.\n\n")
+        else:
+            cli.Base.handle_error(self, throwable)
 
     def __get_device(self, arguments):
         """
