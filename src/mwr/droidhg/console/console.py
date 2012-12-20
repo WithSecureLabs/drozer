@@ -68,8 +68,12 @@ class Console(cli.Base):
                 print "Caught SIGINT, terminating your session."
             finally:
                 session.do_exit("")
+                
+            self.__getServer(arguments).close()
         else:
             print "error:", response.system_response.error_message
+            
+            self.__getServer(arguments).close()
 
             sys.exit(-1)
 
@@ -80,12 +84,16 @@ class Console(cli.Base):
 
         print SystemResponseFormatter.format(response)
 
+        self.__getServer(arguments).close()
+
     def do_disconnect(self, arguments):
         """disconnects a Mercury session"""
 
         response = self.__getServer(arguments).stopSession(arguments.device)
 
         print SystemResponseFormatter.format(response)
+        
+        self.__getServer(arguments).close()
 
     def do_sessions(self, arguments):
         """lists all active sessions on the Mercury server"""
@@ -93,6 +101,8 @@ class Console(cli.Base):
         response = self.__getServer(arguments).listSessions()
 
         print SystemResponseFormatter.format(response)
+        
+        self.__getServer(arguments).close()
         
     def handle_error(self, throwable):
         """error handler: shows an exception message, before terminating"""
