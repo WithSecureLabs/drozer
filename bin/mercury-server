@@ -25,13 +25,15 @@ if arguments.log != None:
 
 task.LoopingCall(heartbeat).start(arguments.ping_interval)
 
-print "Starting Mercury server, listening on 0.0.0.0:%d" % arguments.port
-
 if arguments.ssl:
+    print "Starting Mercury server, listening on 0.0.0.0:%d (with SSL)" % arguments.port
+    
     internet.reactor.listenSSL(arguments.port,
                                DroidHgServer(not arguments.no_http),
                                ssl.DefaultOpenSSLContextFactory('../../scratch/ssl/mercury.key', '../../scratch/ssl/mercury.crt'))
 else:
+    print "Starting Mercury server, listening on 0.0.0.0:%d" % arguments.port
+    
     internet.reactor.listenTCP(arguments.port,
                                DroidHgServer(not arguments.no_http))
 
