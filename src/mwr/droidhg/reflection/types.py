@@ -534,6 +534,9 @@ class ReflectedPrimitive(ReflectedType):
             return divmod(other._native, self._native)
         else:
             return divmod(other, self._native)
+    
+    def __repr__(self):
+        return repr(self._native)
 
     def __rmod__(self, other):
         if isinstance(other, ReflectedPrimitive):
