@@ -2,16 +2,24 @@ import argparse
 import textwrap
 import sys
 
+from mwr.common import console
+
 class Base(object):
+    """
+    cli.Base provides a simple command-line environment, where numerous different
+    commands can be invoked.
+    """
 
     def __init__(self):
         doc_text = textwrap.dedent(self.__doc__).strip().split("\n")
         
         self._parser = argparse.ArgumentParser(description="\n".join(doc_text[1:]), usage=doc_text[0])
         self._parser.add_argument("command", default=None,
-            help="the command to execute, try `commands` to see all available")
+            help="the command to execute")
         
+        self._parser.epilog = "available commands:\n%s" % self.__get_commands_help()
         self._parser.error = self.__parse_error
+        self._parser.formatter_class = argparse.RawDescriptionHelpFormatter
 
     def run(self, argv=None):
         """
@@ -32,13 +40,10 @@ class Base(object):
     def do_commands(self, arguments):
         """shows a list of all console commands"""
 
-        print "Usage:", self.__doc__.strip()
+        print "usage:", self.__doc__.strip()
         print
-        print "Commands:"
-        for command in self.__commands():
-            print "  {:<15}  {}".format(command.replace("do_", ""),
-                getattr(self, command).__doc__.strip())
-        print
+        print "available commands:"
+        print self.__get_commands_help()
 
     def __commands(self):
         """
@@ -48,6 +53,19 @@ class Base(object):
 
         return filter(lambda f: f.startswith("do_") and\
             getattr(self, f).__doc__ is not None, dir(self))
+    
+    def __get_commands_help(self):
+        """
+        Produce a piece of text, containing the available commands, and their short
+        description.
+        """
+        
+        commands = {}
+        
+        for command in self.__commands():
+            commands[command.replace("do_", "")] = getattr(self, command).__doc__.strip()
+            
+        return console.format_dict(commands, left_margin=2)
 
     def __invokeCommand(self, arguments):
         """
