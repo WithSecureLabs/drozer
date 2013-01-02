@@ -98,18 +98,23 @@ class CA(object):
         return self.verify(self.ca_key, self.ca_cert)
         
     def __generate_ca_certificate(self, key):
+        """
+        Generate a new CA certificate - issued to 'mercury CA' and self-signed.
+        """
+        
         cert = self.__generate_certificate(key, "mercury CA")
         cert.set_issuer(cert.get_subject())
-        cert.add_extensions([OpenSSL.crypto.X509Extension("basicConstraints", True, "CA:TRUE, pathlen:0"),
-                             OpenSSL.crypto.X509Extension("keyUsage", True, "keyCertSign, cRLSign"),
-                             OpenSSL.crypto.X509Extension("subjectKeyIdentifier", False, "hash", subject=cert)])
         self.__sign_certificate(cert)
         
         return cert
         
     def __generate_certificate(self, key, cn):
+        """
+        Generate an X509 certificate, valid for 1 year.
+        """
+        
         cert = OpenSSL.crypto.X509()
-        cert.set_version(3)
+        cert.set_version(2)
         cert.set_serial_number(1)
         cert.get_subject().CN = cn
         cert.gmtime_adj_notBefore(0)
@@ -119,12 +124,20 @@ class CA(object):
         return cert
         
     def __generate_rsa_key(self):
+        """
+        Generate a new RSA key, that is KEY_LENGTH bits long.
+        """
+        
         key = OpenSSL.crypto.PKey()
         key.generate_key(OpenSSL.crypto.TYPE_RSA, self.KEY_LENGTH)
         
         return key
     
     def __sign_certificate(self, cert):
+        """
+        Sign an X509 certificate with the CA.
+        """
+        
         cert.sign(self.ca_key, "sha1")
         
         
