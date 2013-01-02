@@ -20,7 +20,7 @@ See INSTALLING.
 License
 -------
 
-Mercury is released under the MWR Code License v1. See LICENSE for full details.
+Mercury is released under the MWR Code License v2. See LICENSE for full details.
 
 
 Contacting the Project

@@ -3,12 +3,12 @@ import setuptools
 
 setuptools.setup(
   name = "mercury",
-  version = "2.0.0",
+  version = "2.1.0",
   author = "MWR InfoSecurity",
   author_email = "mercury@mwrinfosecurity.com",
   description = "The Heavy Metal that Poisoned the Droid.",
   long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).read(),
-  license = "MWR Code License",
+  license = "MWR Code License v2",
   keywords = "android security framework",
   url = "http://mwr.to/mercury",
 
