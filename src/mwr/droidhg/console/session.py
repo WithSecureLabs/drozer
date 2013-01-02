@@ -9,10 +9,10 @@ import traceback
 from mwr.common import cmd_ext as cmd
 from mwr.common import console
 from mwr.common.list import flatten
+from mwr.common.stream import ColouredStream
 from mwr.common.text import wrap
 
 from mwr.droidhg.api.protobuf_pb2 import Message
-from mwr.droidhg.console.coloured_stream import ColouredStream
 from mwr.droidhg.console.sequencer import Sequencer
 from mwr.droidhg.modules import common, Module
 from mwr.droidhg.reflection import Reflector
