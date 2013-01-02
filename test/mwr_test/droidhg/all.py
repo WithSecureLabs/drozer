@@ -1,6 +1,6 @@
 import unittest
 
-from mwr_test.droidhg import android_test, console, modules, reflection, repoman
+from mwr_test.droidhg import android_test, console, modules, reflection, repoman, ssl
 from mwr_test.droidhg.api import builders, frame_test
 
 all_tests = unittest.TestSuite((
@@ -48,6 +48,8 @@ all_tests = unittest.TestSuite((
   repoman.remote_test.RemoteTestSuite(),
   repoman.repository_builder_test.RepositoryBuilderTestSuite(),
   repoman.repository_test.RepositoryTestSuite(),
+  
+  ssl.ca.CATestSuite(),
 
   android_test.IntentTestSuite() ))
   #device_test
