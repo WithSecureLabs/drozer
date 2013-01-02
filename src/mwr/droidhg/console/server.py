@@ -4,6 +4,7 @@ import sys
 
 from mwr.droidhg.api.builders import SystemRequestFactory
 from mwr.droidhg.api.frame import Frame
+from mwr.droidhg.ssl.provider import Provider
 
 class Server:
     """
@@ -22,7 +23,9 @@ class Server:
         self.__socket = socket.socket()
         
         if arguments.ssl:
-            self.__socket = ssl.wrap_socket(self.__socket, cert_reqs=ssl.CERT_REQUIRED, ca_certs="../../scratch/ssl/mercury.crt")
+            provider = Provider()
+            
+            self.__socket = ssl.wrap_socket(self.__socket, cert_reqs=ssl.CERT_REQUIRED, ca_certs=provider.ca_certificate_path())
 
         try:
             self.__socket.settimeout(90.0)
