@@ -204,7 +204,10 @@ class Manifest(Module, common.Assets, common.ClassLoader):
         parser.add_argument("package", nargs='?')
 
     def execute(self, arguments):
-        self.stdout.write(self.getAndroidManifest(arguments.package) + "\n")
+        if arguments.package == None or arguments.package == "":
+            self.stderr.write("No package provided.\n")
+        else:
+            self.stdout.write(self.getAndroidManifest(arguments.package) + "\n")
 
 class SharedUID(Module, common.PackageManager):
 
