@@ -8,28 +8,32 @@ from mwr.common import text
 #
 # src: http://stackoverflow.com/questions/566746/how-to-get-console-window-width-in-python
 
-def format_dict(values):
-    width = { 'gutter': 2, 'total': get_size()[0] }
-    width['key'] = width['total'] / 3
+def format_dict(values, left_margin=0):
+    width = { 'gutter': 2, 'left_margin': left_margin, 'total': get_size()[0] - left_margin }
+    width['key'] = min([max(map(lambda k: len(k), values.keys())), width['total'] / 3])
     width['value'] = width['total'] - (width['gutter'] + width['key'])
     
-    template_key_only = "%%-%ds" % width['key'] 
-    template = "%%-%ds%%%ds%%-%ds" % (width['key'], width['gutter'], width['value'])
+    template_key_only = "%%%ds%%-%ds\n" % (width['left_margin'], width['key']) 
+    template = "%%%ds%%-%ds%%%ds%%-%ds\n" % (width['left_margin'], width['key'], width['gutter'], width['value'])
 
     keys = values.keys()
     keys.sort()
+    
+    formatted = ""
     
     for key in keys:
         value = text.wrap(values[key], width['value']).split("\n")
         
         if len(key) > width['key']:
-            print template_key_only % (key) 
-            print template % ("", "", value.pop(0))
+            formatted += template_key_only % ("", key) 
+            formatted += template % ("", "", "", value.pop(0))
         else:
-            print template % (key, "", value.pop(0))
+            formatted += template % ("", key, "", value.pop(0))
         
         for line in value:
-            print template % ("", "", line)
+            formatted += template % ("", "", "", line)
+    
+    return formatted
             
 
 def get_size():

@@ -226,7 +226,7 @@ class Session(cmd.Cmd):
 
         term = len(argv) > 0 and argv[0] or None
 
-        console.format_dict(dict(map(lambda m: [m, Module.get(m).name], filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules()))))
+        print console.format_dict(dict(map(lambda m: [m, Module.get(m).name], filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules()))))
 
     def do_load(self, args):
         """
