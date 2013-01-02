@@ -1,4 +1,13 @@
-from mwr.droidhg.console.coloured_stream import DecolouredStream
+import os
+
+from mwr.common.stream import DecolouredStream
+
+def which(executable):
+    for path in os.getenv("PATH", "").split(os.pathsep):
+        trial = os.path.join(path, executable)
+        
+        if os.path.isfile(trial) and os.access(trial, os.X_OK):
+            return trial
 
 class Tee(object):
     """
