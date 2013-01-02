@@ -17,6 +17,7 @@ class SSLManager(cli.Base):
         
         self._parser.add_argument("type", choices=["ca", "keypair"], help="the type of key material to create", nargs='?')
         self._parser.add_argument("subject", help="the subject CN, when generating a keypair", nargs='?')
+        self._parser.add_argument("--bks", help="also build a BouncyCastle store (for Android), using the store and key password (keypair only)", metavar=("STORE_PW", "KEY_PW"), nargs=2)
     
     def do_create(self, arguments):
         """create some new key material"""
@@ -39,13 +40,16 @@ class SSLManager(cli.Base):
             else:
                 key, certificate = provider.create_keypair(arguments.subject)
                 
-                p12_path, export_password = provider.make_pcks12(arguments.subject, key, certificate)
-                bks_path = provider.make_bks(arguments.subject, p12_path, export_password, "mercury", "mercury")
-                
-                if bks_path != None:
-                    print "Created SSL keypair, %s: %s" % (arguments.subject, bks_path)
+                if arguments.bks:
+                    p12_path, export_password = provider.make_pcks12(arguments.subject, key, certificate)
+                    bks_path = provider.make_bks(arguments.subject, p12_path, export_password, arguments.bks[0], arguments.bks[1])
+                    
+                    if bks_path != None:
+                        print "Created SSL keypair, %s: %s" % (arguments.subject, bks_path)
+                    else:
+                        print "There was a problem creating the BKS KeyStore."
                 else:
-                    print "There was a problem creating the BKS KeyStore."
+                    print "Created keypair."
         else:
             print "Unexpected type:", arguments.type
     
