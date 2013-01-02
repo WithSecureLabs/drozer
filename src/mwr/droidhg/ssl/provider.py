@@ -42,7 +42,12 @@ class Provider(object):
         
         self.__load_key_material()
         
-        return self.authority.create_certificate(cn)
+        key, certificate = self.authority.create_certificate(cn)
+        
+        fs.write(self.__certificate_path(cn), ca.CA.certificate_to_pem(certificate))
+        fs.write(self.__key_path(cn), ca.CA.pkey_to_pem(key))
+        
+        return (key, certificate)
     
     def key_exists(self):
         """
