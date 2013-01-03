@@ -5,7 +5,7 @@ from mwr.droidhg.ssl.provider import Provider
 
 class SSLManager(cli.Base):
     """
-    mercury ssl {ca,keypair} [OPTIONS]
+    mercury ssl {ca,keypair,truststore} [OPTIONS]
     
     Run the Mercury SSL Manager.
 
@@ -15,7 +15,7 @@ class SSLManager(cli.Base):
     def __init__(self):
         cli.Base.__init__(self)
         
-        self._parser.add_argument("type", choices=["ca", "keypair"], help="the type of key material to create", nargs='?')
+        self._parser.add_argument("type", choices=["ca", "keypair", "truststore"], help="the type of key material to create", nargs='?')
         self._parser.add_argument("subject", help="the subject CN, when generating a keypair", nargs='?')
         self._parser.add_argument("--bks", help="also build a BouncyCastle store (for Android), using the store and key password (keypair only)", metavar=("STORE_PW", "KEY_PW"), nargs=2)
     
@@ -42,7 +42,7 @@ class SSLManager(cli.Base):
                 
                 if arguments.bks:
                     p12_path, export_password = provider.make_pcks12(arguments.subject, key, certificate)
-                    bks_path = provider.make_bks(arguments.subject, p12_path, export_password, arguments.bks[0], arguments.bks[1])
+                    bks_path = provider.make_bks_key_store(arguments.subject, p12_path, export_password, arguments.bks[0], arguments.bks[1])
                     
                     if bks_path != None:
                         print "Created SSL keypair, %s: %s" % (arguments.subject, bks_path)
@@ -50,6 +50,8 @@ class SSLManager(cli.Base):
                         print "There was a problem creating the BKS KeyStore."
                 else:
                     print "Created keypair."
+        elif arguments.type == "truststore":
+            bks_path = provider.make_bks_trust_store()
         else:
             print "Unexpected type:", arguments.type
     

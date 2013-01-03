@@ -72,7 +72,7 @@ class Provider(object):
         
         return self.authority.verify_ca()
     
-    def make_bks(self, cn, p12_path, export_password, store_password, key_password):
+    def make_bks_key_store(self, cn, p12_path, export_password, store_password, key_password):
         """
         Prepare a BouncyCastle KeyStore from a PKCS12 bundle.
         """
@@ -85,7 +85,7 @@ class Provider(object):
                             "-destkeystore %s " +
                             "-deststoretype BKS " + 
                             "-provider org.bouncycastle.jce.provider.BouncyCastleProvider " +
-                            "-providerpath /usr/local/share/classpath/bcprov-ext-jdk15on-1.46.jar "
+                            "-providerpath /usr/local/share/classpath/bcprov-ext-jdk15on-1.46.jar " +
                             "-srckeystore %s " +
                             "-srcstoretype PKCS12 " +
                             "-srcstorepass %s " +
@@ -94,6 +94,26 @@ class Provider(object):
         if os.spawnvpe(os.P_WAIT, argv[0], argv, os.environ) == 0:
             return self.__bks_path(cn)
     
+    def make_bks_trust_store(self):
+        """
+        Prepare a BouncyCastle TrustStore, for the CA.
+        """
+        
+        keytool = system.which('keytool')
+        argv = shlex.split(("%s " +
+                            "-import " +
+                            "-trustcacerts " +
+                            "-alias mercuryCA " +
+                            "-file %s " +
+                            "-keystore %s " +
+                            "-storetype BKS " +
+                            "-storepass %s " +
+                            "-provider org.bouncycastle.jce.provider.BouncyCastleProvider " +
+                            "-providerpath /usr/local/share/classpath/bcprov-ext-jdk15on-1.46.jar") % (keytool, self.ca_certificate_path(), self.__bks_path('mercury-ca'), "mercury"))
+        
+        if os.spawnvpe(os.P_WAIT, argv[0], argv, os.environ) == 0:
+            return self.__bks_path('mercury-ca')
+        
     def make_pcks12(self, cn, key, cert, export_password=None):
         """
         Prepare a PKCS12 package, given a key and a certificate.
