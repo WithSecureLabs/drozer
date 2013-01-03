@@ -18,7 +18,7 @@ class Server:
     DefaultHost = "127.0.0.1"
     DefaultPort = 31415
     
-    def __init__(self, arguments):
+    def __init__(self, arguments, trust_callback):
         self.__id = 1
         self.__socket = socket.socket()
         
@@ -38,6 +38,9 @@ class Server:
             print "error connecting to server:", e.strerror.lower()
 
             sys.exit(-1)
+        
+        if arguments.ssl:
+            trust_callback(provider, self.__socket.getpeercert(True), self.__socket.getpeername())
 
     def close(self):
         """

@@ -22,18 +22,12 @@ class Console(cli.Base):
     def __init__(self):
         cli.Base.__init__(self)
         
-        self._parser.add_argument("device", default=None, nargs='?',
-            help="the unique identifier of the Agent to connect to")
-        self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]",
-            help="specify the address and port of the Mercury server")
-        self._parser.add_argument("--ssl", action="store_true", default=False,
-            help="connect with SSL")
-        self._parser.add_argument("--debug", action="store_true", default=False,
-            help="enable debug mode")
-        self._parser.add_argument("-c", "--command", default=None, dest="onecmd",
-            help="specify a single command to run in the session")
-        self._parser.add_argument("-f", "--file", default=[],
-            help="source file", nargs="*")
+        self._parser.add_argument("device", default=None, nargs='?', help="the unique identifier of the Agent to connect to")
+        self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the Mercury server")
+        self._parser.add_argument("--ssl", action="store_true", default=False, help="connect with SSL")
+        self._parser.add_argument("--debug", action="store_true", default=False, help="enable debug mode")
+        self._parser.add_argument("-c", "--command", default=None, dest="onecmd", help="specify a single command to run in the session")
+        self._parser.add_argument("-f", "--file", default=[], help="source file", nargs="*")
         
         self.__server = None
         
@@ -125,20 +119,15 @@ class Console(cli.Base):
             if len(devices) == 1:
                 device = devices[0].id
 
-                print "Selecting {} ({} {} {})"\
-                    .format(devices[0].id, devices[0].manufacturer,
-                        devices[0].model, devices[0].software)
-                print
+                print "Selecting %s (%s %s %s)\n" % (devices[0].id, devices[0].manufacturer, devices[0].model, devices[0].software)
 
                 return device
             elif len(devices) == 0:
-                print "No devices available."
-                print
+                print "No devices available.\n"
 
                 sys.exit(-1)
             else:
-                print "More than one device available. Please specify the target device ID."
-                print
+                print "More than one device available. Please specify the target device ID.\n"
 
                 sys.exit(-1)
         else:
@@ -150,7 +139,39 @@ class Console(cli.Base):
         """
 
         if self.__server == None:
-            self.__server = Server(arguments)
+            self.__server = Server(arguments, self.__manage_trust)
 
         return self.__server
+    
+    def __manage_trust(self, provider, certificate, peer):
+        """
+        Callback, invoked when connecting to a server with SSL, to manage the trust
+        relationship with that server based on SSL certificates.
+        """
         
+        trust_status = provider.trusted(certificate, peer)
+            
+        if trust_status < 0:
+            print "Mercury has established an SSL Connection to %s:%d." % peer
+            print "The server has provided an SSL Certificate with the SHA-1 Fingerprint:"
+            print "%s\n" % provider.digest(certificate)
+            
+            if trust_status == -2:
+                print "WARNING: this host has previously used a certificate with the fingerprint:"
+                print "%s\n" % provider.trusted_certificate_for(peer)
+            
+            while(True):
+                print "Do you want to accept this certificate? [yna] ",
+                
+                selection = raw_input().strip().lower()
+                
+                if selection == "n":
+                    sys.exit(-2)
+                elif selection == "y":
+                    print
+                    break
+                elif selection == "a":
+                    print "Adding certificate to known hosts.\n"
+                    provider.trust(certificate, peer)
+                    break
+                    
