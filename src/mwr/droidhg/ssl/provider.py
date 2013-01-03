@@ -49,6 +49,13 @@ class Provider(object):
         
         return (key, certificate)
     
+    def digest(self, certificate):
+        """
+        Calculate the SHA-1 digest of an X509 certificate.
+        """
+        
+        return OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_ASN1, certificate).digest('sha1')
+    
     def key_exists(self):
         """
         True, if the CA key file exists, and can be read.
@@ -147,6 +154,39 @@ class Provider(object):
         fs.write(self.__ca_key_path(), ca.CA.pkey_to_pem(self.authority.ca_key))
         
         return True
+    
+    def trust(self, certificate, peer):
+        """
+        Add the certificate to the SSL Known Hosts in the Configuration file, so we will
+        always trust this host in future.
+        """
+        
+        Configuration.set("ssl-known-hosts", "%s|%d" % peer, self.digest(certificate))
+    
+    def trusted(self, certificate, peer):
+        """
+        Determine if the certificate/peer pair have been previously trusted.
+        
+         0 - Trusted
+        -1 - Not Trusted
+        -2 - Wrong Certificate
+        """
+        
+        known_certificate = self.trusted_certificate_for(peer)
+        
+        if known_certificate == None:
+            return -1
+        elif known_certificate == self.digest(certificate):
+            return 0
+        else:
+            return -2
+    
+    def trusted_certificate_for(self, peer):
+        """
+        Fetches the trusted certificate for a peer.
+        """
+        
+        return Configuration.get("ssl-known-hosts", "%s|%d" % peer)
     
     def __bks_path(self, cn):
         """
