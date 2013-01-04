@@ -108,12 +108,12 @@ class Server:
             elif response.id == message_id:
                 return response
 
-    def startSession(self, device_id):
+    def startSession(self, device_id, password):
         """
         Start a new Session with a Device known to the Server.
         """
 
-        return self.sendAndReceive(SystemRequestFactory.startSession(device_id))
+        return self.sendAndReceive(SystemRequestFactory.startSession(device_id).setPassword(password))
 
     def stopSession(self, session_id):
         """

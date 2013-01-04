@@ -1,4 +1,5 @@
 import argparse
+import getpass
 import sys
 
 from mwr.common import cli
@@ -26,6 +27,7 @@ class Console(cli.Base):
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the Mercury server")
         self._parser.add_argument("--ssl", action="store_true", default=False, help="connect with SSL")
         self._parser.add_argument("--debug", action="store_true", default=False, help="enable debug mode")
+        self._parser.add_argument("--password", action="store_true", default=False, help="the agent requires a password")
         self._parser.add_argument("-c", "--command", default=None, dest="onecmd", help="specify a single command to run in the session")
         self._parser.add_argument("-f", "--file", default=[], help="source file", nargs="*")
         
@@ -33,11 +35,16 @@ class Console(cli.Base):
         
     def do_connect(self, arguments):
         """starts a new session with a device"""
+        
+        if arguments.password:
+            password = getpass.getpass()
+        else:
+            password = None
 
         device = self.__get_device(arguments)
         
         server = self.__getServer(arguments)
-        response = server.startSession(device)
+        response = server.startSession(device, password)
         
         if response.type == Message.SYSTEM_RESPONSE and\
             response.system_response.status == Message.SystemResponse.SUCCESS:
