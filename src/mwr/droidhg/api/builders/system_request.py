@@ -93,6 +93,16 @@ class SystemRequestFactory:
         
         return self
 
+    def setPassword(self, password):
+        """
+        Set the password required to establish a session.
+        """
+        
+        if password != None:
+            self.builder.system_request.password = password
+        
+        return self
+        
     def setSessionId(self, session):
         """
         Set session identifier, to route a message correctly on the Agent.
