@@ -117,6 +117,7 @@ class Device:
 
         self.write(SystemRequestFactory
             .startSession(self.device_id)
+            .setPassword(message.system_request.password)
             .setId(message.id)
             .build())
 
