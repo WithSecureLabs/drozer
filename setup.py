@@ -16,5 +16,5 @@ setuptools.setup(
   package_dir = { "": "src" },
   package_data = { "": ["*.apk", "busybox"] },
   scripts = ["bin/mercury", "bin/mercury-console", "bin/mercury-server"],
-  install_requires = ["protobuf==2.4.1", "twisted==10.2.0"],
+  install_requires = ["protobuf==2.4.1"],
   classifiers = [])

@@ -1,4 +1,7 @@
-from twisted.internet import reactor
+try:
+    from twisted.internet import reactor
+except ImportError:
+    pass
 
 from mwr.droidhg import Devices, Sessions
 from mwr.droidhg.api.builders import SystemResponseFactory

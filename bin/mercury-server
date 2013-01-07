@@ -2,8 +2,15 @@
 
 import argparse
 import logging
-from twisted import internet
-from twisted.internet import ssl, task
+import sys
+
+try:
+    from twisted import internet
+    from twisted.internet import ssl, task
+except ImportError:
+    print "Mercury Server required Twisted to run."
+    print "Run 'easy_install twisted==10.2.0' to fetch this dependency."
+    sys.exit(-1)
 
 from mwr.common import logger
 from mwr.droidhg.server import DroidHgServer, heartbeat
