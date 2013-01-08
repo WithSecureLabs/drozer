@@ -26,7 +26,12 @@ class Provider(object):
         Get the path to the CA Key Material, as defined by the configuration file.
         """
         
-        return Configuration.get("ssl", "ca_path")
+        ca_path = Configuration.get("ssl", "ca_path")
+        
+        if ca_path == None:
+            ca_path = os.path.abspath(os.curdir)
+        
+        return ca_path
 
     def certificate_exists(self):
         """
