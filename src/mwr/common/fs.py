@@ -20,7 +20,7 @@ def touch(path):
     
 def write(path, data):
     try:
-        f = open(path, 'w')
+        f = open(path, 'wb')
         f.write(data)
         f.close()
         
