@@ -1,7 +1,6 @@
 import os
 import OpenSSL
 import random
-import shlex
 import string
 
 from mwr.common import fs, system
@@ -29,7 +28,7 @@ class Provider(object):
         ca_path = Configuration.get("ssl", "ca_path")
         
         if ca_path == None and skip_default == False:
-            ca_path = os.path.join(os.path.dirname(__file__), "ca")
+            ca_path = os.path.join(os.path.dirname(__file__), "embedded_ca")
         
         return ca_path
 

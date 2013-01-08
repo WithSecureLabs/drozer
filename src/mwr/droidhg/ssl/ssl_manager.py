@@ -1,6 +1,6 @@
 import os
 
-from mwr.common import cli, fs
+from mwr.common import cli
 from mwr.droidhg.ssl.provider import Provider
 
 class SSLManager(cli.Base):
