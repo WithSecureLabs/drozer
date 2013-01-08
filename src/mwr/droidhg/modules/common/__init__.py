@@ -15,5 +15,6 @@ import path_completion
 from provider import Provider
 from shell import Shell
 from strings import Strings
+from superuser import SuperUser
 from vulnerability import Vulnerability, VulnerabilityScanner
 from zip_file import ZipFile

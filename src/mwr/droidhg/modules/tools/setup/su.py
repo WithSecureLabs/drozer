@@ -1,7 +1,6 @@
 from mwr.droidhg.modules import common, Module
-import os
 
-class Su(Module, common.ClassLoader, common.FileSystem, common.Shell):
+class Su(Module, common.ClassLoader, common.FileSystem, common.Shell, common.SuperUser):
 
     name = "Prepare su binary installation on the device."
     description = """Prepares su binary installation files on the device in order to provide access to a root shell on demand.
@@ -31,29 +30,24 @@ WARNING: This minimal version of the su binary is completely unprotected, meanin
 
     def execute(self, arguments):
         
-        # Remove existing uploads from this module
-        self.shellExec("rm /data/data/com.mwr.droidhg.agent/su")
-        self.shellExec("rm /data/data/com.mwr.droidhg.agent/install-su.sh")
+        # Check for existence of /system/bin/su
+        if self.isSuInstalled():
+            self.stdout.write("[!] A version of su is already installed at /system/bin/su\n")
         
         # Upload su binary
-        length = self.uploadFile(os.path.join(os.path.dirname(__file__), "minimal-su", "libs", "armeabi", "su"), "/data/data/com.mwr.droidhg.agent/su")
-        if length != None:
+        if self.uploadSu():
             self.stdout.write("[*] Uploaded su\n")
         else:
             self.stdout.write("[-] Upload failed (su) - aborting\n")
             return
         
         # Upload install-su.sh    
-        length = self.uploadFile(os.path.join(os.path.dirname(__file__), "minimal-su", "install-su.sh"), "/data/data/com.mwr.droidhg.agent/install-su.sh")
-        if length != None:
+        if self.uploadSuInstallScript():
             self.stdout.write("[*] Uploaded install-su.sh\n")
+            self.stdout.write("[*] chmod 770 /data/data/com.mwr.droidhg.agent/install-su.sh\n")
         else:
             self.stdout.write("[-] Upload failed (install-su.sh) - aborting\n")
             return
-        
-        # chmod install-su.sh to make it executable
-        self.shellExec("chmod 770 /data/data/com.mwr.droidhg.agent/install-su.sh")
-        self.stdout.write("[*] chmod 770 /data/data/com.mwr.droidhg.agent/install-su.sh\n")
         
         # Ready to be used from root context
         self.stdout.write("[*] Ready! Execute /data/data/com.mwr.droidhg.agent/install-su.sh from root context to install su\n")
