@@ -106,21 +106,30 @@ class Provider(object):
         """
         
         keytool = system.which('keytool') 
-        argv = shlex.split(("%s " +
-                            "-importkeystore "+
-                            "-deststorepass %s "+
-                            "-destkeypass %s " +
-                            "-destkeystore %s " +
-                            "-deststoretype BKS " + 
-                            "-provider org.bouncycastle.jce.provider.BouncyCastleProvider " +
-                            "-providerpath /usr/local/share/classpath/bcprov-ext-jdk15on-1.46.jar " +
-                            "-srckeystore %s " +
-                            "-srcstoretype PKCS12 " +
-                            "-srcstorepass %s " +
-                            "-alias mercury") % (keytool, store_password, key_password, self.__bks_path(cn), p12_path, export_password))
+        argv = [keytool,
+                "-importkeystore",
+                "-deststorepass", store_password,
+                "-destkeypass", key_password,
+                "-destkeystore", self.__bks_path(cn),
+                "-deststoretype", "BKS", 
+                "-provider", "org.bouncycastle.jce.provider.BouncyCastleProvider",
+                "-providerpath", os.path.abspath(os.path.join(os.path.dirname(__file__), "bcprov-ext-jdk15on-1.46.jar")),
+                "-srckeystore", p12_path,
+                "-srcstoretype", "PKCS12",
+                "-srcstorepass", export_password,
+                "-alias", "mercury"]
         
-        if os.spawnvpe(os.P_WAIT, argv[0], argv, os.environ) == 0:
-            return self.__bks_path(cn)
+        if keytool != None:
+            if os.spawnve(os.P_WAIT, argv[0], argv, os.environ) == 0:
+                return self.__bks_path(cn)
+        else:
+            argv[0] = "keytool"
+            
+            print "Could not compile the BKS keystore, because keytool could not be located on your system."
+            print "Run:"
+            print " ".join(argv) 
+            
+            return False
     
     def make_bks_trust_store(self):
         """
@@ -128,19 +137,28 @@ class Provider(object):
         """
         
         keytool = system.which('keytool')
-        argv = shlex.split(("%s " +
-                            "-import " +
-                            "-trustcacerts " +
-                            "-alias mercuryCA " +
-                            "-file %s " +
-                            "-keystore %s " +
-                            "-storetype BKS " +
-                            "-storepass %s " +
-                            "-provider org.bouncycastle.jce.provider.BouncyCastleProvider " +
-                            "-providerpath /usr/local/share/classpath/bcprov-ext-jdk15on-1.46.jar") % (keytool, self.ca_certificate_path(), self.__bks_path('mercury-ca'), "mercury"))
+        argv = [keytool,
+                "-import",
+                "-trustcacerts",
+                "-alias", "mercuryCA",
+                "-file",  self.ca_certificate_path(),
+                "-keystore", self.__bks_path('mercury-ca'),
+                "-storetype", "BKS",
+                "-storepass", "mercury",
+                "-provider", "org.bouncycastle.jce.provider.BouncyCastleProvider",
+                "-providerpath", os.path.abspath(os.path.join(os.path.dirname(__file__), "bcprov-ext-jdk15on-1.46.jar"))]
         
-        if os.spawnvpe(os.P_WAIT, argv[0], argv, os.environ) == 0:
-            return self.__bks_path('mercury-ca')
+        if keytool != None:
+            if os.spawnve(os.P_WAIT, argv[0], argv, os.environ) == 0:
+                return self.__bks_path('mercury-ca')
+        else:
+            argv[0] = "keytool"
+            
+            print "Could not compile the BKS trust store, because keytool could not be located on your system."
+            print "Run:"
+            print " ".join(argv) 
+            
+            return False
         
     def make_pcks12(self, cn, key, cert, export_password=None):
         """
