@@ -21,15 +21,15 @@ class Provider(object):
         
         return self.__certificate_path("mercury-ca")
     
-    def ca_path(self):
+    def ca_path(self, skip_default=False):
         """
         Get the path to the CA Key Material, as defined by the configuration file.
         """
         
         ca_path = Configuration.get("ssl", "ca_path")
         
-        if ca_path == None:
-            ca_path = os.path.abspath(os.curdir)
+        if ca_path == None and skip_default == False:
+            ca_path = os.path.join(os.path.dirname(__file__), "ca")
         
         return ca_path
 
@@ -61,19 +61,19 @@ class Provider(object):
         
         return OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_ASN1, certificate).digest('sha1')
     
-    def get_keypair(self, cn):
+    def get_keypair(self, cn, skip_default=False):
         """
         Retrieves a key pair, stored in the CA.
         """
         
-        return (self.__key_path(cn), self.__certificate_path(cn))
+        return (self.__key_path(cn, skip_default), self.__certificate_path(cn, skip_default))
         
     def key_exists(self):
         """
         True, if the CA key file exists, and can be read.
         """
         
-        return os.path.exists(self.__ca_key_path())
+        return self.ca_path() != None and os.path.exists(self.__ca_key_path())
     
     def key_material_exists(self):
         """
@@ -91,12 +91,15 @@ class Provider(object):
         
         return self.authority.verify_ca()
     
-    def keypair_exists(self, cn):
+    def keypair_exists(self, cn, skip_default=False):
         """
         True, if a keypair by the specified CN exists.
         """
         
-        key, certificate = self.get_keypair(cn)
+        if self.ca_path(skip_default) == None:
+            return False
+        
+        key, certificate = self.get_keypair(cn, skip_default)
         
         return os.path.exists(key) and os.path.exists(certificate)
     
@@ -241,19 +244,19 @@ class Provider(object):
         
         return self.__key_path("mercury-ca")
     
-    def __certificate_path(self, cn):
+    def __certificate_path(self, cn, skip_default=False):
         """
         Get the path to a certificate file.
         """
         
-        return os.path.join(self.ca_path(), "%s.crt" % cn)
+        return os.path.join(self.ca_path(skip_default), "%s.crt" % cn)
     
-    def __key_path(self, cn):
+    def __key_path(self, cn, skip_default=False):
         """
         Get the path to a key file.
         """
         
-        return os.path.join(self.ca_path(), "%s.key" % cn)
+        return os.path.join(self.ca_path(skip_default), "%s.key" % cn)
         
     def __load_key_material(self):
         """

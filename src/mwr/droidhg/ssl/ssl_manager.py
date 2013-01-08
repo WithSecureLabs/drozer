@@ -19,19 +19,22 @@ class SSLManager(cli.Base):
         self._parser.add_argument("subject", help="the subject CN, when generating a keypair", nargs='?')
         self._parser.add_argument("--bks", help="also build a BouncyCastle store (for Android), using the store and key password (keypair only)", metavar=("STORE_PW", "KEY_PW"), nargs=2)
     
+    def handle_error(self, tr):
+        raise
+    
     def do_create(self, arguments):
         """create some new key material"""
         
         provider = Provider()
         
         if arguments.type == "ca":
-            path = provider.ca_path()
-            
+            path = provider.ca_path(skip_default=True)
+
             if path == None or not os.path.exists(path):
                 path = os.path.abspath(os.curdir)
             
-            if provider.keypair_exists("mercury-ca"):
-                print "A Mercury CA already exists."
+            if provider.keypair_exists("mercury-ca", skip_default=True):
+                print "A Mercury CA already exists at", path
                 
                 if self.confirm("Do you want to overwrite the existing CA?") == "n":
                     print "Aborted."
