@@ -30,6 +30,14 @@ class SSLManager(cli.Base):
             if path == None or not os.path.exists(path):
                 path = os.path.abspath(os.curdir)
             
+            if provider.keypair_exists("mercury-ca"):
+                print "A Mercury CA already exists."
+                
+                if self.confirm("Do you want to overwrite the existing CA?") == "n":
+                    print "Aborted."
+                    
+                    return
+                
             if provider.provision(path):
                 print "Created Authority."
             else:
@@ -38,6 +46,14 @@ class SSLManager(cli.Base):
             if arguments.subject == None or arguments.subject == "":
                 print "Please specify the subject CN."
             else:
+                if provider.keypair_exists(arguments.subject):
+                    print "A key pair with CN=%s already exists." % (arguments.subject)
+                
+                    if self.confirm("Do you want to overwrite the existing key pair?") == "n":
+                        print "Aborted."
+                        
+                        return
+                    
                 key, certificate = provider.create_keypair(arguments.subject)
                 
                 if arguments.bks:

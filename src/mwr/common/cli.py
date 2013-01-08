@@ -21,14 +21,14 @@ class Base(object):
         self._parser.epilog = "available commands:\n%s" % self.__get_commands_help()
         self._parser.error = self.__parse_error
         self._parser.formatter_class = argparse.RawDescriptionHelpFormatter
-        
+
     def ask(self, prompt):
         """
-        Ask the user to provide some input.
+        Ask the user a question, and collect a single line as input.
         """
         
         return raw_input(prompt)
-        
+
     def choose(self, prompt, options):
         """
         Ask the user to select from a list of options. 

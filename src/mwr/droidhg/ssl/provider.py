@@ -61,6 +61,13 @@ class Provider(object):
         
         return OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_ASN1, certificate).digest('sha1')
     
+    def get_keypair(self, cn):
+        """
+        Retrieves a key pair, stored in the CA.
+        """
+        
+        return (self.__key_path(cn), self.__certificate_path(cn))
+        
     def key_exists(self):
         """
         True, if the CA key file exists, and can be read.
@@ -83,6 +90,15 @@ class Provider(object):
         self.__load_key_material()
         
         return self.authority.verify_ca()
+    
+    def keypair_exists(self, cn):
+        """
+        True, if a keypair by the specified CN exists.
+        """
+        
+        key, certificate = self.get_keypair(cn)
+        
+        return os.path.exists(key) and os.path.exists(certificate)
     
     def make_bks_key_store(self, cn, p12_path, export_password, store_password, key_password):
         """
