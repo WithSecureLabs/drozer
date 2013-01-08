@@ -16,5 +16,5 @@ setuptools.setup(
   package_dir = { "": "src" },
   package_data = { "": ["*.apk", "*.jar", "busybox"] },
   scripts = ["bin/mercury", "bin/mercury-console", "bin/mercury-module", "bin/mercury-server", "bin/mercury-ssl"],
-  install_requires = ["protobuf==2.4.1"],
+  install_requires = ["protobuf==2.4.1", "pyopenssl"],
   classifiers = [])
