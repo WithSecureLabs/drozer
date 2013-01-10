@@ -51,7 +51,7 @@ class Delete(Module, common.Provider):
     def execute(self, arguments):
         c = self.contentResolver().delete(argument.uri, argument.selection, argument.selection_args)
 
-        self.stdout.write("Done.")
+        self.stdout.write("Done.\n\n")
 
 class Download(Module, common.ClassLoader, common.Provider):
 
@@ -86,7 +86,7 @@ class Download(Module, common.ClassLoader, common.Provider):
         output.write(str(data))
         output.close()
 
-        self.stdout.write("Written %d bytes\n" % len(data))
+        self.stdout.write("Written %d bytes\n\n" % len(data))
         
 class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
@@ -272,7 +272,7 @@ class Insert(Module, common.Provider):
 
         c = self.contentResolver().insert(arguments.uri, values);
 
-        self.stdout.write("Done.")
+        self.stdout.write("Done.\n\n")
         
 class Query(Module, common.Provider, common.TableFormatter):
 
@@ -308,7 +308,7 @@ class Query(Module, common.Provider, common.TableFormatter):
 
             self.print_table(rows, show_headers=True, vertical=arguments.vertical)
         else:
-            self.stdout.write("Unknown Error.\n")
+            self.stdout.write("Unknown Error.\n\n")
 
 class Read(Module, common.ClassLoader, common.Provider):
 
@@ -378,4 +378,4 @@ class Update(Module, common.Provider):
 
         c = self.contentResolver().update(arguments.uri, values, arguments.selection, arguments.selection_args)
 
-        self.stdout.write("Done.")
+        self.stdout.write("Done.\n\n")
