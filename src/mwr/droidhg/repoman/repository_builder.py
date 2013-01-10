@@ -104,11 +104,12 @@ class SourcePackage(Source):
     def emit(self, target):
         archive = zipfile.ZipFile(os.path.sep.join([target, self.name()]), 'w')
         
-        for f in self.contents:
-            if not f.endswith(".pyc") and not f in [".mercury_package", "__init__.py"]:
-                print " - zipping %s..." % f
-                 
-                archive.write(os.path.sep.join([self.path, f]), f)
+        for base, dirs, files in os.walk(self.path):
+            for f in files:
+                print " - adding %s to the archive..." % f
+                
+                filename = os.path.join(base, f)
+                archive.write(filename, filename[len(self.path):])
         
         archive.close()
     
