@@ -133,6 +133,7 @@ class Provider(object):
         """
 
         rows = []
+        blob_type = self.klass("android.database.Cursor").FIELD_TYPE_BLOB
 
         if cursor != None:
             columns = cursor.getColumnNames()
@@ -143,8 +144,10 @@ class Provider(object):
                 row = []
 
                 for i in range(len(columns)):
-                    row.append(cursor.getString(i))
-                    # TODO handle blobs  data += "(blob) " + Base64.encodeToString(cursor.getBlob(l), Base64.DEFAULT)
+                    if(cursor.getType(i) == blob_type):
+                        row.append("%s (Base64-encoded)" % (cursor.getBlob(i).base64_encode()))
+                    else:
+                        row.append(cursor.getString(i))
 
                 rows.append(row)
 

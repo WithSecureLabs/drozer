@@ -1,3 +1,4 @@
+import base64
 from functools import partial
 
 from mwr.droidhg.api.protobuf_pb2 import Message
@@ -962,4 +963,11 @@ class ReflectedString(ReflectedType):
         return self._native
 
 class ReflectedBinary(ReflectedString):
-    pass
+    
+    def base64_encode(self):
+        """
+        Get a Base64-encoded representation of the underlying Binary data.
+        """
+    
+        return base64.b64encode(self._native)
+        
