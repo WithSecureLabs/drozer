@@ -32,11 +32,12 @@ class ModuleManager(cli.Base):
             modules = installer.install(arguments.options)
                         
             print
-            print "Successfully installed %d modules." % len(modules['success'])
-            print "Failed to install %d:" % len(modules['fail'])
-            for module in modules['fail']:
-                print "  %s" % module
-                print "    %s" % modules['fail'][module]
+            print "Successfully installed %d modules, %d already installed." % (len(modules['success']), len(modules['existing']))
+            if len(modules['fail']) > 0:
+                print "Failed to install %d modules:" % len(modules['fail'])
+                for module in modules['fail']:
+                    print "  %s" % module
+                    print "    %s" % modules['fail'][module]
             print
         
     def do_remote(self, arguments):

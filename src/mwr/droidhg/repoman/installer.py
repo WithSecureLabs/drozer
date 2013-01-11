@@ -17,7 +17,7 @@ class ModuleInstaller(object):
         a dictionary of status information.
         """
         
-        status = { 'success': [], 'fail': {} }
+        status = { 'success': [], 'existing': [], 'fail': {} }
 
         for pattern in modules:
             if pattern.find("/") >= 0 or pattern.find("\\") >= 0:
@@ -35,6 +35,10 @@ class ModuleInstaller(object):
                     print "Done."
                     
                     status['success'].append(module)
+                except AlreadyInstalledError as e:
+                    print "Already Installed."
+                    
+                    status['existing'].append(module)
                 except InstallError as e:
                     print "Failed."
                     
@@ -178,7 +182,7 @@ class ModuleInstaller(object):
         path = os.path.join(package, path[-1] + ".py")
         # ensure that we are not about to overwrite an existing module
         if os.path.exists(path):
-            raise InstallError("The target (%s) already exists in the repository." % module)
+            raise AlreadyInstalledError("The target (%s) already exists in the repository." % module)
         # write the module file into the package
         if fs.write(path, source) != None:
             return True
@@ -202,7 +206,7 @@ class ModuleInstaller(object):
         files = archive.infolist()
         # ensure we are not about to overwrite any existing files
         if True in map(lambda f: os.path.exists(os.path.join(package, f.filename)), files):
-            raise InstallError("Installing this module would overwrite one-or-more files in your repository.")
+            raise AlreadyInstalledError("Installing this module would overwrite one-or-more files in your repository.")
         # extract each file, in turn
         try:
             for f in files:
@@ -213,4 +217,7 @@ class ModuleInstaller(object):
         return True
             
 class InstallError(Exception):
+    pass
+
+class AlreadyInstalledError(InstallError):
     pass
