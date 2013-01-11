@@ -16,6 +16,7 @@ from mwr.droidhg.console.coloured_stream import ColouredStream
 from mwr.droidhg.console.sequencer import Sequencer
 from mwr.droidhg.modules import common, Module
 from mwr.droidhg.reflection import Reflector
+from mwr.droidhg.repoman import ModuleManager
 
 class Session(cmd.Cmd):
     """
@@ -258,6 +259,18 @@ class Session(cmd.Cmd):
 
         return self.completefilename(text, line, begidx, endidx)
 
+    def do_module(self, args):
+        """
+        module [COMMAND] (inside Mercury)
+    
+        Run the Mercury Module and Repository Manager.
+    
+        The Repository Manager handles Mercury modules and module repositories.
+        """
+        
+        ModuleManager().run(shlex.split(args, comments=True))
+        Module.reload()
+        
     def do_run(self, args):
         """
         usage: run MODULE [OPTIONS]
