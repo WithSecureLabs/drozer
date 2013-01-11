@@ -237,13 +237,13 @@ class Insert(Module, common.Provider):
 
     def add_arguments(self, parser):
         parser.add_argument("uri", nargs="?", help="the content provider uri to insert into")
-        parser.add_argument('--boolean', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--double', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--float', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--integer', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--long', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--short', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--string', action="append", nargs=2, metavar='column data')
+        parser.add_argument('--boolean', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--double', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--float', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--integer', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--long', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--short', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--string', action="append", nargs=2, metavar=('column', 'data'))
     
     def execute(self, arguments):
         values = self.new("android.content.ContentValues")
@@ -286,7 +286,16 @@ class Query(Module, common.Provider, common.TableFormatter):
     | 5   | assisted_gps_enabled                    | 1       |
     | 9   | wifi_networks_available_notification_on | 1       |
     | 10  | sys_storage_full_threshold_bytes        | 2097152 |
-    | ... | ...                                     | ...     |"""
+    | ... | ...                                     | ...     |
+
+Querying, with a WHERE clause in the SELECT statement:
+
+    mercury> run app.provider.query content://settings/secure
+                --selection "_id=?"
+                --selection-args 10
+    
+    | _id | name                                    | value   |
+    | 10  | sys_storage_full_threshold_bytes        | 2097152 |"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
     license = "MWR Code License"
@@ -333,7 +342,13 @@ class Update(Module, common.Provider):
 
     name = "Update a record in a content provider"
     description = "Update the specified content provider URI"
-    examples = ""
+    examples = """Updating, the assisted_gps_enabled setting:
+
+    mercury> run app.provider.query content://settings/secure
+                --selection "name=?"
+                --selection-args assisted_gps_enabled
+                --integer value 0
+    Done."""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
     license = "MWR Code License"
@@ -343,13 +358,13 @@ class Update(Module, common.Provider):
         parser.add_argument("uri", nargs="?", help="the content provider uri to update in")
         parser.add_argument("--selection", dest="selection", default=None, metavar="<rows>")
         parser.add_argument("--selection-args", default=None, metavar="<arg>", nargs="*")
-        parser.add_argument('--boolean', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--double', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--float', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--integer', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--long', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--short', action="append", nargs=2, metavar='column data')
-        parser.add_argument('--string', action="append", nargs=2, metavar='column data')
+        parser.add_argument('--boolean', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--double', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--float', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--integer', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--long', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--short', action="append", nargs=2, metavar=('column', 'data'))
+        parser.add_argument('--string', action="append", nargs=2, metavar=('column', 'data'))
     
     def execute(self, arguments):
         values = self.new("android.content.ContentValues")
