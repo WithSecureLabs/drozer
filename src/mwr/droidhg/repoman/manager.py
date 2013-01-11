@@ -1,11 +1,7 @@
-import os
-import sys
-
 from mwr.common import cli
 from mwr.droidhg.repoman.installer import ModuleInstaller
 from mwr.droidhg.repoman.remotes import Remote, UnknownRemote
 from mwr.droidhg.repoman.repositories import Repository, NotEmptyException, UnknownRepository
-from mwr.droidhg.repoman.repository_builder import RepositoryBuilder
 
 class ModuleManager(cli.Base):
     """
@@ -310,15 +306,6 @@ class RepositoryManager(cli.Base):
         """list all repositories, both local and remote"""
         
         self.__list_repositories()
-        
-    def do_make(self, arguments):
-        """build a repository, from a Python package"""
-        
-        if len(arguments.options) != 1:
-            print "you must specify the target"
-            sys.exit(-1)
-            
-        RepositoryBuilder(os.getcwd(), arguments.options[0]).build()
 
     def run(self, argv=None):
         """
