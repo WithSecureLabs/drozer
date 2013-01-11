@@ -9,17 +9,22 @@ from mwr.droidhg.repoman.repository_builder import RepositoryBuilder
 
 class ModuleManager(cli.Base):
     """
-    mercury module [COMMAND]
+    module [COMMAND]
     
     Run the Mercury Module and Repository Manager.
 
     The Repository Manager handles Mercury modules and module repositories.
     """
+    
+    exit_on_error = False
 
     def __init__(self):
-        cli.Base.__init__(self)
+        cli.Base.__init__(self, add_help=False)
         
+        self._parser.add_argument("-h", "--help", action="store_true", dest="help", default=False)
         self._parser.add_argument("options", nargs='*')
+        
+        self._parser.error = self.__parse_error
         
     def do_install(self, arguments):
         """install a new module"""
@@ -52,6 +57,25 @@ class ModuleManager(cli.Base):
         """search for modules"""
 
         self.__search_remotes(len(arguments.options) > 0 and arguments.options[0] or "")
+
+    def run(self, argv=None):
+        """
+        Run is the main entry point of the console, called by the runtime. It
+        parses the command-line arguments, and invokes an appropriate handler.
+        """
+
+        if argv == None:
+            argv = []
+
+        arguments = self._parser.parse_args(argv)
+
+        if arguments.help or arguments.command == None:
+            self._parser.print_help()
+        else:
+            try:
+                self._Base__invokeCommand(arguments)
+            except cli.UsageError:
+                self._parser.print_help()
     
     def __choose_repo(self):
         """
@@ -87,6 +111,13 @@ class ModuleManager(cli.Base):
                 except ValueError:
                     print "Not a valid selection. Please enter a number between 1 and %d." % len(repositories)
     
+    def __parse_error(self, message):
+        """
+        Silently swallow parse errors.
+        """
+        
+        pass
+    
     def __search_remotes(self, term):
         """
         Search for modules, on remote repositories.
@@ -105,15 +136,20 @@ class ModuleManager(cli.Base):
 
 class RemoteManager(cli.Base):
     """
-    mercury module remote [COMMAND] [OPTIONS]
+    module remote [COMMAND] [OPTIONS]
     
     Run the remote part of the Mercury Module and Repository Manager.
     """
+    
+    exit_on_error = False
 
     def __init__(self):
-        cli.Base.__init__(self)
+        cli.Base.__init__(self, add_help=False)
         
+        self._parser.add_argument("-h", "--help", action="store_true", dest="help", default=False)
         self._parser.add_argument("options", nargs='*')
+        
+        self._parser.error = self.__parse_error
         
     def do_add(self, arguments):
         """add a new remote module repository"""
@@ -149,21 +185,52 @@ class RemoteManager(cli.Base):
         for url in Remote.all():
             print "  %s" % url
         print
+
+    def run(self, argv=None):
+        """
+        Run is the main entry point of the console, called by the runtime. It
+        parses the command-line arguments, and invokes an appropriate handler.
+        """
+
+        if argv == None:
+            argv = []
+
+        arguments = self._parser.parse_args(argv)
+
+        if arguments.help or arguments.command == None:
+            self._parser.print_help()
+        else:
+            try:
+                self._Base__invokeCommand(arguments)
+            except cli.UsageError:
+                self._parser.print_help()
+    
+    def __parse_error(self, message):
+        """
+        Silently swallow parse errors.
+        """
+        
+        pass
                 
         
 class RepositoryManager(cli.Base):
     """
-    mercury module repository [COMMAND] [OPTIONS]
+    module repository [COMMAND] [OPTIONS]
     
     Run the repository part of the Mercury Module and Repository Manager.
 
     The Repository Manager handles Mercury modules and module repositories.
     """
+    
+    exit_on_error = False
 
     def __init__(self):
-        cli.Base.__init__(self)
+        cli.Base.__init__(self, add_help=False)
         
+        self._parser.add_argument("-h", "--help", action="store_true", dest="help", default=False)
         self._parser.add_argument("options", nargs='*')
+        
+        self._parser.error = self.__parse_error
         
     def do_create(self, arguments):
         """create a new Mercury module repository"""
@@ -238,6 +305,25 @@ class RepositoryManager(cli.Base):
             sys.exit(-1)
             
         RepositoryBuilder(os.getcwd(), arguments.options[0]).build()
+
+    def run(self, argv=None):
+        """
+        Run is the main entry point of the console, called by the runtime. It
+        parses the command-line arguments, and invokes an appropriate handler.
+        """
+
+        if argv == None:
+            argv = []
+
+        arguments = self._parser.parse_args(argv)
+
+        if arguments.help or arguments.command == None:
+            self._parser.print_help()
+        else:
+            try:
+                self._Base__invokeCommand(arguments)
+            except cli.UsageError:
+                self._parser.print_help()
         
     def __list_repositories(self):
         """
@@ -249,4 +335,11 @@ class RepositoryManager(cli.Base):
         for repo in Repository.all():
             print "  %s" % repo
         print
+    
+    def __parse_error(self, message):
+        """
+        Silently swallow parse errors.
+        """
+        
+        pass
         
