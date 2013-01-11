@@ -9,13 +9,14 @@ class Base(object):
     cli.Base provides a simple command-line environment, where numerous different
     commands can be invoked.
     """
+    
+    exit_on_error = True
 
-    def __init__(self):
+    def __init__(self, add_help=True):
         doc_text = textwrap.dedent(self.__doc__).strip().split("\n")
         
-        self._parser = argparse.ArgumentParser(description="\n".join(doc_text[1:]), usage=doc_text[0])
-        self._parser.add_argument("command", default=None,
-            help="the command to execute")
+        self._parser = argparse.ArgumentParser(add_help=add_help, description="\n".join(doc_text[1:]), usage=doc_text[0])
+        self._parser.add_argument("command", default=None, help="the command to execute")
         
         self._parser.epilog = "available commands:\n%s" % self.__get_commands_help()
         self._parser.error = self.__parse_error
@@ -85,7 +86,8 @@ class Base(object):
     def __parse_error(self, message):
         self.__showUsage(message)
         
-        sys.exit(-1)
+        if self.exit_on_error:
+            sys.exit(-1)
             
     def __showUsage(self, message):
         """
