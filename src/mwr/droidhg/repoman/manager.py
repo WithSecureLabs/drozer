@@ -88,9 +88,23 @@ class ModuleManager(cli.Base):
         if len(repositories) == 1:
             return repositories[0]
         elif len(repositories) == 0:
-            print "You do not have a Mercury module repository. Please create one, then try again."
-            
-            return None
+            print "You do not have a Mercury module repository."
+            if self.confirm("Would you like to create one?") == "y":
+                while True:
+                    path = self.ask("Path to new repository: ")
+                    
+                    try:
+                        Repository.create(path)
+                        
+                        print "Initialised repository at %s.\n" % path
+                        
+                        return Repository.all()[0]
+                    except NotEmptyException:
+                        print "The target (%s) already exists.\n" % path
+                
+                return None
+            else:
+                return None
         else:
             print "You have %d Mercury module repositories. Which would you like to install into?\n" % len(repositories)
             for i in range(len(repositories)):

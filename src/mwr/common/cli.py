@@ -21,7 +21,32 @@ class Base(object):
         self._parser.epilog = "available commands:\n%s" % self.__get_commands_help()
         self._parser.error = self.__parse_error
         self._parser.formatter_class = argparse.RawDescriptionHelpFormatter
-
+        
+    def ask(self, prompt):
+        """
+        Ask the user to provide some input.
+        """
+        
+        return raw_input(prompt)
+        
+    def choose(self, prompt, options):
+        """
+        Ask the user to select from a list of options. 
+        """
+        
+        while(True):
+            selection = self.ask("%s [%s] " % (prompt, "".join(options)))
+            
+            if selection in options:
+                return selection
+    
+    def confirm(self, prompt):
+        """
+        Ask the user to confirm yes/no.
+        """
+        
+        return self.choose(prompt, ["y", "n"])
+        
     def run(self, argv=None):
         """
         Run is the main entry point of the console, called by the runtime. It
