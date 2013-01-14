@@ -104,7 +104,7 @@ class ModuleManager(cli.Base):
                 return None
         else:
             print "You have %d Mercury module repositories. Which would you like to install into?\n" % len(repositories)
-            for i in range(len(repositories)):
+            for i in xrange(len(repositories)):
                 print "  %5d  %s" % (i+1, repositories[i])
             print
             

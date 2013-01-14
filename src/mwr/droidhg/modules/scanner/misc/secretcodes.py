@@ -16,17 +16,14 @@ class SecretCodes(Module, common.ClassLoader, common.PackageManager):
     def execute(self, arguments):
         SecretCodes = self.loadClass("scanner/misc/SecretCodes.apk", "SecretCodes")
 
-        packages = self.packageManager().installedPackages(0)
-
-        for i in range(packages.size()):
-            package = packages.get(i).packageName
-            codes = SecretCodes.find(self.getContext(), package)
+        for package in self.packageManager().getPackages():
+            codes = SecretCodes.find(self.getContext(), package.packageName)
 
             if len(codes) > 0 or arguments.verbose == True:
-                self.stdout.write("Package: %s\n"%package)
+                self.stdout.write("Package: %s\n" % package.packageName)
 
                 for code in codes:
-                    self.stdout.write("  %s\n"%code)
+                    self.stdout.write("  %s\n" % code)
 
                 self.stdout.write("\n")
                 

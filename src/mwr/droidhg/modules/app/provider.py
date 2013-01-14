@@ -270,7 +270,7 @@ class Insert(Module, common.Provider):
             for s in arguments.string:
                 values.put(s[0], self.arg(s[1], obj_type="string"))
 
-        c = self.contentResolver().insert(arguments.uri, values);
+        self.contentResolver().insert(arguments.uri, values);
 
         self.stdout.write("Done.\n\n")
         
@@ -391,6 +391,6 @@ class Update(Module, common.Provider):
             for s in arguments.string:
                 values.put(s[0], self.arg(s[1], obj_type="string"))
 
-        c = self.contentResolver().update(arguments.uri, values, arguments.selection, arguments.selection_args)
+        self.contentResolver().update(arguments.uri, values, arguments.selection, arguments.selection_args)
 
         self.stdout.write("Done.\n\n")

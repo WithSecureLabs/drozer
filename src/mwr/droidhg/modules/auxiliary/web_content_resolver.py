@@ -153,15 +153,15 @@ class Handler(BaseHTTPRequestHandler):
         if cursor != None:
             rows = self.module.getResultSet(cursor)
 
-            for i in range(len(rows[0])):
-                output += "<th>%s</th>" % rows[0][i]
+            for v in rows[0]:
+                output += "<th>%s</th>" % v
             
             output += "</tr></thead><tbody>"
             
             for r in rows[1:]:
                 output += "<tr>"
-                for i in range(len(r)):
-                    output += "<td>%s</td>" % r[i]
+                for v in r:
+                    output += "<td>%s</td>" % v
                 output += "</tr>"
 
             output += "</tbody></table>"

@@ -61,7 +61,7 @@ class PackageManager(object):
 
             packages = self.installedPackages(flags)
 
-            for i in range(packages.size()):
+            for i in xrange(packages.size()):
                 yield packages.get(i)
 
         def getPackagesForUid(self, uid):
@@ -99,7 +99,7 @@ class PackageManager(object):
 
             providers = self.__package_manager.queryContentProviders(process_name, uid, flags)
 
-            for i in range(providers.size()):
+            for i in xrange(providers.size()):
                 yield providers.get(i)
 
         def queryIntentActivities(self, intent, flags):
@@ -109,7 +109,7 @@ class PackageManager(object):
 
             activities = self.__package_manager.queryIntentActivities(intent.buildIn(self.__module), flags)
 
-            for i in range(activities.size()):
+            for i in xrange(activities.size()):
                 yield activities.get(i)
 
     def packageManager(self):

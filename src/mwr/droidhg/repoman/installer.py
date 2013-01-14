@@ -85,7 +85,7 @@ class ModuleInstaller(object):
         
         directories = package[len(self.repository):].split(os.path.sep)
         
-        for i in range(len(directories)):
+        for i in xrange(len(directories)):
             self.__emit(os.path.join(self.repository, *directories[0:i+1] + ["__init__.py"]))
     
     def __get_combined_index(self):

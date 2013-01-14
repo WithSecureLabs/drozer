@@ -143,7 +143,7 @@ class Provider(object):
             while cursor.isAfterLast() == False:
                 row = []
 
-                for i in range(len(columns)):
+                for i in xrange(len(columns)):
                     if(cursor.getType(i) == blob_type):
                         row.append("%s (Base64-encoded)" % (cursor.getBlob(i).base64_encode()))
                     else:

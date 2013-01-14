@@ -29,7 +29,7 @@ class TableFormatter(object):
         if show_headers:
             self.stdout.write("|")
 
-        for i in range(len(rows[0])):
+        for i in xrange(len(rows[0])):
             widths.append(max(map(lambda r: len(str(r[i])), rows)))
 
             if show_headers:
@@ -38,7 +38,7 @@ class TableFormatter(object):
 
         for r in rows[1:]:
             self.stdout.write("|")
-            for i in range(len(r)):
+            for i in xrange(len(r)):
                 self.stdout.write((" {:<" + str(widths[i]) + "} |").format(r[i]))
             self.stdout.write("\n")
         self.stdout.write("\n")
@@ -58,7 +58,7 @@ class TableFormatter(object):
         width = max(map(lambda e: len(str(e)), headers))
 
         for row in rows:
-            for i in range(len(headers)):
+            for i in xrange(len(headers)):
                 self.stdout.write(("{:>" + str(width) + "}  {}\n").format(headers[i], row[i]))
             self.stdout.write("\n")
         self.stdout.write("\n")
