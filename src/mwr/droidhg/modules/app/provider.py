@@ -45,11 +45,11 @@ class Delete(Module, common.Provider):
 
     def add_arguments(self, parser):
         parser.add_argument("uri", nargs="?", help="the content provider uri to query")
-        parser.add_argument("--selection", dest="selection", default=None, metavar="<rows>")
-        parser.add_argument("--selection-args", action="append", dest="arguments", default=None, metavar="<arg>")
+        parser.add_argument("--selection", default=None, metavar="<rows>")
+        parser.add_argument("--selection-args", action="append", default=None, metavar="<arg>")
     
     def execute(self, arguments):
-        c = self.contentResolver().delete(argument.uri, argument.selection, argument.selection_args)
+        self.contentResolver().delete(arguments.uri, arguments.selection, arguments.selection_args)
 
         self.stdout.write("Done.\n\n")
 
