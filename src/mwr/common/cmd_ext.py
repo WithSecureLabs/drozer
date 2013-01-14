@@ -192,14 +192,15 @@ class Cmd(cmd.Cmd):
         """
         Process a command before it executes: perform variable substitutions and
         set up any output redirection.
-        """
+        """ 
 
         # perform Bash-style substitutions
         if line.find("!!") >= 0 or line.find("!$") >= 0 or line.find("!^") >= 0 or line.find("!*") >= 0:
             line = self.__do_substitutions(line)
 
+        parsed_line = shlex.split(line)
         # perform output stream redirection (as in the `tee` command)
-        if line.find(">") >= 0:
+        if ">" in parsed_line or ">>" in parsed_line:
             line = self.__redirect_output(line)
 
         return line
@@ -214,7 +215,7 @@ class Cmd(cmd.Cmd):
             mode = 'a'
         else:
             mode = 'w'
-
+        
         return system.Tee(console, destination.strip(), mode)
 
     def __do_substitutions(self, line):
@@ -241,8 +242,8 @@ class Cmd(cmd.Cmd):
         Set up output redirection, by building a Tee between stdout and the
         specified file.
         """
-
-        (line, destination) = line.split(">", 1)
+        
+        (line, destination) = line.rsplit(">", 1)
 
         if len(destination) > 0:
             try:
