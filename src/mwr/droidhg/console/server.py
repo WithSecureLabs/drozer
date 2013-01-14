@@ -93,7 +93,9 @@ class Server:
         while(True):
             response = self.receive()
 
-            if response.id == message_id:
+            if response == None:
+                raise RuntimeError('Received an empty response from the Agent. This normally means the remote service has crashed.')
+            elif response.id == message_id:
                 return response
 
     def startSession(self, device_id):
