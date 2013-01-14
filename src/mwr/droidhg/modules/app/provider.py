@@ -164,10 +164,10 @@ Finding content providers that do not require permissions to read/write:
 
     def execute(self, arguments):
         if arguments.package == None:
-            for package in self.packageManager().getPackages(common.PackageManager.GET_PROVIDERS):
+            for package in self.packageManager().getPackages(common.PackageManager.GET_PROVIDERS | common.PackageManager.GET_URI_PERMISSION_PATTERNS):
                 self.__get_providers(arguments, package)
         else:
-            package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PROVIDERS)
+            package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PROVIDERS | common.PackageManager.GET_URI_PERMISSION_PATTERNS)
 
             self.__get_providers(arguments, package)
 
@@ -210,8 +210,8 @@ Finding content providers that do not require permissions to read/write:
         if provider.uriPermissionPatterns != None:
             self.stdout.write("    Uri Permission Patterns:\n")
             for pattern in provider.uriPermissionPatterns:
-                self.stdout.write("      Path: %s\n" % permission.getPath())
-                self.stdout.write("        Type: %s\n" % Info.PatternMatcherTypes[int(permission.getType())])
+                self.stdout.write("      Path: %s\n" % pattern.getPath())
+                self.stdout.write("        Type: %s\n" % Info.PatternMatcherTypes[int(pattern.getType())])
         if provider.pathPermissions != None:
             self.stdout.write("    Path Permissions:\n")
             for permission in provider.pathPermissions:
