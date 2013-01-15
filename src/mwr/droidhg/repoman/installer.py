@@ -3,9 +3,25 @@ import os
 import re
 import zipfile
 
+from xml.etree import ElementTree as xml
+
 from mwr.common import fs
 from mwr.droidhg.repoman.remotes import Remote
 
+class ModuleInfo(object):
+    
+    def __init__(self, remote, name, description=None):
+        self.name = name
+        self.description = description
+        self.__remote = remote
+    
+    def matches(self, pattern):
+        return re.match(pattern, self.name)
+    
+    def __str__(self):
+        return self.name
+    
+        
 class ModuleInstaller(object):
     
     def __init__(self, repository):
@@ -53,8 +69,8 @@ class ModuleInstaller(object):
         """
         
         index = self.__get_combined_index()
-        
-        return sorted(filter(lambda m: re.match(".*" + module.replace("*", ".*") + ".*", m) != None, index))
+
+        return sorted(filter(lambda m: m.matches(".*" + module.replace("*", ".*") + ".*") != None, index), key=lambda m: m.name)
     
     def __create_package(self, package):
         """
@@ -97,10 +113,12 @@ class ModuleInstaller(object):
         index = set([])
         
         for url in Remote.all():
-            source = Remote.get(url).download("INDEX")
+            source = Remote.get(url).download("INDEX.xml")
             
             if source != None:
-                index = index.union(source.split("\n"))
+                modules = xml.fromstring(source)
+                
+                index = index.union(map(lambda m: ModuleInfo(url, m.attrib['name'], m.find("./description").text), modules.findall("./module")))
         
         return filter(lambda m: m != None and m != "", index)
 

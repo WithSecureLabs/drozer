@@ -3,6 +3,10 @@ import shutil
 import sys
 import zipfile
 
+from xml.etree import ElementTree as xml
+
+from mwr.common import fs
+
 class RepositoryBuilder(object):
     """
     RepositoryBuilder converts Python packages into Mercury module repositories.
@@ -30,17 +34,18 @@ class RepositoryBuilder(object):
         os.mkdir(self.target)
         
         print "Preparing INDEX file..."
-        index = open(os.path.sep.join([self.target, "INDEX"]), 'w')
+        index = xml.Element("repository")
         
         print "Writing modules..."
         for source in self.__find_sources():
             print "Processing %s (%s)..." % (source.name(), source.type())
             
             source.emit(self.target)
-            index.write("%s\n" % source.name())
+            
+            source.add_to_index(index)
         
-        print "Finishing INDEX file..."
-        index.close()
+        print "Generating INDEX file..."
+        xml.ElementTree(index).write(os.path.sep.join([self.target, "INDEX.xml"]))
         
         print "Done."
     
@@ -76,6 +81,14 @@ class Source(object):
         self.root = root
         self.path = path
     
+    def add_to_index(self, index):
+        module = xml.Element("module")
+        module.attrib["name"] = self.name()
+        description = xml.Element("description")
+        description.text = self.description()
+        module.append(description)
+        index.append(module)
+    
     def name(self):
         relative_path = self.path.endswith(".py") and self.path[len(self.root)+1:-3] or self.path[len(self.root)+1:]
         
@@ -83,6 +96,18 @@ class Source(object):
     
     
 class SourceFile(Source):
+    
+    def description(self):
+        delim = "\"\"\""
+        source = fs.read(self.path)
+        
+        if delim in source:
+            start_idx = source.index(delim) + len(delim)
+            finish_idx = source.index(delim, start_idx)
+            
+            return source[start_idx:finish_idx].strip()
+        else:
+            return ""
     
     def emit(self, target):
         shutil.copyfile(self.path, os.path.sep.join([target, self.name()]))
@@ -100,6 +125,9 @@ class SourcePackage(Source):
         Source.__init__(self, root, path)
         
         self.contents = contents
+    
+    def description(self):
+        return fs.read(os.path.join(self.path, ".mercury_package")).strip()
         
     def emit(self, target):
         archive = zipfile.ZipFile(os.path.sep.join([target, self.name()]), 'w')
