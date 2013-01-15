@@ -2,6 +2,13 @@
 A library of text handling functions.
 """
 
+def indent(text, prefix):
+    """
+    Add prefix to the beginning of all lines in text.
+    """
+    
+    return "\n".join(map(lambda l: "%s%s" % (prefix, l), text.split("\n")))
+    
 def wrap(text, width=80):
     """
     A word-wrap function that preserves existing line breaks and most spaces in
