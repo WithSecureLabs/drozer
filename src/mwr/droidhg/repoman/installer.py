@@ -143,7 +143,7 @@ class ModuleInstaller(object):
         if source == None:
             raise InstallError("Failed to get module for '%s'." % module)
         
-        return self.__unpack_module(os.path.basename(module), source)
+        return self.__unpack_module(os.path.basename(str(module)), source)
 
     def __read_local_module(self, module):
         """

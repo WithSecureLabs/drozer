@@ -76,7 +76,7 @@ class Remote(object):
         Build a full URL for a given path on this remote.
         """
         
-        return self.url + path
+        return self.url + str(path)
     
     def download(self, module):
         """
