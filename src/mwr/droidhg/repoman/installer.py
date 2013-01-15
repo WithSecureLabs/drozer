@@ -18,6 +18,15 @@ class ModuleInfo(object):
     def matches(self, pattern):
         return re.match(pattern, self.name)
     
+    def __eq__(self, other):
+        return other != None and str(self) == str(other)
+    
+    def __hash__(self):
+        return hash(self.name)
+    
+    def __ne__(self, other):
+        return other == None or str(self) != str(other)
+    
     def __str__(self):
         return self.name
     
