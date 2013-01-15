@@ -6,5 +6,6 @@
 build/*
 dist/*
 log/*.log
+obj
 src/mercury.egg-info
 mercury.log
