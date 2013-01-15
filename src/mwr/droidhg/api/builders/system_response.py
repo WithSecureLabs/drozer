@@ -115,8 +115,8 @@ class SystemResponseFactory:
 
         builder = SystemResponseFactory(Message.SystemResponse.SESSION_LIST)
 
-        for session in sessions:
-            builder.add_session(session)
+        #for session in sessions:
+        #    builder.add_session(session)
 
         return builder
 

@@ -95,15 +95,6 @@ class Console(cli.Base):
         print SystemResponseFormatter.format(response)
         
         self.__getServer(arguments).close()
-
-    def do_sessions(self, arguments):
-        """lists all active sessions on the Mercury server"""
-
-        response = self.__getServer(arguments).listSessions()
-
-        print SystemResponseFormatter.format(response)
-        
-        self.__getServer(arguments).close()
         
     def handle_error(self, throwable):
         """error handler: shows an exception message, before terminating"""
