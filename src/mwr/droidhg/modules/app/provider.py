@@ -344,7 +344,7 @@ class Update(Module, common.Provider):
     description = "Update the specified content provider URI"
     examples = """Updating, the assisted_gps_enabled setting:
 
-    mercury> run app.provider.query content://settings/secure
+    mercury> run app.provider.update content://settings/secure
                 --selection "name=?"
                 --selection-args assisted_gps_enabled
                 --integer value 0
