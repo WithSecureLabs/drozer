@@ -94,13 +94,19 @@ class Provider(object):
                     uris = uris.union(self.__search_package(package))
                 except ReflectionException as e:
                     if "java.util.zip.ZipException: unknown format" in e.message:
-                        self.stderr.write("Skipping package %s, because we cannot unzip it...")
+                        self.stderr.write("Skipping package %s, because we cannot unzip it..." % package.applicationInfo.packageName)
                     else:
                         raise
         else:
             package = self.packageManager().getPackageInfo(package, PackageManager.GET_PROVIDERS)
 
-            uris = uris.union(self.__search_package(package))
+            try:
+                uris = uris.union(self.__search_package(package))
+            except ReflectionException as e:
+                if "java.util.zip.ZipException: unknown format" in e.message:
+                    self.stderr.write("Skipping package %s, because we cannot unzip it..." % package.applicationInfo.packageName)
+                else:
+                    raise
 
         return uris
         
