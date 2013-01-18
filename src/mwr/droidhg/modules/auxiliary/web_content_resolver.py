@@ -4,8 +4,9 @@ import urlparse
 from BaseHTTPServer import BaseHTTPRequestHandler
 from BaseHTTPServer import HTTPServer
 
+from mwr.cinnibar.reflection import ReflectionException
+
 from mwr.droidhg.modules import common, Module
-from mwr.droidhg.reflection import ReflectionException
 
 class WebContentResolver(Module, common.PackageManager, common.Provider):
 

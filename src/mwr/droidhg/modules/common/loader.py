@@ -2,8 +2,9 @@ import binascii
 import hashlib
 import os
 
+from mwr.cinnibar.reflection.types import ReflectedPrimitive
+
 from mwr.droidhg.modules.base import Module
-from mwr.droidhg.reflection import ReflectedPrimitive
 
 class ClassLoader(object):
     """

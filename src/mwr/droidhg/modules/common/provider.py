@@ -1,5 +1,6 @@
+from mwr.cinnibar.reflection import ReflectionException
+
 from mwr.droidhg.modules.common.package_manager import PackageManager
-from mwr.droidhg.reflection import ReflectionException
 
 class Provider(object):
     """

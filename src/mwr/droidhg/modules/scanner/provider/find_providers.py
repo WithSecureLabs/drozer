@@ -1,5 +1,6 @@
+from mwr.cinnibar.reflection import ReflectionException
+
 from mwr.droidhg.modules import common, Module
-from mwr.droidhg.reflection import ReflectionException
 
 class FindUris(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 

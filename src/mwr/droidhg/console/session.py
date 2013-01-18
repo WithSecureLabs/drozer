@@ -6,6 +6,8 @@ import sys
 import textwrap
 import traceback
 
+from mwr.cinnibar.reflection import Reflector
+
 from mwr.common import cmd_ext as cmd
 from mwr.common import console
 from mwr.common.list import flatten
@@ -15,7 +17,6 @@ from mwr.common.text import wrap
 from mwr.droidhg.api.protobuf_pb2 import Message
 from mwr.droidhg.console.sequencer import Sequencer
 from mwr.droidhg.modules import common, Module
-from mwr.droidhg.reflection import Reflector
 from mwr.droidhg.repoman import ModuleManager
 
 class Session(cmd.Cmd):

@@ -3,9 +3,10 @@ import os
 import sys
 import time
 
+from mwr.cinnibar.reflection.types import ReflectedType
+
 from mwr.common import console
 from mwr.common.text import wrap
-from mwr.droidhg.reflection import ReflectedType
 from mwr.droidhg.repoman import Repository
 
 class ImportConflictResolver(object):
