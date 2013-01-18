@@ -1,7 +1,7 @@
 from mwr.cinnibar.api.builders import ReflectionResponseFactory
+from mwr.cinnibar.api.protobuf_pb2 import Message
 
 from mwr.droidhg import Sessions
-from mwr.droidhg.api.protobuf_pb2 import Message
 from mwr.droidhg.device import DeviceGoneAway
 
 class ReflectionRequestForwarder:

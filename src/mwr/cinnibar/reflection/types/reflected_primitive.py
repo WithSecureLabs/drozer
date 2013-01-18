@@ -1,7 +1,6 @@
+from mwr.cinnibar.api.protobuf_pb2 import Message
 from mwr.cinnibar.reflection.reflection_exception import ReflectionException
 from mwr.cinnibar.reflection.types.reflected_type import ReflectedType
-
-from mwr.droidhg.api.protobuf_pb2 import Message
 
 class ReflectedPrimitive(ReflectedType):
     """

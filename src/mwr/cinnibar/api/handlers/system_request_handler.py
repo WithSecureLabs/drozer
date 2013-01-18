@@ -1,7 +1,6 @@
 from mwr.cinnibar.api.invalid_message_exception import InvalidMessageException
+from mwr.cinnibar.api.protobuf_pb2 import Message
 from mwr.cinnibar.api.unexpected_message_exception import UnexpectedMessageException
-
-from mwr.droidhg.api.protobuf_pb2 import Message
 
 class SystemRequestHandler(object):
     """

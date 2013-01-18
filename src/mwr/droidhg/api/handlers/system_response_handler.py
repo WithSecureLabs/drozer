@@ -3,8 +3,9 @@ try:
 except ImportError:
     pass
 
-from mwr.cinnibar.api.builders import SystemResponseFactory
 from mwr.cinnibar.api import handlers, UnexpectedMessageException
+from mwr.cinnibar.api.builders import SystemResponseFactory
+from mwr.cinnibar.api.protobuf_pb2 import Message
 
 class SystemResponseHandler(handlers.SystemResponseHandler):
     """

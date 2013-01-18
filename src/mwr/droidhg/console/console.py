@@ -2,9 +2,11 @@ import argparse
 import getpass
 import sys
 
+from mwr.cinnibar.api.protobuf_pb2 import Message
+
 from mwr.common import cli
+
 from mwr.droidhg.api.formatters import SystemResponseFormatter
-from mwr.droidhg.api.protobuf_pb2 import Message
 from mwr.droidhg.console.server import Server
 from mwr.droidhg.console.session import Session, DebugSession
 

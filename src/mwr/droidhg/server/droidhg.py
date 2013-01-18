@@ -1,10 +1,12 @@
 from logging import getLogger
 from time import time
 
+from mwr.cinnibar.api.protobuf_pb2 import Message
+
 from mwr.common.twisted import StreamReceiver
+
 from mwr.droidhg.api.frame import Frame
 from mwr.droidhg.api.handlers import *
-from mwr.droidhg.api.protobuf_pb2 import Message
 
 class FrameReceiver(StreamReceiver):
     """

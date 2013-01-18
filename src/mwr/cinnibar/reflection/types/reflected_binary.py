@@ -1,10 +1,9 @@
 import base64
 
+from mwr.cinnibar.api.protobuf_pb2 import Message
 from mwr.cinnibar.reflection.reflection_exception import ReflectionException
 from mwr.cinnibar.reflection.types.reflected_type import ReflectedType
 from mwr.cinnibar.reflection.types.reflected_string import ReflectedString
-
-from mwr.droidhg.api.protobuf_pb2 import Message
 
 class ReflectedBinary(ReflectedString):
     
