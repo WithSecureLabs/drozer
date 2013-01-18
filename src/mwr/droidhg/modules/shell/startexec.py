@@ -11,7 +11,7 @@ class Start(Module, common.ClassLoader, common.Shell):
     path = ["shell"]
 
     def add_arguments(self, parser):
-      pass
+        pass
 
     def execute(self, arguments):
         self.shellStart()
@@ -27,7 +27,7 @@ class Exec(Module, common.ClassLoader, common.Shell):
     path = ["shell"]
 
     def add_arguments(self, parser):
-      parser.add_argument("command", nargs='?', help="the Linux command to execute")
+        parser.add_argument("command", nargs='?', help="the Linux command to execute")
 
     def execute(self, arguments):
         if arguments.command == None:
