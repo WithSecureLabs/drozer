@@ -2,9 +2,9 @@ import socket
 import ssl
 import sys
 
+from mwr.cinnibar.api import Frame
 from mwr.cinnibar.api.builders import SystemRequestFactory
 
-from mwr.droidhg.api.frame import Frame
 from mwr.droidhg.ssl.provider import Provider
 
 class Server:
