@@ -1,4 +1,5 @@
-from mwr.droidhg.api.builders import SystemRequestFactory
+from mwr.cinnibar.api.builders import SystemRequestFactory
+
 from mwr.droidhg.session import Sessions
 
 class Device:

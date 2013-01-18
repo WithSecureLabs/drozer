@@ -3,8 +3,9 @@ try:
 except ImportError:
     pass
 
+from mwr.cinnibar.api.builders import SystemResponseFactory
+
 from mwr.droidhg import Devices, Sessions
-from mwr.droidhg.api.builders import SystemResponseFactory
 from mwr.droidhg.api.protobuf_pb2 import Message
 
 class SystemRequestHandler:

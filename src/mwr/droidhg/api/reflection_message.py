@@ -1,5 +1,6 @@
+from mwr.cinnibar.api.builders import ReflectionResponseFactory
+
 from mwr.droidhg import Sessions
-from mwr.droidhg.api.builders import ReflectionResponseFactory
 from mwr.droidhg.api.protobuf_pb2 import Message
 from mwr.droidhg.device import DeviceGoneAway
 

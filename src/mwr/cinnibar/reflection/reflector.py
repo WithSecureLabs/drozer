@@ -1,8 +1,8 @@
-from mwr.droidhg.api.builders import ReflectionRequestFactory
-from mwr.droidhg.api.protobuf_pb2 import Message
-
+from mwr.cinnibar.api.builders import ReflectionRequestFactory
 from mwr.cinnibar.reflection import ReflectionException
 from mwr.cinnibar.reflection.types import ReflectedType
+
+from mwr.droidhg.api.protobuf_pb2 import Message
 
 class Reflector:
     """
