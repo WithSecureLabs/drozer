@@ -7,7 +7,7 @@ from mwr.cinnibar.api.protobuf_pb2 import Message
 from mwr.common import cli
 
 from mwr.droidhg.api.formatters import SystemResponseFormatter
-from mwr.droidhg.console.server import Server
+from mwr.droidhg.connector import ServerConnector
 from mwr.droidhg.console.session import Session, DebugSession
 
 class Console(cli.Base):
@@ -45,7 +45,7 @@ class Console(cli.Base):
 
         device = self.__get_device(arguments)
         
-        server = self.__getServer(arguments)
+        server = self.__getServerConnector(arguments)
         response = server.startSession(device, password)
         
         if response.type == Message.SYSTEM_RESPONSE and\
@@ -72,31 +72,31 @@ class Console(cli.Base):
             finally:
                 session.do_exit("")
                 
-            self.__getServer(arguments).close()
+            self.__getServerConnector(arguments).close()
         else:
             print "error:", response.system_response.error_message
             
-            self.__getServer(arguments).close()
+            self.__getServerConnector(arguments).close()
 
             sys.exit(-1)
 
     def do_devices(self, arguments):
         """lists all devices bound to the Mercury server"""
 
-        response = self.__getServer(arguments).listDevices()
+        response = self.__getServerConnector(arguments).listDevices()
 
         print SystemResponseFormatter.format(response)
 
-        self.__getServer(arguments).close()
+        self.__getServerConnector(arguments).close()
 
     def do_disconnect(self, arguments):
         """disconnects a Mercury session"""
 
-        response = self.__getServer(arguments).stopSession(arguments.device)
+        response = self.__getServerConnector(arguments).stopSession(arguments.device)
 
         print SystemResponseFormatter.format(response)
         
-        self.__getServer(arguments).close()
+        self.__getServerConnector(arguments).close()
         
     def handle_error(self, throwable):
         """error handler: shows an exception message, before terminating"""
@@ -114,7 +114,7 @@ class Console(cli.Base):
         """
 
         if arguments.device == None:
-            devices = self.__getServer(arguments).listDevices().system_response.devices
+            devices = self.__getServerConnector(arguments).listDevices().system_response.devices
 
             if len(devices) == 1:
                 device = devices[0].id
@@ -133,13 +133,13 @@ class Console(cli.Base):
         else:
             return arguments.device
 
-    def __getServer(self, arguments):
+    def __getServerConnector(self, arguments):
         """
         Get a Server object which provides a connection to the selected server.
         """
 
         if self.__server == None:
-            self.__server = Server(arguments, self.__manage_trust)
+            self.__server = ServerConnector(arguments, self.__manage_trust)
 
         return self.__server
     

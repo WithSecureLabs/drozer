@@ -1,5 +1,7 @@
 
 __all__ = [ "api",
+            "handlers",
+            "transport",
             "Frame",
             "InvalidMessageException",
             "UnexpectedMessageException" ]
