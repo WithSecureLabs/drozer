@@ -10,7 +10,7 @@ def find_libs(src):
         for filename in fnmatch.filter(dirnames, 'libs'):
             matches.extend(glob.glob(os.path.join(root, filename, "*", "*")))
 
-    return matches
+    return map(lambda fn: os.path.basename(fn), matches)
     
 setuptools.setup(
   name = "mercury",
