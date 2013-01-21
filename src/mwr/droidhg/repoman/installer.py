@@ -9,6 +9,10 @@ from mwr.common import fs
 from mwr.droidhg.repoman.remotes import Remote
 
 class ModuleInfo(object):
+    """
+    ModuleInfo encapsulates the name and human-readable description of a module
+    that has been discovered on a remote.
+    """
     
     def __init__(self, remote, name, description=None):
         self.name = name
@@ -16,6 +20,10 @@ class ModuleInfo(object):
         self.__remote = remote
     
     def matches(self, pattern):
+        """
+        True, if the given regex pattern matches the module name.
+        """
+        
         return re.match(pattern, self.name)
     
     def __eq__(self, other):
@@ -32,6 +40,10 @@ class ModuleInfo(object):
     
         
 class ModuleInstaller(object):
+    """
+    ModuleInstaller encapsulates methods for installing new modules from the local
+    filesystem, or a remote module repository.
+    """
     
     def __init__(self, repository):
         self.repository = repository
@@ -176,7 +188,7 @@ class ModuleInstaller(object):
         
         We use the inferred path from the module name to create a package structure
         and either write Python source into the last segment, as a module, or
-        unzip a zip file into that folder
+        unzip a zip file into that folder.
         """
         
         # we test for the presence of a zip header in the source, which we *should*
@@ -244,7 +256,15 @@ class ModuleInstaller(object):
         return True
             
 class InstallError(Exception):
+    """
+    Raised if there was a problem installing a module.
+    """
+    
     pass
 
 class AlreadyInstalledError(InstallError):
+    """
+    Raised if a requested module is already installed.
+    """
+    
     pass

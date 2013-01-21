@@ -15,6 +15,10 @@ class FrameReceiver(StreamReceiver):
 
     Once a frame is ready, it is passed to the frameReceived() method.
     """
+    
+    def __init__(self, *args, **kwargs):
+        pass
+        #StreamReceiver.__init__(self, *args, **kwargs)
 
     def connectionMade(self):
         """
@@ -53,6 +57,15 @@ class DroidHG(FrameReceiver):
     __logger = getLogger(__name__ + '.droidhg')
     
     name = 'droidhg'
+    
+    device = None
+    request_forwarder = None
+    request_handler = None
+    response_forwarder = None
+    response_handler = None
+    
+    def __init__(self, *args, **kwargs):
+        FrameReceiver.__init__(self, *args, **kwargs)
     
     def connectionMade(self):
         """

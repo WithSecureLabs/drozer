@@ -1,11 +1,4 @@
-try:
-    from twisted.internet import reactor
-except ImportError:
-    pass
-
 from mwr.cinnibar.api import handlers, UnexpectedMessageException
-from mwr.cinnibar.api.builders import SystemResponseFactory
-from mwr.cinnibar.api.protobuf_pb2 import Message
 
 class SystemResponseHandler(handlers.SystemResponseHandler):
     """
@@ -15,12 +8,22 @@ class SystemResponseHandler(handlers.SystemResponseHandler):
     """
 
     def __init__(self, connection):
+        handlers.SystemResponseHandler.__init__(self)
+        
         self.connection = connection
 
     def bound(self, message):
+        """
+        We do not expect to receive a BOUND message.
+        """
+        
         raise UnexpectedMessageException(message.system_response.type)
     
     def device_list(self, message):
+        """
+        We do not expect to receive a DEVICE_LIST response message.
+        """
+        
         raise UnexpectedMessageException(message.system_response.type)
 
     def pong(self, message):
@@ -34,6 +37,10 @@ class SystemResponseHandler(handlers.SystemResponseHandler):
             self.connection.device.pong(message.id)
             
     def session_id(self, message):
+        """
+        We do not expect to receive a SESSION_ID message.
+        """
+        
         raise UnexpectedMessageException(message.system_response.type)
             
     def session_list(self, message):
@@ -46,5 +53,9 @@ class SystemResponseHandler(handlers.SystemResponseHandler):
             self.connection.device.sessionList(message)
     
     def unbound(self, message):
+        """
+        We do not expect to receive an UNBOUND message.
+        """
+        
         raise UnexpectedMessageException(message.system_response.type)
         

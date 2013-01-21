@@ -110,11 +110,18 @@ class Remote(object):
             
         
 class FakeSocket(StringIO.StringIO):
+    """
+    FakeSocket is used to interface between urllib2 and httplib, which aren't
+    totally compatible.
+    """
     
     def makefile(self, *args, **kwargs):
         return self
     
 class UnknownRemote(Exception):
+    """
+    Raised if a Remote is specified that isn't in the configuration.
+    """
     
     def __init__(self, url):
         Exception.__init__(self)

@@ -1,1 +1,1 @@
-from system_response import SystemResponseFormatter
+from mwr.droidhg.api.formatters.system_response import SystemResponseFormatter

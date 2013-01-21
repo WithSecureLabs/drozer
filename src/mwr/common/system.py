@@ -3,6 +3,11 @@ import os
 from mwr.common.stream import DecolouredStream
 
 def which(executable):
+    """
+    Implementation of the *nix `which` command, to find an executable on the
+    current PATH.
+    """
+    
     for path in os.getenv("PATH", "").split(os.pathsep):
         trial = os.path.join(path, executable)
         

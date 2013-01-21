@@ -1,4 +1,4 @@
 
 __all__ = [ "ServerConnector" ]
 
-from server_connector import ServerConnector
+from mwr.droidhg.connector.server_connector import ServerConnector

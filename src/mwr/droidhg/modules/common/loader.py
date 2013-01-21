@@ -40,10 +40,10 @@ class ClassLoader(object):
         Load a Class from a local apk file (source) on the running Dalvik VM.
         """
         
-        if not ".".join([source, klass]) in Module._Module__klasses:
-            Module._Module__klasses[".".join([source, klass])] = self.getClassLoader(source, relative_to=relative_to).loadClass(klass)
+        if not Module.cached_klass(".".join([source, klass])):
+            Module.cache_klass(".".join([source, klass]), self.getClassLoader(source, relative_to=relative_to).loadClass(klass))
             
-        return Module._Module__klasses[".".join([source, klass])]
+        return Module.get_cached_klass(".".join([source, klass]))
 
     def __getCachePath(self):
         """

@@ -1,7 +1,6 @@
 import os
 import OpenSSL
 import random
-import string
 
 from mwr.common import fs, system
 
@@ -9,6 +8,10 @@ from mwr.droidhg.configuration import Configuration
 from mwr.droidhg.ssl import ca
 
 class Provider(object):
+    """
+    Wraps the CA object provided by this package, to provide a DSL around key and
+    certificate operations.
+    """
     
     def __init__(self):
         self.authority = ca.CA()
@@ -168,7 +171,7 @@ class Provider(object):
         """
         
         if export_password == None:
-            export_password = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(12))
+            export_password = ''.join(random.choice(list("abcdefghijklmnopqrstuvwxyz01234556789")) for x in range(12))
         
         pkcs12 = OpenSSL.crypto.PKCS12()
         pkcs12.set_friendlyname("mercury")

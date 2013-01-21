@@ -3,7 +3,7 @@ try:
 except ImportError:
     pass
 
-from mwr.cinnibar.api import handlers, UnexpectedMessageException
+from mwr.cinnibar.api import handlers
 from mwr.cinnibar.api.builders import SystemResponseFactory
 from mwr.cinnibar.api.protobuf_pb2 import Message
 
@@ -19,6 +19,8 @@ class SystemRequestHandler(handlers.SystemRequestHandler):
     """
     
     def __init__(self, connection):
+        handlers.SystemRequestHandler.__init__(self)
+        
         self.connection = connection
     
     def bindDevice(self, message):

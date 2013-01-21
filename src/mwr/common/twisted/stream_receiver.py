@@ -10,6 +10,11 @@ class StreamReceiver(Protocol):
     the implementation, which can choose to consume some of the data.
     """
     
+    stream = None
+    
+    def __init__(self):
+        pass
+    
     def connectionMade(self):
         """
         Called when a connection is received to the StreamReceiver. This

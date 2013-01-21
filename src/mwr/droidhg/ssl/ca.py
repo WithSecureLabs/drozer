@@ -1,6 +1,10 @@
 import OpenSSL
 
 class CA(object):
+    """
+    CA represents a Certification Authority, capable of signing X509 certificates
+    for use with SSL.
+    """
     
     KEY_LENGTH = 2048
     
@@ -142,4 +146,9 @@ class CA(object):
         
         
 class NoKeyMaterialError(Exception):
+    """
+    Raised by CA if it is asked to perform signing operations with no valid CA key
+    material.
+    """
+    
     pass

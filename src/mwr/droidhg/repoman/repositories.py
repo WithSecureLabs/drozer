@@ -103,6 +103,9 @@ class Repository(object):
         
 
 class NotEmptyException(Exception):
+    """
+    Raised if a new repository path already exists on the filesystem.
+    """
     
     def __init__(self, path):
         Exception.__init__(self)
@@ -114,6 +117,9 @@ class NotEmptyException(Exception):
     
     
 class UnknownRepository(Exception):
+    """
+    Raised if the specified repository is not in the configuration.
+    """
     
     def __init__(self, path):
         Exception.__init__(self)

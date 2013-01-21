@@ -79,19 +79,66 @@ class Intent(object):
 
         intent = module.new("android.content.Intent")
 
+        self.__add_action_to(intent, module)
+        self.__add_category_to(intent, module)
+        self.__add_component_to(intent, module)
+        self.__add_data_uri_to(intent, module)
+        self.__add_extras_to(intent, module)
+        self.__add_flags_to(intent, module)
+        self.__add_type_to(intent, module)
+
+        return intent
+
+    def isValid(self):
+        """
+        Determine whether an Intent is valid: it must have an action or a
+        component.
+        """
+
+        return self.action != None or self.component != None
+    
+    def __add_action_to(self, intent, context):
+        """
+        Set the ACTION of intent, iff we have a value to set.
+        """
+        
         if self.action != None:
             intent.setAction(self.action)
+    
+    def __add_category_to(self, intent, context):
+        """
+        Set the CATEGORY of intent, iff we have a value to set.
+        """
+        
         if self.category != None:
             intent.addCategory(self.category)
+    
+    def __add_component_to(self, intent, context):
+        """
+        Set the COMPONENT of intent, iff we have a value to set.
+        """
+        
         if self.component != None:
-            com = module.new("android.content.ComponentName", *self.component)
+            com = context.new("android.content.ComponentName", *self.component)
             # pass the built ComponentName to the intent
             intent.setComponent(com)
+    
+    def __add_data_uri_to(self, intent, context):
+        """
+        Set the DATA of intent as a Uri, iff we have a value to set.
+        """
+        
         if self.data_uri != None:
-            uri = module.klass("android.net.Uri")
+            uri = context.klass("android.net.Uri")
             intent.setData(uri.parse(self.data_uri))
+
+    def __add_extras_to(self, intent, context):
+        """
+        Set the EXTRAS of intent, iff we have a value to set.
+        """
+        
         if self.extras != None:
-            extras = module.new("android.os.Bundle")
+            extras = context.new("android.os.Bundle")
 
             for extra in self.extras:
                 if extra[0] == "boolean":
@@ -116,21 +163,22 @@ class Intent(object):
                     extras.putParcelable(extra[1], extra[2])
 
             intent.putExtras(extras)
+            
+    def __add_flags_to(self, intent, context):
+        """
+        Set the FLAGS of intent, iff we have a value to set.
+        """
         if self.flags != None:
             intent.setFlags(self.__build_flags(self.flags))
+    
+    def __add_type_to(self, intent, context):
+        """
+        Set the TYPE of intent, iff we have a value to set.
+        """
+        
         if self.mimetype != None:
             intent.setType(self.mimetype)
-
-        return intent
-
-    def isValid(self):
-        """
-        Determine whether an Intent is valid: it must have an action or a
-        component.
-        """
-
-        return self.action != None or self.component != None
-
+            
     def __build_flags(self, flags):
         """
         Take arguments passed as flags, and combine them to form the integer

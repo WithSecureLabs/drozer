@@ -1,1 +1,1 @@
-from base import Module
+from mwr.droidhg.modules.base import Module

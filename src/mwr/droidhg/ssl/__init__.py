@@ -1,1 +1,1 @@
-from ssl_manager import SSLManager
+from mwr.droidhg.ssl.ssl_manager import SSLManager
