@@ -192,12 +192,12 @@ class Module(object):
 
         parser.description = self.__description()
         parser.usage = self.__usage(parser)
-        
-        arguments = parser.parse_args(args)
 
-        if(arguments.help):
+        if "-h" in args or "--help" in args:
             return parser.print_help()
         else:
+            arguments = parser.parse_args(args)
+            
             if hasattr(self, 'execute'):
                 result = self.execute(arguments)
             else:

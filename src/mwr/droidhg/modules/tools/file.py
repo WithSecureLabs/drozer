@@ -11,8 +11,8 @@ class Download(Module, common.ClassLoader, common.FileSystem):
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
-        parser.add_argument("source", nargs="?")
-        parser.add_argument("destination", nargs="?")
+        parser.add_argument("source")
+        parser.add_argument("destination")
 
     def complete(self, text, line, begidx, endidx):
         if not " " in line or begidx < line.index(" "):
@@ -39,7 +39,7 @@ class Size(Module, common.FileSystem):
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
-        parser.add_argument("target", nargs="?")
+        parser.add_argument("target")
 
     def complete(self, text, line, begidx, endidx):
         return common.path_completion.on_agent(text)
@@ -66,7 +66,7 @@ class MD5Sum(Module, common.ClassLoader, common.FileSystem):
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
-        parser.add_argument("target", nargs="?")
+        parser.add_argument("target")
 
     def complete(self, text, line, begidx, endidx):
         return common.path_completion.on_agent(text)
@@ -90,8 +90,8 @@ class Upload(Module, common.ClassLoader, common.FileSystem):
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
-        parser.add_argument("source", nargs="?")
-        parser.add_argument("destination", nargs="?")
+        parser.add_argument("source")
+        parser.add_argument("destination")
 
     def complete(self, text, line, begidx, endidx):
         if not " " in line or begidx < line.index(" "):
