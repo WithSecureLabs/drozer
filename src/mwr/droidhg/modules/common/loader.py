@@ -3,6 +3,7 @@ import hashlib
 import os
 
 from mwr.cinnibar.reflection.types import ReflectedPrimitive
+from mwr.common import fs
 
 from mwr.droidhg.modules.base import Module
 
@@ -20,20 +21,23 @@ class ClassLoader(object):
 
         source = self.__getSource(source_or_relative_path, relative_to=relative_to)
 
-        path = self.__getCachePath()
-        file_name = binascii.hexlify(hashlib.md5(source).digest()) + ".apk"
-        file_path = "/".join([path, file_name])
-
-        file_io = self.new("java.io.File", file_path)
-
-        if file_io.exists() != True or file_io.length() != len(source):
-            source_data = [ReflectedPrimitive("byte", (ord(i) if ord(i) < 128 else ord(i) - 0x100), reflector=self.reflector()) for i in source]
-
-            file_stream = self.new("java.io.FileOutputStream", file_path)
-            file_stream.write(source_data, 0, len(source_data))
-            file_stream.close()
-        
-        return self.new('dalvik.system.DexClassLoader', file_path, path, None, self.klass('java.lang.ClassLoader').getSystemClassLoader())
+        if source != None:
+            path = self.__getCachePath()
+            file_name = binascii.hexlify(hashlib.md5(source).digest()) + ".apk"
+            file_path = "/".join([path, file_name])
+    
+            file_io = self.new("java.io.File", file_path)
+    
+            if file_io.exists() != True or file_io.length() != len(source):
+                source_data = [ReflectedPrimitive("byte", (ord(i) if ord(i) < 128 else ord(i) - 0x100), reflector=self.reflector()) for i in source]
+    
+                file_stream = self.new("java.io.FileOutputStream", file_path)
+                file_stream.write(source_data, 0, len(source_data))
+                file_stream.close()
+            
+            return self.new('dalvik.system.DexClassLoader', file_path, path, None, self.klass('java.lang.ClassLoader').getSystemClassLoader())
+        else:
+            raise RuntimeError("Mercury could not find or compile the extension library %s.\n" % os.path.basename(source_or_relative_path))
 
     def loadClass(self, source, klass, relative_to=None):
         """
@@ -56,6 +60,8 @@ class ClassLoader(object):
         """
         Get source, either from an apk file or passed directly.
         """
+        
+        source = None
 
         if source_or_relative_path.endswith(".apk"):
             if relative_to == None:
@@ -65,15 +71,8 @@ class ClassLoader(object):
                 
             apk_path = os.path.join(relative_to, *source_or_relative_path.split("/"))
             
-            file_handle = open(apk_path, 'rb')
-            data = file_handle.read()
-            source = data
-            
-            while data != "":
-                data = file_handle.read()
-                source += data
-
-            file_handle.close()
+            if os.path.exists(apk_path):
+                source = fs.read(apk_path)
         else:
             source = source_or_relative_path
 
