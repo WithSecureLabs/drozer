@@ -3,6 +3,7 @@ import hashlib
 import os
 
 from mwr.cinnibar.reflection.types import ReflectedPrimitive
+from mwr.cinnibar.reflection.utils import ClassBuilder
 from mwr.common import fs
 
 from mwr.droidhg.modules.base import Module
@@ -70,9 +71,12 @@ class ClassLoader(object):
                 relative_to = os.path.dirname(relative_to)
                 
             apk_path = os.path.join(relative_to, *source_or_relative_path.split("/"))
+            java_path = apk_path.replace(".apk", ".java")
             
             if os.path.exists(apk_path):
                 source = fs.read(apk_path)
+            elif os.path.exists(java_path):
+                source = ClassBuilder(java_path).build()
         else:
             source = source_or_relative_path
 
