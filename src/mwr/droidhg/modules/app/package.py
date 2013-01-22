@@ -18,7 +18,7 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
     path = ["app", "package"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package", nargs='?', help="the identifier of the package to inspect")
+        parser.add_argument("package", help="the identifier of the package to inspect")
 
     def execute(self, arguments):
         if arguments.package != None:
@@ -145,7 +145,7 @@ class LaunchIntent(Module, common.PackageManager):
     path = ["app", "package"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package", nargs='?', help="the identifier of the package to inspect")
+        parser.add_argument("package", help="the identifier of the package to inspect")
 
     def execute(self, arguments):
         intent = self.packageManager().getLaunchIntentForPackage(arguments.package)
@@ -204,7 +204,7 @@ class Manifest(Module, common.Assets, common.ClassLoader):
     path = ["app", "package"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package", nargs='?')
+        parser.add_argument("package", help="the identifier of the package")
 
     def execute(self, arguments):
         if arguments.package == None or arguments.package == "":

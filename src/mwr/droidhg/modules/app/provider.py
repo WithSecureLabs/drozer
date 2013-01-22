@@ -16,7 +16,7 @@ class Columns(Module, common.Provider, common.TableFormatter):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs='?', help="the content provider uri to query")
+        parser.add_argument("uri", help="the content provider uri to query")
 
     def execute(self, arguments):
         c = self.contentResolver().query(arguments.uri)
@@ -44,7 +44,7 @@ class Delete(Module, common.Provider):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider uri to query")
+        parser.add_argument("uri", help="the content provider uri to query")
         parser.add_argument("--selection", default=None, metavar="<rows>")
         parser.add_argument("--selection-args", action="append", default=None, metavar="<arg>")
     
@@ -67,8 +67,8 @@ class Download(Module, common.ClassLoader, common.Provider):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider URI to read a file through")
-        parser.add_argument("destination", nargs="?")
+        parser.add_argument("uri", help="the content provider URI to read a file through")
+        parser.add_argument("destination", help="path to save the downloaded file to")
 
     def complete(self, text, line, begidx, endidx):
         if not " " in line or begidx < line.index(" "):
@@ -103,7 +103,7 @@ class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManag
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package", nargs='?', help="the package to search for content provider uris")
+        parser.add_argument("package", help="the package to search for content provider uris")
 
     def execute(self, arguments):
         for (path, content_uris) in self.findContentUris(arguments.package):
@@ -236,7 +236,7 @@ class Insert(Module, common.Provider):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider uri to insert into")
+        parser.add_argument("uri", help="the content provider uri to insert into")
         parser.add_argument('--boolean', action="append", nargs=2, metavar=('column', 'data'))
         parser.add_argument('--double', action="append", nargs=2, metavar=('column', 'data'))
         parser.add_argument('--float', action="append", nargs=2, metavar=('column', 'data'))
@@ -302,7 +302,7 @@ Querying, with a WHERE clause in the SELECT statement:
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider uri to query")
+        parser.add_argument("uri", help="the content provider uri to query")
         parser.add_argument("--projection", default=None, metavar="<column>", nargs="*")
         parser.add_argument("--selection", default=None, metavar="<rows>")
         parser.add_argument("--selection-args", default=None, metavar="<arg>", nargs="*")
@@ -333,7 +333,7 @@ class Read(Module, common.ClassLoader, common.Provider):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider URI to read a file through")
+        parser.add_argument("uri", help="the content provider URI to read a file through")
 
     def execute(self, arguments):
         self.stdout.write(self.contentResolver().read(arguments.uri) + "\n")
@@ -355,7 +355,7 @@ class Update(Module, common.Provider):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider uri to update in")
+        parser.add_argument("uri", help="the content provider uri to update in")
         parser.add_argument("--selection", dest="selection", default=None, metavar="<rows>")
         parser.add_argument("--selection-args", default=None, metavar="<arg>", nargs="*")
         parser.add_argument('--boolean', action="append", nargs=2, metavar=('column', 'data'))
