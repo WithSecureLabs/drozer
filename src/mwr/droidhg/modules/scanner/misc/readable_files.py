@@ -11,7 +11,7 @@ class ReadableFiles(Module, common.BusyBox, common.ClassLoader, common.FileSyste
     path = ["scanner", "misc"]
     
     def add_arguments(self, parser):
-        parser.add_argument("target", default="/dev", help="the target directory to search", nargs="?")
+        parser.add_argument("--target", default="/dev", help="the target directory to search")
 
     def execute(self, arguments):
         if self.isBusyBoxInstalled():

@@ -12,7 +12,7 @@ class WebContentResolver(Module, common.PackageManager, common.Provider):
 
     name = "Start a web service interface to content providers."
     description = "Start a Web Service interface to Content Providers. This allows you to use web application testing capabilities and tools to test content providers."
-    examples = """mercury> run auxiliary.webcontentresolver [PORT]
+    examples = """mercury> run auxiliary.webcontentresolver --port 8080
 
     WebContentResolver started on port 8080.
     Ctrl+C to Stop"""
@@ -22,7 +22,7 @@ class WebContentResolver(Module, common.PackageManager, common.Provider):
     path = ["auxiliary"]
 
     def add_arguments(self, parser):
-        parser.add_argument("port", default=8080, help="the port to start the WebContentResolver on", nargs='?')
+        parser.add_argument("-p", "--port", default=8080, help="the port to start the WebContentResolver on")
     
     def execute(self, arguments):
         try:

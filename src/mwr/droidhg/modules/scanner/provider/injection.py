@@ -13,7 +13,7 @@ class Injection(Module, common.ClassLoader, common.FileSystem, common.PackageMan
     path = ["scanner", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package_or_uri", help="specify a package to search", metavar="package or uri", nargs="?")
+        parser.add_argument("-a", "--package", "--uri", dest="package_or_uri", help="specify a package, or content uri to search", metavar="<package or uri>")
         
     def execute(self, arguments):
         vulnerable = { 'projection': set([]), 'selection': set([]), 'uris': set([]) }

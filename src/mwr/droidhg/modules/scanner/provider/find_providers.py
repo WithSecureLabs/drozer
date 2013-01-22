@@ -13,7 +13,7 @@ class FindUris(Module, common.ClassLoader, common.FileSystem, common.PackageMana
     path = ["scanner", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package", help="specify a package to search for content uris", nargs="?")
+        parser.add_argument("-a", "--package", help="specify a package to search")
     
     def execute(self, arguments):
         accessible_uris = set([])
