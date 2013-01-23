@@ -94,6 +94,11 @@ class Start(Module):
             self.getContext().startService(intent.buildIn(self))
         else:
             self.stderr.write("invalid intent: one of action or component must be set\n")
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest in ["action", "category", "component", "data_uri",
+                           "extras", "flags", "mimetype"]:
+            return android.Intent.get_completion_suggestions(action, text, **kwargs)
 
 class Stop(Module):
 
@@ -115,3 +120,8 @@ class Stop(Module):
             self.getContext().stopService(intent.buildIn(self))
         else:
             self.stderr.write("invalid intent: one of action or component must be set\n")
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest in ["action", "category", "component", "data_uri",
+                           "extras", "flags", "mimetype"]:
+            return android.Intent.get_completion_suggestions(action, text, **kwargs)

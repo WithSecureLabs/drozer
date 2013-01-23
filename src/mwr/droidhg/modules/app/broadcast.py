@@ -108,4 +108,9 @@ class Send(Module):
             self.getContext().sendBroadcast(intent.buildIn(self))
         else:
             self.stderr.write("invalid intent: one of action or component must be set")
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest in ["action", "category", "component", "data_uri",
+                           "extras", "flags", "mimetype"]:
+            return android.Intent.get_completion_suggestions(action, text, **kwargs)
             
