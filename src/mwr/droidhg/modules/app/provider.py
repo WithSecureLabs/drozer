@@ -45,8 +45,8 @@ class Delete(Module, common.Provider):
 
     def add_arguments(self, parser):
         parser.add_argument("uri", help="the content provider uri to query")
-        parser.add_argument("--selection", default=None, metavar="<rows>")
-        parser.add_argument("--selection-args", action="append", default=None, metavar="<arg>")
+        parser.add_argument("--selection", default=None, metavar="conditions", help="the conditions to apply to the query, as in \"WHERE <conditions>\"")
+        parser.add_argument("--selection-args", default=None, metavar="arg", nargs="*", help="any parameters to replace '?' in --selection")
     
     def execute(self, arguments):
         self.contentResolver().delete(arguments.uri, arguments.selection, arguments.selection_args)
@@ -70,12 +70,6 @@ class Download(Module, common.ClassLoader, common.Provider):
         parser.add_argument("uri", help="the content provider URI to read a file through")
         parser.add_argument("destination", help="path to save the downloaded file to")
 
-    def complete(self, text, line, begidx, endidx):
-        if not " " in line or begidx < line.index(" "):
-            return common.path_completion.on_agent(text)
-        else:
-            return common.path_completion.on_console(text)
-
     def execute(self, arguments):
         data = self.contentResolver().read(arguments.uri)
         
@@ -87,6 +81,10 @@ class Download(Module, common.ClassLoader, common.Provider):
         output.close()
 
         self.stdout.write("Written %d bytes\n\n" % len(data))
+
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "destination":
+            return common.path_completion.on_console(text)
         
 class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
@@ -303,10 +301,10 @@ Querying, with a WHERE clause in the SELECT statement:
 
     def add_arguments(self, parser):
         parser.add_argument("uri", help="the content provider uri to query")
-        parser.add_argument("--projection", default=None, metavar="<column>", nargs="*")
-        parser.add_argument("--selection", default=None, metavar="<rows>")
-        parser.add_argument("--selection-args", default=None, metavar="<arg>", nargs="*")
-        parser.add_argument("--order", default=None, metavar="<order>")
+        parser.add_argument("--projection", default=None, metavar="columns", nargs="*", help="the columns to SELECT from the database, as in \"SELECT <projection> FROM ...\"")
+        parser.add_argument("--selection", default=None, metavar="conditions", help="the conditions to apply to the query, as in \"WHERE <conditions>\"")
+        parser.add_argument("--selection-args", default=None, metavar="arg", nargs="*", help="any parameters to replace '?' in --selection")
+        parser.add_argument("--order", default=None, metavar="by_column", help="the column to order results by")
         parser.add_argument("--vertical", action="store_true", default=False)
 
     def execute(self, arguments):
@@ -356,8 +354,8 @@ class Update(Module, common.Provider):
 
     def add_arguments(self, parser):
         parser.add_argument("uri", help="the content provider uri to update in")
-        parser.add_argument("--selection", dest="selection", default=None, metavar="<rows>")
-        parser.add_argument("--selection-args", default=None, metavar="<arg>", nargs="*")
+        parser.add_argument("--selection", default=None, metavar="conditions", help="the conditions to apply to the query, as in \"WHERE <conditions>\"")
+        parser.add_argument("--selection-args", default=None, metavar="arg", nargs="*", help="any parameters to replace '?' in --selection")
         parser.add_argument('--boolean', action="append", nargs=2, metavar=('column', 'data'))
         parser.add_argument('--double', action="append", nargs=2, metavar=('column', 'data'))
         parser.add_argument('--float', action="append", nargs=2, metavar=('column', 'data'))
