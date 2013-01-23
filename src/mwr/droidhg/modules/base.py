@@ -1,7 +1,7 @@
 import argparse
 
 from mwr.cinnibar.reflection.types import ReflectedType
-from mwr.common import console
+from mwr.common import argparse_completer, console
 from mwr.common.text import wrap
 
 from mwr.droidhg.modules.loader import ModuleLoader
@@ -89,11 +89,13 @@ class Module(object):
 
     def complete(self, text, line, begidx, endidx):
         """
-        Stub Method: override this in a module to add command auto-completion
-        to the module.
+        Intercept all readline completion requests for argument strings, and delegate
+        them to the ArgumentParserCompleter to get suitable suggestions.
         """
-
-        pass
+        
+        return argparse_completer\
+            .ArgumentParserCompleter(self.__prepare_parser(), self)\
+            .get_suggestions(text, line, begidx, endidx)
 
     @classmethod
     def fqmn(cls):
@@ -118,6 +120,14 @@ class Module(object):
         """
         
         return Module.__klasses[klass]
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        """
+        Stub Method: invoked during completion of module arguments, to allow the module
+        to provide suggestions.
+        """
+        
+        pass
 
     def getContext(self):
         """
@@ -182,13 +192,7 @@ class Module(object):
         custom execute() method, and cleaning up instantiated objects.
         """
 
-        parser = argparse.ArgumentParser(add_help=False, formatter_class=argparse.RawTextHelpFormatter)
-
-        parser.error = self.__parse_error
-
-        parser.add_argument("-h", "--help", action="store_true", dest="help", default=False)
-
-        self.add_arguments(parser)
+        parser = self.__prepare_parser()
 
         parser.description = self.__description()
         parser.usage = self.__usage(parser)
@@ -234,7 +238,22 @@ class Module(object):
         """
 
         raise Exception(message)
+    
+    def __prepare_parser(self):
+        """
+        Build an argparse.ArgumentParser for this Module.
+        """
+        
+        parser = argparse.ArgumentParser(add_help=False, formatter_class=argparse.RawTextHelpFormatter)
 
+        parser.error = self.__parse_error
+
+        parser.add_argument("-h", "--help", action="store_true", dest="help", default=False)
+
+        self.add_arguments(parser)
+        
+        return parser
+    
     def __usage(self, parser):
         """
         Get usage information about the Module.
