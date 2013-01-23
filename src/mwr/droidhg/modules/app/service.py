@@ -88,7 +88,7 @@ class Start(Module):
         android.Intent.addArgumentsTo(parser)
 
     def execute(self, arguments):
-        intent = android.Intent.fromParser(options)
+        intent = android.Intent.fromParser(arguments)
         
         if intent.isValid():        
             self.getContext().startService(intent.buildIn(self))
@@ -105,11 +105,11 @@ class Stop(Module):
     license = "MWR Code License"
     path = ["app", "service"]
 
-    def add_options(self, parser):
-        android.Intent.addOptionsTo(parser)
+    def add_arguments(self, parser):
+        android.Intent.addArgumentsTo(parser)
 
     def execute(self, arguments):
-        intent = android.Intent.fromParser(options)
+        intent = android.Intent.fromParser(arguments)
         
         if intent.isValid():        
             self.getContext().stopService(intent.buildIn(self))
