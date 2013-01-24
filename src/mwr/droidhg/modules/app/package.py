@@ -1,3 +1,4 @@
+from mwr.droidhg import android
 from mwr.droidhg.modules import common, Module
 
 class AttackSurface(Module, common.Filters, common.PackageManager):
@@ -104,6 +105,10 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
             package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PERMISSIONS | common.PackageManager.GET_CONFIGURATIONS | common.PackageManager.GET_GIDS | common.PackageManager.GET_SHARED_LIBRARY_FILES)
 
             self.__get_package(arguments, package)
+            
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "permission":
+            return android.permissions
 
     def __get_package(self, arguments, package):
         application = package.applicationInfo

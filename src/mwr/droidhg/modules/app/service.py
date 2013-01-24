@@ -45,6 +45,10 @@ List exported services with no permissions required to interact with it:
             package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_SERVICES | common.PackageManager.GET_PERMISSIONS)
 
             self.__get_services(arguments, package)
+            
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "permission":
+            return ["null"] + android.permissions
 
     def __get_services(self, arguments, package):
         services = self.match_filter(package.services, "name", arguments.filter)

@@ -1,5 +1,6 @@
 import os
 
+from mwr.droidhg import android
 from mwr.droidhg.modules import common, Module
 
 class Columns(Module, common.Provider, common.TableFormatter):
@@ -168,6 +169,10 @@ Finding content providers that do not require permissions to read/write:
             package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PROVIDERS | common.PackageManager.GET_URI_PERMISSION_PATTERNS)
 
             self.__get_providers(arguments, package)
+            
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "permission":
+            return ["null"] + android.permissions
 
     def __get_providers(self, arguments, package):
         providers = self.match_filter(package.providers, 'authority', arguments.filter)
