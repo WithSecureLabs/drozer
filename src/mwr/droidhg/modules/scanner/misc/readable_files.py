@@ -30,4 +30,8 @@ class ReadableFiles(Module, common.BusyBox, common.ClassLoader, common.FileSyste
                 self.stdout.write("No world-readable files found.")
         else:
             self.stderr.write("This command requires BusyBox to complete. Run tools.setup.busybox and then retry.\n")
+
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "target":
+            return common.path_completion.on_agent(text, self)
             
