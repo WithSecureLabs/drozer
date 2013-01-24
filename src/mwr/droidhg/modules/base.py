@@ -21,6 +21,9 @@ class Module(object):
     date = "1970-01-01"
     license = "Unspecified"
     path = []
+    
+    push_completer = None
+    pop_completer = None
 
     __klasses = {}
     __loader = ModuleLoader()
@@ -153,6 +156,9 @@ class Module(object):
 
         return self.__reflector.construct(klass, *map(lambda arg: self.arg(arg), args))
 
+    def null_complete(self, text, state):
+        return None
+    
     def reflector(self):
         """
         Get the internal Reflector instance in use.
