@@ -31,6 +31,7 @@ class Session(cmd.Cmd):
         cmd.Cmd.__init__(self)
 
         self.__base = ""
+        self.__module_pushed_completers = 0
         self.__reflector = Reflector(self)
         self.__server = server
         self.__session_id = session_id
@@ -305,6 +306,10 @@ class Session(cmd.Cmd):
         if len(argv) > 0:
             try:
                 module = self.__module(argv[0])
+                module.push_completer = self.__push_module_completer
+                module.pop_completer = self.__pop_module_completer
+                
+                self.__module_pushed_completers = 0
             except KeyError as e:
                 self.stderr.write("unknown module: %s\n" % str(e))
                 return None
@@ -315,6 +320,9 @@ class Session(cmd.Cmd):
                 self.stderr.write("\nCaught SIGINT. Interrupt again to terminate you session.\n")
             except Exception as e:
                 self.handleException(e)
+            
+            while self.__module_pushed_completers > 0:
+                self.__pop_module_completer()
         else:
             self.do_help("run")
 
@@ -447,6 +455,26 @@ class Session(cmd.Cmd):
             return set(map(lambda m: self.__module("." + m).namespace(), Module.all()))
         else:
             return set(map(lambda m: self.__module("." + m).namespace(), self.__modules()))
+    
+    def __push_module_completer(self, completer, history_file=None):
+        """
+        Delegate, passed to the module, so it can add a new readline completer
+        to the stack.
+        """
+        
+        self.__module_pushed_completers += 1
+        
+        self.push_completer(completer, history_file)
+    
+    def __pop_module_completer(self):
+        """
+        Delegate, passed to the module, so it can add a remove a readline completer
+        from the stack.
+        """
+        
+        self.__module_pushed_completers -= 1
+        
+        self.pop_completer()
 
     def __setBase(self, base):
         """
