@@ -3,7 +3,7 @@ import sys
 
 from mwr.cinnibar.api.protobuf_pb2 import Message
 
-from mwr.common import cli
+from mwr.common import cli, path_completion
 
 from mwr.droidhg.api.formatters import SystemResponseFormatter
 from mwr.droidhg.connector import ServerConnector
@@ -96,6 +96,16 @@ class Console(cli.Base):
         print SystemResponseFormatter.format(response)
         
         self.__getServerConnector(arguments).close()
+        
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "server":
+            return ["localhost:31415"]
+        elif action.dest == "file":
+            return path_completion.complete(text)
+        elif action.dest == "device":
+            return None
+        elif action.dest == "onecmd":
+            return None
         
     def handle_error(self, throwable):
         """error handler: shows an exception message, before terminating"""

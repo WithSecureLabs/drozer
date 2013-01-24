@@ -1,0 +1,41 @@
+#!/usr/bin/python
+
+import sys
+
+from mwr.common import argparse_completer
+
+from mwr.droidhg.console import Console
+from mwr.droidhg.ssl import SSLManager
+
+words = sys.argv[1:-1]
+offset = int(sys.argv[-1])
+
+if offset == len(words):
+    words.append("")
+
+word = words[offset]
+
+begidx = len(" ".join(words))
+endidx = begidx + len(word)
+
+providers = { "console": Console, "ssl": SSLManager }
+
+class ArgumentSuggestor(object):
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        return ["abc", "def", "ghi"]
+
+if offset == 1:
+    # we are selecting the Mercury sub-program
+    print "console server ssl"
+elif offset == 2:
+    # we are selecting the command
+    print " ".join(map(lambda c: c.replace("do_", ""), providers[words[1]]()._Base__commands()))
+else:
+    # we are typing arguments to a command
+    provider = providers[words[1]]()
+    
+    print " ".join(argparse_completer\
+        .ArgumentParserCompleter(provider._parser, provider)\
+        .get_suggestions(word, " ".join(words), begidx, endidx))
+        

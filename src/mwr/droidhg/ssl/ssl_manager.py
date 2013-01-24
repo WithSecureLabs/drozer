@@ -15,8 +15,8 @@ class SSLManager(cli.Base):
     def __init__(self):
         cli.Base.__init__(self)
         
-        self._parser.add_argument("type", choices=["ca", "keypair", "truststore"], help="the type of key material to create", nargs='?')
-        self._parser.add_argument("subject", help="the subject CN, when generating a keypair", nargs='?')
+        self._parser.add_argument("--type", choices=["ca", "keypair", "truststore"], help="the type of key material to create")
+        self._parser.add_argument("--subject", help="the subject CN, when generating a keypair")
         self._parser.add_argument("--bks", help="also build a BouncyCastle store (for Android), using the store and key password (keypair only)", metavar=("STORE_PW", "KEY_PW"), nargs=2)
     
     def do_create(self, arguments):
@@ -45,6 +45,12 @@ class SSLManager(cli.Base):
             print "         Key Pair:", provider.key_material_valid() and "VALID" or "INVALID"
         else:
             print "SSL has not been provisioned."
+            
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "subject":
+            return None
+        elif action.dest == "bks":
+            return ["password"]
         
     def __create_ca(self, provider, arguments):
         """
