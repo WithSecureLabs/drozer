@@ -1,4 +1,5 @@
 import itertools
+import os
 import re
 import shlex
 import socket
@@ -39,7 +40,7 @@ class Session(cmd.Cmd):
         self.active = True
         self.aliases = { "ls": "list" }
         self.intro = "Mercury Console"
-        self.history_file = ".mercury_history"
+        self.history_file = os.path.sep.join([os.path.expanduser("~"), ".mercury_history"])
         self.prompt = "mercury> "
         self.stdout = ColouredStream(self.stdout)
         self.stderr = ColouredStream(self.stderr)
