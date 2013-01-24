@@ -208,10 +208,9 @@ class Cmd(cmd.Cmd):
                 readline.write_history_file(self.__history_stack[-1])
                 
             self.__history_stack.append(history_file)
+            readline.clear_history()
             if history_file != None and os.path.exists(history_file):
                 readline.read_history_file(history_file)
-            else:
-                readline.clear_history()
                 
             readline.parse_and_bind(self.completekey + ": complete")
     
@@ -222,10 +221,9 @@ class Cmd(cmd.Cmd):
             else:
                 self.__history_stack.pop()
             
+            readline.clear_history()
             if len(self.__history_stack) > 0 and self.__history_stack[-1]:
                 readline.read_history_file(self.__history_stack[-1])
-            else:
-                readline.clear_history()
                 
             readline.set_completer(self.__completer_stack.pop())
 
