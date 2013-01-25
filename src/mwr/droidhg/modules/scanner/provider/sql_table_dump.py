@@ -15,14 +15,17 @@ class SqlTableDump(Module, common.ClassLoader, common.FileSystem, common.Package
         parser.add_argument("package_or_uri", help="specify a package to search", metavar="package or uri", nargs="?")
         
     def execute(self, arguments):
-        foundOne = False # for printing sugar
+        results = []
         if arguments.package_or_uri != None and arguments.package_or_uri.startswith("content://"):
-            foundOne |= self.__test_uri(arguments.package_or_uri)
+            results.append(self.__test_uri(arguments.package_or_uri))
         else:
             for uri in self.findAllContentUris(arguments.package_or_uri):
-                foundOne |= self.__test_uri(uri)
-
-        self.stdout.write("============================\n") if foundOne else None
+                results.append(self.__test_uri(uri))
+        
+        if results: 
+            self.stdout.write('\n'.join(filter(None, results)) + '\n')
+        else:
+            self.stdout.write("No results found.\n")
 
     def __test_uri(self, uri):
         try:
@@ -30,12 +33,10 @@ class SqlTableDump(Module, common.ClassLoader, common.FileSystem, common.Package
         except ReflectionException as e:
             if e.message.find("unrecognized token") >= 0: # if there's a projection injection
                 try:
-                    cursor = self.contentResolver().query(uri, projection=["* from sqlite_master--"]) # query the sqlite_master
-                    resultSet = self.getResultSet(cursor) # contains tables in sqlite_master
-                    self.stdout.write("============================\n")
-                    self.stdout.write("Accessible tables for uri " + uri + ": \n\n---")
-                    self.stdout.write('\n---'.join([str(x[1]) for x in resultSet[1:]]) + "\n") # Get the table names
-                    return True
+                    cursor = self.contentResolver().query(uri, projection=["* from sqlite_master--"])
+                    resultSet = self.getResultSet(cursor)
+                    listOfTables = filter(lambda x: str(x[0]) == 'table', resultSet[1:]) # exclude indexes
+                    return "Accessible tables for uri " + uri + ":\n  " + \
+                                   '\n  '.join(str(x[1]) for x in listOfTables) # join on table names
                 except:
                     pass
-        return False
