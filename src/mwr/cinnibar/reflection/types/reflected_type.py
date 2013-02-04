@@ -67,6 +67,8 @@ class ReflectedType(object):
             return cls.reflected_primitive("float", obj, reflector=reflector)
         elif obj_type == None and isinstance(obj, bool) or obj_type == "boolean":
             return cls.reflected_primitive("boolean", obj, reflector=reflector)
+        elif obj_type == "data":
+            return cls.reflected_binary(obj, reflector=reflector)
         elif obj_type == None and (isinstance(obj, str) or isinstance(obj, unicode)) or obj_type == "string":
             return cls.reflected_string(obj, reflector=reflector)
         elif obj_type == "double":

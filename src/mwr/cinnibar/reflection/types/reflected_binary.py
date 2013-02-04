@@ -13,4 +13,12 @@ class ReflectedBinary(ReflectedString):
         """
     
         return base64.b64encode(self._native)
+    
+    def _pb(self):
+        """
+        Get the Argument representation of the String, as defined in the Mercury
+        protocol.
+        """
+
+        return Message.Argument(type=Message.Argument.DATA, data=self._native)
         
