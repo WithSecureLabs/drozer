@@ -25,7 +25,7 @@ test: force
 	$(PYTHON) test/mwr_test/droidhg/all.py
 
 %.apk: %.class
-	cd $(dir $^); $(DX) --dex --output=$(notdir $(^:.class=.apk) $^)
+	cd $(dir $^); $(DX) --dex --output=$(notdir $(^:.class=.apk) $(^:.class=*.class))
 %.class: %.java
 	cd $(dir $^); $(JAVAC) -cp $(SDK) $(notdir $^)
 %.mk: force
