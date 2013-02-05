@@ -5,6 +5,7 @@ system access, interacting with the package manager and some template modules.
 """
 
 from mwr.droidhg.modules.common.assets import Assets
+from mwr.droidhg.modules.common.binding import ServiceBinding
 from mwr.droidhg.modules.common.busy_box import BusyBox
 from mwr.droidhg.modules.common.file_system import FileSystem
 from mwr.droidhg.modules.common.filtering import Filters
