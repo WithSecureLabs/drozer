@@ -10,7 +10,7 @@ from mwr.cinnibar.api.protobuf_pb2 import Message
 from mwr.cinnibar.reflection import Reflector
 
 from mwr.common import cmd_ext as cmd
-from mwr.common import console
+from mwr.common import console, Clean
 from mwr.common.list import flatten
 from mwr.common.stream import ColouredStream
 from mwr.common.text import wrap
@@ -126,6 +126,14 @@ class Session(cmd.Cmd):
         """
 
         return self.completenamespaces(args[0])
+
+    def do_clean(self, args):
+        """
+        Clean the cache of all imported files
+        """
+
+        i = Clean.clean(self.__reflector)
+        self.stdout.write("%d files deleted\n" % i)
 
     def do_contributors(self, args):
         """
