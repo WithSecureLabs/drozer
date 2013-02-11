@@ -1,6 +1,6 @@
 import binascii
 import hashlib
-import os
+import os, md5
 
 from mwr.cinnibar.reflection.types import ReflectedPrimitive
 from mwr.cinnibar.reflection.utils import ClassBuilder
@@ -33,7 +33,8 @@ class ClassLoader(object):
     
             file_io = self.construct('java.io.File', file_path)
     
-            if file_io.exists() != True or file_io.length() != len(self.source):
+            #if file_io.exists() != True or file_io.length() != len(self.source):
+            if self.__verify_file(file_io, self.source):
                 source_data = [ReflectedPrimitive("byte", (ord(i) if ord(i) < 128 else ord(i) - 0x100), reflector=None) for i in self.source]
     
                 file_stream = self.construct("java.io.FileOutputStream", file_path)
@@ -76,4 +77,53 @@ class ClassLoader(object):
             source = source_or_relative_path
 
         return source
+
+    def __verify_file(self, remote, local_data):
+        """
+        calulates the md5 of the local and remote files
+        and checks that they are equal
+        
+        remote: a java File object that points to the apk in question
+        local : the local apk (console side) source data
+        """     
+
+        
+        """no point checking if the file does not exists!"""
+        if remote == None or remote.exists() == False:
+            return False;
+        print "constructing byte array"
+        remote_data = ""
+        print "constructing inpustream"
+        remote_file = self.construct("java.io.FileInputStream", remote)
+        print "getting data, remote length %d" %remote.length()
+
+        """
+        while remote_file.read(remote_data, 0, remote.length()) != -1:
+            pass
+        """
+        for i in range(0, remote.length()):
+            remote_data += chr(remote_file.read())
+        
+        print "remote_data length: %d"%len(remote_data)
+        """
+        the byte array is in a wierd format that we cannot use yet, the data must be reformatted in the system 
+        """
+
+        #print "remote_data: %s"%remote_data            
+        print "remote_data length: %d"%len(remote_data)       
+        
+        a = md5.new(remote_data)
+        b = md5.new(local_data)
+
+        print "remote_data: %s"%remote_data
+        print "local_data: %s" %local_data
+
+        print ("a: %s, b:%s" %(a.digest(),b.digest()))
+
+        match = (a.digest() == b.digest())
+        
+        print "match: %s" % match
+        return a.digest() == b.digest()
+        
+           
         
