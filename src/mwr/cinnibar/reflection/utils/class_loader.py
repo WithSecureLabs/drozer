@@ -2,9 +2,14 @@ import binascii
 import hashlib
 import os, md5
 
+import time
+
+from mwr.cinnibar.reflection import ReflectionException
 from mwr.cinnibar.reflection.types import ReflectedPrimitive
 from mwr.cinnibar.reflection.utils import ClassBuilder
 from mwr.common import fs
+
+from mwr.droidhg.modules import Module
 
 class ClassLoader(object):
     """
@@ -18,6 +23,8 @@ class ClassLoader(object):
         self.cache_path = cache_path
         self.construct = construct
         self.system_class_loader = system_class_loader
+
+        self.verifier = "Verifier.apk"
 
     def loadClass(self, klass):
         return self.getClassLoader().loadClass(klass);
@@ -34,13 +41,12 @@ class ClassLoader(object):
             file_io = self.construct('java.io.File', file_path)
     
             #if file_io.exists() != True or file_io.length() != len(self.source):
-            if self.__verify_file(file_io, self.source):
+            if not self.__verify_file(file_io, self.source):  
                 source_data = [ReflectedPrimitive("byte", (ord(i) if ord(i) < 128 else ord(i) - 0x100), reflector=None) for i in self.source]
     
                 file_stream = self.construct("java.io.FileOutputStream", file_path)
                 file_stream.write(source_data, 0, len(source_data))
                 file_stream.close()
-            
             return self.construct('dalvik.system.DexClassLoader', file_path, self.cache_path, None, self.system_class_loader)
         else:
             raise RuntimeError("Mercury could not find or compile a required extension library.\n")
@@ -80,50 +86,41 @@ class ClassLoader(object):
 
     def __verify_file(self, remote, local_data):
         """
-        calulates the md5 of the local and remote files
-        and checks that they are equal
-        
-        remote: a java File object that points to the apk in question
-        local : the local apk (console side) source data
-        """     
+        checks the hash value of the requested apk to the one already present on the agent
+        """
 
+        if remote == None or not remote.exists():
+            """
+            no file present on the agent
+            """
+            return False
         
-        """no point checking if the file does not exists!"""
-        if remote == None or remote.exists() == False:
-            return False;
-        print "constructing byte array"
+        remote_hash = ""        
+        try:
+            remote_verify = self.construct("com.mwr.droidhg.util.Verify")
+            remote_hash = remote_verify.md5sum(remote)
+        except ReflectionException as e:
+            """
+            this means that the agent does not have the hash function
+            """
+            print "Unable to get hash agent-side, using local hash method"
+            print "This is really slow, to improve performance, consider updating your agent"
+            remote_hash = self.__local_getmd5Hash(remote)
+            
+        local_hash = md5.new(local_data).digest().encode("hex")
+        return remote_hash == local_hash
+
+    def __local_getmd5Hash(self, remote):
+        """
+        this is really, really slow
+        typically ~100b a second
+        """
         remote_data = ""
-        print "constructing inpustream"
         remote_file = self.construct("java.io.FileInputStream", remote)
-        print "getting data, remote length %d" %remote.length()
-
-        """
-        while remote_file.read(remote_data, 0, remote.length()) != -1:
-            pass
-        """
+        
+        
         for i in range(0, remote.length()):
             remote_data += chr(remote_file.read())
         
-        print "remote_data length: %d"%len(remote_data)
-        """
-        the byte array is in a wierd format that we cannot use yet, the data must be reformatted in the system 
-        """
-
-        #print "remote_data: %s"%remote_data            
-        print "remote_data length: %d"%len(remote_data)       
-        
-        a = md5.new(remote_data)
-        b = md5.new(local_data)
-
-        print "remote_data: %s"%remote_data
-        print "local_data: %s" %local_data
-
-        print ("a: %s, b:%s" %(a.digest(),b.digest()))
-
-        match = (a.digest() == b.digest())
-        
-        print "match: %s" % match
-        return a.digest() == b.digest()
-        
-           
+        return md5.new(remote_data).digest().encode("hex")
         
