@@ -21,25 +21,28 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
         parser.add_argument("package", nargs='?', help="the identifier of the package to inspect")
 
     def execute(self, arguments):
-        package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_ACTIVITIES | common.PackageManager.GET_RECEIVERS | common.PackageManager.GET_PROVIDERS | common.PackageManager.GET_SERVICES)
-        application = package.applicationInfo
+        if arguments.package != None:
+            package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_ACTIVITIES | common.PackageManager.GET_RECEIVERS | common.PackageManager.GET_PROVIDERS | common.PackageManager.GET_SERVICES)
+            application = package.applicationInfo
 
-        activities = self.match_filter(package.activities, 'exported', True)
-        receivers = self.match_filter(package.receivers, 'exported', True)
-        providers = self.match_filter(package.providers, 'exported', True)
-        services = self.match_filter(package.services, 'exported', True)
-        
-        self.stdout.write("Attack Surface:\n")
-        self.stdout.write("  %d activities exported\n" % len(activities))
-        self.stdout.write("  %d broadcast receivers exported\n" % len(receivers))
-        self.stdout.write("  %d content providers exported\n" % len(providers))
-        self.stdout.write("  %d services exported\n" % len(services))
+            activities = self.match_filter(package.activities, 'exported', True)
+            receivers = self.match_filter(package.receivers, 'exported', True)
+            providers = self.match_filter(package.providers, 'exported', True)
+            services = self.match_filter(package.services, 'exported', True)
+            
+            self.stdout.write("Attack Surface:\n")
+            self.stdout.write("  %d activities exported\n" % len(activities))
+            self.stdout.write("  %d broadcast receivers exported\n" % len(receivers))
+            self.stdout.write("  %d content providers exported\n" % len(providers))
+            self.stdout.write("  %d services exported\n" % len(services))
 
-        if (application.flags & application.FLAG_DEBUGGABLE) != 0:
-            self.stdout.write("    is debuggable\n")
+            if (application.flags & application.FLAG_DEBUGGABLE) != 0:
+                self.stdout.write("    is debuggable\n")
 
-        if package.sharedUserId != None:
-            self.stdout.write("    Shared UID (%s)\n" % package.sharedUserId)
+            if package.sharedUserId != None:
+                self.stdout.write("    Shared UID (%s)\n" % package.sharedUserId)
+        else:
+            self.stdout.write("Package Not Found\n")
 
 class Info(Module, common.Filters, common.PackageManager):
 
