@@ -24,8 +24,6 @@ class ClassLoader(object):
         self.construct = construct
         self.system_class_loader = system_class_loader
 
-        self.verifier = "Verifier.apk"
-
     def loadClass(self, klass):
         return self.getClassLoader().loadClass(klass);
         
@@ -89,7 +87,7 @@ class ClassLoader(object):
         checks the hash value of the requested apk to the one already present on the agent
         """
 
-        if remote == None or not remote.exists():
+        if remote == None or not remote.exists() or local_data == None:
             """
             no file present on the agent
             """
