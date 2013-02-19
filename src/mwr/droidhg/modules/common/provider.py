@@ -25,15 +25,36 @@ class Provider(object):
             """
             Delete from a content provider, given filter conditions.
             """
+            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            returnVal = None
+            try:
+                returnVal = client.delete(self.parseUri(uri), selection, selectionArgs)
+            except ReflectionException as e:
+                if e.message.startswith("Unknown Exception"):
+                    raise ReflectionException("Error during provider operation. It looks like the Content Provider crashed.")
+                else:
+                    raise
+            client.release()
 
-            return self.__content_resolver.delete(self.parseUri(uri), selection, selectionArgs)
+            return returnVal
 
         def insert(self, uri, contentValues):
             """
             Insert contentValues into a content provider.
             """
+            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            returnVal = None
+            try:
+                returnVal = client.insert(self.parseUri(uri), contentValues)
+            except ReflectionException as e:
+                client.release()
+                if e.message.startswith("Unknown Exception"):
+                    raise ReflectionException("Error during provider operation. It looks like the Content Provider crashed.")
+                else:
+                    raise
+            client.release()
 
-            return self.__content_resolver.insert(self.parseUri(uri), contentValues)
+            return returnVal
 
         def parseUri(self, uri):
             """
@@ -48,7 +69,20 @@ class Provider(object):
             filter conditions and sort order.
             """
 
-            return self.__content_resolver.query(self.parseUri(uri), projection, selection, selectionArgs, sortOrder)
+            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            returnCursor = None
+            try:
+                returnCursor = client.query(self.parseUri(uri), projection, selection, selectionArgs, sortOrder)
+            except ReflectionException as e:
+                client.release()
+                if e.message.startswith("Unknown Exception"):
+                    raise ReflectionException("Error during provider operation. It looks like the Content Provider crashed.")
+                else:
+                    raise
+            client.release()
+
+            return returnCursor
+            
 
         def read(self, uri):
             """
@@ -57,7 +91,19 @@ class Provider(object):
 
             ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
 
-            stream = self.__content_resolver.openInputStream(self.parseUri(uri))
+            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            stream = None
+
+            try:
+                stream = client.openInputStream(self.parseUri(uri))
+            except ReflectionException as e:
+                client.release()
+                if e.message.startswith("Unknown Exception"):
+                    raise ReflectionException("Error during provider operation. It looks like the Content Provider crashed.")
+                else:
+                    raise
+
+            client.release()
 
             return str(ByteStreamReader.read(stream))
 
@@ -65,9 +111,21 @@ class Provider(object):
             """
             Update records in a content provider with contentValues.
             """
+            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            returnVal = None
+            try:
+                returnVal = client.update(self.parseUri(uri), contentValues, selection, selectionArgs)
+            except ReflectionException as e:
+                client.release()
+                if e.message.startswith("Unknown Exception"):
+                    raise ReflectionException("Error during provider operation. It looks like the Content Provider crashed.")
+                else:
+                    raise
 
-            return self.__content_resolver.update(self.parseUri(uri), contentValues, selection, selectionArgs)
-
+            client.release()
+            
+            return returnVal
+            
     def contentResolver(self):
         """
         Get a ContentResolver to interact with a ContentProvider.
