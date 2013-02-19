@@ -21,6 +21,7 @@ class ModuleManager(cli.Base):
         self._parser.add_argument("-h", "--help", action="store_true", dest="help", default=False)
         self._parser.add_argument("-d", "--descriptions", action="store_true", default=False, help="include descriptions when searching modules (search only)")
         self._parser.add_argument("options", nargs='*')
+        self._parser.add_argument("-f", "--force", action="store_true", default=False, help="force install modules from the repositories (install only)")
         
         self._parser.error = self.__parse_error
         
@@ -31,7 +32,7 @@ class ModuleManager(cli.Base):
         
         if repository != None:
             installer = ModuleInstaller(repository)
-            modules = installer.install(arguments.options)
+            modules = installer.install(arguments.options, arguments.force)
                         
             print
             print "Successfully installed %d modules, %d already installed." % (len(modules['success']), len(modules['existing']))
