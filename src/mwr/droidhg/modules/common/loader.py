@@ -1,8 +1,6 @@
-import binascii
-import hashlib
 import os
 
-from mwr.cinnibar.reflection.types import ReflectedPrimitive
+from mwr.cinnibar.reflection import utils
 
 from mwr.droidhg.modules.base import Module
 
@@ -12,69 +10,38 @@ class ClassLoader(object):
     from the local system into the Dalvik VM on the Agent.
     """
 
-    def getClassLoader(self, source_or_relative_path, relative_to=None):
-        """
-        Gets a DexClassLoader on the agent, given compiled source or an apk
-        file from the local system.
-        """
-
-        source = self.__getSource(source_or_relative_path, relative_to=relative_to)
-
-        path = self.__getCachePath()
-        file_name = binascii.hexlify(hashlib.md5(source).digest()) + ".apk"
-        file_path = "/".join([path, file_name])
-
-        file_io = self.new("java.io.File", file_path)
-
-        if file_io.exists() != True or file_io.length() != len(source):
-            source_data = [ReflectedPrimitive("byte", (ord(i) if ord(i) < 128 else ord(i) - 0x100), reflector=self.reflector()) for i in source]
-
-            file_stream = self.new("java.io.FileOutputStream", file_path)
-            file_stream.write(source_data, 0, len(source_data))
-            file_stream.close()
-        
-        return self.new('dalvik.system.DexClassLoader', file_path, path, None, self.klass('java.lang.ClassLoader').getSystemClassLoader())
-
     def loadClass(self, source, klass, relative_to=None):
         """
         Load a Class from a local apk file (source) on the running Dalvik VM.
         """
         
+        if relative_to == None:
+            relative_to = os.path.join(os.path.dirname(__file__), "..")
+        elif relative_to.find(".py") >= 0 or relative_to.find(".pyc") >= 0:
+            relative_to = os.path.dirname(relative_to)
+        
         if not Module.cached_klass(".".join([source, klass])):
-            Module.cache_klass(".".join([source, klass]), self.getClassLoader(source, relative_to=relative_to).loadClass(klass))
+            loader = utils.ClassLoader(source, self.__get_cache_path(), self.__get_constructor(), self.klass('java.lang.ClassLoader').getSystemClassLoader(), relative_to=relative_to)
+            
+            Module.cache_klass(".".join([source, klass]), loader.loadClass(klass))
             
         return Module.get_cached_klass(".".join([source, klass]))
-
-    def __getCachePath(self):
+     
+    def __get_cache_path(self):
         """
         Get a working path, to which the compiled will be unpacked.
         """
 
         return self.getContext().getCacheDir().getAbsolutePath().native()
 
-    def __getSource(self, source_or_relative_path, relative_to=None):
+    def __get_constructor(self):
         """
-        Get source, either from an apk file or passed directly.
+        Capture a reference to the default constructor (self.new) that can be
+        passed as an argument.
         """
-
-        if source_or_relative_path.endswith(".apk"):
-            if relative_to == None:
-                relative_to = os.path.join(os.path.dirname(__file__), "..")
-            elif relative_to.find(".py") >= 0 or relative_to.find(".pyc") >= 0:
-                relative_to = os.path.dirname(relative_to)
-                
-            apk_path = os.path.join(relative_to, *source_or_relative_path.split("/"))
-            
-            file_handle = open(apk_path, 'rb')
-            data = file_handle.read()
-            source = data
-            
-            while data != "":
-                data = file_handle.read()
-                source += data
-
-            file_handle.close()
-        else:
-            source = source_or_relative_path
-
-        return source
+        
+        def constructor(*args, **kwargs):
+            return self.new(*args, **kwargs)
+        
+        return constructor
+        

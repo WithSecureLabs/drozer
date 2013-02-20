@@ -92,6 +92,7 @@ class Provider(object):
             ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
 
             client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+
             fileDescriptor = None
 
             try:

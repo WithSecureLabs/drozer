@@ -15,6 +15,7 @@ from mwr.common.list import flatten
 from mwr.common.stream import ColouredStream
 from mwr.common.text import wrap
 
+from mwr.droidhg.console import clean
 from mwr.droidhg.console.sequencer import Sequencer
 from mwr.droidhg.modules import common, Module
 from mwr.droidhg.repoman import ModuleManager
@@ -126,6 +127,23 @@ class Session(cmd.Cmd):
         """
 
         return self.completenamespaces(args[0])
+
+    def do_clean(self, args):
+        """
+        usage: clean
+        
+        Cleans APK and DEX files from Mercury's cache.
+        
+        During normal operation, Mercury uploads a number of APK files to your device, and extracts the DEX bytecode from others already on your device. This can start to consume a large amount of space, particularly if you are developing Mercury modules.
+        
+        The `clean` command removes all of these cached files for you.
+        
+        Mercury will automatically re-upload any files that it needs as you continue to use it.
+        """
+
+        files = clean.clean(self.__reflector)
+        
+        self.stdout.write("Removed %d cached files.\n" % files)
 
     def do_contributors(self, args):
         """
