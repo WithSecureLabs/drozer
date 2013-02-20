@@ -92,10 +92,10 @@ class Provider(object):
             ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
 
             client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
-            stream = None
+            fileDescriptor = None
 
             try:
-                stream = client.openInputStream(self.parseUri(uri))
+                fileDescriptor = client.openFile(self.parseUri(uri), "r")
             except ReflectionException as e:
                 client.release()
                 if e.message.startswith("Unknown Exception"):
@@ -105,7 +105,7 @@ class Provider(object):
 
             client.release()
 
-            return str(ByteStreamReader.read(stream))
+            return str(ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fileDescriptor.getFileDescriptor())))
 
         def update(self, uri, contentValues, selection, selectionArgs):
             """
