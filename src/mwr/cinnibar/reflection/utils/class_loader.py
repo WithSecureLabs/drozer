@@ -2,14 +2,10 @@ import binascii
 import hashlib
 import os, md5
 
-import time
-
 from mwr.cinnibar.reflection import ReflectionException
 from mwr.cinnibar.reflection.types import ReflectedPrimitive
 from mwr.cinnibar.reflection.utils import ClassBuilder
 from mwr.common import fs
-
-from mwr.droidhg.modules import Module
 
 class ClassLoader(object):
     """
@@ -37,8 +33,7 @@ class ClassLoader(object):
             file_path = "/".join([self.cache_path, self.__get_cached_apk_name()])
     
             file_io = self.construct('java.io.File', file_path)
-    
-            #if file_io.exists() != True or file_io.length() != len(self.source):
+            
             if not self.__verify_file(file_io, self.source):  
                 source_data = [ReflectedPrimitive("byte", (ord(i) if ord(i) < 128 else ord(i) - 0x100), reflector=None) for i in self.source]
     
@@ -97,18 +92,38 @@ class ClassLoader(object):
         try:
             remote_verify = self.construct("com.mwr.droidhg.util.Verify")
             remote_hash = remote_verify.md5sum(remote)
-        except ReflectionException as e:
+        except ReflectionException:
             """
             this means that the agent does not have the hash function
             """
-            print "Unable to get hash agent-side, using local hash method"
-            print "This is really slow, to improve performance, consider updating your agent"
-            remote_hash = self.__local_getmd5Hash(remote)
+            
+            print
+            print "   +------------------------------------------------------------------------+   "
+            print "   | Mercury needs to upload some additional code to run this module. The   |   "
+            print "   | code seems to have already been uploaded, but Mercury cannot verify it |   "
+            print "   | because you seem to be running an old version of the Mercury Agent.    |   "
+            print "   |                                                                        |   "
+            print "   | Mercury can perform this verification locally, but this is typically   |   "
+            print "   | very slow.                                                             |   "
+            print "   |                                                                        |   "
+            print "   | Would you like to verify the remote file? [yN]                         |   "
+            print "   +------------------------------------------------------------------------+   "
+            
+            if(raw_input().lower() == 'y'):
+                remote_hash = self.__local_md5sum(remote)
+            else:
+                print "   +------------------------------------------------------------------------+   "
+                print "   | Skipping Verification.                                                 |   "
+                print "   +------------------------------------------------------------------------+   "
+                print
+                
+                return True
             
         local_hash = md5.new(local_data).digest().encode("hex")
+        
         return remote_hash == local_hash
 
-    def __local_getmd5Hash(self, remote):
+    def __local_md5sum(self, remote):
         """
         this is really, really slow
         typically ~100b a second
@@ -116,7 +131,7 @@ class ClassLoader(object):
         remote_data = ""
         remote_file = self.construct("java.io.FileInputStream", remote)
         
-        
+        # read the file back from the Agent, one byte at a time
         for i in range(0, remote.length()):
             remote_data += chr(remote_file.read())
         
