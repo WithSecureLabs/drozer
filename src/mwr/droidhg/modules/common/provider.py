@@ -92,6 +92,8 @@ class Provider(object):
             ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
 
             client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            if client == None:
+                return None
 
             fileDescriptor = None
 
@@ -105,6 +107,9 @@ class Provider(object):
                     raise
 
             client.release()
+
+            if fileDescriptor == None:
+                return None
 
             return str(ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fileDescriptor.getFileDescriptor())))
 
