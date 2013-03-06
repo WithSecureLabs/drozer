@@ -142,8 +142,13 @@ class LaunchIntent(Module, common.PackageManager):
 
     mercury> run app.package.launchintent com.android.browser
 
-    Intent { act=android.intent.action.MAIN flg=0x10000000
-             cmp=com.android.browser/.BrowserActivity }"""
+    Intent: 
+      Action: android.intent.action.MAIN
+      Component: {com.android.browser/com.android.browser.BrowserActivity}
+      Categories: 
+        android.intent.category.LAUNCHER
+      Flags: 268435456
+      Extras: None"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
     license = "MWR Code License"
@@ -151,15 +156,42 @@ class LaunchIntent(Module, common.PackageManager):
 
     def add_arguments(self, parser):
         parser.add_argument("package", help="the identifier of the package to inspect")
+        parser.add_argument("-r", "--raw", action="store_true", default=False, help="display the raw output of the intent (as if you were calling intent.toString())")
 
     def execute(self, arguments):
         intent = self.packageManager().getLaunchIntentForPackage(arguments.package)
 
         if intent != None:
-            self.stdout.write("%s\n\n" % str(intent.toString()))
+            if not arguments.raw:
+                self.processIntent(intent)
+            else:
+                self.stdout.write("%s\n\n" % str(intent.toString()))
         else:
             self.stdout.write("No Launch Intent found.\n\n")
+    
+    def processIntent(self, intent):
 
+        self.stdout.write("Intent: \n")
+        self.stdout.write("  Action: %s\n"%intent.getAction())
+        self.stdout.write("  Component: %s\n"%intent.getComponent().toShortString())
+        if intent.getCategories().size() > 0:
+            self.stdout.write("  Categories: \n")
+            for category in intent.getCategories().toArray():
+                self.stdout.write("    %s\n"%str(category.toString()))
+        else:
+            self.stdout.write("  Categories: None\n")
+
+        self.stdout.write("  Flags: %d\n"%intent.getFlags())
+        
+        extras = intent.getExtras()
+        if extras != None:
+            if not extras.isEmpty():
+                self.stdout.write("  Extras: \n")
+                for extra in extras.keySet():
+                    self.stdout.write("    %s\n"%extras.get(extra))
+        else:
+            self.stdout.write("  Extras: None\n")
+    
 class List(Module, common.PackageManager):
 
     name = "List Packages"
