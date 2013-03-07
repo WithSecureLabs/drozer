@@ -145,12 +145,14 @@ class LaunchIntent(Module, common.PackageManager):
     Intent: 
       Action: android.intent.action.MAIN
       Component: {com.android.browser/com.android.browser.BrowserActivity}
+      Data: null
       Categories: 
         android.intent.category.LAUNCHER
-      Flags: 268435456
-      Extras: None"""
+      Flags: [ACTIVITY_NEW_TASK]
+      Mime Type: null
+      Extras: null"""
     author = "MWR InfoSecurity (@mwrlabs)"
-    date = "2012-11-06"
+    date = "2013-03-06"
     license = "MWR Code License"
     path = ["app", "package"]
 
@@ -171,26 +173,44 @@ class LaunchIntent(Module, common.PackageManager):
     
     def processIntent(self, intent):
 
-        self.stdout.write("Intent: \n")
+        self.stdout.write("Launch Intent:\n")
         self.stdout.write("  Action: %s\n"%intent.getAction())
         self.stdout.write("  Component: %s\n"%intent.getComponent().toShortString())
+        self.stdout.write("  Data: %s\n"%intent.getDataString())
         if intent.getCategories().size() > 0:
             self.stdout.write("  Categories: \n")
             for category in intent.getCategories().toArray():
-                self.stdout.write("    %s\n"%str(category.toString()))
+                self.stdout.write("     - %s\n"%str(category.toString()))
         else:
-            self.stdout.write("  Categories: None\n")
+            self.stdout.write("  Categories: null\n")
 
-        self.stdout.write("  Flags: %d\n"%intent.getFlags())
+        self.stdout.write("  Flags: %s\n"%self.processFlags(intent.getFlags()))
+        self.stdout.write("  Mime Type: %s\n"%intent.getType())
         
         extras = intent.getExtras()
         if extras != None:
             if not extras.isEmpty():
                 self.stdout.write("  Extras: \n")
                 for extra in extras.keySet():
-                    self.stdout.write("    %s\n"%extras.get(extra))
+                    self.stdout.write("    - %s\n"%extras.get(extra))
         else:
-            self.stdout.write("  Extras: None\n")
+            self.stdout.write("  Extras: null\n")
+
+    def processFlags(self, flags):
+
+        out = ""
+        #flags are a bit mask
+        for key in android.Intent.flags.keys():
+            for i in range(0, 8):
+                flag = flags & (0x0000000F << i*4)
+                if android.Intent.flags.get(key) == flag:
+                    out = out + "%s, "%key
+        if out is not "":
+            return "[%s]"%out[:-2]
+        else:
+            return "null"
+            
+        
     
 class List(Module, common.PackageManager):
 
