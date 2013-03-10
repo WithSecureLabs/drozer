@@ -35,8 +35,8 @@ class SqlTables(Module, common.ClassLoader, common.FileSystem, common.PackageMan
                 try:
                     cursor = self.contentResolver().query(uri, projection=["* from sqlite_master--"])
                     resultSet = self.getResultSet(cursor)
-                    listOfTables = filter(lambda x: str(x[0]) == 'table', resultSet[1:]) # exclude indexes
+                    listOfTables = filter(lambda x: str(x[0]) == "table", resultSet[1:]) # exclude indexes
                     return "Accessible tables for uri " + uri + ":\n  " + \
-                                   '\n  '.join(str(x[1]) for x in listOfTables) # join on table names
+                                   "\n  ".join(str(x[1]) for x in listOfTables) + "\n"
                 except:
                     pass
