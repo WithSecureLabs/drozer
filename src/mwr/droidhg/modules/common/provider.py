@@ -31,7 +31,7 @@ class Provider(object):
                 returnVal = client.delete(self.parseUri(uri), selection, selectionArgs)
             except ReflectionException as e:
                 if e.message.startswith("Unknown Exception"):
-                    raise ReflectionException("Error during provider operation. It looks like the Content Provider crashed.")
+                    raise ReflectionException("Could not delete from %s." % uri)
                 else:
                     raise
             client.release()
@@ -49,7 +49,7 @@ class Provider(object):
             except ReflectionException as e:
                 client.release()
                 if e.message.startswith("Unknown Exception"):
-                    raise ReflectionException("Error during provider operation. It looks like the Content Provider crashed.")
+                    raise ReflectionException("Could not insert into %s." % uri)
                 else:
                     raise
             client.release()
@@ -70,13 +70,17 @@ class Provider(object):
             """
 
             client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            
+            if client == None:
+                raise ReflectionException("Could not get a ContentProviderClient for %s." % uri)
+            
             returnCursor = None
             try:
                 returnCursor = client.query(self.parseUri(uri), projection, selection, selectionArgs, sortOrder)
             except ReflectionException as e:
                 client.release()
                 if e.message.startswith("Unknown Exception"):
-                    raise ReflectionException("Error during provider operation. It looks like the Content Provider crashed.")
+                    raise ReflectionException("Could not query %s." % uri)
                 else:
                     raise
             client.release()
@@ -102,7 +106,7 @@ class Provider(object):
             except ReflectionException as e:
                 client.release()
                 if e.message.startswith("Unknown Exception"):
-                    raise ReflectionException("Error during provider operation. It looks like the Content Provider crashed.")
+                    raise ReflectionException("Could not read from %s." % uri)
                 else:
                     raise
 
@@ -124,7 +128,7 @@ class Provider(object):
             except ReflectionException as e:
                 client.release()
                 if e.message.startswith("Unknown Exception"):
-                    raise ReflectionException("Error during provider operation. It looks like the Content Provider crashed.")
+                    raise ReflectionException("Could not update %s." % uri)
                 else:
                     raise
 
