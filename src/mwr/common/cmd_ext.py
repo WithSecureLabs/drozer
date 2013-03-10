@@ -129,6 +129,8 @@ class Cmd(cmd.Cmd):
             return self.completion_matches[state]
         except IndexError:
             return None
+        except TypeError:
+            return None
 
     def completefilename(self, text, line, begidx, endidx):
         """
