@@ -63,6 +63,12 @@ class ReflectedType(object):
             return cls.reflected_primitive("long", obj, reflector=reflector)
         elif obj_type == None and isinstance(obj, int) or obj_type == "int":
             return cls.reflected_primitive("int", obj, reflector=reflector)
+        elif obj_type == "byte" and isinstance(obj, int):
+            return cls.reflected_primitive("byte", obj, reflector=reflector)
+        elif obj_type == "char" and isinstance(obj, int):
+            return cls.reflected_primitive("char", obj, reflector=reflector)
+        elif obj_type == "short":
+            return cls.reflected_primitive("short", obj, reflector=reflector)
         elif obj_type == None and isinstance(obj, float) or obj_type == "float":
             return cls.reflected_primitive("float", obj, reflector=reflector)
         elif obj_type == None and isinstance(obj, bool) or obj_type == "boolean":
