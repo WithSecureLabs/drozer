@@ -6,7 +6,7 @@ class FindUris(Module, common.ClassLoader, common.FileSystem, common.PackageMana
 
     name = "Search for content providers that can be queried from our context."
     description = "Search for content providers that can be queried from our context."
-    examples = "run scanner.provider.findproviders"
+    examples = "run scanner.provider.finduris"
     author = "Luander (luander.r@samsung.com)"
     date = "2012-11-06"
     license = "MWR Code License"
