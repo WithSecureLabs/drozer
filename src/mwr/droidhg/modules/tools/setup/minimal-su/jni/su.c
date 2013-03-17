@@ -17,7 +17,14 @@ int main(int argc, char **argv)
 		fprintf(stderr, "su: permission denied\n");
 	else
 	{
-		char * const args [] = { "sh", NULL };
+		char *args[argc + 1];
+		args[0] = "sh";
+		args[argc] = NULL;
+		
+		int i;
+		for (i = 1; i < argc; i++)
+		        args[i] = argv[i];
+
 		execv("/system/bin/sh", args);
 	}
 }
