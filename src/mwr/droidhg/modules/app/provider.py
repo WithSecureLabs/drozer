@@ -105,13 +105,13 @@ class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManag
         parser.add_argument("package", help="the package to search for content provider uris")
 
     def execute(self, arguments):
-        for (path, content_uris) in self.findContentUris(arguments.package):
-            self.stdout.write(path + ":\n")
-            if len(content_uris) > 0:
-                for uri in content_uris:
-                    self.stdout.write("  %s\n" % uri[uri.upper().find("CONTENT"):])
-            else:
-                self.stdout.write("  No content:// strings found.\n")
+        uris = self.findAllContentUris(arguments.package)
+        
+        if len(uris) > 0:
+            for uri in uris:
+                self.stdout.write("%s\n" % uri[uri.upper().find("CONTENT"):])
+        else:
+            self.stdout.write("No Content URIs found.\n")
 
 class Info(Module, common.Filters, common.PackageManager):
 
