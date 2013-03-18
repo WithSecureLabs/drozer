@@ -25,7 +25,11 @@ class Provider(object):
             """
             Delete from a content provider, given filter conditions.
             """
-            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            try:
+                client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            except ReflectionException as e:
+                client = self.__content_resolver
+
             returnVal = None
             try:
                 returnVal = client.delete(self.parseUri(uri), selection, selectionArgs)
@@ -42,7 +46,11 @@ class Provider(object):
             """
             Insert contentValues into a content provider.
             """
-            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            try:
+                client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            except ReflectionExceltion as e:
+                client = self.__content_resolver
+
             returnVal = None
             try:
                 returnVal = client.insert(self.parseUri(uri), contentValues)
@@ -68,8 +76,10 @@ class Provider(object):
             Query a database-backed content provider, with an optional projection,
             filter conditions and sort order.
             """
-
-            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            try: 
+                client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            except ReflectionException as e:
+                client = self.__content_resolver
             
             if client == None:
                 raise ReflectionException("Could not get a ContentProviderClient for %s." % uri)
@@ -95,9 +105,11 @@ class Provider(object):
 
             ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
 
-            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
-            if client == None:
-                return None
+            
+            try:
+                client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            except RefectionException as e:
+                return self.__content_resolver.openInputStream(self.parseUri(uri))
 
             fileDescriptor = None
 
@@ -121,7 +133,11 @@ class Provider(object):
             """
             Update records in a content provider with contentValues.
             """
-            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            try:
+                client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            except ReflectionException as e:
+                client = self.__content_resolver
+
             returnVal = None
             try:
                 returnVal = client.update(self.parseUri(uri), contentValues, selection, selectionArgs)
@@ -226,10 +242,22 @@ class Provider(object):
                 row = []
 
                 for i in xrange(len(columns)):
-                    if(cursor.getType(i) == blob_type):
-                        row.append("%s (Base64-encoded)" % (cursor.getBlob(i).base64_encode()))
-                    else:
-                        row.append(cursor.getString(i))
+                    try:
+                        if(cursor.getType(i) == blob_type):
+                            row.append("%s (Base64-encoded)" % (cursor.getBlob(i).base64_encode()))
+                        else:
+                            row.append(cursor.getString(i))
+                    except ReflectionException as e:
+                        if e.message.startswith("getType"):
+                            try:
+                                row.append(cursor.getString(i))
+                            except ReflectionException as e:
+                                if e.message.startswith("unknown error: Unable to convert BLOB to string"):
+                                    row.append("%s (Base64-encoded)" % (cursor.getBlob(i).base64_encode()))
+                                else:
+                                    raise
+                        else:
+                            raise
 
                 rows.append(row)
 
