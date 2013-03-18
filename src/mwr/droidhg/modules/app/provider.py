@@ -109,7 +109,7 @@ This module uses a number of strategies to identify a content URI, including ins
     content://com.android.browser.home/
     content://browser/bookmarks/search_suggest_query"""
     author = "MWR InfoSecurity (@mwrlabs)"
-    date = "2012-11-06"
+    date = "2012-13-18"
     license = "MWR Code License"
     path = ["app", "provider"]
 
