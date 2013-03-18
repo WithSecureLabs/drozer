@@ -6,7 +6,7 @@ class FindUris(Module, common.ClassLoader, common.FileSystem, common.PackageMana
 
     name = "Search for content providers that can be queried from our context."
     description = "Search for content providers that can be queried from our context."
-    examples = "run scanner.provider.findproviders"
+    examples = "run scanner.provider.finduris"
     author = "Luander (luander.r@samsung.com)"
     date = "2012-11-06"
     license = "MWR Code License"
@@ -33,6 +33,9 @@ class FindUris(Module, common.ClassLoader, common.FileSystem, common.PackageMana
                 accessible_uris.add(uri)
 
         # print out a report
-        self.stdout.write("Accessible content URIs:\n")
-        for uri in accessible_uris:
-            self.stdout.write("  %s\n" % uri)
+        if len(accessible_uris) > 0:
+            self.stdout.write("\nAccessible content URIs:\n")
+            for uri in accessible_uris:
+                self.stdout.write("  %s\n" % uri)
+        else:
+            self.stdout.write("\nNo accessible content URIs found.\n")

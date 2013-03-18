@@ -174,7 +174,7 @@ class Provider(object):
         # in the source
         
         if package == None:
-            for package in self.packageManager().getPackages(PackageManager.GET_PROVIDERS):
+            for package in self.packageManager().getPackages(PackageManager.GET_PROVIDERS | PackageManager.GET_URI_PERMISSION_PATTERNS):
                 try:
                     uris = uris.union(self.__search_package(package))
                 except ReflectionException as e:
@@ -280,11 +280,24 @@ class Provider(object):
         if package.providers != None:
             for provider in package.providers:
                 if provider.authority != None:
-                    uris.add("content://%s" % provider.authority)
+                    paths = set([])
+                    
+                    if provider.uriPermissionPatterns != None:
+                        for pattern in provider.uriPermissionPatterns:
+                            paths.add(pattern.getPath())
+                    if provider.pathPermissions != None:
+                        for permission in provider.pathPermissions:
+                            paths.add(permission.getPath())
+                    
+                    for authority in provider.authority.split(";"):
+                        uris.add("content://%s/" % authority)
+                        
+                        for path in paths:
+                            uris.add("content://%s%s" % (authority, path))
         for (path, content_uris) in self.findContentUris(package.packageName):
             if len(content_uris) > 0:
                 for uri in content_uris:
                     uris.add(uri[uri.upper().find("CONTENT"):])
 
-        return uris
+        return sorted(uris)
         
