@@ -90,12 +90,24 @@ class Download(Module, common.ClassLoader, common.Provider):
 class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
     name = "Find referenced content URIs in a package"
-    description = "Finds content provider URIs by searching for strings in a package."
+    description = """Finds Content URIs within a package.
+    
+This module uses a number of strategies to identify a content URI, including inspecting the authorities, path permissions and searching for strings inside the package."""
     examples = """Find content provider URIs in the Browser:
 
     mercury> run app.provider.finduri com.android.browser
-    /system/app/Browser.apk:
-      No content:// strings found."""
+    Scanning com.android.browser...
+    content://com.android.browser.home/res/raw/
+    content://browser/search_suggest_query
+    content://browser/
+    content://com.android.browser.snapshots/
+    content://com.android.browser/bookmarks/search_suggest_query
+    content://com.android.browser/
+    content://com.google.settings/partner
+    content://com.android.browser.snapshots
+    content://com.google.android.partnersetup.rlzappprovider/
+    content://com.android.browser.home/
+    content://browser/bookmarks/search_suggest_query"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
     license = "MWR Code License"

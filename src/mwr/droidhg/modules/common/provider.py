@@ -252,8 +252,20 @@ class Provider(object):
         if package.providers != None:
             for provider in package.providers:
                 if provider.authority != None:
+                    paths = set([])
+                    
+                    if provider.uriPermissionPatterns != None:
+                        for pattern in provider.uriPermissionPatterns:
+                            paths.add(pattern.getPath())
+                    if provider.pathPermissions != None:
+                        for permission in provider.pathPermissions:
+                            paths.add(permission.getPath())
+                    
                     for authority in provider.authority.split(";"):
                         uris.add("content://%s/" % authority)
+                        
+                        for path in paths:
+                            uris.add("content://%s%s" % (authority, path))
         for (path, content_uris) in self.findContentUris(package.packageName):
             if len(content_uris) > 0:
                 for uri in content_uris:
