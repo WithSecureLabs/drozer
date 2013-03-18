@@ -103,24 +103,27 @@ class Provider(object):
             
             client = self.__get_client(uri)
 
-            fd = None
-
-            try:
-                fd = client.openFile(self.parseUri(uri), "r")
-            except ReflectionException as e:
-                if e.message.startswith("Unknown Exception"):
-                    raise ReflectionException("Could not read from %s." % uri)
+            if self.__must_release_client:
+                fd = None
+    
+                try:
+                    fd = client.openFile(self.parseUri(uri), "r")
+                except ReflectionException as e:
+                    if e.message.startswith("Unknown Exception"):
+                        raise ReflectionException("Could not read from %s." % uri)
+                    else:
+                        raise
+    
+                self.__release(client)
+    
+                if fd != None:
+                    ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
+                    
+                    return str(ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fd.getFileDescriptor())))
                 else:
-                    raise
-
-            self.__release(client)
-
-            if fd != None:
-                ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
-                
-                return str(ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fd.getFileDescriptor())))
+                    return None
             else:
-                return None
+                return self.__content_resolver.openInputStream(self.parseUri(uri))
 
         def update(self, uri, contentValues, selection, selectionArgs):
             """
@@ -295,6 +298,8 @@ class Provider(object):
                     if provider.pathPermissions != None:
                         for permission in provider.pathPermissions:
                             paths.add(permission.getPath())
+                            
+                    # TODO: try to handle wildcard paths sensibly, like /contacts/.*/xyz
                     
                     for authority in provider.authority.split(";"):
                         uris.add("content://%s/" % authority)
