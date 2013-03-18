@@ -3,7 +3,7 @@ from mwr.droidhg.modules import common, Module
 class Native(Module, common.ClassLoader, common.Filters, common.PackageManager):
 
     name = "Find native components included in packages"
-    description = "Lists packages which use native code."
+    description = "Lists packages which use native code.\nNOTE: This only checks for libraries that are bundled inside the package APK. System packages often do not contain the libraries they use inside their APK and so this module will miss them."
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"

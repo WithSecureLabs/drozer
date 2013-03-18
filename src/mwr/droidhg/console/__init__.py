@@ -1,1 +1,1 @@
-from console import Console
+from mwr.droidhg.console.console import Console

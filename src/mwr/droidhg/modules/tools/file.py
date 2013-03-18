@@ -11,14 +11,8 @@ class Download(Module, common.ClassLoader, common.FileSystem):
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
-        parser.add_argument("source", nargs="?")
-        parser.add_argument("destination", nargs="?")
-
-    def complete(self, text, line, begidx, endidx):
-        if not " " in line or begidx < line.index(" "):
-            return common.path_completion.on_agent(text, self)
-        else:
-            return common.path_completion.on_console(text)
+        parser.add_argument("source")
+        parser.add_argument("destination")
 
     def execute(self, arguments):
         length = self.downloadFile(arguments.source, arguments.destination)
@@ -27,6 +21,12 @@ class Download(Module, common.ClassLoader, common.FileSystem):
             self.stdout.write("Read %d bytes\n" % length)
         else:
             self.stderr.write("Could not download file. The file may not exist.\n")
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "source":
+            return common.path_completion.on_agent(text, self)
+        elif action.dest == "destination":
+            return common.path_completion.on_console(text)
 
 class Size(Module, common.FileSystem):
 
@@ -39,10 +39,7 @@ class Size(Module, common.FileSystem):
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
-        parser.add_argument("target", nargs="?")
-
-    def complete(self, text, line, begidx, endidx):
-        return common.path_completion.on_agent(text)
+        parser.add_argument("target")
 
     def execute(self, arguments):
         size = self.fileSize(arguments.target)
@@ -55,6 +52,10 @@ class Size(Module, common.FileSystem):
         else:
             self.stderr.write("Could not determine file size. The file may not exist.\n")
 
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "target":
+            return common.path_completion.on_agent(text)
+
 class MD5Sum(Module, common.ClassLoader, common.FileSystem):
 
     name = "Get md5 Checksum of file"
@@ -66,10 +67,7 @@ class MD5Sum(Module, common.ClassLoader, common.FileSystem):
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
-        parser.add_argument("target", nargs="?")
-
-    def complete(self, text, line, begidx, endidx):
-        return common.path_completion.on_agent(text)
+        parser.add_argument("target")
 
     def execute(self, arguments):
         md5sum = self.md5sum(arguments.target)
@@ -78,6 +76,10 @@ class MD5Sum(Module, common.ClassLoader, common.FileSystem):
             self.stdout.write("%s\n" % md5sum)
         else:
             self.stderr.write("Could not calculate the md5 checksum. The file may not exist.\n")
+
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "target":
+            return common.path_completion.on_agent(text)
 
 class Upload(Module, common.ClassLoader, common.FileSystem):
 
@@ -90,14 +92,8 @@ class Upload(Module, common.ClassLoader, common.FileSystem):
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
-        parser.add_argument("source", nargs="?")
-        parser.add_argument("destination", nargs="?")
-
-    def complete(self, text, line, begidx, endidx):
-        if not " " in line or begidx < line.index(" "):
-            return common.path_completion.on_console(text)
-        else:
-            return common.path_completion.on_agent(text, self)
+        parser.add_argument("source")
+        parser.add_argument("destination")
 
     def execute(self, arguments):
         length = self.uploadFile(arguments.source, arguments.destination)
@@ -106,3 +102,10 @@ class Upload(Module, common.ClassLoader, common.FileSystem):
             self.stdout.write("Written %d bytes\n" % length)
         else:
             self.stderr.write("Could not upload file.\n")
+
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "source":
+            return common.path_completion.on_console(text)
+        elif action.dest == "destination":
+            return common.path_completion.on_agent(text, self)
+            

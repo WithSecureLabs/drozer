@@ -10,6 +10,9 @@ class HTTP(Protocol):
     
     name = 'HTTP'
     
+    def __init__(self):
+        pass
+    
     def connectionMade(self):
         """
         Called when a connection is made to the HTTP Server. We write back a

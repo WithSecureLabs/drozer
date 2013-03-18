@@ -1,5 +1,11 @@
 import cmd
 import os
+
+try:
+    import readline
+except ImportError:
+    pass
+
 import shlex
 import sys
 import textwrap
@@ -24,6 +30,8 @@ class Cmd(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
 
+        self.__completer_stack = []
+        self.__history_stack = []
         self.__output_redirected = None
 
         self.aliases = {}
@@ -43,16 +51,7 @@ class Cmd(cmd.Cmd):
 
         self.preloop()
         if self.use_rawinput and self.completekey:
-            try:
-                import readline
-                self.old_completer = readline.get_completer()
-                readline.set_completer(self.complete)
-                readline.set_completer_delims(readline.get_completer_delims().replace("/", ""))
-                if self.history_file != None and os.path.exists(self.history_file):
-                    readline.read_history_file(self.history_file)
-                readline.parse_and_bind(self.completekey + ": complete")
-            except ImportError:
-                pass
+            self.push_completer(self.complete, self.history_file)
         try:
             if intro is not None:
                 self.intro = intro
@@ -90,13 +89,7 @@ class Cmd(cmd.Cmd):
             self.postloop()
         finally:
             if self.use_rawinput and self.completekey:
-                try:
-                    import readline
-                    if self.history_file != None:
-                        readline.write_history_file(self.history_file)
-                    readline.set_completer(self.old_completer)
-                except ImportError:
-                    pass
+                self.pop_completer()
 
     def complete(self, text, state):
         """
@@ -107,34 +100,36 @@ class Cmd(cmd.Cmd):
         """
 
         if state == 0:
-            import readline
-            origline = readline.get_line_buffer()
-            line = origline.lstrip()
-            stripped = len(origline) - len(line)
-            begidx = readline.get_begidx() - stripped
-            endidx = readline.get_endidx() - stripped
-
-            if begidx > 0:
-                if ">" in line and begidx > line.index(">"):
-                    self.completion_matches = self.completefilename(text, line, begidx, endidx)
-
-                    return self.completion_matches[0]
-                    
-                command = self.parseline(line)[0]
-                if command == '':
-                    compfunc = self.completedefault
-                else:
-                    try:
-                        compfunc = getattr(self, 'complete_' + command)
-                    except AttributeError:
+            if "readline" in sys.modules:
+                origline = readline.get_line_buffer()
+                line = origline.lstrip()
+                stripped = len(origline) - len(line)
+                begidx = readline.get_begidx() - stripped
+                endidx = readline.get_endidx() - stripped
+    
+                if begidx > 0:
+                    if ">" in line and begidx > line.index(">"):
+                        self.completion_matches = self.completefilename(text, line, begidx, endidx)
+    
+                        return self.completion_matches[0]
+                        
+                    command = self.parseline(line)[0]
+                    if command == '':
                         compfunc = self.completedefault
-            else:
-                compfunc = self.completenames
-            self.completion_matches = compfunc(text, line, begidx, endidx)
+                    else:
+                        try:
+                            compfunc = getattr(self, 'complete_' + command)
+                        except AttributeError:
+                            compfunc = self.completedefault
+                else:
+                    compfunc = self.completenames
+                self.completion_matches = compfunc(text, line, begidx, endidx)
 
         try:
             return self.completion_matches[state]
         except IndexError:
+            return None
+        except TypeError:
             return None
 
     def completefilename(self, text, line, begidx, endidx):
@@ -204,6 +199,35 @@ class Cmd(cmd.Cmd):
             line = self.__redirect_output(line)
 
         return line
+    
+    def push_completer(self, completer, history_file=None):
+        if "readline" in sys.modules:
+            self.__completer_stack.append(readline.get_completer())
+            readline.set_completer(completer)
+            readline.set_completer_delims(readline.get_completer_delims().replace("/", ""))
+            
+            if len(self.__history_stack) > 0 and self.__history_stack[-1]:
+                readline.write_history_file(self.__history_stack[-1])
+                
+            self.__history_stack.append(history_file)
+            readline.clear_history()
+            if history_file != None and os.path.exists(history_file):
+                readline.read_history_file(history_file)
+                
+            readline.parse_and_bind(self.completekey + ": complete")
+    
+    def pop_completer(self):
+        if "readline" in sys.modules:
+            if self.__history_stack[-1] != None:
+                readline.write_history_file(self.__history_stack.pop())
+            else:
+                self.__history_stack.pop()
+            
+            readline.clear_history()
+            if len(self.__history_stack) > 0 and self.__history_stack[-1]:
+                readline.read_history_file(self.__history_stack[-1])
+                
+            readline.set_completer(self.__completer_stack.pop())
 
     def __build_tee(self, console, destination):
         """

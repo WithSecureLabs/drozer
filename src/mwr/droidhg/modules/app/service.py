@@ -45,6 +45,10 @@ List exported services with no permissions required to interact with it:
             package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_SERVICES | common.PackageManager.GET_PERMISSIONS)
 
             self.__get_services(arguments, package)
+            
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "permission":
+            return ["null"] + android.permissions
 
     def __get_services(self, arguments, package):
         services = self.match_filter(package.services, "name", arguments.filter)
@@ -88,12 +92,17 @@ class Start(Module):
         android.Intent.addArgumentsTo(parser)
 
     def execute(self, arguments):
-        intent = android.Intent.fromParser(options)
+        intent = android.Intent.fromParser(arguments)
         
         if intent.isValid():        
             self.getContext().startService(intent.buildIn(self))
         else:
             self.stderr.write("invalid intent: one of action or component must be set\n")
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest in ["action", "category", "component", "data_uri",
+                           "extras", "flags", "mimetype"]:
+            return android.Intent.get_completion_suggestions(action, text, **kwargs)
 
 class Stop(Module):
 
@@ -105,13 +114,18 @@ class Stop(Module):
     license = "MWR Code License"
     path = ["app", "service"]
 
-    def add_options(self, parser):
-        android.Intent.addOptionsTo(parser)
+    def add_arguments(self, parser):
+        android.Intent.addArgumentsTo(parser)
 
     def execute(self, arguments):
-        intent = android.Intent.fromParser(options)
+        intent = android.Intent.fromParser(arguments)
         
         if intent.isValid():        
             self.getContext().stopService(intent.buildIn(self))
         else:
             self.stderr.write("invalid intent: one of action or component must be set\n")
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest in ["action", "category", "component", "data_uri",
+                           "extras", "flags", "mimetype"]:
+            return android.Intent.get_completion_suggestions(action, text, **kwargs)

@@ -1,5 +1,6 @@
 import os
 
+from mwr.droidhg import android
 from mwr.droidhg.modules import common, Module
 
 class Columns(Module, common.Provider, common.TableFormatter):
@@ -16,7 +17,7 @@ class Columns(Module, common.Provider, common.TableFormatter):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs='?', help="the content provider uri to query")
+        parser.add_argument("uri", help="the content provider uri to query")
 
     def execute(self, arguments):
         c = self.contentResolver().query(arguments.uri)
@@ -44,9 +45,9 @@ class Delete(Module, common.Provider):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider uri to query")
-        parser.add_argument("--selection", default=None, metavar="<rows>")
-        parser.add_argument("--selection-args", action="append", default=None, metavar="<arg>")
+        parser.add_argument("uri", help="the content provider uri to query")
+        parser.add_argument("--selection", default=None, metavar="conditions", help="the conditions to apply to the query, as in \"WHERE <conditions>\"")
+        parser.add_argument("--selection-args", default=None, metavar="arg", nargs="*", help="any parameters to replace '?' in --selection")
     
     def execute(self, arguments):
         self.contentResolver().delete(arguments.uri, arguments.selection, arguments.selection_args)
@@ -67,14 +68,8 @@ class Download(Module, common.ClassLoader, common.Provider):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider URI to read a file through")
-        parser.add_argument("destination", nargs="?")
-
-    def complete(self, text, line, begidx, endidx):
-        if not " " in line or begidx < line.index(" "):
-            return common.path_completion.on_agent(text)
-        else:
-            return common.path_completion.on_console(text)
+        parser.add_argument("uri", help="the content provider URI to read a file through")
+        parser.add_argument("destination", help="path to save the downloaded file to")
 
     def execute(self, arguments):
         data = self.contentResolver().read(arguments.uri)
@@ -87,6 +82,10 @@ class Download(Module, common.ClassLoader, common.Provider):
         output.close()
 
         self.stdout.write("Written %d bytes\n\n" % len(data))
+
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "destination":
+            return common.path_completion.on_console(text)
         
 class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
@@ -103,7 +102,7 @@ class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManag
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package", nargs='?', help="the package to search for content provider uris")
+        parser.add_argument("package", help="the package to search for content provider uris")
 
     def execute(self, arguments):
         for (path, content_uris) in self.findContentUris(arguments.package):
@@ -170,6 +169,10 @@ Finding content providers that do not require permissions to read/write:
             package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PROVIDERS | common.PackageManager.GET_URI_PERMISSION_PATTERNS)
 
             self.__get_providers(arguments, package)
+            
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "permission":
+            return ["null"] + android.permissions
 
     def __get_providers(self, arguments, package):
         providers = self.match_filter(package.providers, 'authority', arguments.filter)
@@ -236,7 +239,7 @@ class Insert(Module, common.Provider):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider uri to insert into")
+        parser.add_argument("uri", help="the content provider uri to insert into")
         parser.add_argument('--boolean', action="append", nargs=2, metavar=('column', 'data'))
         parser.add_argument('--double', action="append", nargs=2, metavar=('column', 'data'))
         parser.add_argument('--float', action="append", nargs=2, metavar=('column', 'data'))
@@ -302,11 +305,11 @@ Querying, with a WHERE clause in the SELECT statement:
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider uri to query")
-        parser.add_argument("--projection", default=None, metavar="<column>", nargs="*")
-        parser.add_argument("--selection", default=None, metavar="<rows>")
-        parser.add_argument("--selection-args", default=None, metavar="<arg>", nargs="*")
-        parser.add_argument("--order", default=None, metavar="<order>")
+        parser.add_argument("uri", help="the content provider uri to query")
+        parser.add_argument("--projection", default=None, metavar="columns", nargs="*", help="the columns to SELECT from the database, as in \"SELECT <projection> FROM ...\"")
+        parser.add_argument("--selection", default=None, metavar="conditions", help="the conditions to apply to the query, as in \"WHERE <conditions>\"")
+        parser.add_argument("--selection-args", default=None, metavar="arg", nargs="*", help="any parameters to replace '?' in --selection")
+        parser.add_argument("--order", default=None, metavar="by_column", help="the column to order results by")
         parser.add_argument("--vertical", action="store_true", default=False)
 
     def execute(self, arguments):
@@ -333,7 +336,7 @@ class Read(Module, common.ClassLoader, common.Provider):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider URI to read a file through")
+        parser.add_argument("uri", help="the content provider URI to read a file through")
 
     def execute(self, arguments):
         self.stdout.write(self.contentResolver().read(arguments.uri) + "\n")
@@ -344,7 +347,7 @@ class Update(Module, common.Provider):
     description = "Update the specified content provider URI"
     examples = """Updating, the assisted_gps_enabled setting:
 
-    mercury> run app.provider.query content://settings/secure
+    mercury> run app.provider.update content://settings/secure
                 --selection "name=?"
                 --selection-args assisted_gps_enabled
                 --integer value 0
@@ -355,9 +358,9 @@ class Update(Module, common.Provider):
     path = ["app", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("uri", nargs="?", help="the content provider uri to update in")
-        parser.add_argument("--selection", dest="selection", default=None, metavar="<rows>")
-        parser.add_argument("--selection-args", default=None, metavar="<arg>", nargs="*")
+        parser.add_argument("uri", help="the content provider uri to update in")
+        parser.add_argument("--selection", default=None, metavar="conditions", help="the conditions to apply to the query, as in \"WHERE <conditions>\"")
+        parser.add_argument("--selection-args", default=None, metavar="arg", nargs="*", help="any parameters to replace '?' in --selection")
         parser.add_argument('--boolean', action="append", nargs=2, metavar=('column', 'data'))
         parser.add_argument('--double', action="append", nargs=2, metavar=('column', 'data'))
         parser.add_argument('--float', action="append", nargs=2, metavar=('column', 'data'))

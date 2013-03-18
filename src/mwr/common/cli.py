@@ -21,14 +21,14 @@ class Base(object):
         self._parser.epilog = "available commands:\n%s" % self.__get_commands_help()
         self._parser.error = self.__parse_error
         self._parser.formatter_class = argparse.RawDescriptionHelpFormatter
-        
+
     def ask(self, prompt):
         """
-        Ask the user to provide some input.
+        Ask the user a question, and collect a single line as input.
         """
         
         return raw_input(prompt)
-        
+
     def choose(self, prompt, options):
         """
         Ask the user to select from a list of options. 
@@ -62,6 +62,8 @@ class Base(object):
             self.__invokeCommand(arguments)
         except UsageError as e:
             self.__showUsage(e.message)
+        except Exception as e:
+            self.handle_error(e)
         
     def do_commands(self, arguments):
         """shows a list of all console commands"""
@@ -70,6 +72,12 @@ class Base(object):
         print
         print "available commands:"
         print self.__get_commands_help()
+        
+    def handle_error(self, throwable):
+        """default error handler: shows an exception message, before terminating"""
+        
+        sys.stderr.write("%s\n\n" % throwable)
+        sys.exit(-1)
 
     def __commands(self):
         """

@@ -1,5 +1,6 @@
+from mwr.cinnibar.reflection import ReflectionException
+
 from mwr.droidhg.modules.common.package_manager import PackageManager
-from mwr.droidhg.reflection import ReflectionException
 
 class Provider(object):
     """
@@ -24,15 +25,36 @@ class Provider(object):
             """
             Delete from a content provider, given filter conditions.
             """
+            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            returnVal = None
+            try:
+                returnVal = client.delete(self.parseUri(uri), selection, selectionArgs)
+            except ReflectionException as e:
+                if e.message.startswith("Unknown Exception"):
+                    raise ReflectionException("Could not delete from %s." % uri)
+                else:
+                    raise
+            client.release()
 
-            return self.__content_resolver.delete(self.parseUri(uri), selection, selectionArgs)
+            return returnVal
 
         def insert(self, uri, contentValues):
             """
             Insert contentValues into a content provider.
             """
+            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            returnVal = None
+            try:
+                returnVal = client.insert(self.parseUri(uri), contentValues)
+            except ReflectionException as e:
+                client.release()
+                if e.message.startswith("Unknown Exception"):
+                    raise ReflectionException("Could not insert into %s." % uri)
+                else:
+                    raise
+            client.release()
 
-            return self.__content_resolver.insert(self.parseUri(uri), contentValues)
+            return returnVal
 
         def parseUri(self, uri):
             """
@@ -47,7 +69,24 @@ class Provider(object):
             filter conditions and sort order.
             """
 
-            return self.__content_resolver.query(self.parseUri(uri), projection, selection, selectionArgs, sortOrder)
+            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            
+            if client == None:
+                raise ReflectionException("Could not get a ContentProviderClient for %s." % uri)
+            
+            returnCursor = None
+            try:
+                returnCursor = client.query(self.parseUri(uri), projection, selection, selectionArgs, sortOrder)
+            except ReflectionException as e:
+                client.release()
+                if e.message.startswith("Unknown Exception"):
+                    raise ReflectionException("Could not query %s." % uri)
+                else:
+                    raise
+            client.release()
+
+            return returnCursor
+            
 
         def read(self, uri):
             """
@@ -56,17 +95,47 @@ class Provider(object):
 
             ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
 
-            stream = self.__content_resolver.openInputStream(self.parseUri(uri))
+            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            if client == None:
+                return None
 
-            return str(ByteStreamReader.read(stream))
+            fileDescriptor = None
+
+            try:
+                fileDescriptor = client.openFile(self.parseUri(uri), "r")
+            except ReflectionException as e:
+                client.release()
+                if e.message.startswith("Unknown Exception"):
+                    raise ReflectionException("Could not read from %s." % uri)
+                else:
+                    raise
+
+            client.release()
+
+            if fileDescriptor == None:
+                return None
+
+            return str(ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fileDescriptor.getFileDescriptor())))
 
         def update(self, uri, contentValues, selection, selectionArgs):
             """
             Update records in a content provider with contentValues.
             """
+            client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            returnVal = None
+            try:
+                returnVal = client.update(self.parseUri(uri), contentValues, selection, selectionArgs)
+            except ReflectionException as e:
+                client.release()
+                if e.message.startswith("Unknown Exception"):
+                    raise ReflectionException("Could not update %s." % uri)
+                else:
+                    raise
 
-            return self.__content_resolver.update(self.parseUri(uri), contentValues, selection, selectionArgs)
-
+            client.release()
+            
+            return returnVal
+            
     def contentResolver(self):
         """
         Get a ContentResolver to interact with a ContentProvider.
@@ -94,13 +163,19 @@ class Provider(object):
                     uris = uris.union(self.__search_package(package))
                 except ReflectionException as e:
                     if "java.util.zip.ZipException: unknown format" in e.message:
-                        self.stderr.write("Skipping package %s, because we cannot unzip it...")
+                        self.stderr.write("Skipping package %s, because we cannot unzip it..." % package.applicationInfo.packageName)
                     else:
                         raise
         else:
             package = self.packageManager().getPackageInfo(package, PackageManager.GET_PROVIDERS)
 
-            uris = uris.union(self.__search_package(package))
+            try:
+                uris = uris.union(self.__search_package(package))
+            except ReflectionException as e:
+                if "java.util.zip.ZipException: unknown format" in e.message:
+                    self.stderr.write("Skipping package %s, because we cannot unzip it..." % package.applicationInfo.packageName)
+                else:
+                    raise
 
         return uris
         

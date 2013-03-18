@@ -1,8 +1,6 @@
 import unittest
 
-from mwr.droidhg.console import coloured_stream
-
-from mwr_test.mocks.reflection import MockReflector
+from mwr.common import stream as coloured_stream
 
 class ColouredStreamTestCase(unittest.TestCase):
 

@@ -1,3 +1,4 @@
+from mwr.droidhg import android
 from mwr.droidhg.modules import common, Module
 
 class AttackSurface(Module, common.Filters, common.PackageManager):
@@ -18,28 +19,31 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
     path = ["app", "package"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package", nargs='?', help="the identifier of the package to inspect")
+        parser.add_argument("package", help="the identifier of the package to inspect")
 
     def execute(self, arguments):
-        package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_ACTIVITIES | common.PackageManager.GET_RECEIVERS | common.PackageManager.GET_PROVIDERS | common.PackageManager.GET_SERVICES)
-        application = package.applicationInfo
+        if arguments.package != None:
+            package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_ACTIVITIES | common.PackageManager.GET_RECEIVERS | common.PackageManager.GET_PROVIDERS | common.PackageManager.GET_SERVICES)
+            application = package.applicationInfo
 
-        activities = self.match_filter(package.activities, 'exported', True)
-        receivers = self.match_filter(package.receivers, 'exported', True)
-        providers = self.match_filter(package.providers, 'exported', True)
-        services = self.match_filter(package.services, 'exported', True)
-        
-        self.stdout.write("Attack Surface:\n")
-        self.stdout.write("  %d activities exported\n" % len(activities))
-        self.stdout.write("  %d broadcast receivers exported\n" % len(receivers))
-        self.stdout.write("  %d content providers exported\n" % len(providers))
-        self.stdout.write("  %d services exported\n" % len(services))
+            activities = self.match_filter(package.activities, 'exported', True)
+            receivers = self.match_filter(package.receivers, 'exported', True)
+            providers = self.match_filter(package.providers, 'exported', True)
+            services = self.match_filter(package.services, 'exported', True)
+            
+            self.stdout.write("Attack Surface:\n")
+            self.stdout.write("  %d activities exported\n" % len(activities))
+            self.stdout.write("  %d broadcast receivers exported\n" % len(receivers))
+            self.stdout.write("  %d content providers exported\n" % len(providers))
+            self.stdout.write("  %d services exported\n" % len(services))
 
-        if (application.flags & application.FLAG_DEBUGGABLE) != 0:
-            self.stdout.write("    is debuggable\n")
+            if (application.flags & application.FLAG_DEBUGGABLE) != 0:
+                self.stdout.write("    is debuggable\n")
 
-        if package.sharedUserId != None:
-            self.stdout.write("    Shared UID (%s)\n" % package.sharedUserId)
+            if package.sharedUserId != None:
+                self.stdout.write("    Shared UID (%s)\n" % package.sharedUserId)
+        else:
+            self.stdout.write("Package Not Found\n")
 
 class Info(Module, common.Filters, common.PackageManager):
 
@@ -101,6 +105,10 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
             package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PERMISSIONS | common.PackageManager.GET_CONFIGURATIONS | common.PackageManager.GET_GIDS | common.PackageManager.GET_SHARED_LIBRARY_FILES)
 
             self.__get_package(arguments, package)
+            
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "permission":
+            return android.permissions
 
     def __get_package(self, arguments, package):
         application = package.applicationInfo
@@ -142,7 +150,7 @@ class LaunchIntent(Module, common.PackageManager):
     path = ["app", "package"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package", nargs='?', help="the identifier of the package to inspect")
+        parser.add_argument("package", help="the identifier of the package to inspect")
 
     def execute(self, arguments):
         intent = self.packageManager().getLaunchIntentForPackage(arguments.package)
@@ -201,7 +209,7 @@ class Manifest(Module, common.Assets, common.ClassLoader):
     path = ["app", "package"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package", nargs='?')
+        parser.add_argument("package", help="the identifier of the package")
 
     def execute(self, arguments):
         if arguments.package == None or arguments.package == "":

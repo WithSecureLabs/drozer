@@ -1,1 +1,1 @@
-from stream_receiver import StreamReceiver
+from mwr.common.twisted.stream_receiver import StreamReceiver

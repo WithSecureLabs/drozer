@@ -6,6 +6,10 @@ using Python, and have a few dependencies that must be met.
 
 It is recommended that you use Python 2.7 to run Mercury.
 
+Download the latest version of Mercury from the project site (mwr.to/mercury).
+Mercury is available in the Python Egg format, or as an installer for Microsoft
+Windows.
+
 Follow the instructions for your platform.
 
 
@@ -31,9 +35,14 @@ Install the Google Protobufs library:
 
     $ easy_install --allow-hosts pypi.python.org protobuf
 
+If you want to use Infrastructure Mode, you will also need to install the Twisted
+library:
+
+    $ easy_install twisted==10.2.0
+
 Install Mercury:
 
-    $ easy_install mercury-2.0.0-py2.7.egg
+    $ easy_install ./mercury-2.0.0-py2.7.egg
 
 To test the installation:
 
@@ -54,9 +63,13 @@ Install Dependencies:
 Install dependencies:
 
     > C:\Python27\Scripts\easy_install.exe --allow-hosts pypi.python.org protobuf
-    > C:\Python27\Scripts\easy_install.exe twisted==10.2.0
     > C:\Python27\Scripts\easy_install.exe pyreadline
 
+If you want to use Infrastructure Mode, you will also need to install the Twisted
+library:
+
+    > C:\Python27\Scripts\easy_install.exe twisted==10.2.0
+    
 Run the Mercury installer.
 
 To test the installation:

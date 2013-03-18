@@ -1,3 +1,5 @@
+import os
+
 from mwr.droidhg.modules import common, Module
 
 class Start(Module, common.ClassLoader, common.Shell):
@@ -11,10 +13,12 @@ class Start(Module, common.ClassLoader, common.Shell):
     path = ["shell"]
 
     def add_arguments(self, parser):
-      pass
+        pass
 
     def execute(self, arguments):
+        self.push_completer(self.null_complete, os.path.sep.join([os.path.expanduser("~"), ".mercury_shrc"]))
         self.shellStart()
+        self.pop_completer()
 
 class Exec(Module, common.ClassLoader, common.Shell):
 
@@ -27,7 +31,7 @@ class Exec(Module, common.ClassLoader, common.Shell):
     path = ["shell"]
 
     def add_arguments(self, parser):
-      parser.add_argument("command", nargs='?', help="the Linux command to execute")
+        parser.add_argument("command", help="the Linux command to execute")
 
     def execute(self, arguments):
         if arguments.command == None:

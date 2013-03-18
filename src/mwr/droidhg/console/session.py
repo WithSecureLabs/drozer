@@ -1,4 +1,5 @@
 import itertools
+import os
 import re
 import shlex
 import socket
@@ -6,16 +7,18 @@ import sys
 import textwrap
 import traceback
 
+from mwr.cinnibar.api.protobuf_pb2 import Message
+from mwr.cinnibar.reflection import Reflector
+
 from mwr.common import cmd_ext as cmd
 from mwr.common import console
 from mwr.common.list import flatten
+from mwr.common.stream import ColouredStream
 from mwr.common.text import wrap
 
-from mwr.droidhg.api.protobuf_pb2 import Message
-from mwr.droidhg.console.coloured_stream import ColouredStream
+from mwr.droidhg.console import clean
 from mwr.droidhg.console.sequencer import Sequencer
 from mwr.droidhg.modules import common, Module
-from mwr.droidhg.reflection import Reflector
 from mwr.droidhg.repoman import ModuleManager
 
 class Session(cmd.Cmd):
@@ -29,6 +32,7 @@ class Session(cmd.Cmd):
         cmd.Cmd.__init__(self)
 
         self.__base = ""
+        self.__module_pushed_completers = 0
         self.__reflector = Reflector(self)
         self.__server = server
         self.__session_id = session_id
@@ -36,7 +40,7 @@ class Session(cmd.Cmd):
         self.active = True
         self.aliases = { "ls": "list" }
         self.intro = "Mercury Console"
-        self.history_file = ".mercury_history"
+        self.history_file = os.path.sep.join([os.path.expanduser("~"), ".mercury_history"])
         self.prompt = "mercury> "
         self.stdout = ColouredStream(self.stdout)
         self.stderr = ColouredStream(self.stderr)
@@ -125,6 +129,23 @@ class Session(cmd.Cmd):
         """
 
         return self.completenamespaces(args[0])
+
+    def do_clean(self, args):
+        """
+        usage: clean
+        
+        Cleans APK and DEX files from Mercury's cache.
+        
+        During normal operation, Mercury uploads a number of APK files to your device, and extracts the DEX bytecode from others already on your device. This can start to consume a large amount of space, particularly if you are developing Mercury modules.
+        
+        The `clean` command removes all of these cached files for you.
+        
+        Mercury will automatically re-upload any files that it needs as you continue to use it.
+        """
+
+        files = clean.clean(self.__reflector)
+        
+        self.stdout.write("Removed %d cached files.\n" % files)
 
     def do_contributors(self, args):
         """
@@ -227,7 +248,7 @@ class Session(cmd.Cmd):
 
         term = len(argv) > 0 and argv[0] or None
 
-        print console.format_dict(dict(map(lambda m: [m, Module.get(m).name], filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules()))))
+        self.stdout.write(console.format_dict(dict(map(lambda m: [m, Module.get(m).name], filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules())))) + "\n")
 
     def do_load(self, args):
         """
@@ -286,6 +307,10 @@ class Session(cmd.Cmd):
         if len(argv) > 0:
             try:
                 module = self.__module(argv[0])
+                module.push_completer = self.__push_module_completer
+                module.pop_completer = self.__pop_module_completer
+                
+                self.__module_pushed_completers = 0
             except KeyError as e:
                 self.stderr.write("unknown module: %s\n" % str(e))
                 return None
@@ -296,6 +321,9 @@ class Session(cmd.Cmd):
                 self.stderr.write("\nCaught SIGINT. Interrupt again to terminate you session.\n")
             except Exception as e:
                 self.handleException(e)
+            
+            while self.__module_pushed_completers > 0:
+                self.__pop_module_completer()
         else:
             self.do_help("run")
 
@@ -428,6 +456,26 @@ class Session(cmd.Cmd):
             return set(map(lambda m: self.__module("." + m).namespace(), Module.all()))
         else:
             return set(map(lambda m: self.__module("." + m).namespace(), self.__modules()))
+    
+    def __push_module_completer(self, completer, history_file=None):
+        """
+        Delegate, passed to the module, so it can add a new readline completer
+        to the stack.
+        """
+        
+        self.__module_pushed_completers += 1
+        
+        self.push_completer(completer, history_file)
+    
+    def __pop_module_completer(self):
+        """
+        Delegate, passed to the module, so it can add a remove a readline completer
+        from the stack.
+        """
+        
+        self.__module_pushed_completers -= 1
+        
+        self.pop_completer()
 
     def __setBase(self, base):
         """
@@ -492,7 +540,7 @@ class DebugSession(Session):
         
         Module.reload()
         
-        print "Done.\n"
+        self.stdout.write("Done.\n\n")
 
     def handleException(self, e):
         """

@@ -32,6 +32,11 @@ class ForIntent(Module, common.PackageManager):
                 self.stdout.write("  %s\n\n" % activity_info.name)
         else:
             self.stderr.write("invalid intent: one of action or component must be set\n")
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest in ["action", "category", "component", "data_uri",
+                           "extras", "flags", "mimetype"]:
+            return android.Intent.get_completion_suggestions(action, text, **kwargs)
 
 class Info(Module, common.Filters, common.PackageManager):
     
@@ -123,4 +128,9 @@ Starting the Browser with an implicit intent:
             self.getContext().startActivity(intent.buildIn(self))
         else:
             self.stderr.write("invalid intent: one of action or component must be set\n")
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest in ["action", "category", "component", "data_uri",
+                           "extras", "flags", "mimetype"]:
+            return android.Intent.get_completion_suggestions(action, text, **kwargs)
             

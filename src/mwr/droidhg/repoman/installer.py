@@ -9,6 +9,10 @@ from mwr.common import fs
 from mwr.droidhg.repoman.remotes import Remote
 
 class ModuleInfo(object):
+    """
+    ModuleInfo encapsulates the name and human-readable description of a module
+    that has been discovered on a remote.
+    """
     
     def __init__(self, remote, name, description=None):
         self.name = name
@@ -16,6 +20,10 @@ class ModuleInfo(object):
         self.__remote = remote
     
     def matches(self, pattern):
+        """
+        True, if the given regex pattern matches the module name.
+        """
+        
         return re.match(pattern, self.name)
     
     def __eq__(self, other):
@@ -32,15 +40,22 @@ class ModuleInfo(object):
     
         
 class ModuleInstaller(object):
+    """
+    ModuleInstaller encapsulates methods for installing new modules from the local
+    filesystem, or a remote module repository.
+    """
     
     def __init__(self, repository):
         self.repository = repository
     
-    def install(self, modules):
+    def install(self, modules, force=False):
         """
         Installs a list of modules, either as local or remote specs, and returns
         a dictionary of status information.
         """
+
+        if force:
+            print "Forcing installation of modules from repositories"
         
         status = { 'success': [], 'existing': [], 'fail': {} }
 
@@ -56,7 +71,7 @@ class ModuleInstaller(object):
                 print "Processing %s..." % module,
                 
                 try:
-                    self.__install_module(fetch, module)
+                    self.__install_module(fetch, module, force)
                     print "Done."
                     
                     status['success'].append(module)
@@ -131,7 +146,7 @@ class ModuleInstaller(object):
         
         return filter(lambda m: m != None and m != "", index)
 
-    def __install_module(self, fetch, module):
+    def __install_module(self, fetch, module, force):
         """
         Install a module into a repository.
         """
@@ -143,7 +158,7 @@ class ModuleInstaller(object):
         if source == None:
             raise InstallError("Failed to get module for '%s'." % module)
         
-        return self.__unpack_module(os.path.basename(str(module)), source)
+        return self.__unpack_module(os.path.basename(str(module)), source, force)
 
     def __read_local_module(self, module):
         """
@@ -167,7 +182,7 @@ class ModuleInstaller(object):
         
         return None
     
-    def __unpack_module(self, module, source):
+    def __unpack_module(self, module, source, force):
         """
         Unpack some module source and install it into the repository. We may have:
         
@@ -176,7 +191,7 @@ class ModuleInstaller(object):
         
         We use the inferred path from the module name to create a package structure
         and either write Python source into the last segment, as a module, or
-        unzip a zip file into that folder
+        unzip a zip file into that folder.
         """
         
         # we test for the presence of a zip header in the source, which we *should*
@@ -188,13 +203,13 @@ class ModuleInstaller(object):
         # Because the bytes are in little-endian order, we actually must look for
         # the bytes 50 4b 03 04.
         if source[0:4] == "\x50\x4b\x03\x04":
-            return self.__unpack_module_zip(module, source)
+            return self.__unpack_module_zip(module, source, force)
         else:
-            return self.__unpack_module_raw(module, source)
+            return self.__unpack_module_raw(module, source, force)
         
         return True
     
-    def __unpack_module_raw(self, module, source):
+    def __unpack_module_raw(self, module, source, force=False):
         """
         Handles unpacking a module and installing it, if the source is a Python
         module.
@@ -208,7 +223,7 @@ class ModuleInstaller(object):
         # calculate the path where we will write the module
         path = os.path.join(package, path[-1] + ".py")
         # ensure that we are not about to overwrite an existing module
-        if os.path.exists(path):
+        if os.path.exists(path) and not force:
             raise AlreadyInstalledError("The target (%s) already exists in the repository." % module)
         # write the module file into the package
         if fs.write(path, source) != None:
@@ -216,7 +231,7 @@ class ModuleInstaller(object):
         else:
             raise InstallError("Failed to write module to repository.")
         
-    def __unpack_module_zip(self, module, source):
+    def __unpack_module_zip(self, module, source, force=False):
         """
         Handles unpacking a module and installing it, if the source is a zipped
         archive.
@@ -231,8 +246,9 @@ class ModuleInstaller(object):
         # get a list of files within the archives
         archive = zipfile.ZipFile(cStringIO.StringIO(source))
         files = archive.infolist()
+        # if force is set, we dont care if it overwrites an existing file
         # ensure we are not about to overwrite any existing files
-        if True in map(lambda f: os.path.exists(os.path.join(package, f.filename)), files):
+        if True in map(lambda f: os.path.exists(os.path.join(package, f.filename)), files) and not force:
             raise AlreadyInstalledError("Installing this module would overwrite one-or-more files in your repository.")
         # extract each file, in turn
         try:
@@ -244,7 +260,15 @@ class ModuleInstaller(object):
         return True
             
 class InstallError(Exception):
+    """
+    Raised if there was a problem installing a module.
+    """
+    
     pass
 
 class AlreadyInstalledError(InstallError):
+    """
+    Raised if a requested module is already installed.
+    """
+    
     pass

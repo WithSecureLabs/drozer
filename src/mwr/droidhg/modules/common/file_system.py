@@ -69,7 +69,11 @@ class FileSystem(object):
             return None
     
     def format_file_size(self, size):
-        for x in ['bytes','KiB','MiB','GiB']:
+        """
+        Return the size of a file in human-readable form (i.e., x KiB).
+        """
+        
+        for x in ['bytes', 'KiB', 'MiB', 'GiB']:
             if size < 1024.0 and size > -1024.0:
                 if x != "bytes":
                     return "%.1f %s" % (size, x)

@@ -1,11 +1,12 @@
 from logging import getLogger
 from time import time
 
+from mwr.cinnibar.api import Frame
+from mwr.cinnibar.api.protobuf_pb2 import Message
+
 from mwr.common.twisted import StreamReceiver
-from mwr.droidhg.api.frame import Frame
-from mwr.droidhg.api.reflection_message import ReflectionRequestForwarder, ReflectionResponseForwarder
-from mwr.droidhg.api.system_message import SystemRequestHandler, SystemResponseHandler
-from mwr.droidhg.api.protobuf_pb2 import Message
+
+from mwr.droidhg.api.handlers import *
 
 class FrameReceiver(StreamReceiver):
     """
@@ -14,6 +15,10 @@ class FrameReceiver(StreamReceiver):
 
     Once a frame is ready, it is passed to the frameReceived() method.
     """
+    
+    def __init__(self, *args, **kwargs):
+        pass
+        #StreamReceiver.__init__(self, *args, **kwargs)
 
     def connectionMade(self):
         """
@@ -52,6 +57,15 @@ class DroidHG(FrameReceiver):
     __logger = getLogger(__name__ + '.droidhg')
     
     name = 'droidhg'
+    
+    device = None
+    request_forwarder = None
+    request_handler = None
+    response_forwarder = None
+    response_handler = None
+    
+    def __init__(self, *args, **kwargs):
+        FrameReceiver.__init__(self, *args, **kwargs)
     
     def connectionMade(self):
         """

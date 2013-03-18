@@ -31,6 +31,9 @@ This licence does not apply to the following components:
    -  BusyBox located at /src/mwr/droidhg/modules/tools/setup/busybox
       Released under a GPLv2 License, and available to download from:
       http://www.busybox.net/
+   -  BouncyCastle Provider located at /src/mwr/droidhg/ssl/bcprov-ext-jdk15on-1.46.jar
+      Released under a modified MIT X11 License, and available to
+      download from: http://www.bouncycastle.org/
 
 For clarity, the entire agreement between us will be governed by:
 

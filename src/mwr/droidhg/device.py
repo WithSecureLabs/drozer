@@ -1,4 +1,5 @@
-from mwr.droidhg.api.builders import SystemRequestFactory
+from mwr.cinnibar.api.builders import SystemRequestFactory
+
 from mwr.droidhg.session import Sessions
 
 class Device:
@@ -117,6 +118,7 @@ class Device:
 
         self.write(SystemRequestFactory
             .startSession(self.device_id)
+            .setPassword(message.system_request.password)
             .setId(message.id)
             .build())
 

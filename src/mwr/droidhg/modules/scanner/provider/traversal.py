@@ -1,5 +1,6 @@
+from mwr.cinnibar.reflection import ReflectionException
+
 from mwr.droidhg.modules import common, Module
-from mwr.droidhg.reflection import ReflectionException
 
 class Traversal(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
@@ -12,7 +13,7 @@ class Traversal(Module, common.ClassLoader, common.FileSystem, common.PackageMan
     path = ["scanner", "provider"]
 
     def add_arguments(self, parser):
-        parser.add_argument("package_or_uri", help="specify a package to search for content uris", metavar="package or uri", nargs="?")
+        parser.add_argument("-a", "--package", "--uri", dest="package_or_uri", help="specify a package, or content uri to search", metavar="<package or uri>")
 
     def execute(self, arguments):
         vulnerable = set([])
@@ -59,6 +60,6 @@ class Traversal(Module, common.ClassLoader, common.FileSystem, common.PackageMan
             else:
                 raise
     
-        if len(data) > 0:
+        if data != None and len(data) > 0:
             vulnerable.add(uri)
             

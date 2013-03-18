@@ -1,3 +1,3 @@
-from manager import ModuleManager, RemoteManager, RepositoryManager
-from remotes import Remote
-from repositories import Repository
+from mwr.droidhg.repoman.manager import ModuleManager, RemoteManager, RepositoryManager
+from mwr.droidhg.repoman.remotes import Remote
+from mwr.droidhg.repoman.repositories import Repository

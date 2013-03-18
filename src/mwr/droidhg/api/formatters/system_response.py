@@ -1,6 +1,6 @@
 from StringIO import StringIO
 
-from mwr.droidhg.api.protobuf_pb2 import Message
+from mwr.cinnibar.api.protobuf_pb2 import Message
 
 class SystemResponseFormatter:
     """

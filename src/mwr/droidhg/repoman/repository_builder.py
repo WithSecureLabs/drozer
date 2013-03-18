@@ -76,12 +76,20 @@ class RepositoryBuilder(object):
                 
 
 class Source(object):
+    """
+    A Source represents a Mercury module identified for packaging by the Repository
+    Builder.
+    """
     
     def __init__(self, root, path):
         self.root = root
         self.path = path
     
     def add_to_index(self, index):
+        """
+        Add this source file to the specified XML index (passed in as an eTree).
+        """
+        
         module = xml.Element("module")
         module.attrib["name"] = self.name()
         description = xml.Element("description")
@@ -90,14 +98,28 @@ class Source(object):
         index.append(module)
     
     def name(self):
+        """
+        Get the name of this module, by flattening the directory structure into
+        a Python module path.
+        """
+        
         relative_path = self.path.endswith(".py") and self.path[len(self.root)+1:-3] or self.path[len(self.root)+1:]
         
         return relative_path.replace(os.path.sep, ".")
     
     
 class SourceFile(Source):
+    """
+    A SourceFile represents a Mercury module for packaging, where it is contained
+    within a single Python source file.
+    """
     
     def description(self):
+        """
+        Fetch the human-readable description of this module, by extracting the first
+        multi-line comment.
+        """
+        
         delim = "\"\"\""
         source = fs.read(self.path)
         
@@ -110,9 +132,17 @@ class SourceFile(Source):
             return ""
     
     def emit(self, target):
+        """
+        Copy this SourceFile into a remote repository structure, at target.
+        """
+        
         shutil.copyfile(self.path, os.path.sep.join([target, self.name()]))
     
     def type(self):
+        """
+        This Source is a 'file'.
+        """
+        
         return "file"
     
     def __str__(self):
@@ -120,6 +150,10 @@ class SourceFile(Source):
 
 
 class SourcePackage(Source):
+    """
+    A SourceFile represents a Mercury module for packaging, where it is contained
+    within a Python package, with a .mercury_module file.
+    """
     
     def __init__(self, root, path, contents):
         Source.__init__(self, root, path)
@@ -127,9 +161,18 @@ class SourcePackage(Source):
         self.contents = contents
     
     def description(self):
+        """
+        Fetch the human-readable description of this module, from the .mercury_module
+        file.
+        """
+        
         return fs.read(os.path.join(self.path, ".mercury_package")).strip()
         
     def emit(self, target):
+        """
+        Copy this SourcePackage into a remote repository structure, at target.
+        """
+        
         archive = zipfile.ZipFile(os.path.sep.join([target, self.name()]), 'w')
         
         for base, dirs, files in os.walk(self.path):
@@ -142,6 +185,10 @@ class SourcePackage(Source):
         archive.close()
     
     def type(self):
+        """
+        This Source is a 'package'.
+        """
+        
         return "package"
     
     def __str__(self):

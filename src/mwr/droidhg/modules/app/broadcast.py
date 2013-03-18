@@ -38,6 +38,10 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
             package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_RECEIVERS | common.PackageManager.GET_PERMISSIONS)
 
             self.__get_receivers(arguments, package)
+            
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "permission":
+            return ["null"] + android.permissions
 
     def __get_receivers(self, arguments, package):
         receivers = self.match_filter(package.receivers, 'name', arguments.filter)
@@ -108,4 +112,9 @@ class Send(Module):
             self.getContext().sendBroadcast(intent.buildIn(self))
         else:
             self.stderr.write("invalid intent: one of action or component must be set")
+    
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest in ["action", "category", "component", "data_uri",
+                           "extras", "flags", "mimetype"]:
+            return android.Intent.get_completion_suggestions(action, text, **kwargs)
             

@@ -15,7 +15,12 @@ class ProtocolSwitcher(Protocol):
     """
 
     enable_http = True
+    protocol = None
+    
     __logger = getLogger(__name__)
+    
+    def __init__(self):
+        pass
     
     def __chooseProtocol(self, data):
         """
