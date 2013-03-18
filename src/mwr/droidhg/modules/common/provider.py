@@ -20,49 +20,48 @@ class Provider(object):
         def __init__(self, module):
             self.__module = module
             self.__content_resolver = module.getContext().getContentResolver()
+            
+            self.__must_release_client = False
 
         def delete(self, uri, selection, selectionArgs):
             """
             Delete from a content provider, given filter conditions.
             """
-            try:
-                client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
-            except ReflectionException as e:
-                client = self.__content_resolver
+            
+            client = self.__get_client(uri)
 
-            returnVal = None
+            return_val = None
             try:
-                returnVal = client.delete(self.parseUri(uri), selection, selectionArgs)
+                return_val = client.delete(self.parseUri(uri), selection, selectionArgs)
             except ReflectionException as e:
                 if e.message.startswith("Unknown Exception"):
                     raise ReflectionException("Could not delete from %s." % uri)
                 else:
                     raise
-            client.release()
+            
+            self.__release(client)
 
-            return returnVal
+            return return_val
 
         def insert(self, uri, contentValues):
             """
             Insert contentValues into a content provider.
             """
-            try:
-                client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
-            except ReflectionExceltion as e:
-                client = self.__content_resolver
+            
+            client = self.__get_client(uri)
 
-            returnVal = None
+            return_val = None
             try:
-                returnVal = client.insert(self.parseUri(uri), contentValues)
+                return_val = client.insert(self.parseUri(uri), contentValues)
             except ReflectionException as e:
-                client.release()
                 if e.message.startswith("Unknown Exception"):
                     raise ReflectionException("Could not insert into %s." % uri)
                 else:
                     raise
-            client.release()
+            
+            self.__release(client)
 
-            return returnVal
+            return return_val
 
         def parseUri(self, uri):
             """
@@ -76,81 +75,89 @@ class Provider(object):
             Query a database-backed content provider, with an optional projection,
             filter conditions and sort order.
             """
-            try: 
-                client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
-            except ReflectionException as e:
-                client = self.__content_resolver
+
+            client = self.__get_client(uri)
             
             if client == None:
                 raise ReflectionException("Could not get a ContentProviderClient for %s." % uri)
             
-            returnCursor = None
+            cursor = None
+            
             try:
-                returnCursor = client.query(self.parseUri(uri), projection, selection, selectionArgs, sortOrder)
+                cursor = client.query(self.parseUri(uri), projection, selection, selectionArgs, sortOrder)
             except ReflectionException as e:
-                client.release()
                 if e.message.startswith("Unknown Exception"):
                     raise ReflectionException("Could not query %s." % uri)
                 else:
                     raise
-            client.release()
+                
+            self.__release(client)
 
-            return returnCursor
+            return cursor
             
 
         def read(self, uri):
             """
             Read a file from a file-system-based content provider.
             """
-
-            ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
-
             
-            try:
-                client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
-            except RefectionException as e:
-                return self.__content_resolver.openInputStream(self.parseUri(uri))
+            client = self.__get_client(uri)
 
-            fileDescriptor = None
+            fd = None
 
             try:
-                fileDescriptor = client.openFile(self.parseUri(uri), "r")
+                fd = client.openFile(self.parseUri(uri), "r")
             except ReflectionException as e:
-                client.release()
                 if e.message.startswith("Unknown Exception"):
                     raise ReflectionException("Could not read from %s." % uri)
                 else:
                     raise
 
-            client.release()
+            self.__release(client)
 
-            if fileDescriptor == None:
+            if fd != None:
+                ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
+                
+                return str(ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fd.getFileDescriptor())))
+            else:
                 return None
-
-            return str(ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fileDescriptor.getFileDescriptor())))
 
         def update(self, uri, contentValues, selection, selectionArgs):
             """
             Update records in a content provider with contentValues.
             """
-            try:
-                client = self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
-            except ReflectionException as e:
-                client = self.__content_resolver
+            
+            client = self.__get_client(uri)
 
-            returnVal = None
+            return_val = None
             try:
-                returnVal = client.update(self.parseUri(uri), contentValues, selection, selectionArgs)
+                return_val = client.update(self.parseUri(uri), contentValues, selection, selectionArgs)
             except ReflectionException as e:
-                client.release()
                 if e.message.startswith("Unknown Exception"):
                     raise ReflectionException("Could not update %s." % uri)
                 else:
                     raise
 
-            client.release()
+            self.__release(client)
             
-            return returnVal
+            return return_val
+        
+        def __get_client(self, uri):
+            try:
+                self.__must_release_client = True
+                
+                return self.__content_resolver.acquireUnstableContentProviderClient(self.parseUri(uri))
+            except ReflectionException:
+                self.__must_release_client = False
+                
+                return self.__content_resolver
+        
+        def __release(self, client):
+            if self.__must_release_client:
+                try:
+                    client.release()
+                except ReflectionException:
+                    pass
             
     def contentResolver(self):
         """
