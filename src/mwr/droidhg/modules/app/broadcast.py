@@ -83,10 +83,14 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
             self.stdout.write("    Permission: %s\n" % receiver.permission)
 
     def __find_receiver_actions(self, receiver):
+        actions = set([])
+
         xml = ElementTree.fromstring(self.getAndroidManifest(receiver.packageName))
 
-        return map(lambda r: r.attrib['name'], xml.findall("./application/receiver[@name='" + str(receiver.name)[len(receiver.packageName):] + "']/intent-filter/action"))
+        actions.update(map(lambda r: r.attrib['name'], xml.findall("./application/receiver[@name='" + str(receiver.name)[len(receiver.packageName):] + "']/intent-filter/action")))
+        actions.update(map(lambda r: r.attrib['name'], xml.findall("./application/receiver[@name='" + str(receiver.name) + "']/intent-filter/action")))
 
+        return actions
 
 class Send(Module):
 
