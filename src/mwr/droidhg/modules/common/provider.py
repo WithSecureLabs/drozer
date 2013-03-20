@@ -105,14 +105,15 @@ class Provider(object):
 
             if self.__must_release_client:
                 fd = None
-    
-                try:
-                    fd = client.openFile(self.parseUri(uri), "r")
-                except ReflectionException as e:
-                    if e.message.startswith("Unknown Exception"):
-                        raise ReflectionException("Could not read from %s." % uri)
-                    else:
-                        raise
+   
+                if client != None:
+                    try:
+                        fd = client.openFile(self.parseUri(uri), "r")
+                    except ReflectionException as e:
+                        if e.message.startswith("Unknown Exception"):
+                            raise ReflectionException("Could not read from %s." % uri)
+                        else:
+                            raise
     
                 self.__release(client)
     
@@ -156,7 +157,7 @@ class Provider(object):
                 return self.__content_resolver
         
         def __release(self, client):
-            if self.__must_release_client:
+            if self.__must_release_client and client != None:
                 try:
                     client.release()
                 except ReflectionException:
