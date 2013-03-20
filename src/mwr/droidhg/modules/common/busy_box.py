@@ -44,6 +44,6 @@ class BusyBox(object):
         if bytes_copied != os.path.getsize(self._localPath()):
             return False
         else:
-            self.shellExec("chmod 770 " + self.__agentPath())
+            self.shellExec("chmod 775 " + self.__agentPath())
             
             return True
