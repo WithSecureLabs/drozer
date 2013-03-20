@@ -31,7 +31,7 @@ Install Python setuptools:
     $ wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg
     $ sh setuptools-0.6c11-py2.7.egg
 
-Install the Google Protobufs library:
+Install the required dependencies:
 
     $ easy_install --allow-hosts pypi.python.org protobuf
 
@@ -60,9 +60,12 @@ Install Dependencies:
     Python:     http://www.python.org/download/
     setuptools: http://pypi.python.org/pypi/setuptools/0.6c11
 
+The Mercury installation must be performed as a Windows administrator.
+
 Install dependencies:
 
     > C:\Python27\Scripts\easy_install.exe --allow-hosts pypi.python.org protobuf
+    > C:\Python27\Scripts\easy_install.exe pyopenssl
     > C:\Python27\Scripts\easy_install.exe pyreadline
 
 If you want to use Infrastructure Mode, you will also need to install the Twisted
