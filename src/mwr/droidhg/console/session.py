@@ -38,7 +38,7 @@ class Session(cmd.Cmd):
         self.__session_id = session_id
 
         self.active = True
-        self.aliases = { "ls": "list" }
+        self.aliases = { "l": "list", "ls": "list", "ll": "list" }
         self.intro = "Mercury Console"
         self.history_file = os.path.sep.join([os.path.expanduser("~"), ".mercury_history"])
         self.prompt = "mercury> "
