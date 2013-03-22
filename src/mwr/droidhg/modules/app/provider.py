@@ -1,4 +1,4 @@
-import os
+import os, copy
 
 from mwr.droidhg import android
 from mwr.droidhg.modules import common, Module
@@ -187,14 +187,14 @@ Finding content providers that do not require permissions to read/write:
             return ["null"] + android.permissions
 
     def __get_providers(self, arguments, package):
-        providers = self.match_filter(package.providers, 'authority', arguments.filter)
-
+        providers = self.match_filter(package.providers, 'authority', arguments.filter)        
+        
         if arguments.permission != None:
             r_providers = self.match_filter(providers, 'readPermission', arguments.permission)
             w_providers = self.match_filter(providers, 'writePermission', arguments.permission)
 
             providers = set(r_providers + w_providers)
-
+            
         exported_providers = self.match_filter(providers, 'exported', True)
         hidden_providers = self.match_filter(providers, 'exported', False)
 
@@ -203,21 +203,24 @@ Finding content providers that do not require permissions to read/write:
 
             if not arguments.unexported:
                 for provider in exported_providers:
-                    self.__print_provider(provider)
+                    for authority in provider.authority.split(";"):
+                        self.__print_provider(provider, authority)
             else:
                 self.stdout.write("  Exported Providers:\n")
                 for provider in exported_providers:
-                    self.__print_provider(provider)
+                    for authority in provider.authority.split(";"):
+                        self.__print_provider(provider, authority)
                 self.stdout.write("  Hidden Providers:\n")
                 for provider in hidden_providers:
-                    self.__print_provider(provider)
+                    for authority in provider.authority.split(";"):
+                        self.__print_provider(provider, authority)
             self.stdout.write("\n")
         elif arguments.package or arguments.verbose:
             self.stdout.write("Package: %s\n" % package.packageName)
             self.stdout.write("  No matching providers.\n\n")
 
-    def __print_provider(self, provider):
-        self.stdout.write("  Authority: %s\n" % provider.authority)
+    def __print_provider(self, provider, authority):
+        self.stdout.write("  Authority: %s\n" % authority)
         self.stdout.write("    Read Permission: %s\n" % provider.readPermission)
         self.stdout.write("    Write Permission: %s\n" % provider.writePermission)
         self.stdout.write("    Multiprocess Allowed: %s\n" % provider.multiprocess)
