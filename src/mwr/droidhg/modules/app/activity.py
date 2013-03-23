@@ -106,6 +106,13 @@ class Start(Module):
                 --component com.android.browser
                             com.android.browser.BrowserActivity
                 --flags ACTIVITY_NEW_TASK
+                
+If no flags are specified, Mercury will add the ACTIVITY_NEW_TASK flag. To launch an activity with no flags:
+
+    mercury> run app.activity.start
+                --component com.android.browser
+                            com.android.browser.BrowserActivity
+                --flags 0x0
 
 Starting the Browser with an implicit intent:
 
@@ -124,6 +131,9 @@ Starting the Browser with an implicit intent:
     def execute(self, arguments):
         intent = android.Intent.fromParser(arguments)
 
+        if len(intent.flags) == 0:
+            intent.flags.append('ACTIVITY_NEW_TASK')
+        
         if intent.isValid():
             self.getContext().startActivity(intent.buildIn(self))
         else:
