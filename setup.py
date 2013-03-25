@@ -14,7 +14,7 @@ def find_libs(src):
     
 setuptools.setup(
   name = "mercury",
-  version = "2.1.0",
+  version = "2.2.0",
   author = "MWR InfoSecurity",
   author_email = "mercury@mwrinfosecurity.com",
   description = "The Heavy Metal that Poisoned the Droid.",
