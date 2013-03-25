@@ -9,6 +9,5 @@ from mwr.droidhg.ssl import SSLManager
 logger.setLevel(logging.DEBUG)
 logger.addStreamHandler()
 
-if __name__ == '__main__':
-    SSLManager().run(sys.argv[1::])
+SSLManager().run(sys.argv[2::])
     

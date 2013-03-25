@@ -35,7 +35,7 @@ parser.add_argument("--port", default=31415, metavar="PORT", type=int, help="spe
 parser.add_argument("--ping-interval", default=15, metavar="SECS", type=int, help="the interval at which to ping connected agents")
 parser.add_argument("--ssl", action=store_zero_or_two(), help="enable SSL, optionally specifying the key and certificate", nargs="*")
 
-arguments = parser.parse_args()
+arguments = parser.parse_args(sys.argv[2::])
 
 if arguments.log != None:
     logger.addFileHandler(arguments.log)
