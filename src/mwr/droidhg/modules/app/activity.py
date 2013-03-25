@@ -119,7 +119,9 @@ Starting the Browser with an implicit intent:
     mercury> run app.activity.start
                 --action android.intent.action.VIEW
                 --data-uri http://www.google.com
-                --flags ACTIVITY_NEW_TASK"""
+                --flags ACTIVITY_NEW_TASK
+
+For more information on how to formulate an Intent, type 'help intents'."""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
     license = "MWR Code License"

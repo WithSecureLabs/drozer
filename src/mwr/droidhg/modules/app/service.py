@@ -81,7 +81,9 @@ List exported services with no permissions required to interact with it:
 class Start(Module):
 
     name = "Start Service"
-    description = "Formulate an Intent to start a service, and deliver it to another application."
+    description = """Formulate an Intent to start a service, and deliver it to another application.
+
+For more information on how to formulate an Intent, type 'help intents'."""
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
