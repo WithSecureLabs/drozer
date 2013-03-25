@@ -100,7 +100,9 @@ class Send(Module):
 
     mercury> run app.broadcast.send
                 --action android.intent.action.BOOT_COMPLETED
-    java.lang.SecurityException: Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMPLETED from pid=955, uid=10044"""
+    java.lang.SecurityException: Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMPLETED from pid=955, uid=10044
+
+For more information on how to formulate an Intent, type 'help intents'."""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
     license = "MWR Code License"

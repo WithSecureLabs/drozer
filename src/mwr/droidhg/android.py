@@ -250,6 +250,28 @@ class Intent(object):
                     'GRANT_READ_URI_PERMISSION': 0x00000001,
                     'GRANT_WRITE_URI_PERMISSION': 0x00000002,
                     'RECEIVER_REGISTERED_ONLY': 0x40000000 }
+    
+    usage = """    mercury> run app.activity.start
+                --action android.intent.action.VIEW
+                --data-uri http://www.google.com
+                --flags ACTIVITY_NEW_TASK
+
+Last Modified: 2012-11-06
+Credit: MWR InfoSecurity (@mwrlabs)
+License: MWR Code License
+
+optional arguments:
+  -h, --help
+  --action ACTION       specify the action to include in the Intent
+  --category CATEGORY   specify the category to include in the Intent
+  --component COMPONENT COMPONENT
+                        specify the component name to include in the Intent
+  --data-uri DATA_URI   specify a Uri to attach as data in the Intent
+  --extra type key value
+                        add an field to the Intent's extras bundle
+  --flags FLAGS [FLAGS ...]
+                        specify one-or-more flags to include in the Intent
+  --mimetype MIMETYPE   specify the MIME type to send in the Intent"""
 
     def __init__(self, action=None, category=None, component=None,
         data_uri=None, extras=None, flags=None, mimetype=None):
@@ -270,10 +292,11 @@ class Intent(object):
 
         parser.add_argument("--action", help="specify the action to include in the Intent")
         parser.add_argument("--category", help="specify the category to include in the Intent")
-        parser.add_argument("--component", help="specify the component name to include in the Intent", nargs=2)
+        parser.add_argument("--component", help="specify the component name to include in the Intent",
+                            nargs=2, metavar=('PACKAGE', 'COMPONENT'))
         parser.add_argument("--data-uri", help="specify a Uri to attach as data in the Intent")
-        parser.add_argument("--extra", action="append", default=[],
-            dest="extras", nargs=3, help="add an field to the Intent's extras bundle", metavar=('type', 'key', 'value'))
+        parser.add_argument("--extra", action="append", default=[], 
+                            dest="extras", nargs=3, help="add an field to the Intent's extras bundle", metavar=('TYPE', 'KEY', 'VALUE'))
         parser.add_argument("--flags", nargs='+', default=[], help="specify one-or-more flags to include in the Intent")
         parser.add_argument("--mimetype", help="specify the MIME type to send in the Intent")
 

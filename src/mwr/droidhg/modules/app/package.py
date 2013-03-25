@@ -269,6 +269,39 @@ class Manifest(Module, common.Assets, common.ClassLoader):
         else:
             self.stdout.write(self.getAndroidManifest(arguments.package) + "\n")
 
+
+class Native(Module, common.ClassLoader, common.PackageManager):
+
+    name = "Find Native libraries embedded in the application."
+    description = "Find Native libraries embedded in the application."
+    examples = ""
+    author = "MWR InfoSecurity (@mwrlabs)"
+    date = "2013-03-23"
+    license = "MWR Code License"
+    path = ["app", "package"]
+
+    def add_arguments(self, parser):
+        parser.add_argument("package", help="the identifier of the package")
+    
+    def execute(self, arguments):
+        Native = self.loadClass("common/Native.apk", "Native")
+        
+        package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PROVIDERS)
+        libraries = Native.libraries(package.applicationInfo)
+
+        if len(libraries) > 0:
+            self.stdout.write("Package: %s\n" % package.packageName)
+            self.stdout.write("  Native Libraries:\n")
+
+            for library in libraries:
+                self.stdout.write("   - %s\n"%library)
+            self.stdout.write("\n")
+        else:
+            self.stdout.write("Package: %s\n" % package.packageName)
+            self.stdout.write("  No Native Libraries.\n")
+            self.stdout.write("\n")
+
+
 class SharedUID(Module, common.PackageManager):
 
     name = "Look for packages with shared UIDs"

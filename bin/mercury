@@ -39,13 +39,9 @@ def print_usage():
 
 if len(sys.argv) > 1:
     if sys.argv[1] in Commands:
-        process = __file__ + "-" + sys.argv[1]
-        
         print_logo()
-        if platform.system() != 'Windows':
-            os.execv(sys.executable, [sys.executable, process] + sys.argv[2::])
-        else:
-            subprocess.call([sys.executable, process] + sys.argv[2::])
+
+        __import__("mwr.mercury.%s" % (sys.argv[1]))
     else:
         print_logo()
         print "unknown command:", sys.argv[1]

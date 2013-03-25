@@ -375,6 +375,66 @@ class Session(cmd.Cmd):
         else:
             return self.do_run(".shell.start")
 
+    def help_intents(self):
+        """
+        An intent is an abstract description of an operation to be performed. It can be used with app.activity.start to launch an Activity, app.broadcast.send to send it to any interested BroadcastReceiver components, and app.service.start to communicate with a background Service.
+        
+        An Intent provides a facility for performing late runtime binding between the code in different applications. Its most significant use is in the launching of activities, where it can be thought of as the glue between activities. It is basically a passive data structure holding an abstract description of an action to be performed.
+        
+        
+        Intent Structure
+        ----------------
+        The primary pieces of information in an intent are:
+        
+          action: the general action to be performed
+          data: the data to operate on
+        
+        In addition to these primary attributes, there are a number of secondary attributes that you can also include with an intent:
+        
+          category: gives additional information about the action to execute
+          type: specifies an explicit MIME type (a MIME type) of the data
+          component: specifies an explicit component class
+          extras: a bundle of any additional information
+
+        Put together, the set of actions, data types, categories, and extra data defines a language for the system allowing for the expression of phrases such as "call john smith's cell". As applications are added to the system, they can extend this language by adding new actions, types, and categories, or they can modify the behavior of existing phrases by supplying their own activities that handle them.
+
+
+        Intent Formulation
+        ------------------
+        In Mercury, intents are formulated using a set of command-line options. Some of these set a simple String in the Intent:
+        
+          --action ACTION
+          --category CATEGORY
+          --component PACKAGE COMPONENT
+          --data-uri URI
+          --flags FLAG [FLAG ...]
+          --mimetype TYPE
+        
+        When specifying a component, the fully-qualified name of both the package and component must be used, for example to specify the BrowserActivity within the com.android.browser package:
+        
+          --component com.android.browser com.android.browser.BrowserActivity
+          
+        Intents can carry messages or commands inside of them in the form of extras. Applications may want to pass additional information inside of the intents they send to one another, possibly containing the data to perform a task on, or any other user-defined task to initiate from the received data.
+        
+        Passing the extras is a little more complex. You need to tell Mercury the data type, key and value:
+          
+          --extras TYPE KEY VALUE
+        
+        Mercury supports a few common types:
+        
+          boolean
+          byte
+          char
+          double
+          float
+          integer
+          short
+          string
+        
+        """
+        
+        self.stdout.write(wrap(textwrap.dedent(self.help_intents.__doc__).strip() + "\n\n", console.get_size()[0]))
+        
     def sendAndReceive(self, message):
         """
         Delivers a message to the Agent, and returns the response.

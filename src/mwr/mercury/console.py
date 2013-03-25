@@ -9,6 +9,5 @@ from mwr.droidhg.console import Console
 logger.setLevel(logging.DEBUG)
 logger.addStreamHandler()
 
-if __name__ == '__main__':
-    Console().run(sys.argv[1::])
+Console().run(sys.argv[2::])
     
