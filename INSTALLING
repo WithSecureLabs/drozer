@@ -20,23 +20,18 @@ Install dependencies:
 
     On Debian-based Systems:
 
-        $ apt-get install build-essential python-dev
+        $ apt-get install build-essential python-dev python-setuptools
 
     On Fedora-based Systems:
 
-        $ yum install make gcc gcc-c++ python-devel
-
-Install Python setuptools:
-
-    $ wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg
-    $ sh setuptools-0.6c11-py2.7.egg
+        $ yum install make gcc gcc-c++ python-devel python-setuptools
 
 Install the required dependencies:
 
-    $ easy_install --allow-hosts pypi.python.org protobuf
+    $ easy_install --allow-hosts pypi.python.org protobuf==2.4.1
 
-If you want to use Infrastructure Mode, you will also need to install the Twisted
-library:
+If you want to use Infrastructure Mode, you will also need to install the
+Twisted library:
 
     $ easy_install twisted==10.2.0
 
@@ -64,7 +59,7 @@ The Mercury installation must be performed as a Windows administrator.
 
 Install dependencies:
 
-    > C:\Python27\Scripts\easy_install.exe --allow-hosts pypi.python.org protobuf
+    > C:\Python27\Scripts\easy_install.exe --allow-hosts pypi.python.org protobuf==2.4.1
     > C:\Python27\Scripts\easy_install.exe pyopenssl
     > C:\Python27\Scripts\easy_install.exe pyreadline
 
@@ -77,9 +72,8 @@ Run the Mercury installer.
 
 To test the installation:
 
-    > C:\Python27\python.exe  C:\Python27\Scripts\mercury-console
-    usage: mercury-console
-    mercury-console: error: too few arguments
+    > C:\Python27\python.exe  C:\Python27\Scripts\mercury
+    usage: mercury [COMMAND]
 
     >
 
