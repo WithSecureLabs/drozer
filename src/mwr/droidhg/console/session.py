@@ -410,6 +410,12 @@ class Session(cmd.Cmd):
           --flags FLAG [FLAG ...]
           --mimetype TYPE
         
+        When specifying a component, the fully-qualified name of both the package and component must be used, for example to specify the BrowserActivity within the com.android.browser package:
+        
+          --component com.android.browser com.android.browser.BrowserActivity
+          
+        Intents can carry messages or commands inside of them in the form of extras. Applications may want to pass additional information inside of the intents they send to one another, possibly containing the data to perform a task on, or any other user-defined task to initiate from the received data.
+        
         Passing the extras is a little more complex. You need to tell Mercury the data type, key and value:
           
           --extras TYPE KEY VALUE
