@@ -1,8 +1,8 @@
 Installing Mercury Console
 ==========================
 
-The Mercury Console and Server should be installed on your PC. They are implemented
-using Python, and have a few dependencies that must be met.
+The Mercury Console and Server should be installed on your PC. They are
+implemented using Python, and have a few dependencies that must be met.
 
 It is recommended that you use Python 2.7 to run Mercury.
 
@@ -11,6 +11,10 @@ Mercury is available in the Python Egg format, or as an installer for Microsoft
 Windows.
 
 Follow the instructions for your platform.
+
+Note: before upgrading, you should remove the previous version of Mercury from
+your system. This will avoid potential problems with Mercury using parts of the
+old codebase.
 
 
 Linux
