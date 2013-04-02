@@ -418,7 +418,7 @@ class Session(cmd.Cmd):
         
         Passing the extras is a little more complex. You need to tell Mercury the data type, key and value:
           
-          --extras TYPE KEY VALUE
+          --extra TYPE KEY VALUE
         
         Mercury supports a few common types:
         
