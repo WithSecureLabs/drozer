@@ -61,7 +61,7 @@ List exported services with no permissions required to interact with it:
             self.stdout.write("Package: %s\n"%package.packageName)
 
             if not arguments.unexported:
-                for service in services:
+                for service in exported_services:
                     self.stdout.write("  {}\n".format(service.name))
                     self.stdout.write("    Permission: {}\n".format(service.permission))
             else:
