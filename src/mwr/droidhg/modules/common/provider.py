@@ -125,7 +125,11 @@ class Provider(object):
                 else:
                     return None
             else:
-                return self.__content_resolver.openInputStream(self.parseUri(uri))
+                input_stream = self.__content_resolver.openInputStream(self.parseUri(uri))
+                out= ""
+                while input_stream.available() > 0:
+                    out += str(input_stream.read())
+                return out
 
         def update(self, uri, contentValues, selection, selectionArgs):
             """
