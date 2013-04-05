@@ -38,8 +38,8 @@ class Provider(object):
                     raise ReflectionException("Could not delete from %s." % uri)
                 else:
                     raise
-            
-            self.__release(client)
+            finally:
+                self.__release(client)
 
             return return_val
 
@@ -58,8 +58,8 @@ class Provider(object):
                     raise ReflectionException("Could not insert into %s." % uri)
                 else:
                     raise
-            
-            self.__release(client)
+            finally:            
+                self.__release(client)
 
             return return_val
 
@@ -86,12 +86,13 @@ class Provider(object):
             try:
                 cursor = client.query(self.parseUri(uri), projection, selection, selectionArgs, sortOrder)
             except ReflectionException as e:
+
                 if e.message.startswith("Unknown Exception"):
                     raise ReflectionException("Could not query %s." % uri)
                 else:
                     raise
-                
-            self.__release(client)
+            finally:  
+                self.__release(client)
 
             return cursor
             
@@ -141,8 +142,8 @@ class Provider(object):
                     raise ReflectionException("Could not update %s." % uri)
                 else:
                     raise
-
-            self.__release(client)
+            finally:
+                self.__release(client)
             
             return return_val
         
