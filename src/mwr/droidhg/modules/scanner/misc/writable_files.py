@@ -1,33 +1,52 @@
 from mwr.droidhg.modules import common, Module
 
-class WritableFiles(Module, common.BusyBox, common.ClassLoader, common.FileSystem, common.Shell):
+class WritableFiles(Module, common.BusyBox, common.ClassLoader, common.FileSystem, common.Shell, common.SuperUser):
 
-    name = "Find files in a folder, which are world-writable."
-    description = "Find files in a folder, which are world-writable."
-    examples = ""
+    name = "Find world-writable files in the given folder"
+    description = "Find world-writable files in the given folder"
+    examples = """mercury> run scanner.misc.writablefiles /data --privileged
+Discovered world-writable files in /data:
+  /data/anr/slow00.txt
+  /data/anr/slow01.txt
+  ...<snipped>...
+"""
     author = "MWR InfoSecurity (@mwrlabs)"
-    date = "2012-12-17"
+    date = "2013-04-18"
     license = "MWR Code License"
     path = ["scanner", "misc"]
     
     def add_arguments(self, parser):
-        parser.add_argument("--target", default="/dev", help="the target directory to search")
+        parser.add_argument("target", help="the target directory to search")
+        parser.add_argument("-p", "--privileged", action="store_true", default=False, help="request root to perform the task in a privileged context")
 
     def execute(self, arguments):
         if self.isBusyBoxInstalled():
-            files = self.busyBoxExec("find %s \( -type b -o -type c -o -type f -o -type s \) -perm -o=w \-exec ls {} \;" % arguments.target)
+            command = "$BB find %s \( -type b -o -type c -o -type f -o -type s \) -perm -o=w \-exec ls {} \;" % arguments.target
+            privileged = arguments.privileged
+            
+            if privileged:
+                if self.isSuInstalled():
+                    command = "su -c \"%s\"" % command
+                else:
+                    self.stdout.write("su is not installed...reverting back to unprivileged mode\n")
+                    privileged = False
+                    
+            files = self.shellExec(command)
             writable_files = []
 
             for f in iter(files.split("\n")):
-                if not f.startswith('find: '):
+                if not f.startswith('find: ') and len(f.strip()) > 0:
                     writable_files.append(f)
 
             if len(writable_files) > 0:
-                self.stdout.write("Found world-writable files:\n")
+                self.stdout.write("Discovered world-writable files in %s:\n" % arguments.target)
                 for f in writable_files:
                     self.stdout.write("  %s\n" % f)
             else:
-                self.stdout.write("No world-writable files found.")
+                if privileged:
+                    self.stdout.write("No world-writable files found in %s\n" % arguments.target)
+                else:
+                    self.stdout.write("No world-writable files found in %s\nTry running again with --privileged option just to make sure (requires root)\n" % arguments.target)
         else:
             self.stderr.write("This command requires BusyBox to complete. Run tools.setup.busybox and then retry.\n")
 
