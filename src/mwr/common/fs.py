@@ -2,6 +2,8 @@
 A library of fileystem functions.
 """
 
+import md5
+
 def read(path):
     """
     Utility method to read a file from the filesystem into a string.
@@ -40,6 +42,26 @@ def write(path, data):
         f.close()
         
         return len(data)
+    except IOError:
+        return None
+        
+def md5sum(path):
+    """
+    Utility method to get the md5sum of a file on the filesystem
+    """
+    
+    try:
+        f = open(path, 'rb')
+        line = data = f.read()
+
+        while line != "":
+            line = f.read()
+            
+            data += line
+        
+        f.close()
+        
+        return md5.new(data).digest().encode("hex")
     except IOError:
         return None
         
