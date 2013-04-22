@@ -94,8 +94,11 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
 
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", default=None, help="the identifier of the package to inspect")
+        parser.add_argument("-d", "--defines-permission", default=None, help="filter by the permissions a package defines")
         parser.add_argument("-f", "--filter", default=None, help="keyword filter conditions")
+        parser.add_argument("-g", "--gid", default=None, help="filter packages by GID")
         parser.add_argument("-p", "--permission", default=None, help="permission filter conditions")
+        parser.add_argument("-u", "--uid", default=None, help="filter packages by UID")
 
     def execute(self, arguments):
         if arguments.package == None:
@@ -113,7 +116,7 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
     def __get_package(self, arguments, package):
         application = package.applicationInfo
 
-        if (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)):
+        if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
             self.stdout.write("Package: %s\n" % application.packageName)
             self.stdout.write("  Process Name: %s\n" % application.processName)
             self.stdout.write("  Version: %s\n" % package.versionName)
@@ -233,6 +236,7 @@ class List(Module, common.PackageManager):
     path = ["app", "package"]
 
     def add_arguments(self, parser):
+        parser.add_argument("-d", "--defines-permission", default=None, help="filter by the permissions a package defines")
         parser.add_argument("-f", "--filter", default=None, help="keyword filter conditions")
         parser.add_argument("-g", "--gid", default=None, help="filter packages by GID")
         parser.add_argument("-p", "--permission", default=None, help="permission filter conditions")
@@ -245,7 +249,7 @@ class List(Module, common.PackageManager):
     def __get_package(self, arguments, package):
         application = package.applicationInfo
 
-        if (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
+        if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
             self.stdout.write("%s\n" % application.packageName)
 
 class Manifest(Module, common.Assets, common.ClassLoader):
