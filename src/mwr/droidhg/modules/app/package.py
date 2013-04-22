@@ -234,6 +234,9 @@ class List(Module, common.PackageManager):
 
     def add_arguments(self, parser):
         parser.add_argument("-f", "--filter", default=None, help="keyword filter conditions")
+        parser.add_argument("-g", "--gid", default=None, help="filter packages by GID")
+        parser.add_argument("-p", "--permission", default=None, help="permission filter conditions")
+        parser.add_argument("-u", "--uid", default=None, help="filter packages by UID")
 
     def execute(self, arguments):
         for package in self.packageManager().getPackages(common.PackageManager.GET_PERMISSIONS | common.PackageManager.GET_CONFIGURATIONS | common.PackageManager.GET_GIDS | common.PackageManager.GET_SHARED_LIBRARY_FILES):
@@ -242,7 +245,7 @@ class List(Module, common.PackageManager):
     def __get_package(self, arguments, package):
         application = package.applicationInfo
 
-        if arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0:
+        if (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
             self.stdout.write("%s\n" % application.packageName)
 
 class Manifest(Module, common.Assets, common.ClassLoader):
