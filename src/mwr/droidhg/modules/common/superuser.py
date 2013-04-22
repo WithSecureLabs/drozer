@@ -1,19 +1,20 @@
 import os
+from mwr.common import fs
 
 class SuperUser(object):
     """
     Mercury Client Library: provides utility methods for aiding with superuser
-    binary installation on the Agent.
+    binary detection and installation of "minimal su" on the Agent.
     """
 
-    def __agentPathSu(self):
+    def __agentPathMinimalSu(self):
         """
         Get the path to which su is uploaded on the Agent.
         """
 
         return "/data/data/com.mwr.droidhg.agent/su"
 
-    def _localPathSu(self):
+    def _localPathMinimalSu(self):
         """
         Get the path to the su binary on the local system.
         """
@@ -25,7 +26,7 @@ class SuperUser(object):
         Get the path to which the install script is uploaded on the Agent.
         """
 
-        return "/data/data/com.mwr.droidhg.agent/install-su.sh"
+        return "/data/data/com.mwr.droidhg.agent/install-minimal-su.sh"
 
     def _localPathScript(self):
         """
@@ -34,31 +35,39 @@ class SuperUser(object):
 
         return os.path.join(os.path.dirname(__file__) , "..", "tools", "setup", "minimal-su", "install-su.sh")
 
-    def isSuInstalled(self):
+    def isAnySuInstalled(self):
         """
-        Test whether su is installed on the Agent.
+        Test whether any su binary is installed on the Agent.
         """
+        
+        return (self.exists("/system/bin/su") or self.exists("/system/xbin/su"))
+            
+    def isMinimalSuInstalled(self):
+        """
+        
+        Test whether the 'minimal su' binary is installed on the Agent.
+        """
+        
+        return (self.md5sum("/system/bin/su") == fs.md5sum(self._localPathMinimalSu()))
 
-        return self.exists("/system/bin/su")
-
-    def uploadSu(self):
+    def uploadMinimalSu(self):
         """
-        Upload su to the Agent.
+        Upload minimal su to the Agent.
         """
 
         # Remove existing uploads of su
         self.shellExec("rm /data/data/com.mwr.droidhg.agent/su")
 
-        bytes_copied = self.uploadFile(self._localPathSu(), self.__agentPathSu())
+        bytes_copied = self.uploadFile(self._localPathMinimalSu(), self.__agentPathMinimalSu())
 
-        if bytes_copied == os.path.getsize(self._localPathSu()):
+        if bytes_copied == os.path.getsize(self._localPathMinimalSu()):
             return True
         else:
             return False
 
-    def uploadSuInstallScript(self):
+    def uploadMinimalSuInstallScript(self):
         """
-        Upload su install script to the Agent.
+        Upload minimal su install script to the Agent.
         """
 
         # Remove existing uploads of su install script
