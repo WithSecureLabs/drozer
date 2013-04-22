@@ -126,10 +126,16 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
                 self.stdout.write("  GID: None\n")
             self.stdout.write("  Shared Libraries: %s\n" % application.sharedLibraryFiles)
             self.stdout.write("  Shared User ID: %s\n" % package.sharedUserId)
-            self.stdout.write("  Permissions:\n")
+            self.stdout.write("  Uses Permissions:\n")
             if package.requestedPermissions != None:
                 for permission in package.requestedPermissions:
                     self.stdout.write("  - %s\n" % permission)
+            else:
+                self.stdout.write("  - None\n")
+            self.stdout.write("  Defines Permissions:\n")
+            if package.permissions != None:
+                for permission in package.permissions:
+                    self.stdout.write("  - %s\n" % permission.name)
             else:
                 self.stdout.write("  - None\n")
             self.stdout.write("\n")
