@@ -1,4 +1,6 @@
-class ZipFile(object):
+from mwr.droidhg.modules.common import loader
+
+class ZipFile(loader.ClassLoader):
     """
     Mercury Client Library: provides utility methods for interacting with zipped
     archive files.

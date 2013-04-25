@@ -1,5 +1,6 @@
+from mwr.droidhg.modules.common import loader
 
-class ServiceBinding(object):
+class ServiceBinding(loader.ClassLoader):
     
     class ServiceBindingProxy(object):
         

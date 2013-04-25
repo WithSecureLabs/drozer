@@ -1,4 +1,6 @@
-class Assets(object):
+from mwr.droidhg.modules.common import loader
+
+class Assets(loader.ClassLoader):
     """
     Mercury Client Library: contains utility methods for interacting with the
     Android Asset Manager.

@@ -1,6 +1,8 @@
 import os
 
-class BusyBox(object):
+from mwr.droidhg.modules.common import file_system, shell
+
+class BusyBox(file_system.FileSystem, shell.Shell):
     """
     Mercury Client Library: provides utility methods for interacting with Mercury-
     installed Busybox on the Agent.

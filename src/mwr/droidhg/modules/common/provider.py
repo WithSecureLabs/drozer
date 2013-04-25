@@ -1,8 +1,9 @@
 from mwr.cinnibar.reflection import ReflectionException
 
+from mwr.droidhg.modules.common import loader
 from mwr.droidhg.modules.common.package_manager import PackageManager
 
-class Provider(object):
+class Provider(loader.ClassLoader):
     """
     Mercury Client Library: provides utility methods for interacting with content
     providers.

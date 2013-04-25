@@ -1,6 +1,8 @@
 from mwr.cinnibar.reflection import ReflectionException
 
-class Shell(object):
+from mwr.droidhg.modules.common import loader
+
+class Shell(loader.ClassLoader):
     """
     Mercury Client Library: provides a wrapper around the Android Shell, allowing
     commands to be executed.
