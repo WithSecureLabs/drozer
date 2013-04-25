@@ -1,3 +1,4 @@
+from mwr.cinnibar.reflection import ReflectionException
 
 class PackageManager(object):
     """
@@ -22,6 +23,11 @@ class PackageManager(object):
     GET_URI_PERMISSION_PATTERNS = 0x00000800
 
     __package_manager_proxy = None
+    
+    class NoSuchPackageException(ReflectionException):
+        
+        def __str__(self):
+            return "could not find the package: %s" % self.message
 
     class PackageManagerProxy(object):
         """
@@ -51,8 +57,14 @@ class PackageManager(object):
             """
             Get a package's PackageInfo object, optionally passing flags.
             """
-
-            return self.__package_manager.getPackageInfo(package, flags)
+            
+            try:
+                return self.__package_manager.getPackageInfo(package, flags)
+            except ReflectionException as e:
+                if e.message == package:
+                    raise PackageManager.NoSuchPackageException(package)
+                else:
+                    raise
 
         def getPackages(self, flags=0):
             """
