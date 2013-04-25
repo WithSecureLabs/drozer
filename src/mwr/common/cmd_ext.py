@@ -153,6 +153,49 @@ class Cmd(cmd.Cmd):
             getattr(self, "do_" + self.aliases[argv[0]])(" ".join(argv[1:]))
         else:
             cmd.Cmd.default(self, line)
+            
+    def do_echo(self, arguments):
+        """
+        usage: echo LINE
+        
+        Prints out how a line will be processed at runtime, performing all variable substitutions.
+        
+        Example:
+        
+            mercury> set P=com.example.app
+            mercury> echo run app.package.info -a $P
+            run app.package.info com.example.app
+        """
+        
+        print self.__do_substitutions(arguments)
+    
+    def do_set(self, arguments):
+        """
+        usage: set NAME=VALUE [NAME=VALUE ...]
+        
+        Sets one-or-more variables, that can be used to set values in subsequent commands.
+        
+        Example:
+        
+            mercury> set P=com.example.app
+            mercury> run app.package.info -a $P
+        """
+        
+        for kv in shlex.split(arguments):
+            if "=" in kv:
+                key, value = kv.split("=", 1)
+                
+                self.variables[key] = value
+        
+    def do_unset(self, arguments):
+        """
+        usage: unset NAME [NAME ...]
+        
+        Removes one-or-more values previously stored in variables.
+        """
+        
+        for key in shlex.split(arguments):
+            del self.variables[key]
 
     def emptyline(self):
         """
