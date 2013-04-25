@@ -8,6 +8,7 @@ import textwrap
 import traceback
 
 from mwr.cinnibar.api.protobuf_pb2 import Message
+from mwr.cinnibar.api.transport.exceptions import ConnectionError
 from mwr.cinnibar.reflection import Reflector
 
 from mwr.common import cmd_ext as cmd
@@ -173,12 +174,17 @@ class Session(cmd.Cmd):
         Terminate your Mercury session.
         """
         
-        if self.active:
-            self.__server.stopSession(self.__session_id)
-            
+        try:
+            if self.active:
+                self.__server.stopSession(self.__session_id)
+                
+                self.active = False
+    
+            return True
+        except ConnectionError:
             self.active = False
-
-        return True
+            
+            return True
 
     def do_help(self, args):
         """
@@ -446,15 +452,18 @@ class Session(cmd.Cmd):
 
         try:
             message = self.__server.sendAndReceive(message.setSessionId(self.__session_id))
-        except socket.timeout:
-            self.stderr.write("lost session: %s\n"%self.__session_id)
+        except ConnectionError:
+            self.stderr.write("We lost your Mercury session.\n\n")
+            self.stderr.write("For some reason the mobile Agent has stopped responding. You will need to restart it, and try again.\n\n")
 
-            sys.exit(-1)
+            sys.exit(1)
 
         if message and message.type == Message.REFLECTION_RESPONSE and message.reflection_response.status == Message.ReflectionResponse.FATAL:
-            self.stderr.write("lost session: %s\n"%self.__session_id)
+            self.stderr.write("We lost your Mercury session.\n\n")
+            self.stderr.write("The mobile Agent did not like the last message you sent it. It has terminated your session.\n\n")
+            self.stderr.write("You will need to reconnect, and may need to restart the mobile Agent.\n\n")
 
-            sys.exit(-1)
+            sys.exit(2)
 
         return message
 

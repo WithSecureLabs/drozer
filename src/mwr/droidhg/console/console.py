@@ -2,12 +2,12 @@ import getpass
 import sys
 
 from mwr.cinnibar.api.protobuf_pb2 import Message
+from mwr.cinnibar.api.transport.exceptions import ConnectionError
 
 from mwr.common import cli, path_completion
 
 from mwr.droidhg.api.formatters import SystemResponseFormatter
 from mwr.droidhg.connector import ServerConnector
-from mwr.droidhg.connector.exceptions import ConnectionError
 from mwr.droidhg.console.session import Session, DebugSession
 
 class Console(cli.Base):
