@@ -102,6 +102,8 @@ class Provider(object):
             Read a file from a file-system-based content provider.
             """
             
+            ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
+            
             client = self.__get_client(uri)
 
             if self.__must_release_client:
@@ -119,17 +121,16 @@ class Provider(object):
                 self.__release(client)
     
                 if fd != None:
-                    ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
-                
                     return str(ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fd.getFileDescriptor())))
                 else:
                     raise Provider.UnableToOpenFileException(uri)
             else:
                 input_stream = self.__content_resolver.openInputStream(self.parseUri(uri))
-                out= ""
-                while input_stream.available() > 0:
-                    out += str(input_stream.read())
-                return out
+                
+                if input_stream != None:
+                    return str(ByteStreamReader.read(input_stream))
+                else:
+                    raise Provider.UnableToOpenFileException(uri)
 
         def update(self, uri, contentValues, selection, selectionArgs):
             """
