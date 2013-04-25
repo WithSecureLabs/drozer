@@ -317,6 +317,13 @@ class Provider(object):
             if len(content_uris) > 0:
                 for uri in content_uris:
                     uris.add(uri[uri.upper().find("CONTENT"):])
+        
+        # one more pass, make sure we get the / and non-/ version of each URI
+        for uri in set(uris):
+            if uri.endswith("/"):
+                uris.add(uri[uri.upper().find("CONTENT"):-1])
+            else:
+                uris.add(uri[uri.upper().find("CONTENT"):] + "/")
 
         return sorted(uris)
         
