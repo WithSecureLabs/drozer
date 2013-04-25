@@ -30,10 +30,10 @@ class RepositoryBuilderTestCase(unittest.TestCase):
         RepositoryBuilder("./tmp", "./repo").build()
         
         assert os.path.exists("./repo")
-        assert os.path.exists("./repo/INDEX")
+        assert os.path.exists("./repo/INDEX.xml")
         assert os.path.exists("./repo/a.local.module")
         
-        assert fs.read("./repo/INDEX") == "a.local.module\n"
+        assert "a.local.module" in fs.read("./repo/INDEX.xml")
     
     def testItShouldBuildAModuleRepositoryWithPackage(self):
         fs.touch("./tmp/a/local/.mercury_package")
@@ -41,10 +41,10 @@ class RepositoryBuilderTestCase(unittest.TestCase):
         RepositoryBuilder("./tmp", "./repo").build()
         
         assert os.path.exists("./repo")
-        assert os.path.exists("./repo/INDEX")
+        assert os.path.exists("./repo/INDEX.xml")
         assert os.path.exists("./repo/a.local")
         
-        assert fs.read("./repo/INDEX") == "a.local\n"
+        assert "a.local" in fs.read("./repo/INDEX.xml")
         assert fs.read("./repo/a.local")[0:4] == "\x50\x4b\x03\x04"
 
     

@@ -1,7 +1,7 @@
 import unittest
 
-from mwr.droidhg import reflection
-from mwr.droidhg.api.protobuf_pb2 import Message
+from mwr.cinnibar import reflection
+from mwr.cinnibar.api.protobuf_pb2 import Message
 
 from mwr_test.mocks.reflection import MockReflector
 
@@ -11,7 +11,7 @@ class ReflectorTestCase(unittest.TestCase):
         self.reflector = MockReflector(None)
 
     def testItShouldConstructAClass(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildObjectReply(55512345))
 
@@ -20,15 +20,15 @@ class ReflectorTestCase(unittest.TestCase):
         assert self.reflector.sent.type == Message.REFLECTION_REQUEST
         assert self.reflector.sent.reflection_request.type == Message.ReflectionRequest.CONSTRUCT
         assert self.reflector.sent.reflection_request.construct.object.reference == 987654321
-        assert isinstance(response, reflection.ReflectedObject)
+        assert isinstance(response, reflection.types.ReflectedObject)
         assert response._ref == 55512345
 
     def testItShouldConstructAClassWithArguments(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildObjectReply(55512345))
 
-        response = self.reflector.construct(object, reflection.ReflectedType.fromNative(1, reflector=self.reflector), reflection.ReflectedType.fromNative("Joe", reflector=self.reflector))
+        response = self.reflector.construct(object, reflection.types.ReflectedType.fromNative(1, reflector=self.reflector), reflection.types.ReflectedType.fromNative("Joe", reflector=self.reflector))
 
         assert self.reflector.sent.type == Message.REFLECTION_REQUEST
         assert self.reflector.sent.reflection_request.type == Message.ReflectionRequest.CONSTRUCT
@@ -36,23 +36,23 @@ class ReflectorTestCase(unittest.TestCase):
         assert len(self.reflector.sent.reflection_request.construct.argument) == 2
         assert self.reflector.sent.reflection_request.construct.argument[0].type == Message.Argument.PRIMITIVE
         assert self.reflector.sent.reflection_request.construct.argument[1].type == Message.Argument.STRING
-        assert isinstance(response, reflection.ReflectedObject)
+        assert isinstance(response, reflection.types.ReflectedObject)
         assert response._ref == 55512345
 
     def testItShouldRaiseReflectionExceptionIfThereIsNoConstructor(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildErrorReply("no matching constructor for those parameters"))
 
         try:
-            self.reflector.construct(object, reflection.ReflectedType.fromNative(1, reflector=self.reflector), reflection.ReflectedType.fromNative("Joe", reflector=self.reflector))
+            self.reflector.construct(object, reflection.types.ReflectedType.fromNative(1, reflector=self.reflector), reflection.types.ReflectedType.fromNative("Joe", reflector=self.reflector))
 
             assert False, "expected a ReflectionException"
         except reflection.ReflectionException as e:
             assert e.message == "no matching constructor for those parameters"
 
     def testItShouldDeleteFromTheObjectStore(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildSuccessReply())
 
@@ -64,7 +64,7 @@ class ReflectorTestCase(unittest.TestCase):
         assert response == True
 
     def testItShouldReturnFalseIfThereIsNoObjectToDelete(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildErrorReply("nothing to delete"))
 
@@ -94,7 +94,7 @@ class ReflectorTestCase(unittest.TestCase):
         assert response == True
 
     def testItShouldGetAnObjectProperty(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildPrimitiveReply(Message.Primitive.INT, 1))
 
@@ -104,12 +104,12 @@ class ReflectorTestCase(unittest.TestCase):
         assert self.reflector.sent.reflection_request.type == Message.ReflectionRequest.GET_PROPERTY
         assert self.reflector.sent.reflection_request.get_property.object.reference == 987654321
         assert self.reflector.sent.reflection_request.get_property.property == "id"
-        assert isinstance(response, reflection.ReflectedPrimitive)
+        assert isinstance(response, reflection.types.ReflectedPrimitive)
         assert response.type() == 'int'
         assert response.native() == 1
 
     def testItShouldRaiseReflectionExceptionIfThereIsNoPropertyToGet(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildErrorReply("no property"))
 
@@ -121,7 +121,7 @@ class ReflectorTestCase(unittest.TestCase):
             assert e.message == "no property"
 
     def testItShouldInvokeAMethod(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildObjectReply(55512345))
 
@@ -132,15 +132,15 @@ class ReflectorTestCase(unittest.TestCase):
         assert self.reflector.sent.reflection_request.invoke.object.reference == 987654321
         assert self.reflector.sent.reflection_request.invoke.method == "callMe"
         assert len(self.reflector.sent.reflection_request.invoke.argument) == 0
-        assert isinstance(response, reflection.ReflectedObject)
+        assert isinstance(response, reflection.types.ReflectedObject)
         assert response._ref == 55512345
 
     def testItShouldInvokeAMethodWithArguments(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildObjectReply(55512345))
 
-        response = self.reflector.invoke(object, "callMe", reflection.ReflectedType.fromNative(1, reflector=self.reflector), reflection.ReflectedType.fromNative("Joe", reflector=self.reflector))
+        response = self.reflector.invoke(object, "callMe", reflection.types.ReflectedType.fromNative(1, reflector=self.reflector), reflection.types.ReflectedType.fromNative("Joe", reflector=self.reflector))
 
         assert self.reflector.sent.type == Message.REFLECTION_REQUEST
         assert self.reflector.sent.reflection_request.type == Message.ReflectionRequest.INVOKE
@@ -149,16 +149,16 @@ class ReflectorTestCase(unittest.TestCase):
         assert len(self.reflector.sent.reflection_request.invoke.argument) == 2
         assert self.reflector.sent.reflection_request.invoke.argument[0].type == Message.Argument.PRIMITIVE
         assert self.reflector.sent.reflection_request.invoke.argument[1].type == Message.Argument.STRING
-        assert isinstance(response, reflection.ReflectedObject)
+        assert isinstance(response, reflection.types.ReflectedObject)
         assert response._ref == 55512345
 
     def testItShouldRaiseReflectionExceptionIfThereIsNoMatchingMethod(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildErrorReply("no matching method for those parameters"))
 
         try:
-            self.reflector.construct(object, reflection.ReflectedType.fromNative(1, reflector=self.reflector), reflection.ReflectedType.fromNative("Joe", reflector=self.reflector))
+            self.reflector.construct(object, reflection.types.ReflectedType.fromNative(1, reflector=self.reflector), reflection.types.ReflectedType.fromNative("Joe", reflector=self.reflector))
 
             assert False, "expected a ReflectionException"
         except reflection.ReflectionException as e:
@@ -172,7 +172,7 @@ class ReflectorTestCase(unittest.TestCase):
         assert self.reflector.sent.type == Message.REFLECTION_REQUEST
         assert self.reflector.sent.reflection_request.type == Message.ReflectionRequest.RESOLVE
         assert self.reflector.sent.reflection_request.resolve.classname == "java.lang.String"
-        assert isinstance(response, reflection.ReflectedObject)
+        assert isinstance(response, reflection.types.ReflectedObject)
         assert response._ref == 55512345
 
     def testItShouldRaiseReflectionExceptionIfThereIsNoMatchingClass(self):
@@ -186,11 +186,11 @@ class ReflectorTestCase(unittest.TestCase):
             assert e.message == "could not resolve"
 
     def testItShouldSetAnObjectProperty(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildPrimitiveReply(Message.Primitive.INT, 1))
 
-        response = self.reflector.setProperty(object, "id", reflection.ReflectedType.fromNative(1, reflector=self.reflector))
+        response = self.reflector.setProperty(object, "id", reflection.types.ReflectedType.fromNative(1, reflector=self.reflector))
 
         assert self.reflector.sent.type == Message.REFLECTION_REQUEST
         assert self.reflector.sent.reflection_request.type == Message.ReflectionRequest.SET_PROPERTY
@@ -201,12 +201,12 @@ class ReflectorTestCase(unittest.TestCase):
         assert response.reflection_response.status == Message.ReflectionResponse.SUCCESS
 
     def testItShouldRaiseReflectionExceptionIfThereIsNoPropertyToSet(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildErrorReply("could not set property"))
 
         try:
-            self.reflector.setProperty(object, "id", reflection.ReflectedType.fromNative(1, reflector=self.reflector))
+            self.reflector.setProperty(object, "id", reflection.types.ReflectedType.fromNative(1, reflector=self.reflector))
 
             assert False, "expected a ReflectionException"
         except reflection.ReflectionException as e:

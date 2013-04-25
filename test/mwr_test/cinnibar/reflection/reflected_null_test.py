@@ -1,7 +1,7 @@
 import unittest
 
-from mwr.droidhg import reflection
-from mwr.droidhg.api.protobuf_pb2 import Message
+from mwr.cinnibar import reflection
+from mwr.cinnibar.api.protobuf_pb2 import Message
 
 from mwr_test.mocks.reflection import MockReflector
 

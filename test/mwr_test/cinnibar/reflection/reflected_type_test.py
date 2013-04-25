@@ -1,7 +1,7 @@
 import unittest
 
-from mwr.droidhg import reflection
-from mwr.droidhg.api.protobuf_pb2 import Message
+from mwr.cinnibar import reflection
+from mwr.cinnibar.api.protobuf_pb2 import Message
 
 from mwr_test.mocks.reflection import MockReflector
 
@@ -15,9 +15,9 @@ class ReflectedTypeTestCase(unittest.TestCase):
         argument.primitive.type = Message.Primitive.BOOL
         argument.primitive.bool = True
 
-        type = reflection.ReflectedType.fromArgument(argument, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromArgument(argument, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedPrimitive)
+        assert isinstance(type, reflection.types.ReflectedPrimitive)
         assert type.type() == "boolean"
         assert type.native() == True
 
@@ -25,9 +25,9 @@ class ReflectedTypeTestCase(unittest.TestCase):
         argument = Message.Argument(type=Message.Argument.STRING)
         argument.string = "Hello, World!"
 
-        type = reflection.ReflectedType.fromArgument(argument, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromArgument(argument, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedString)
+        assert isinstance(type, reflection.types.ReflectedString)
         assert type.native() == "Hello, World!"
 
     def testItShouldBuildPrimitiveArrayFromArgument(self):
@@ -39,13 +39,13 @@ class ReflectedTypeTestCase(unittest.TestCase):
             element.primitive.type = Message.Primitive.BOOL
             element.primitive.bool = True
 
-        type = reflection.ReflectedType.fromArgument(argument, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromArgument(argument, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedArray)
+        assert isinstance(type, reflection.types.ReflectedArray)
         assert len(type.native()) == 3
 
         for i in range(0,3):
-            assert isinstance(type.native()[i], reflection.ReflectedPrimitive)
+            assert isinstance(type.native()[i], reflection.types.ReflectedPrimitive)
             assert type.native()[i].type() == "boolean"
 
     def testItShouldBuildStringArrayFromArgument(self):
@@ -56,13 +56,13 @@ class ReflectedTypeTestCase(unittest.TestCase):
             element = argument.array.element.add(type=Message.Argument.STRING)
             element.string = "Hello, World! (" + str(i) + ")"
 
-        type = reflection.ReflectedType.fromArgument(argument, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromArgument(argument, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedArray)
+        assert isinstance(type, reflection.types.ReflectedArray)
         assert len(type.native()) == 3
 
         for i in range(0,3):
-            assert isinstance(type.native()[i], reflection.ReflectedString)
+            assert isinstance(type.native()[i], reflection.types.ReflectedString)
             assert type.native()[i].native() == "Hello, World! (" + str(i) + ")"
 
     def testItShouldBuildNestedArrayFromArgument(self):
@@ -77,13 +77,13 @@ class ReflectedTypeTestCase(unittest.TestCase):
                 subelement.primitive.type = Message.Primitive.BOOL
                 subelement.primitive.bool = True
 
-        type = reflection.ReflectedType.fromArgument(argument, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromArgument(argument, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedArray)
+        assert isinstance(type, reflection.types.ReflectedArray)
         assert len(type.native()) == 3
 
         for i in range(0,3):
-            assert isinstance(type.native()[i], reflection.ReflectedArray)
+            assert isinstance(type.native()[i], reflection.types.ReflectedArray)
             assert len(type.native()[i].native()) == i
 
     def testItShouldBuildObjectArrayFromArgument(self):
@@ -94,13 +94,13 @@ class ReflectedTypeTestCase(unittest.TestCase):
             element = argument.array.element.add(type=Message.Argument.OBJECT)
             element.object.reference = i
 
-        type = reflection.ReflectedType.fromArgument(argument, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromArgument(argument, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedArray)
+        assert isinstance(type, reflection.types.ReflectedArray)
         assert len(type.native()) == 3
 
         for i in range(0,3):
-            assert isinstance(type.native()[i], reflection.ReflectedObject)
+            assert isinstance(type.native()[i], reflection.types.ReflectedObject)
             assert type.native()[i]._ref == i
 
     def testItShouldRaiseTypeErrorIfArrayIsMixedTypes(self):
@@ -116,7 +116,7 @@ class ReflectedTypeTestCase(unittest.TestCase):
             element.object.reference = i
 
         try:
-            type = reflection.ReflectedType.fromArgument(argument, reflector=self.reflector)
+            type = reflection.types.ReflectedType.fromArgument(argument, reflector=self.reflector)
 
             assert False, "should have caused a TypeError building a mixed array"
         except TypeError as e:
@@ -126,84 +126,84 @@ class ReflectedTypeTestCase(unittest.TestCase):
         argument = Message.Argument(type=Message.Argument.OBJECT)
         argument.object.reference = 987654321
 
-        type = reflection.ReflectedType.fromArgument(argument, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromArgument(argument, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedObject)
+        assert isinstance(type, reflection.types.ReflectedObject)
         assert type._ref == 987654321
 
     def testItShouldBuildNullFromArgument(self):
         argument = Message.Argument(type=Message.Argument.NULL)
 
-        type = reflection.ReflectedType.fromArgument(argument, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromArgument(argument, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedNull)
+        assert isinstance(type, reflection.types.ReflectedNull)
 
     def testItShouldBuildBooleanFromNative(self):
-        type = reflection.ReflectedType.fromNative(True, reflector=self.reflector, obj_type="boolean")
+        type = reflection.types.ReflectedType.fromNative(True, reflector=self.reflector, obj_type="boolean")
         
         # we must use type-hinting for booleans, otherwise Python gets a little
         # bit confused, because it doesn't support them properly
 
-        assert isinstance(type, reflection.ReflectedPrimitive)
+        assert isinstance(type, reflection.types.ReflectedPrimitive)
         assert type.type() == "boolean"
         assert type.native() == True
 
     def testItShouldBuildFloatFromNative(self):
-        type = reflection.ReflectedType.fromNative(1.5, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromNative(1.5, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedPrimitive)
+        assert isinstance(type, reflection.types.ReflectedPrimitive)
         assert type.type() == "float"
         assert type.native() == 1.5
 
     def testItShouldBuildIntFromNative(self):
-        type = reflection.ReflectedType.fromNative(1, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromNative(1, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedPrimitive)
+        assert isinstance(type, reflection.types.ReflectedPrimitive)
         assert type.type() == "int"
         assert type.native() == 1
 
     def testItShouldBuildLongFromNative(self):
-        type = reflection.ReflectedType.fromNative(long(1), reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromNative(long(1), reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedPrimitive)
+        assert isinstance(type, reflection.types.ReflectedPrimitive)
         assert type.type() == "long"
         assert type.native() == long(1)
     
     def testItShouldBuildNullFromNative(self):
-        type = reflection.ReflectedType.fromNative(None, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromNative(None, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedNull)
+        assert isinstance(type, reflection.types.ReflectedNull)
 
     def testItShouldBuildPrimitiveArrayFromNative(self):
-        type = reflection.ReflectedType.fromNative([1, 2, 3], reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromNative([1, 2, 3], reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedArray)
+        assert isinstance(type, reflection.types.ReflectedArray)
         for i in range(0,3):
-            assert isinstance(type.native()[i], reflection.ReflectedPrimitive)
+            assert isinstance(type.native()[i], reflection.types.ReflectedPrimitive)
             assert type.native()[i].type() == "int"
             assert type.native()[i].native() == i+1
 
     def testItShouldBuildStringArrayFromNative(self):
         trial = ["Hello", "There", "World"]
-        type = reflection.ReflectedType.fromNative(trial, reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromNative(trial, reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedArray)
+        assert isinstance(type, reflection.types.ReflectedArray)
         for i in range(0,3):
-            assert isinstance(type.native()[i], reflection.ReflectedString)
+            assert isinstance(type.native()[i], reflection.types.ReflectedString)
             assert type.native()[i].native() == trial[i]
 
     def testItShouldBuildNestedArrayFromNative(self):
-        type = reflection.ReflectedType.fromNative([[], [1], [1,2]], reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromNative([[], [1], [1,2]], reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedArray)
+        assert isinstance(type, reflection.types.ReflectedArray)
         for i in range(0,3):
-            assert isinstance(type.native()[i], reflection.ReflectedArray)
+            assert isinstance(type.native()[i], reflection.types.ReflectedArray)
             assert len(type.native()[i].native()) == i
 
     def testItShouldBuildStringFromNative(self):
-        type = reflection.ReflectedType.fromNative("Hello, World!", reflector=self.reflector)
+        type = reflection.types.ReflectedType.fromNative("Hello, World!", reflector=self.reflector)
 
-        assert isinstance(type, reflection.ReflectedString)
+        assert isinstance(type, reflection.types.ReflectedString)
         assert type.native() == "Hello, World!"
         
 

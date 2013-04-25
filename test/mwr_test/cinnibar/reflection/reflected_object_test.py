@@ -1,7 +1,7 @@
 import unittest
 
-from mwr.droidhg import reflection
-from mwr.droidhg.api.protobuf_pb2 import Message
+from mwr.cinnibar import reflection
+from mwr.cinnibar.api.protobuf_pb2 import Message
 
 from mwr_test.mocks.reflection import MockReflector
 
@@ -11,7 +11,7 @@ class ReflectedObjectTestCase(unittest.TestCase):
         self.reflector = MockReflector(None)
 
     def testItShouldGetAPropertyValue(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildPrimitiveReply(Message.Primitive.INT, 42))
 
@@ -26,7 +26,7 @@ class ReflectedObjectTestCase(unittest.TestCase):
         assert False, "not implemented"
 
     def testItShouldSetAPropertyValue(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(self.reflector.buildPrimitiveReply(Message.Primitive.INT, 42))
 
@@ -41,7 +41,7 @@ class ReflectedObjectTestCase(unittest.TestCase):
         assert False, "not implemented"
 
     def testItShouldInvokeAMethod(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(None)
         self.reflector.replyWith(self.reflector.buildObjectReply(55512345))
@@ -55,7 +55,7 @@ class ReflectedObjectTestCase(unittest.TestCase):
         assert self.reflector.sent.reflection_request.invoke.method == "callMe"
 
     def testItShouldInvokeAMethodWithArguments(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(None)
         self.reflector.replyWith(self.reflector.buildObjectReply(55512345))
@@ -75,30 +75,30 @@ class ReflectedObjectTestCase(unittest.TestCase):
         assert self.reflector.sent.reflection_request.invoke.argument[1].string == "Joe"
 
     def testItShouldGetAPrimitiveReturnedByAMethod(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(None)
         self.reflector.replyWith(self.reflector.buildPrimitiveReply(Message.Primitive.INT, 1))
         
         response = object.callMe()
 
-        assert isinstance(response, reflection.ReflectedPrimitive)
+        assert isinstance(response, reflection.types.ReflectedPrimitive)
         assert response.type() == "int"
         assert response.native() == 1
 
     def testItShouldGetAnObjectReturnedByAMethod(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(None)
         self.reflector.replyWith(self.reflector.buildObjectReply(55512345))
         
         response = object.callMe()
 
-        assert isinstance(response, reflection.ReflectedObject)
+        assert isinstance(response, reflection.types.ReflectedObject)
         assert response._ref == 55512345
 
     def testItShouldRaiseReflectionExceptionIfInvokingNonExistentMethod(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(None)
         self.reflector.replyWith(self.reflector.buildErrorReply("no method callMe"))
@@ -111,7 +111,7 @@ class ReflectedObjectTestCase(unittest.TestCase):
             assert e.message == "no method callMe"
 
     def testItShouldRaiseReflectionExceptionIfInvokingMethodWithInappropriateArguments(self):
-        object = reflection.ReflectedObject(987654321, reflector=self.reflector)
+        object = reflection.types.ReflectedObject(987654321, reflector=self.reflector)
 
         self.reflector.replyWith(None)
         self.reflector.replyWith(self.reflector.buildErrorReply("no method callMe compatible with those arguments"))

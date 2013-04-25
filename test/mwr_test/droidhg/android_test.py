@@ -1,8 +1,9 @@
 import functools
 import unittest
 
+from mwr.cinnibar.reflection.types import ReflectedObject
+
 from mwr.droidhg.android import Intent
-from mwr.droidhg.reflection import ReflectedObject
 
 class IntentTestCase(unittest.TestCase):
 
@@ -13,6 +14,9 @@ class IntentTestCase(unittest.TestCase):
 
         def new(self, class_name):
             return self.__reflector.construct(class_name)
+        
+        def arg(self, native, obj_type=None):
+            return native
 
     class MockReflector:
 
@@ -87,7 +91,7 @@ class IntentTestCase(unittest.TestCase):
         reflector.construct_returns = ReflectedObject(999, reflector=reflector)
         module = IntentTestCase.MockModule(reflector)
 
-        intent = Intent(extras=[('boolean', 'myBool', True)])
+        intent = Intent(extras=[('boolean', 'myBool', "True")])
 
         intent.buildIn(module)
         

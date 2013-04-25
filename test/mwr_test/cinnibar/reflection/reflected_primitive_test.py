@@ -1,7 +1,7 @@
 import unittest
 
-from mwr.droidhg import reflection
-from mwr.droidhg.api.protobuf_pb2 import Message
+from mwr.cinnibar import reflection
+from mwr.cinnibar.api.protobuf_pb2 import Message
 
 from mwr_test.mocks.reflection import MockReflector
 
@@ -13,10 +13,10 @@ class ReflectedIntegerPrimitiveTestCase(unittest.TestCase):
         self.np2 = 2
         self.np3 = 3
 
-        self.rp0 = reflection.ReflectedPrimitive('int', 0)
-        self.rp1 = reflection.ReflectedPrimitive('int', 1)
-        self.rp2 = reflection.ReflectedPrimitive('int', 2)
-        self.rp3 = reflection.ReflectedPrimitive('int', 3)
+        self.rp0 = reflection.types.ReflectedPrimitive('int', 0)
+        self.rp1 = reflection.types.ReflectedPrimitive('int', 1)
+        self.rp2 = reflection.types.ReflectedPrimitive('int', 2)
+        self.rp3 = reflection.types.ReflectedPrimitive('int', 3)
         pass
 
     #'__abs__', '__add__',  '__delattr__', 
@@ -42,7 +42,7 @@ class ReflectedIntegerPrimitiveTestCase(unittest.TestCase):
         assert divmod(self.rp3, self.np2) == (1, 1)
 
     def testItShouldShowTwoReflectedPrimitiveAreEqual(self):
-        assert self.rp2 == reflection.ReflectedPrimitive('int', 2)
+        assert self.rp2 == reflection.types.ReflectedPrimitive('int', 2)
 
     def testItShouldShowTwoReflectedPrimitivesAreNotEqual(self):
         assert not self.rp2 == self.rp1

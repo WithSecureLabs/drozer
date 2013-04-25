@@ -3,8 +3,9 @@ import functools
 import sys
 import unittest
 
+from mwr.cinnibar.reflection.types import ReflectedObject, ReflectedType
+
 from mwr.droidhg.modules import Module
-from mwr.droidhg.reflection import ReflectedObject, ReflectedType
 
 class ModuleTestCase(unittest.TestCase):
 

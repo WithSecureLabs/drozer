@@ -1,6 +1,6 @@
 import unittest
 
-from mwr.droidhg.modules.base import ImportConflictResolver
+from mwr.droidhg.modules.import_conflict_resolver import ImportConflictResolver
 from mwr.droidhg.modules.app import package
 
 class ImportConflictResolverTestCase(unittest.TestCase):

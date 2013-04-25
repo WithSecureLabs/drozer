@@ -1,8 +1,8 @@
 import unittest
 
-from mwr.droidhg.api import builders
-from mwr.droidhg.api.protobuf_pb2 import Message
-from mwr.droidhg.reflection import ReflectedType
+from mwr.cinnibar.api import builders
+from mwr.cinnibar.api.protobuf_pb2 import Message
+from mwr.cinnibar.reflection.types import ReflectedType
 
 class ReflectionRequestFactoryTestCase(unittest.TestCase):
 

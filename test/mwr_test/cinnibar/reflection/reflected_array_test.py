@@ -1,15 +1,15 @@
 import unittest
 
-from mwr.droidhg import reflection
-from mwr.droidhg.api.protobuf_pb2 import Message
+from mwr.cinnibar import reflection
+from mwr.cinnibar.api.protobuf_pb2 import Message
 
 from mwr_test.mocks.reflection import MockReflector
 
 class ReflectedArrayTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.a1 = reflection.ReflectedArray([1, 2, 3, 4, 5])
-        self.a2 = reflection.ReflectedArray([6, 7, 8, 9, 10])
+        self.a1 = reflection.types.ReflectedArray([1, 2, 3, 4, 5])
+        self.a2 = reflection.types.ReflectedArray([6, 7, 8, 9, 10])
 
     def testItShouldAddTwoReflectedArrays(self):
         aa = self.a1 + self.a2
@@ -22,13 +22,13 @@ class ReflectedArrayTestCase(unittest.TestCase):
         assert aa == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     def testItShouldShowAReflectedTypeIsInTheArray(self):
-        assert reflection.ReflectedPrimitive.fromNative(3, reflector=None) in self.a1
+        assert reflection.types.ReflectedPrimitive.fromNative(3, reflector=None) in self.a1
 
     def testItShouldShowANativeTypeIsInTheArray(self):
         assert 3 in self.a1
 
     def testItShouldShowAReflectedTypeIsNotInTheArray(self):
-        assert not reflection.ReflectedPrimitive.fromNative(7, reflector=None) in self.a1
+        assert not reflection.types.ReflectedPrimitive.fromNative(7, reflector=None) in self.a1
 
     def testItShouldShowANativeTypeIsNotInTheArray(self):
         assert not 7 in self.a1
@@ -44,7 +44,7 @@ class ReflectedArrayTestCase(unittest.TestCase):
         assert len(self.a1) == 3
 
     def testItShouldShowAReflectedArrayIsEqualToAnother(self):
-        assert self.a1 == reflection.ReflectedArray([1, 2, 3, 4, 5])
+        assert self.a1 == reflection.types.ReflectedArray([1, 2, 3, 4, 5])
 
     def testItShouldShowAReflectedArrayIsEqualToANativeOne(self):
         assert self.a1 == [1, 2, 3, 4, 5]
@@ -87,7 +87,7 @@ class ReflectedArrayTestCase(unittest.TestCase):
         assert self.a1 != [6, 7, 8, 9, 10]
 
     def testItShouldShowAReflectedArrayIsNotNotEqualToAnother(self):
-        assert not self.a1 != reflection.ReflectedArray([1, 2, 3, 4, 5])
+        assert not self.a1 != reflection.types.ReflectedArray([1, 2, 3, 4, 5])
 
     def testItShouldShowAReflectedArrayIsNotNotEqualToANativeOne(self):
         assert not self.a1 != [1, 2, 3, 4, 5]
@@ -111,10 +111,10 @@ class ReflectedArrayTestCase(unittest.TestCase):
         assert len(self.a1) == 6
 
     def testItShouldCountElementsInTheArrayWithAReflectedValue(self):
-        assert self.a1.count(reflection.ReflectedPrimitive.fromNative(3, reflector=None)) == 1
+        assert self.a1.count(reflection.types.ReflectedPrimitive.fromNative(3, reflector=None)) == 1
 
     def testItShouldCountElementsInTheArrayWithANativeValue(self):
-        assert self.a1.count(reflection.ReflectedPrimitive.fromNative(7, reflector=None)) == 0
+        assert self.a1.count(reflection.types.ReflectedPrimitive.fromNative(7, reflector=None)) == 0
 
     def testItShouldExtendTheArrayWithAReflectedArray(self):
         self.a1.extend(self.a2)
@@ -164,7 +164,7 @@ class ReflectedArrayTestCase(unittest.TestCase):
             pass
 
     def testItShouldSortTheArray(self):
-        aa = reflection.ReflectedArray([3, 4, 1, 5, 2])
+        aa = reflection.types.ReflectedArray([3, 4, 1, 5, 2])
 
         assert aa.sort() == [1, 2, 3, 4, 5]
 

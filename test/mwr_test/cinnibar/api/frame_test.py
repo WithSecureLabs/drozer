@@ -1,8 +1,8 @@
 from StringIO import StringIO
 import unittest
 
-from mwr.droidhg.api import builders, frame
-from mwr.droidhg.api.protobuf_pb2 import Message
+from mwr.cinnibar.api import builders, frame
+from mwr.cinnibar.api.protobuf_pb2 import Message
 
 class FrameTestCase(unittest.TestCase):
 

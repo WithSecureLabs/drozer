@@ -1,7 +1,8 @@
 import unittest
 
-from mwr_test.droidhg import android_test, console, modules, reflection, repoman, ssl
-from mwr_test.droidhg.api import builders, frame_test
+from mwr_test.cinnibar.api import builders, frame_test
+from mwr_test.cinnibar.reflection import reflected_array_test, reflected_null_test, reflected_object_test, reflected_primitive_test, reflected_string_test, reflected_type_test, reflector_test
+from mwr_test.droidhg import android_test, console, modules, repoman, ssl
 
 all_tests = unittest.TestSuite((
   builders.reflection_request_test.ReflectionRequestFactoryTestSuite(),
@@ -36,13 +37,13 @@ all_tests = unittest.TestSuite((
   #modules.common.vulnerability
   #modules.common.zip_file
 
-  reflection.reflected_array_test.ReflectedArrayTestSuite(),
-  reflection.reflected_null_test.ReflectedNullTestSuite(),
-  reflection.reflected_object_test.ReflectedObjectTestSuite(),
-  reflection.reflected_string_test.ReflectedStringTestSuite(),
-  reflection.reflected_primitive_test.ReflectedPrimitiveTestSuite(),
-  reflection.reflected_type_test.ReflectedTypeTestSuite(),
-  reflection.reflector_test.ReflectorTestSuite(),
+  reflected_array_test.ReflectedArrayTestSuite(),
+  reflected_null_test.ReflectedNullTestSuite(),
+  reflected_object_test.ReflectedObjectTestSuite(),
+  reflected_string_test.ReflectedStringTestSuite(),
+  reflected_primitive_test.ReflectedPrimitiveTestSuite(),
+  reflected_type_test.ReflectedTypeTestSuite(),
+  reflector_test.ReflectorTestSuite(),
   
   repoman.installer_test.ModuleInstallerTestSuite(),
   repoman.remote_test.RemoteTestSuite(),

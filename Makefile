@@ -22,7 +22,7 @@ lint: force
 native-libraries: $(NATIVES)
 sources: src/mwr/cinnibar/api/protobuf_pb2.py
 test: force
-	$(PYTHON) test/mwr_test/droidhg/all.py
+	$(PYTHON) test/mwr_test/all.py
 
 %.apk: %.class
 	cd $(dir $^); $(DX) --dex --output=$(notdir $(^:.class=.apk) $(^:.class=*.class))

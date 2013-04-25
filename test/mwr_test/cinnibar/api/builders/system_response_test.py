@@ -1,8 +1,8 @@
 import unittest
 
-from mwr.droidhg.api import builders
-from mwr.droidhg.api.protobuf_pb2 import Message
-from mwr.droidhg.reflection import ReflectedType
+from mwr.cinnibar.api import builders
+from mwr.cinnibar.api.protobuf_pb2 import Message
+from mwr.cinnibar.reflection.types import ReflectedType
 
 class SystemResponseFactoryTestCase(unittest.TestCase):
 
@@ -58,16 +58,6 @@ class SystemResponseFactoryTestCase(unittest.TestCase):
         assert message.system_response.devices[1].model == "Mobile 2"
         assert message.system_response.devices[1].software == "4.2.0"
 
-    def testItShouldBuildAListSessionsMessage(self):
-        message = self.factory.listSessions([SystemResponseFactoryTestCase.MockSession("987654321", "987654321"),
-            SystemResponseFactoryTestCase.MockSession("999999999", "999999999")]).builder
-
-        assert message.type == Message.SYSTEM_RESPONSE
-        assert message.system_response.type == Message.SystemResponse.SESSION_LIST
-        assert message.system_response.status == Message.SystemResponse.SUCCESS
-        assert message.system_response.sessions[0].id == "987654321"
-        assert message.system_response.sessions[1].id == "999999999"
-
     def testItShouldBuildAUnboundMessage(self):
         message = self.factory.unbound(SystemResponseFactoryTestCase.MockDevice("987654321", "Widget Corp", "Mobile 1", "4.2.0")).builder
 
@@ -92,17 +82,6 @@ class SystemResponseFactoryTestCase(unittest.TestCase):
         assert message.system_response.devices[1].manufacturer == "Widget Corp"
         assert message.system_response.devices[1].model == "Mobile 2"
         assert message.system_response.devices[1].software == "4.2.0"
-
-    def testItShouldAddASession(self):
-        factory = self.factory.listSessions([SystemResponseFactoryTestCase.MockSession("987654321", "987654321")])
-        factory.add_session(SystemResponseFactoryTestCase.MockSession("999999999", "999999999"))
-        message = factory.builder
-
-        assert message.type == Message.SYSTEM_RESPONSE
-        assert message.system_response.type == Message.SystemResponse.SESSION_LIST
-        assert message.system_response.status == Message.SystemResponse.SUCCESS
-        assert message.system_response.sessions[0].id == "987654321"
-        assert message.system_response.sessions[1].id == "999999999"
 
     def testItShouldMakeError(self):
         factory = self.factory.error(Message.SystemResponse.BOUND, "errorMessage")
@@ -132,10 +111,8 @@ def SystemResponseFactoryTestSuite():
     suite.addTest(SystemResponseFactoryTestCase("testItShouldBuildABoundMessage"))
     suite.addTest(SystemResponseFactoryTestCase("testItShouldBuildAErrorMessage"))
     suite.addTest(SystemResponseFactoryTestCase("testItShouldBuildAListDevicesMessage"))
-    suite.addTest(SystemResponseFactoryTestCase("testItShouldBuildAListSessionsMessage"))
     suite.addTest(SystemResponseFactoryTestCase("testItShouldBuildAUnboundMessage"))
     suite.addTest(SystemResponseFactoryTestCase("testItShouldAddADevice"))
-    suite.addTest(SystemResponseFactoryTestCase("testItShouldAddASession"))
     suite.addTest(SystemResponseFactoryTestCase("testItShouldMakeError"))
     suite.addTest(SystemResponseFactoryTestCase("testItShouldMakeSuccess"))
     suite.addTest(SystemResponseFactoryTestCase("testItShouldSetErrorMessage"))
