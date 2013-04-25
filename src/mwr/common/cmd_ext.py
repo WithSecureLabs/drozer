@@ -41,6 +41,7 @@ class Cmd(cmd.Cmd):
         self.ruler = " "
         self.stdout = self.stdout
         self.stderr = sys.stderr
+        self.variables = {}
 
     def cmdloop(self, intro=None):
         """
@@ -247,9 +248,14 @@ class Cmd(cmd.Cmd):
         Perform substitution of Bash-style variables.
         """
 
+        # perform any arbitrary variable substitutions, from the dictionary
+        for name in self.variables:
+            line = line.replace("$%s" % name, self.variables[name])
+        
+        # perform special variable substitutions, referencing the previous command
         if self.lastcmd != "":
             argv = shlex.split(self.lastcmd)
-                
+            
             line = line.replace("!!", self.lastcmd)
             line = line.replace("!$", argv[-1])
             line = line.replace("!^", argv[1])
