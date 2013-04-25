@@ -2,6 +2,7 @@ import socket
 import ssl
 
 from mwr.cinnibar.api import Frame
+from mwr.cinnibar.api.transport.exceptions import ConnectionError
 from mwr.cinnibar.api.transport.transport import Transport
 
 from mwr.droidhg.ssl.provider import Provider # TODO: eugh
@@ -18,7 +19,7 @@ class SocketTransport(Transport):
             
             self.__socket = ssl.wrap_socket(self.__socket, cert_reqs=ssl.CERT_REQUIRED, ca_certs=provider.ca_certificate_path())
 
-        self.__socket.settimeout(90.0)
+        self.setTimeout(90.0)
         self.__socket.connect(self.__getEndpoint(arguments))
         
         if arguments.ssl:
@@ -38,12 +39,17 @@ class SocketTransport(Transport):
         If not frame is available, None is returned.
         """
 
-        frame = Frame.readFromSocket(self.__socket)
-
-        if frame is not None:
-            return frame.message()
-        else:
-            return None
+        try:
+            frame = Frame.readFromSocket(self.__socket)
+    
+            if frame is not None:
+                return frame.message()
+            else:
+                return None
+        except socket.timeout as e:
+            raise ConnectionError(e)
+        except ssl.SSLError as e:
+            raise ConnectionError(e)
 
     def send(self, message):
         """
@@ -53,13 +59,18 @@ class SocketTransport(Transport):
         returned.
         """
 
-        message_id = self.nextId()
-
-        frame = Frame.fromMessage(message.setId(message_id).build())
-
-        self.__socket.sendall(str(frame))
-
-        return message_id
+        try:
+            message_id = self.nextId()
+    
+            frame = Frame.fromMessage(message.setId(message_id).build())
+    
+            self.__socket.sendall(str(frame))
+    
+            return message_id
+        except socket.timeout as e:
+            raise ConnectionError(e)
+        except ssl.SSLError as e:
+            raise ConnectionError(e)
 
     def sendAndReceive(self, message):
         """
@@ -72,9 +83,16 @@ class SocketTransport(Transport):
             response = self.receive()
 
             if response == None:
-                raise RuntimeError('Received an empty response from the Agent. This normally means the remote service has crashed.')
+                raise ConnectionError(RuntimeError('Received an empty response from the Agent.'))
             elif response.id == message_id:
                 return response
+            
+    def setTimeout(self, timeout):
+        """
+        Change the read timeout on the socket.
+        """
+        
+        self.__socket.settimeout(timeout)
 
     def __getEndpoint(self, arguments):
         """
