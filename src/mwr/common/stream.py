@@ -103,7 +103,7 @@ def format_colors(text):
 
         return "%s%s%s" % (Colors[m.group(1)], m.group(2), Colors['end'])
 
-    text = re.sub("\[color\s*([a-z]+)\](.*)\[\/color\]", replace_color, text)
+    text = re.sub("\[color\s*([a-z]+)\](.*?)\[\/color\]", replace_color, text)
 
     return text
 
