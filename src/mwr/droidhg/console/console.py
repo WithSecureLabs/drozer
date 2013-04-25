@@ -7,6 +7,7 @@ from mwr.common import cli, path_completion
 
 from mwr.droidhg.api.formatters import SystemResponseFormatter
 from mwr.droidhg.connector import ServerConnector
+from mwr.droidhg.connector.exceptions import ConnectionError
 from mwr.droidhg.console.session import Session, DebugSession
 
 class Console(cli.Base):
@@ -73,11 +74,7 @@ class Console(cli.Base):
                 
             self.__getServerConnector(arguments).close()
         else:
-            print "error:", response.system_response.error_message
-            
-            self.__getServerConnector(arguments).close()
-
-            sys.exit(-1)
+            self.handle_error(RuntimeError(response.system_response.error_message), fatal=True)
 
     def do_devices(self, arguments):
         """lists all devices bound to the Mercury server"""
@@ -107,13 +104,26 @@ class Console(cli.Base):
         elif action.dest == "onecmd":
             return None
         
-    def handle_error(self, throwable):
+    def handle_error(self, throwable, fatal=False):
         """error handler: shows an exception message, before terminating"""
         
         if str(throwable) == "connection reset by peer":
             sys.stderr.write("The Mercury server is not available. Please double check the address and port.\n\n")
-        if str(throwable) == "'NoneType' object has no attribute 'id'":
+        elif str(throwable) == "'NoneType' object has no attribute 'id'":
             sys.stderr.write("Expected a response from the server, but there was none.\nThe server may be unavailable, or may be expecting you to connect using SSL.\n\n")
+        elif isinstance(throwable, ConnectionError) or fatal == True:
+            sys.stderr.write("There was a problem connecting to the Mercury server.\n\n")
+            sys.stderr.write("Things to check:\n\n")
+            sys.stderr.write(" - is the Mercury Server running?\n")
+            sys.stderr.write(" - have you set up appropriate adb port forwards?\n")
+            sys.stderr.write(" - have you specified the correct hostname and port with --server?\n")
+            sys.stderr.write(" - is the server protected with SSL (add an --ssl switch)?\n")
+            sys.stderr.write(" - is the agent protected with a password (add a --password switch)?\n\n")
+            if(hasattr(throwable, 'cause')):
+                sys.stderr.write("Debug Information:\n")
+                sys.stderr.write("%s\n\n" % str(throwable.cause))
+            
+            sys.exit(1)
         else:
             cli.Base.handle_error(self, throwable)
 

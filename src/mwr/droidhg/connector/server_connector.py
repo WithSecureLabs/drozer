@@ -4,6 +4,8 @@ import sys
 from mwr.cinnibar.api.builders import SystemRequestFactory
 from mwr.cinnibar.api.transport import SocketTransport
 
+from mwr.droidhg.connector.exceptions import ConnectionError
+
 class ServerConnector(SocketTransport):
     """
     The Server model represents a connection between a Console and a Mercury
@@ -20,39 +22,59 @@ class ServerConnector(SocketTransport):
         try:
             SocketTransport.__init__(self, arguments, trust_callback)
         except socket.error as e:
-            print "error connecting to server:", e.strerror.lower()
-
-            sys.exit(-1)
+            raise ConnectionError(e)
         except socket.timeout as e:
-            print "error connecting to server:", e.strerror.lower()
-
-            sys.exit(-1)
+            raise ConnectionError(e)
 
     def listDevices(self):
         """
         Get a list of Devices boud to the Server.
         """
 
-        return self.sendAndReceive(SystemRequestFactory.listDevices())
+        try:
+            return self.sendAndReceive(SystemRequestFactory.listDevices())
+        except RuntimeError as e:
+            if e.message == 'Received an empty response from the Agent. This normally means the remote service has crashed.':
+                raise ConnectionError(e)
+            else:
+                raise
 
     def listSessions(self):
         """
         Get a list of active sessions on the Server.
         """
 
-        return self.sendAndReceive(SystemRequestFactory.listSessions())
+        try:
+            return self.sendAndReceive(SystemRequestFactory.listSessions())
+        except RuntimeError as e:
+            if e.message == 'Received an empty response from the Agent. This normally means the remote service has crashed.':
+                raise ConnectionError(e)
+            else:
+                raise
 
     def startSession(self, device_id, password):
         """
         Start a new Session with a Device known to the Server.
         """
 
-        return self.sendAndReceive(SystemRequestFactory.startSession(device_id).setPassword(password))
+        try:
+            return self.sendAndReceive(SystemRequestFactory.startSession(device_id).setPassword(password))
+        except RuntimeError as e:
+            if e.message == 'Received an empty response from the Agent. This normally means the remote service has crashed.':
+                raise ConnectionError(e)
+            else:
+                raise
 
     def stopSession(self, session_id):
         """
         Stop an active Session, known to the Server.
         """
 
-        return self.sendAndReceive(SystemRequestFactory.stopSessionId(session_id))
+        try:
+            return self.sendAndReceive(SystemRequestFactory.stopSessionId(session_id))
+        except RuntimeError as e:
+            if e.message == 'Received an empty response from the Agent. This normally means the remote service has crashed.':
+                raise ConnectionError(e)
+            else:
+                raise
         
