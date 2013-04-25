@@ -30,7 +30,7 @@ Discovered suid/sgid files in /system:
             privileged = arguments.privileged
             
             if privileged:
-                if self.isSuInstalled():
+                if self.isAnySuInstalled():
                     command = "su -c \"%s\"" % command
                 else:
                     self.stdout.write("su is not installed...reverting back to unprivileged mode\n")
