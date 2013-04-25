@@ -45,6 +45,8 @@ class Session(cmd.Cmd):
         self.prompt = "mercury> "
         self.stdout = ColouredStream(self.stdout)
         self.stderr = ColouredStream(self.stderr)
+        self.variables = {  'PATH': '/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin:/data/data/com.mwr.droidhg.agent/bin',
+                            'WD': '/data/data/com.mwr.droidhg.agent' }
 
     def completefilename(self, text, line, begidx, endidx):
         """
