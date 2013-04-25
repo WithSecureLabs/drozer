@@ -43,7 +43,7 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
             if package.sharedUserId != None:
                 self.stdout.write("    Shared UID (%s)\n" % package.sharedUserId)
         else:
-            self.stdout.write("Package Not Found\n")
+            self.stdout.write("No package specified\n")
 
 class Info(Module, common.Filters, common.PackageManager):
 
