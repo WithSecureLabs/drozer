@@ -21,10 +21,12 @@ class Shell(object):
         
         shell = self.new("com.mwr.droidhg.shell.Shell")
         
-        while (command.upper() != "EXIT"):
+        while shell.valid():
             shell.write(command)
             response = shell.read()
             self.stdout.write(response.strip())
+            if not shell.valid():
+                break
             self.stdout.write(" ")
             command = raw_input().replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox")
         
