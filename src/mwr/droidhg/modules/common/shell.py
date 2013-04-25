@@ -1,3 +1,5 @@
+from mwr.cinnibar.reflection import ReflectionException
+
 class Shell(object):
     """
     Mercury Client Library: provides a wrapper around the Android Shell, allowing
@@ -21,14 +23,30 @@ class Shell(object):
         
         shell = self.new("com.mwr.droidhg.shell.Shell")
         
-        while shell.valid():
+        try:
+            while shell.valid():
+                shell.write(command)
+                response = shell.read()
+                self.stdout.write(response.strip())
+                if not shell.valid():
+                    break
+                self.stdout.write(" ")
+                command = raw_input().replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox")
+            
+            shell.close()
+        except ReflectionException as e:
+            if e.message == "valid for class com.mwr.droidhg.shell.Shell":
+                self.shellStartCompatibility(command)
+            else:
+                raise
+    
+    def shellStartCompatibility(self, command=""):
+        shell = self.new("com.mwr.droidhg.shell.Shell")
+        
+        while command.upper() != "EXIT":
             shell.write(command)
             response = shell.read()
             self.stdout.write(response.strip())
-            if not shell.valid():
-                break
             self.stdout.write(" ")
             command = raw_input().replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox")
-        
-        shell.close()
-        
+            
