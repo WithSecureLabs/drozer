@@ -2,7 +2,7 @@ import os
 
 from mwr.droidhg.modules import common, Module
 
-class Start(Module, common.ClassLoader, common.Shell):
+class Start(Module, common.Shell):
 
     name = "Enter into an interactive Linux shell."
     description = "Execute Linux commands in a shell in the context of Mercury."
@@ -20,7 +20,7 @@ class Start(Module, common.ClassLoader, common.Shell):
         self.shellStart()
         self.pop_completer()
 
-class Exec(Module, common.ClassLoader, common.Shell):
+class Exec(Module, common.Shell):
 
     name = "Execute a single Linux command."
     description = "Execute a single Linux command from the context of Mercury."

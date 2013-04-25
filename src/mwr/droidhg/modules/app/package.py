@@ -254,7 +254,7 @@ class List(Module, common.PackageManager):
         if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
             self.stdout.write("%s\n" % application.packageName)
 
-class Manifest(Module, common.Assets, common.ClassLoader):
+class Manifest(Module, common.Assets):
 
     name = "Get AndroidManifest.xml of package"
     description = "Retrieves AndroidManifest.xml from an installed package."

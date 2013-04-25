@@ -1,6 +1,6 @@
 from mwr.droidhg.modules import common, Module
 
-class MinimalSu(Module, common.ClassLoader, common.FileSystem, common.Shell, common.SuperUser):
+class MinimalSu(Module, common.FileSystem, common.Shell, common.SuperUser):
 
     name = "Prepare 'minimal-su' binary installation on the device."
     description = """Prepares 'minimal-su' binary installation files on the device in order to provide access to a root shell on demand.

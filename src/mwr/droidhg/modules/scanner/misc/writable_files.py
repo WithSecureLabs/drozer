@@ -1,6 +1,6 @@
 from mwr.droidhg.modules import common, Module
 
-class WritableFiles(Module, common.BusyBox, common.ClassLoader, common.FileSystem, common.Shell, common.SuperUser):
+class WritableFiles(Module, common.BusyBox, common.FileSystem, common.Shell, common.SuperUser):
 
     name = "Find world-writable files in the given folder"
     description = "Find world-writable files in the given folder"

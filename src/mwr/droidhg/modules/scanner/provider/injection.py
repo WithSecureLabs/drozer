@@ -2,7 +2,7 @@ from mwr.cinnibar.reflection import ReflectionException
 
 from mwr.droidhg.modules import common, Module
 
-class Injection(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
+class Injection(Module, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
     name = "Test content providers for SQL injection vulnerabilities."
     description = "Search for content providers with SQL Injection vulnerabilities."

@@ -2,7 +2,7 @@ from mwr.cinnibar.reflection import ReflectionException
 
 from mwr.droidhg.modules import common, Module
 
-class Traversal(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
+class Traversal(Module, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
     name = "Test content providers for basic directory traversal vulnerabilities."
     description = "Finds content providers with basic directory traversal vulnerabilities."

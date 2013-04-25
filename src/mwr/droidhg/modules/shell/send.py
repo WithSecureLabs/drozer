@@ -1,6 +1,6 @@
 from mwr.droidhg.modules import common, Module
 
-class Send(Module, common.BusyBox, common.ClassLoader, common.FileSystem, common.Shell):
+class Send(Module, common.BusyBox, common.FileSystem, common.Shell):
 
     name = "Send an ASH shell to a remote listener."
     description = """Send an ASH Shell to a remote listener.

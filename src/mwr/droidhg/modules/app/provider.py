@@ -54,7 +54,7 @@ class Delete(Module, common.Provider):
 
         self.stdout.write("Done.\n\n")
 
-class Download(Module, common.ClassLoader, common.Provider):
+class Download(Module, common.Provider):
 
     name = "Download a file from a content provider that supports files"
     description = "Read from the specified content uri using openInputStream, and download to the local file system"
@@ -87,7 +87,7 @@ class Download(Module, common.ClassLoader, common.Provider):
         if action.dest == "destination":
             return common.path_completion.on_console(text)
         
-class FindUri(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
+class FindUri(Module, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
     name = "Find referenced content URIs in a package"
     description = """Finds Content URIs within a package.
@@ -337,7 +337,7 @@ Querying, with a WHERE clause in the SELECT statement:
         else:
             self.stdout.write("Unknown Error.\n\n")
 
-class Read(Module, common.ClassLoader, common.Provider):
+class Read(Module, common.Provider):
 
     name = "Read from a content provider that supports files"
     description = "Read from the specified content uri using openInputStream"

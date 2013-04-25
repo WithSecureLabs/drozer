@@ -1,7 +1,7 @@
 from mwr.cinnibar.reflection import ReflectionException
 from mwr.droidhg.modules import common, Module
 
-class SqlTables(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile, common.Vulnerability, common.TableFormatter):
+class SqlTables(Module, common.Provider):
 
     name = "Find tables accessible through SQL injection vulnerabilities."
     description = "Enumerate SQL tables accessible through SQL (projection) Injection vulnerabilities."

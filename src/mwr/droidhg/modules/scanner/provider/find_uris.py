@@ -2,7 +2,7 @@ from mwr.cinnibar.reflection import ReflectionException
 
 from mwr.droidhg.modules import common, Module
 
-class FindUris(Module, common.ClassLoader, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
+class FindUris(Module, common.FileSystem, common.PackageManager, common.Provider, common.Strings, common.ZipFile):
 
     name = "Search for content providers that can be queried from our context."
     description = "Search for content providers that can be queried from our context."
