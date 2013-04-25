@@ -83,18 +83,28 @@ class Info(Module, common.Filters, common.PackageManager):
 
             if not arguments.unexported:
                 for activity in exported_activities:
-                    self.stdout.write("  %s\n" % activity.name)
+                    self.__print_activity(package, activity, "  ")
             else:
                 self.stdout.write("  Exported Activities:\n")
                 for activity in exported_activities:
-                    self.stdout.write("    %s\n" % activity.name)
+                    self.__print_activity(package, activity, "    ")
                 self.stdout.write("  Hidden Activities:\n")
                 for activity in hidden_activities:
-                    self.stdout.write("    %s\n" % activity.name)
+                    self.__print_activity(package, activity, "    ")
             self.stdout.write("\n")
         elif arguments.package or arguments.verbose:
             self.stdout.write("Package: %s\n" % package.packageName)
             self.stdout.write("  No matching activities.\n\n")
+    
+    def __print_activity(self, package, activity, prefix):
+        self.stdout.write("%s%s\n" % (prefix, activity.name))
+        
+        if(activity.parentActivityName != None):
+            self.stdout.write("%s  Parent Activity: %s\n" % (prefix, activity.parentActivityName))
+        if(activity.permission != None):
+            self.stdout.write("%s  Permission: %s\n" % (prefix, activity.permission))
+        if(activity.targetActivity != None):
+            self.stdout.write("%s  Target Activity: %s\n" % (prefix, activity.targetActivity))
                 
 class Start(Module):
 
