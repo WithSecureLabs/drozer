@@ -70,11 +70,5 @@ class ServerConnector(SocketTransport):
         Stop an active Session, known to the Server.
         """
 
-        try:
-            return self.sendAndReceive(SystemRequestFactory.stopSessionId(session_id))
-        except RuntimeError as e:
-            if e.message == 'Received an empty response from the Agent. This normally means the remote service has crashed.':
-                raise ConnectionError(e)
-            else:
-                raise
+        return self.sendAndReceive(SystemRequestFactory.stopSessionId(session_id))
         
