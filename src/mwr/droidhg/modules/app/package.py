@@ -1,3 +1,5 @@
+import re
+
 from mwr.droidhg import android
 from mwr.droidhg.modules import common, Module
 
@@ -280,7 +282,32 @@ class Manifest(Module, common.Assets, common.ClassLoader):
         if arguments.package == None or arguments.package == "":
             self.stderr.write("No package provided.\n")
         else:
-            self.stdout.write(self.getAndroidManifest(arguments.package) + "\n")
+            self.__write_manifest(self.getAndroidManifest(arguments.package))
+    
+    def __write_manifest(self, manifest):
+        lines = manifest.split("\n")
+        level = 0
+        
+        for line in lines:
+            if line.startswith("</"):
+                level -= 1
+            
+            if line.startswith("<") and not line.startswith("</"):
+                pattern = re.compile("(.*)<([^>]+)>(.*)")
+                match = pattern.match(line)
+                
+                contents = match.group(2).split(" ", 1)
+                
+                self.stdout.write("%s%s<[color green]%s[/color]" % ("  " * level, match.group(1), contents[0]))
+                if len(contents) > 1:
+                    self.stdout.write(("\n%s%s" % ("  " * level, " " * (len(contents[0]) + 1))).join(map(lambda m: " [color purple]%s[/color]=[color red]\"%s\"[/color]" % m, re.compile("([^=]+)=\"([^\"]+)\"\s*").findall(contents[1]))))
+                        
+                self.stdout.write(">\n")
+            else:
+                self.stdout.write("%s%s\n" % ("  " * level, line))
+            
+            if line.startswith("<") and not "</" in line:
+                level += 1
 
 
 class Native(Module, common.ClassLoader, common.PackageManager):
