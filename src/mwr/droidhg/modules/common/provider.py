@@ -120,10 +120,10 @@ class Provider(object):
     
                 if fd != None:
                     ByteStreamReader = self.__module.loadClass("common/ByteStreamReader.apk", "ByteStreamReader")
-                    
+                
                     return str(ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fd.getFileDescriptor())))
                 else:
-                    return None
+                    raise Provider.UnableToOpenFileException(uri)
             else:
                 input_stream = self.__content_resolver.openInputStream(self.parseUri(uri))
                 out= ""
@@ -319,3 +319,8 @@ class Provider(object):
 
         return sorted(uris)
         
+        
+    class UnableToOpenFileException(ReflectionException):
+        
+        def __str__(self):
+            return "it was not possible to open the file represented by: %s" % (self.message)
