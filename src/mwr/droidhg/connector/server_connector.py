@@ -3,8 +3,7 @@ import sys
 
 from mwr.cinnibar.api.builders import SystemRequestFactory
 from mwr.cinnibar.api.transport import SocketTransport
-
-from mwr.droidhg.connector.exceptions import ConnectionError
+from mwr.cinnibar.api.transport.exceptions import ConnectionError
 
 class ServerConnector(SocketTransport):
     """
@@ -69,6 +68,8 @@ class ServerConnector(SocketTransport):
         """
         Stop an active Session, known to the Server.
         """
+        
+        self.setTimeout(1.0)
 
         return self.sendAndReceive(SystemRequestFactory.stopSessionId(session_id))
         
