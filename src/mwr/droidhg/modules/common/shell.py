@@ -26,6 +26,9 @@ class Shell(loader.ClassLoader):
         shell = self.new("com.mwr.droidhg.shell.Shell")
         
         try:
+            if shell.valid():
+                self.__send_variables(shell)
+                    
             while shell.valid():
                 shell.write(command)
                 response = shell.read()
@@ -45,6 +48,8 @@ class Shell(loader.ClassLoader):
     def shellStartCompatibility(self, command=""):
         shell = self.new("com.mwr.droidhg.shell.Shell")
         
+        self.__send_variables(shell)
+        
         while command.upper() != "EXIT":
             shell.write(command)
             response = shell.read()
@@ -52,3 +57,6 @@ class Shell(loader.ClassLoader):
             self.stdout.write(" ")
             command = raw_input().replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox")
             
+    def __send_variables(self, shell):
+        shell.write("; ".join(map(lambda k: "export %s=\"%s\"" % (k, self.variables[k]), self.variables)))
+        shell.read()
