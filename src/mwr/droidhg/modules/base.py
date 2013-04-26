@@ -44,13 +44,13 @@ class Module(object):
         pass
 
     @classmethod
-    def all(cls):
+    def all(cls, permissions):
         """
         Loads all modules from the specified module repositories, and returns a
         collection of module identifiers.
         """
 
-        return cls.__loader.all(cls)
+        return cls.__loader.all(cls, permissions)
 
     def arg(self, native, obj_type=None):
         """

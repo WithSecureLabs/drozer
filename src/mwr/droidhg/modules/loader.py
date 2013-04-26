@@ -11,7 +11,7 @@ class ModuleLoader(object):
         self.__modules = {}
         self.__module_paths = os.path.join(os.path.dirname(__file__), "..", "modules")
 
-    def all(self, base):
+    def all(self, base, permissions):
         """
         Loads all modules from the specified module repositories, and returns a
         collection of module identifiers.
@@ -20,7 +20,7 @@ class ModuleLoader(object):
         if(len(self.__modules) == 0):
             self.load(base)
 
-        return sorted(self.__modules.keys())
+        return sorted(filter(lambda m: len(set(self.get(base, m).permissions).difference(permissions)) == 0, self.__modules.keys()))
 
     def get(self, base, key):
         """

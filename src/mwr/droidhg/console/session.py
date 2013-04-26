@@ -163,7 +163,7 @@ class Session(cmd.Cmd):
             self.do_help("contributors")
             return
 
-        contributors = map(lambda m: Module.get(m).author, Module.all())
+        contributors = map(lambda m: Module.get(m).author, Module.all(self.permissions()))
         contribution = [(c[0], len(list(c[1]))) for c in itertools.groupby(sorted(flatten(contributors)))]
 
         self.stdout.write("Core Contributors:\n")
@@ -204,7 +204,7 @@ class Session(cmd.Cmd):
             return
 
         if len(argv) > 0:
-            if self.__module_name(argv[0]) in Module.all() or self.__module_name("." + argv[0]) in Module.all():
+            if self.__module_name(argv[0]) in Module.all(self.permissions()) or self.__module_name("." + argv[0]) in Module.all(self.permissions()):
                 self.do_run(" ".join([argv[0], "--help"]))
             else:
                 try:
@@ -534,9 +534,9 @@ class Session(cmd.Cmd):
         """
 
         if self.__base == "":
-            return Module.all()
+            return Module.all(self.permissions())
         else:
-            return filter(lambda m: m.startswith(self.__base), Module.all())
+            return filter(lambda m: m.startswith(self.__base), Module.all(self.permissions()))
 
     def __namespaces(self, global_scope=False):
         """
@@ -545,9 +545,9 @@ class Session(cmd.Cmd):
         """
 
         if global_scope:
-            return set(map(lambda m: self.__module("." + m).namespace(), Module.all()))
+            return set(map(lambda m: self.__module("." + m).namespace(), Module.all(self.permissions())))
         else:
-            return set(map(lambda m: self.__module("." + m).namespace(), self.__modules()))
+            return set(map(lambda m: self.__module("." + m).namespace(), self.__modules(self.permissions())))
     
     def __push_module_completer(self, completer, history_file=None):
         """
@@ -599,7 +599,7 @@ class Session(cmd.Cmd):
             else:
                 target = self.__base + base + "."
 
-            if True in map(lambda m: m.startswith(target), Module.all()):
+            if True in map(lambda m: m.startswith(target), Module.all(self.permissions())):
                 self.__base = target
             else:
                 self.stderr.write("no such namespace: %s\n"%base)
