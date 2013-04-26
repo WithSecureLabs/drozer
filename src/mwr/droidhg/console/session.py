@@ -386,6 +386,9 @@ class Session(cmd.Cmd):
         else:
             return self.do_run(".shell.start")
 
+    def get_reflector(self):
+        return self.__reflector
+    
     def help_intents(self):
         """
         An intent is an abstract description of an operation to be performed. It can be used with app.activity.start to launch an Activity, app.broadcast.send to send it to any interested BroadcastReceiver components, and app.service.start to communicate with a background Service.
@@ -502,7 +505,7 @@ class Session(cmd.Cmd):
         if module == None:
             raise KeyError(key)
         else:
-            return module(self.__reflector, self.stdout, self.stderr)
+            return module(self)
 
     def __module_name(self, key):
         """

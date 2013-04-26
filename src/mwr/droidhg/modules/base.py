@@ -28,10 +28,11 @@ class Module(object):
     __klasses = {}
     __loader = ModuleLoader()
 
-    def __init__(self, reflector, stdout, stderr):
-        self.__reflector = reflector
-        self.stdout = stdout
-        self.stderr = stderr
+    def __init__(self, session):
+        self.__reflector = session.get_reflector()
+        self.stdout = session.stdout
+        self.stderr = session.stderr
+        self.variables = session.variables
 
     def add_arguments(self, parser):
         """
