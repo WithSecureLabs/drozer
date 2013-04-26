@@ -2,7 +2,7 @@ import os
 
 from mwr.droidhg.modules.common import file_system, shell
 
-class BusyBox(file_system.FileSystem, shell.Shell):
+class BusyBox(shell.Shell):
     """
     Mercury Client Library: provides utility methods for interacting with Mercury-
     installed Busybox on the Agent.
@@ -13,7 +13,7 @@ class BusyBox(file_system.FileSystem, shell.Shell):
         Get the path to which Busybox is installed on the Agent.
         """
 
-        return "/data/data/com.mwr.droidhg.agent/busybox"
+        return self.workingDir() + "/busybox"
 
     def _localPath(self):
         """
@@ -27,7 +27,7 @@ class BusyBox(file_system.FileSystem, shell.Shell):
         Execute a command using Busybox.
         """
 
-        return self.shellExec(("$BB " + command).replace("$BB", self.__agentPath()))
+        return self.shellExec("%s %s" % (self.__agentPath(), command))
 
     def isBusyBoxInstalled(self):
         """

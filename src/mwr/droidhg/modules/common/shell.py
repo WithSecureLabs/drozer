@@ -1,8 +1,8 @@
 from mwr.cinnibar.reflection import ReflectionException
 
-from mwr.droidhg.modules.common import loader
+from mwr.droidhg.modules.common import file_system, loader
 
-class Shell(loader.ClassLoader):
+class Shell(file_system.FileSystem, loader.ClassLoader):
     """
     Mercury Client Library: provides a wrapper around the Android Shell, allowing
     commands to be executed.
@@ -15,7 +15,7 @@ class Shell(loader.ClassLoader):
 
         ShellWrapper = self.loadClass("common/ShellWrapper.apk", "ShellWrapper")
 
-        return ShellWrapper.execute(command.replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox"))
+        return ShellWrapper.execute(command.replace("$BB", self.workingDir() + "/busybox"))
     
     def shellStart(self, command=""):
         """
@@ -36,7 +36,7 @@ class Shell(loader.ClassLoader):
                 if not shell.valid():
                     break
                 self.stdout.write(" ")
-                command = raw_input().replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox")
+                command = raw_input().replace("$BB", self.workingDir() + "/busybox")
             
             shell.close()
         except ReflectionException as e:
@@ -55,7 +55,7 @@ class Shell(loader.ClassLoader):
             response = shell.read()
             self.stdout.write(response.strip())
             self.stdout.write(" ")
-            command = raw_input().replace("$BB", "/data/data/com.mwr.droidhg.agent/busybox")
+            command = raw_input().replace("$BB", self.workingDir() + "/busybox")
             
     def __send_variables(self, shell):
         shell.write("; ".join(map(lambda k: "export %s=\"%s\"" % (k, self.variables[k]), self.variables)))

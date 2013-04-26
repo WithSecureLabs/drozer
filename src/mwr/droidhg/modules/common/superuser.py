@@ -1,7 +1,9 @@
 import os
 from mwr.common import fs
 
-class SuperUser(object):
+from mwr.droidhg.modules.common import file_system
+
+class SuperUser(file_system.FileSystem):
     """
     Mercury Client Library: provides utility methods for aiding with superuser
     binary detection and installation of "minimal su" on the Agent.
@@ -12,7 +14,7 @@ class SuperUser(object):
         Get the path to which su is uploaded on the Agent.
         """
 
-        return "/data/data/com.mwr.droidhg.agent/su"
+        return "%s/su" % (self.workingDir())
 
     def _localPathMinimalSu(self):
         """
@@ -26,7 +28,7 @@ class SuperUser(object):
         Get the path to which the install script is uploaded on the Agent.
         """
 
-        return "/data/data/com.mwr.droidhg.agent/install-minimal-su.sh"
+        return "%s/install-minimal-su.sh" % (self.workingDir())
 
     def _localPathScript(self):
         """
@@ -56,7 +58,7 @@ class SuperUser(object):
         """
 
         # Remove existing uploads of su
-        self.shellExec("rm /data/data/com.mwr.droidhg.agent/su")
+        self.shellExec("rm %s/su" % (self.workingDir()))
 
         bytes_copied = self.uploadFile(self._localPathMinimalSu(), self.__agentPathMinimalSu())
 
@@ -71,7 +73,7 @@ class SuperUser(object):
         """
 
         # Remove existing uploads of su install script
-        self.shellExec("rm /data/data/com.mwr.droidhg.agent/install-su.sh")
+        self.shellExec("rm %s/install-su.sh" % (self.workingDir()))
 
         bytes_copied = self.uploadFile(self._localPathScript(), self.__agentPathScript())
 
