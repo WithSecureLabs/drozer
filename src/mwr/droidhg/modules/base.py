@@ -21,6 +21,7 @@ class Module(object):
     date = "1970-01-01"
     license = "Unspecified"
     path = []
+    permissions = []
     
     push_completer = None
     pop_completer = None

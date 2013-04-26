@@ -449,6 +449,13 @@ class Session(cmd.Cmd):
         
         self.stdout.write(wrap(textwrap.dedent(self.help_intents.__doc__).strip() + "\n\n", console.get_size()[0]))
         
+    def permissions(self):
+        """
+        Retrieves the set of permissions that we have in this session.
+        """
+        
+        return ["android.permission.INTERNET"]
+        
     def sendAndReceive(self, message):
         """
         Delivers a message to the Agent, and returns the response.
