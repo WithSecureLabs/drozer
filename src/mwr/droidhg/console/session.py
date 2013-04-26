@@ -17,6 +17,7 @@ from mwr.common.list import flatten
 from mwr.common.stream import ColouredStream
 from mwr.common.text import wrap
 
+from mwr.droidhg.configuration import Configuration
 from mwr.droidhg.console import clean
 from mwr.droidhg.console.sequencer import Sequencer
 from mwr.droidhg.modules import common, Module
@@ -47,6 +48,8 @@ class Session(cmd.Cmd):
         self.stderr = ColouredStream(self.stderr)
         self.variables = {  'PATH': '/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin:/data/data/com.mwr.droidhg.agent/bin',
                             'WD': '/data/data/com.mwr.droidhg.agent' }
+        
+        self.__load_variables()
 
     def completefilename(self, text, line, begidx, endidx):
         """
@@ -469,6 +472,14 @@ class Session(cmd.Cmd):
 
         return message
 
+    def __load_variables(self):
+        """
+        Load extra variables, specified in the .mercury_config file.
+        """
+        
+        for key in Configuration.get_all_keys("vars"):
+            self.variables[key] = Configuration.get("vars", key)
+        
     def __module(self, key):
         """
         Gets a module instance, by identifier, and initialises it with the
