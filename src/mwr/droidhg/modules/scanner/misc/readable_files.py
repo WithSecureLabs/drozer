@@ -1,6 +1,6 @@
 from mwr.droidhg.modules import common, Module
 
-class ReadableFiles(Module, common.BusyBox, common.FileSystem, common.Shell, common.SuperUser):
+class ReadableFiles(Module, common.BusyBox, common.Shell, common.SuperUser):
 
     name = "Find world-readable files in the given folder"
     description = "Find world-readable files in the given folder"

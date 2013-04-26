@@ -1,6 +1,6 @@
 from mwr.droidhg.modules import common, Module
 
-class BusyBox(Module, common.BusyBox, common.FileSystem, common.Shell):
+class BusyBox(Module, common.BusyBox, common.Shell):
 
     name = "Install Busybox."
     description = """Installs Busybox on the Agent.

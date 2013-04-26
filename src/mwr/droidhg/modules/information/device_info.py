@@ -1,6 +1,6 @@
 from mwr.droidhg.modules import common, Module
 
-class DeviceInfo(Module, common.FileSystem, common.Shell):
+class DeviceInfo(Module, common.Shell):
     
     name = "Get verbose device information"
     description = "Gets device information"
