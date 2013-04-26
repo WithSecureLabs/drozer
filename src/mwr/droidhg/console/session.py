@@ -46,7 +46,7 @@ class Session(cmd.Cmd):
         self.prompt = "mercury> "
         self.stdout = ColouredStream(self.stdout)
         self.stderr = ColouredStream(self.stderr)
-        self.variables = {  'PATH': '/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin:/data/data/com.mwr.droidhg.agent/bin',
+        self.variables = {  'PATH': '/data/data/com.mwr.droidhg.agent/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
                             'WD': '/data/data/com.mwr.droidhg.agent' }
         
         self.__load_variables()
