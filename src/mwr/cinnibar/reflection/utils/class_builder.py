@@ -51,7 +51,7 @@ class ClassBuilder(object):
         """
         
         if self.sdk_path == None:
-            raise RuntimeError("SDK is not defined.")
+            raise RuntimeError("SDK is not defined. Please set SDK to the path to android.jar within the SDK.")
         if self.javac == None:
             raise RuntimeError("Could not find javac on your PATH.")
         if self.dx == None:
