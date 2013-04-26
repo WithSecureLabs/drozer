@@ -158,6 +158,13 @@ class FileSystem(object):
             destination = "/".join([destination, source.split(os.path.sep)[-1]])
 
         return self.writeFile(destination, open(source, 'rb').read(), block_size=block_size)
+    
+    def workingDir(self):
+        """
+        Get the full path to the Agent's working directory.
+        """
+
+        return str(self.getContext().getApplicationInfo().dataDir)
 
     def writeFile(self, destination, data, block_size=65536):
         """
