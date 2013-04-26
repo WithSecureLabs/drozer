@@ -23,7 +23,7 @@ Discovered world-readable files in /data:
 
     def execute(self, arguments):
         if self.isBusyBoxInstalled():
-            command = "$BB find %s \( -type b -o -type c -o -type f -o -type s \) -perm -o=r \-exec ls {} \;" % arguments.target
+            command = "busybox find %s \( -type b -o -type c -o -type f -o -type s \) -perm -o=r \-exec ls {} \;" % arguments.target
             privileged = arguments.privileged
             
             if privileged:

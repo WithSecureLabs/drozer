@@ -7,7 +7,7 @@ class BusyBox(Module, common.BusyBox, common.Shell):
 
 Busybox provides a number of *nix utilities that are missing from Android. Some modules require Busybox to be installed.
 
-Typically, you require root access to the device to install Busybox. Mercury can install it from its restrictive context. You can then use $BB in the when executing shell commands from Mercury to use it."""
+Typically, you require root access to the device to install Busybox. Mercury can install it from its restrictive context. You can then use 'busybox' in the when executing shell commands from Mercury to use it."""
     examples = ""
     author = "Tyrone (@mwrlabs)"
     date = "2012-11-06"

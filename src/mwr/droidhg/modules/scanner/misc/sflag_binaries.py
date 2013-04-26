@@ -26,7 +26,7 @@ Discovered suid/sgid files in /system:
 
     def execute(self, arguments):
         if self.isBusyBoxInstalled():
-            command = "$BB find %s -type f \( -perm -04000 -o -perm -02000 \) \-exec ls {} \;" % arguments.target
+            command = "busybox find %s -type f \( -perm -04000 -o -perm -02000 \) \-exec ls {} \;" % arguments.target
             privileged = arguments.privileged
             
             if privileged:
