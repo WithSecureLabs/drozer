@@ -35,6 +35,7 @@ class Session(cmd.Cmd):
 
         self.__base = ""
         self.__module_pushed_completers = 0
+        self.__permissions = None
         self.__reflector = Reflector(self)
         self.__server = server
         self.__session_id = session_id
@@ -293,7 +294,7 @@ class Session(cmd.Cmd):
 
     def do_module(self, args):
         """
-        module [COMMAND] (inside Mercury)
+        usage: module [COMMAND]
     
         Run the Mercury Module and Repository Manager.
     
@@ -302,6 +303,16 @@ class Session(cmd.Cmd):
         
         ModuleManager().run(shlex.split(args, comments=True))
         Module.reload()
+        
+    def do_permissions(self, args):
+        """
+        usage: permissions
+        
+        Prints out the permissions granted to the agent being used in this session.
+        """
+        
+        for permission in sorted(self.permissions()):
+            self.stdout.write("%s\n" % (permission))
         
     def do_run(self, args):
         """
@@ -454,7 +465,17 @@ class Session(cmd.Cmd):
         Retrieves the set of permissions that we have in this session.
         """
         
-        return ["android.permission.INTERNET"]
+        if self.__permissions == None:
+            context = self.__reflector.resolve("com.mwr.droidhg.Agent").getContext()
+            pm = self.__reflector.resolve("android.content.pm.PackageManager")
+            
+            package = context.getPackageManager().getPackageInfo("com.mwr.droidhg.agent", pm.GET_PERMISSIONS)
+            if package.requestedPermissions != None:
+                self.__permissions = map(lambda p: str(p), package.requestedPermissions)
+            else:
+                self.__permissions = []
+        
+        return self.__permissions
         
     def sendAndReceive(self, message):
         """
