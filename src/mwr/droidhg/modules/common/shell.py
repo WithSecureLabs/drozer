@@ -15,7 +15,7 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
 
         ShellWrapper = self.loadClass("common/ShellWrapper.apk", "ShellWrapper")
 
-        return ShellWrapper.execute(command.replace("$BB", self.workingDir() + "/busybox"))
+        return ShellWrapper.execute("%s; %s" % (self.__get_variables(), command))
     
     def shellStart(self, command=""):
         """
@@ -36,7 +36,7 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
                 if not shell.valid():
                     break
                 self.stdout.write(" ")
-                command = raw_input().replace("$BB", self.workingDir() + "/busybox")
+                command = raw_input()
             
             shell.close()
         except ReflectionException as e:
@@ -55,8 +55,11 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
             response = shell.read()
             self.stdout.write(response.strip())
             self.stdout.write(" ")
-            command = raw_input().replace("$BB", self.workingDir() + "/busybox")
+            command = raw_input()
             
+    def __get_variables(self):
+        return "; ".join(map(lambda k: "export %s=\"%s\"" % (k, self.variables[k]), self.variables))
+        
     def __send_variables(self, shell):
-        shell.write("; ".join(map(lambda k: "export %s=\"%s\"" % (k, self.variables[k]), self.variables)))
+        shell.write(self.__get_variables())
         shell.read()
