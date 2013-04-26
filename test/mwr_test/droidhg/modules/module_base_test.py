@@ -6,6 +6,7 @@ import unittest
 from mwr.cinnibar.reflection.types import ReflectedObject, ReflectedType
 
 from mwr.droidhg.modules import Module
+from mwr_test.mocks.session import MockSession
 
 class ModuleTestCase(unittest.TestCase):
 
@@ -85,7 +86,7 @@ class ModuleTestCase(unittest.TestCase):
         assert Module.all() == ["an.example.module", "an.other.module", "module.in.other.namespace"]
 
     def testItShouldCalculateAModulesFQMN(self):
-        assert ModuleTestCase.MockModule(None, sys.stdout, sys.stderr).fqmn() == "an.example.mockmodule"
+        assert ModuleTestCase.MockModule(MockSession(None)).fqmn() == "an.example.mockmodule"
 
     def testItShouldGetAModuleFromTheModuleLoader(self):
         Module._Module__loader = ModuleTestCase.MockModuleLoader()
@@ -98,15 +99,15 @@ class ModuleTestCase(unittest.TestCase):
         assert Module.get("an.example.module") == "aModule"
 
     def testItShouldCalculateAModulesNamespace(self):
-        assert ModuleTestCase.MockModule(None, sys.stdout, sys.stderr).namespace() == "an.example"
+        assert ModuleTestCase.MockModule(MockSession(None)).namespace() == "an.example"
 
     def testItShouldBuildAReflectedType(self):
         reflector = ModuleTestCase.MockReflector()
-        assert isinstance(ModuleTestCase.MockModule(reflector, sys.stdout, sys.stderr).arg(5), ReflectedType)
+        assert isinstance(ModuleTestCase.MockModule(MockSession(reflector)).arg(5), ReflectedType)
 
     def testItShouldClearTheObjectStore(self):
         reflector = ModuleTestCase.MockReflector()
-        ModuleTestCase.MockModule(reflector, sys.stdout, sys.stderr).clearObjectStore()
+        ModuleTestCase.MockModule(MockSession(reflector)).clearObjectStore()
 
         assert reflector.deleted_all
 
@@ -114,14 +115,14 @@ class ModuleTestCase(unittest.TestCase):
         reflector = ModuleTestCase.MockReflector()
         reflector.resolve_returns = ReflectedObject(999, reflector=reflector)
 
-        ModuleTestCase.MockModule(reflector, sys.stdout, sys.stderr).getContext()
+        ModuleTestCase.MockModule(MockSession(reflector)).getContext()
 
         assert reflector.resolved == "com.mwr.droidhg.Agent"
         assert reflector.invoked[1] == "getContext"
 
     def testItShouldResolveAKlass(self):
         reflector = ModuleTestCase.MockReflector()
-        ModuleTestCase.MockModule(reflector, sys.stdout, sys.stderr).klass("java.lang.String")
+        ModuleTestCase.MockModule(MockSession(reflector)).klass("java.lang.String")
 
         assert reflector.resolved == "java.lang.String"
 
@@ -129,27 +130,27 @@ class ModuleTestCase(unittest.TestCase):
         reflector = ModuleTestCase.MockReflector()
         reflector.resolve_returns = "<class java.util.Random>"
 
-        ModuleTestCase.MockModule(reflector, sys.stdout, sys.stderr).new("java.util.Random")
+        ModuleTestCase.MockModule(MockSession(reflector)).new("java.util.Random")
 
         assert reflector.constructed == "<class java.util.Random>"
 
     def testItShouldCallAddArgumentsWhenRunning(self):
         reflector = ModuleTestCase.MockReflector()
-        module = ModuleTestCase.MockModule(reflector, sys.stdout, sys.stderr)
+        module = ModuleTestCase.MockModule(MockSession(reflector))
         module.run([])
 
         assert isinstance(module.add_arguments_with, argparse.ArgumentParser)
 
     def testItShouldCallExecuteWhenRunning(self):
         reflector = ModuleTestCase.MockReflector()
-        module = ModuleTestCase.MockModule(reflector, sys.stdout, sys.stderr)
+        module = ModuleTestCase.MockModule(MockSession(reflector))
         module.run([])
 
         assert isinstance(module.execute_with, argparse.Namespace)
 
     def testItShouldInterceptARequestForUsageInformation(self):
         reflector = ModuleTestCase.MockReflector()
-        module = ModuleTestCase.MockModule(reflector, sys.stdout, sys.stderr)
+        module = ModuleTestCase.MockModule(MockSession(reflector))
         module.run(["-h"])
 
         assert module.add_arguments_with != None
@@ -157,7 +158,7 @@ class ModuleTestCase(unittest.TestCase):
 
     def testItShouldCleanUpTheObjectStoreAfterRunning(self):
         reflector = ModuleTestCase.MockReflector()
-        module = ModuleTestCase.MockModule(reflector, sys.stdout, sys.stderr)
+        module = ModuleTestCase.MockModule(MockSession(reflector))
         module.run([])
 
         assert reflector.deleted_all
