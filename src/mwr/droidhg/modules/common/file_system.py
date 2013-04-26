@@ -46,13 +46,26 @@ class FileSystem(object):
             return len(data)
         else:
             return None
+        
+    def ensureDirectory(self, target):
+        """
+        Tests whether a directory exists, on the Agent's file system, and creates
+        it if it does not.
+        """
+        
+        if self.isFile(target):
+            return False
+        elif not self.isDirectory(target):
+            return self.new("java.io.File", target).mkdirs()
+        else:
+            return True
 
-    def exists(self, source):
+    def exists(self, target):
         """
         Test whether or not a file exists on the Agent's file system.
         """
 
-        file_io = self.new("java.io.File", source)
+        file_io = self.new("java.io.File", target)
 
         return file_io.exists()
 
