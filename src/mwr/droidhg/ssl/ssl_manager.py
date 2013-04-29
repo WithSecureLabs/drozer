@@ -30,6 +30,7 @@ class SSLManager(cli.Base):
             self.__create_keypair(provider, arguments)
         elif arguments.type == "truststore":
             provider.make_bks_trust_store()
+            provider.make_jks_trust_store()
         else:
             print "Unexpected type:", arguments.type
     

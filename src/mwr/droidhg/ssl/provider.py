@@ -145,6 +145,7 @@ class Provider(object):
         argv = [keytool,
                 "-import",
                 "-trustcacerts",
+                "-noprompt",
                 "-alias", "mercuryCA",
                 "-file",  self.ca_certificate_path(),
                 "-keystore", self.__bks_path('mercury-ca'),
@@ -160,6 +161,34 @@ class Provider(object):
             argv[0] = "keytool"
             
             print "Could not compile the BKS trust store, because keytool could not be located on your system."
+            print "Run:"
+            print " ".join(argv) 
+            
+            return False
+    
+    def make_jks_trust_store(self):
+        """
+        Prepare a JKS TrustStore, for the CA.
+        """
+        
+        keytool = system.which('keytool')
+        argv = [keytool,
+                "-import",
+                "-trustcacerts",
+                "-noprompt",
+                "-alias", "mercuryCA",
+                "-file",  self.ca_certificate_path(),
+                "-keystore", self.__jks_path('mercury-ca'),
+                "-storetype", "JKS",
+                "-storepass", "mercury"]
+        
+        if keytool != None:
+            if os.spawnve(os.P_WAIT, argv[0], argv, os.environ) == 0:
+                return self.__bks_path('mercury-ca')
+        else:
+            argv[0] = "keytool"
+            
+            print "Could not compile the JKS trust store, because keytool could not be located on your system."
             print "Run:"
             print " ".join(argv) 
             
@@ -252,6 +281,13 @@ class Provider(object):
         """
         
         return os.path.join(self.ca_path(skip_default), "%s.crt" % cn)
+    
+    def __jks_path(self, cn):
+        """
+        Get the path to a JKS KeyStore file.
+        """
+        
+        return os.path.join(self.ca_path(), "%s.jks" % cn)
     
     def __key_path(self, cn, skip_default=False):
         """
