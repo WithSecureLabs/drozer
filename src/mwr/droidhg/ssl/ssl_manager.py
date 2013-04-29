@@ -18,6 +18,7 @@ class SSLManager(cli.Base):
         self._parser.add_argument("--type", choices=["ca", "keypair", "truststore"], help="the type of key material to create")
         self._parser.add_argument("--subject", help="the subject CN, when generating a keypair")
         self._parser.add_argument("--bks", help="also build a BouncyCastle store (for Android), using the store and key password (keypair only)", metavar=("STORE_PW", "KEY_PW"), nargs=2)
+        self._parser.add_argument("-y", "--yes", action="store_true", help="answer yes to all questions")
     
     def do_create(self, arguments):
         """create some new key material"""
@@ -66,7 +67,7 @@ class SSLManager(cli.Base):
         if provider.keypair_exists("mercury-ca", skip_default=True):
             print "A Mercury CA already exists at", path
             
-            if self.confirm("Do you want to overwrite the existing CA?") == "n":
+            if not arguments.yes and self.confirm("Do you want to overwrite the existing CA?") == "n":
                 print "Aborted."
                 
                 return
@@ -87,7 +88,7 @@ class SSLManager(cli.Base):
             if provider.keypair_exists(arguments.subject):
                 print "A key pair with CN=%s already exists." % (arguments.subject)
             
-                if self.confirm("Do you want to overwrite the existing key pair?") == "n":
+                if not arguments.yes and self.confirm("Do you want to overwrite the existing key pair?") == "n":
                     print "Aborted."
                     
                     return
