@@ -119,6 +119,6 @@ def remove_colors(text):
 
         return "%s" % (m.group(2))
 
-    text = re.sub("\[color\s*([a-z]+)\](.*)\[\/color\]", remove_color, text)
+    text = re.sub("\[color\s*([a-z]+)\](.*?)\[\/color\]", remove_color, text)
 
     return text
