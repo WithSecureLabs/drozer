@@ -37,7 +37,7 @@ class ModuleTestCase(unittest.TestCase):
         def __init__(self, module=None):
             self.module = module
 
-        def all(self, base):
+        def all(self, base, permissions):
             return ["an.example.module", "an.other.module", "module.in.other.namespace"]
 
         def get(self, base, key):
