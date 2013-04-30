@@ -251,16 +251,33 @@ class Session(cmd.Cmd):
             mercury> list debug
             information.debuggable
             mercury>
+        
+        optional arguments:
+        
+          --unsupported         include a list of the modules that are not available on your device
         """
         argv = shlex.split(args, comments=True)
 
         if len(argv) == 1 and (argv[0] == "-h" or argv[0] == "--help"):
             self.do_help("list")
             return
+        
+        if "--unsupported" in argv:
+            argv.remove("--unsupported")
+            
+            term = len(argv) > 0 and argv[0] or None
+            s_modules = filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules())
+            u_modules = filter(lambda m: (term == None or m.find(term.lower()) >= 0) and not m in s_modules, self.__modules("any"))
+        else:
+            term = len(argv) > 0 and argv[0] or None
+            s_modules = filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules())
+            u_modules = []
 
-        term = len(argv) > 0 and argv[0] or None
-
-        self.stdout.write(console.format_dict(dict(map(lambda m: [m, Module.get(m).name], filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules())))) + "\n")
+        self.stdout.write(console.format_dict(dict(map(lambda m: [m, Module.get(m).name], s_modules))) + "\n")
+        
+        if len(u_modules) > 0:
+            self.stdout.write("\nUnsupported Modules:\n\n")
+            self.stdout.write(console.format_dict(dict(map(lambda m: [m, Module.get(m).name], u_modules))) + "\n")
 
     def do_load(self, args):
         """
@@ -549,15 +566,20 @@ class Session(cmd.Cmd):
         else:
             return self.__base + key
 
-    def __modules(self):
+    def __modules(self, permissions=None):
         """
         Gets a full list of all module identifiers.
         """
+        
+        if permissions == "any":
+            required_perms = None
+        else:
+            required_perms = self.permissions()
 
         if self.__base == "":
-            return Module.all(self.permissions())
+            return Module.all(required_perms)
         else:
-            return filter(lambda m: m.startswith(self.__base), Module.all(self.permissions()))
+            return filter(lambda m: m.startswith(self.__base), Module.all(required_perms))
 
     def __namespaces(self, global_scope=False):
         """

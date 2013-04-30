@@ -44,7 +44,7 @@ class Module(object):
         pass
 
     @classmethod
-    def all(cls, permissions):
+    def all(cls, permissions=None):
         """
         Loads all modules from the specified module repositories, and returns a
         collection of module identifiers.

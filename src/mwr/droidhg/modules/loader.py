@@ -20,7 +20,10 @@ class ModuleLoader(object):
         if(len(self.__modules) == 0):
             self.load(base)
 
-        return sorted(filter(lambda m: len(set(self.get(base, m).permissions).difference(permissions)) == 0, self.__modules.keys()))
+        if permissions != None:
+            return sorted(filter(lambda m: len(set(self.get(base, m).permissions).difference(permissions)) == 0, self.__modules.keys()))
+        else:
+            return sorted(self.__modules.keys())
 
     def get(self, base, key):
         """
