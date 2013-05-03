@@ -5,7 +5,7 @@ from pydiesel.api import Frame
 from pydiesel.api.transport.exceptions import ConnectionError
 from pydiesel.api.transport.transport import Transport
 
-from mwr.droidhg.ssl.provider import Provider # TODO: eugh
+from drozer.ssl.provider import Provider # TODO: eugh
 
 class SocketTransport(Transport):
     

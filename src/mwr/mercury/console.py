@@ -4,7 +4,8 @@ import logging
 import sys
 
 from mwr.common import logger
-from mwr.droidhg.console import Console
+
+from drozer.console import Console
 
 logger.setLevel(logging.DEBUG)
 logger.addStreamHandler()

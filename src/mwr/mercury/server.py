@@ -13,8 +13,9 @@ except ImportError:
     sys.exit(-1)
 
 from mwr.common import logger
-from mwr.droidhg.server import DroidHgServer, heartbeat
-from mwr.droidhg.ssl.provider import Provider
+
+from drozer.server import DroidHgServer, heartbeat
+from drozer.ssl.provider import Provider
 from mwr.mercury import meta
 
 logger.setLevel(logging.DEBUG)

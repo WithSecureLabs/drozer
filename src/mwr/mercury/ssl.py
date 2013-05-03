@@ -4,7 +4,8 @@ import logging
 import sys
 
 from mwr.common import logger
-from mwr.droidhg.ssl import SSLManager
+
+from drozer.ssl import SSLManager
 
 logger.setLevel(logging.DEBUG)
 logger.addStreamHandler()
