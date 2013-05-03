@@ -162,8 +162,8 @@ class Cmd(cmd.Cmd):
         
         Example:
         
-            mercury> set P=com.example.app
-            mercury> echo run app.package.info -a $P
+            dz> set P=com.example.app
+            dz> echo run app.package.info -a $P
             run app.package.info com.example.app
         """
         
@@ -177,8 +177,8 @@ class Cmd(cmd.Cmd):
         
         Example:
         
-            mercury> set P=com.example.app
-            mercury> run app.package.info -a $P
+            dz> set P=com.example.app
+            dz> run app.package.info -a $P
         """
         
         for kv in shlex.split(arguments):

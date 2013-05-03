@@ -9,7 +9,7 @@ from mwr.common import fs
 
 class RepositoryBuilder(object):
     """
-    RepositoryBuilder converts Python packages into Mercury module repositories.
+    RepositoryBuilder converts Python packages into drozer Module Repositories.
     """
     
     __banned_folders = [".git"]
@@ -58,7 +58,7 @@ class RepositoryBuilder(object):
         for root, folders, files in os.walk(self.source):
             self.__skip_folders(folders)
             
-            if ".mercury_package" in files:
+            if ".drozer_package" in files:
                 yield SourcePackage(self.source, root, files)
             else:
                 for f in files:
@@ -77,7 +77,7 @@ class RepositoryBuilder(object):
 
 class Source(object):
     """
-    A Source represents a Mercury module identified for packaging by the Repository
+    A Source represents a drozer Module identified for packaging by the Repository
     Builder.
     """
     
@@ -110,7 +110,7 @@ class Source(object):
     
 class SourceFile(Source):
     """
-    A SourceFile represents a Mercury module for packaging, where it is contained
+    A SourceFile represents a drozer Module for packaging, where it is contained
     within a single Python source file.
     """
     
@@ -151,8 +151,8 @@ class SourceFile(Source):
 
 class SourcePackage(Source):
     """
-    A SourceFile represents a Mercury module for packaging, where it is contained
-    within a Python package, with a .mercury_module file.
+    A SourceFile represents a drozer Module for packaging, where it is contained
+    within a Python package, with a .drozer_module file.
     """
     
     def __init__(self, root, path, contents):
@@ -162,11 +162,11 @@ class SourcePackage(Source):
     
     def description(self):
         """
-        Fetch the human-readable description of this module, from the .mercury_module
+        Fetch the human-readable description of this module, from the .drozer_module
         file.
         """
         
-        return fs.read(os.path.join(self.path, ".mercury_package")).strip()
+        return fs.read(os.path.join(self.path, ".drozer_package")).strip()
         
     def emit(self, target):
         """

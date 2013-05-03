@@ -4,8 +4,7 @@ from drozer.modules.common import file_system, shell
 
 class BusyBox(shell.Shell):
     """
-    Mercury Client Library: provides utility methods for interacting with Mercury-
-    installed Busybox on the Agent.
+    Utility methods for installing and using Busybox on the Agent.
     """
 
     def __agentPath(self):

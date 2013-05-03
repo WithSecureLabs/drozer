@@ -3,8 +3,8 @@ import os
 
 class Configuration(object):
     """
-    Configuration provides a wrapper around a user's Mercury configuration, stored
-    in their home directory as .mercury_config.
+    Configuration provides a wrapper around a user's drozer configuration, stored
+    in their home directory as .drozer_config.
     """
     
     __config = None
@@ -78,7 +78,7 @@ class Configuration(object):
         Returns the path to the configuration file.
         """
         
-        return os.path.sep.join([os.path.expanduser("~"), ".mercury_config"])
+        return os.path.sep.join([os.path.expanduser("~"), ".drozer_config"])
     
     @classmethod
     def set(cls, section, key, value):

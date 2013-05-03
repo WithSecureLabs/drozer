@@ -9,7 +9,7 @@ class Columns(Module, common.Provider, common.TableFormatter):
     description = "List the columns in the specified content provider URI."
     examples = """List the columns of content://settings/secure
 
-    mercury> run app.provider.columns content://settings/secure
+    dz> run app.provider.columns content://settings/secure
     | _id | name | value |"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
@@ -36,7 +36,7 @@ class Delete(Module, common.Provider):
     description = "Delete from the specified content provider URI."
     examples = """Delete from content://settings/secure, with name condition:
 
-    mercury> run app.provider.delete content://settings/secure
+    dz> run app.provider.delete content://settings/secure
                 --selection "name=?"
                 --selection-args my_setting"""
     author = "MWR InfoSecurity (@mwrlabs)"
@@ -60,7 +60,7 @@ class Download(Module, common.Provider):
     description = "Read from the specified content uri using openInputStream, and download to the local file system"
     examples = """Download, using directory traversal on a content provider:
 
-    mercury> run app.provider.download content://vulnerable.provider/../../../system/etc/hosts /tmp/hostsfile
+    dz> run app.provider.download content://vulnerable.provider/../../../system/etc/hosts /tmp/hostsfile
     Written 25 bytes"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
@@ -95,7 +95,7 @@ class FindUri(Module, common.FileSystem, common.PackageManager, common.Provider,
 This module uses a number of strategies to identify a content URI, including inspecting the authorities, path permissions and searching for strings inside the package."""
     examples = """Find content provider URIs in the Browser:
 
-    mercury> run app.provider.finduri com.android.browser
+    dz> run app.provider.finduri com.android.browser
     Scanning com.android.browser...
     content://com.android.browser.home/res/raw/
     content://browser/search_suggest_query
@@ -131,7 +131,7 @@ class Info(Module, common.Filters, common.PackageManager):
     description = "List information about exported content providers, with optional filters."
     examples = """Find content provider with the keyword "settings" in them:
 
-    mercury> run app.provider.info -f settings
+    dz> run app.provider.info -f settings
 
     Package name: com.google.android.gsf
     Authority: com.google.settings
@@ -149,7 +149,7 @@ class Info(Module, common.Filters, common.PackageManager):
 
 Finding content providers that do not require permissions to read/write:
 
-    mercury> run app.provider.info -p null
+    dz> run app.provider.info -p null
 
     Package name: com.google.android.gsf
     Authority: com.google.settings
@@ -244,7 +244,7 @@ class Insert(Module, common.Provider):
     description = "Insert into a content provider."
     examples = """Insert into a vulnerable content provider:
 
-    mercury> run app.provider.insert content://com.vulnerable.im/messages
+    dz> run app.provider.insert content://com.vulnerable.im/messages
                 --string date 1331763850325
                 --string type 0
                 --integer _id 7"""
@@ -298,7 +298,7 @@ class Query(Module, common.Provider, common.TableFormatter):
     description = "Query a content provider"
     examples = """Querying the settings content provider:
 
-    mercury> run app.provider.query content://settings/secure
+    dz> run app.provider.query content://settings/secure
 
     | _id | name                                    | value   |
     | 5   | assisted_gps_enabled                    | 1       |
@@ -308,7 +308,7 @@ class Query(Module, common.Provider, common.TableFormatter):
 
 Querying, with a WHERE clause in the SELECT statement:
 
-    mercury> run app.provider.query content://settings/secure
+    dz> run app.provider.query content://settings/secure
                 --selection "_id=?"
                 --selection-args 10
     
@@ -343,7 +343,7 @@ class Read(Module, common.Provider):
     description = "Read from the specified content uri using openInputStream"
     examples = """Attempt directory traversal on a content provider:
 
-    mercury> run app.provider.read content://settings/secure/../../../system/etc/hosts
+    dz> run app.provider.read content://settings/secure/../../../system/etc/hosts
     java.io.FileNotFoundException: No files supported by provider at content://settings/secure/../../../system/etc/hosts"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
@@ -362,7 +362,7 @@ class Update(Module, common.Provider):
     description = "Update the specified content provider URI"
     examples = """Updating, the assisted_gps_enabled setting:
 
-    mercury> run app.provider.update content://settings/secure
+    dz> run app.provider.update content://settings/secure
                 --selection "name=?"
                 --selection-args assisted_gps_enabled
                 --integer value 0

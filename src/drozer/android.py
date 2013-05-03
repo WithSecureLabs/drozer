@@ -251,7 +251,7 @@ class Intent(object):
                     'GRANT_WRITE_URI_PERMISSION': 0x00000002,
                     'RECEIVER_REGISTERED_ONLY': 0x40000000 }
     
-    usage = """    mercury> run app.activity.start
+    usage = """    dz> run app.activity.start
                 --action android.intent.action.VIEW
                 --data-uri http://www.google.com
                 --flags ACTIVITY_NEW_TASK

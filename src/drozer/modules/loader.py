@@ -71,8 +71,8 @@ class ModuleLoader(object):
 
     def __locate(self):
         """
-        Search the module paths for Python modules, which may contain Mercury
-        modules, and build a collection of Python modules to load.
+        Search the module paths for Python modules, which may contain drozer
+        Modules, and build a collection of Python modules to load.
         """
 
         modules = {}
@@ -106,7 +106,7 @@ class ModuleLoader(object):
         
     def __paths(self):
         """
-        Form a collection of file system paths to search for Mercury modules,
+        Form a collection of file system paths to search for drozer Modules,
         by dissecting the search paths and collecting folders that exist.
 
         We also add these locations to the PYTHONPATH so we can load Python
@@ -129,7 +129,7 @@ class ModuleLoader(object):
     def __subclasses_of(self, klass):
         """
         Method to recursively find subclasses of a given class, used to collate
-        the list of Mercury modules after loading all Python modules from the
+        the list of drozer Modules after loading all Python modules from the
         specified paths.
         """
         

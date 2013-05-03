@@ -12,7 +12,7 @@ class WebContentResolver(Module, common.PackageManager, common.Provider):
 
     name = "Start a web service interface to content providers."
     description = "Start a Web Service interface to Content Providers. This allows you to use web application testing capabilities and tools to test content providers."
-    examples = """mercury> run auxiliary.webcontentresolver --port 8080
+    examples = """dz> run auxiliary.webcontentresolver --port 8080
 
     WebContentResolver started on port 8080.
     Ctrl+C to Stop"""
@@ -39,7 +39,7 @@ class WebContentResolver(Module, common.PackageManager, common.Provider):
 
 class Handler(BaseHTTPRequestHandler):
 
-    header = """<html><head><title>Mercury WebContentResolver</title><style type="text/css">body { font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 12px; } table { font-size: inherit; }</style></head><body><h1>Mercury WebContentResolver</h1>\n"""
+    header = """<html><head><title>drozer WebContentResolver</title><style type="text/css">body { font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 12px; } table { font-size: inherit; }</style></head><body><h1>drozer WebContentResolver</h1>\n"""
     footer = """</body></html>"""
 
     def __init__(self, module, *args, **kwargs):

@@ -6,8 +6,8 @@ from drozer.modules.base import Module
 
 class ClassLoader(object):
     """
-    Mercury Client Module: provides utility methods for loading Java source code
-    from the local system into the Dalvik VM on the Agent.
+    Utility methods for loading Java source code from the local system into
+    the Dalvik VM on the Agent.
     """
 
     def loadClass(self, source, klass, relative_to=None):

@@ -2,9 +2,8 @@ import os
 
 from mwr.common import cli
 
+from drozer import meta
 from drozer.ssl.provider import Provider
-
-from mwr.mercury import meta
 
 class SSLManager(cli.Base):
     """

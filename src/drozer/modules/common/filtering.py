@@ -1,7 +1,6 @@
 class Filters(object):
     """
-    Mercury Client Library: provides utility methods for filtering collections
-    of ReflectedTypes.
+    Utility methods for filtering collections of ReflectedTypes.
     """
 
     def match_filter(self, collection, key, term):

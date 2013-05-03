@@ -5,8 +5,8 @@ from drozer.modules.common import file_system
 
 class SuperUser(file_system.FileSystem):
     """
-    Mercury Client Library: provides utility methods for aiding with superuser
-    binary detection and installation of "minimal su" on the Agent.
+    Utility methods for aiding with superuser binary detection and installation
+    of "minimal su" on the Agent.
     """
 
     def __agentPathMinimalSu(self):

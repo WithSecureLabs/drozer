@@ -9,7 +9,7 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
     description = "Examine the attack surface of an installed package."
     examples = """Finding the attack surface of the built-in browser
 
-    mercury> run app.package.attacksurface com.android.browser
+    dz> run app.package.attacksurface com.android.browser
 
     6 activities exported
     4 broadcast receivers exported
@@ -53,7 +53,7 @@ class Info(Module, common.Filters, common.PackageManager):
     description = "List all installed packages on the device with optional filters. Specify optional keywords to search for in the package information, or granted permissions."
     examples = """Finding all packages with the keyword "browser" in their name:
 
-    mercury> run app.package.info -f browser
+    dz> run app.package.info -f browser
 
     Package: com.android.browser
       Process name: com.android.browser
@@ -71,7 +71,7 @@ class Info(Module, common.Filters, common.PackageManager):
 
 Finding all packages with the "INSTALL_PACKAGES" permission:
 
-    mercury> run app.package.info -p INSTALL_PACKAGES
+    dz> run app.package.info -p INSTALL_PACKAGES
 
     Package: com.android.packageinstaller
       Process Name: com.android.packageinstaller
@@ -151,7 +151,7 @@ class LaunchIntent(Module, common.PackageManager):
     description = "Get the launch intent of an installed package."
     examples = """Finding the launch intent of the Android browser package:
 
-    mercury> run app.package.launchintent com.android.browser
+    dz> run app.package.launchintent com.android.browser
 
     Intent: 
       Action: android.intent.action.MAIN
@@ -229,7 +229,7 @@ class List(Module, common.PackageManager):
     description = "List all installed packages on the device. Specify optional keywords to search for in the package name."
     examples = """Finding all packages with the keyword "browser" in their name:
 
-    mercury> run app.package.list -f browser
+    dz> run app.package.list -f browser
 
     com.android.browser"""
     author = "MWR InfoSecurity (@mwrlabs)"
@@ -258,9 +258,9 @@ class Manifest(Module, common.Assets):
 
     name = "Get AndroidManifest.xml of package"
     description = "Retrieves AndroidManifest.xml from an installed package."
-    examples = """Getting the manifest for Mercury
+    examples = """Getting the manifest for drozer
 
-    mercury> run app.package.manifest com.mwr.droidhg.agent
+    dz> run app.package.manifest com.mwr.droidhg.agent
 
     <manifest versionCode="2" versionName="1.1" package="com.mwr.mercury">
       <uses-sdk minSdkVersion="8" targetSdkVersion="4">
@@ -348,7 +348,7 @@ class SharedUID(Module, common.PackageManager):
     description = "Finds packages that have shared UIDs and gives their accumulated permissions."
     examples = """Finding packages that share the UID 10011
 
-    mercury> run app.package.shareduid -u 10011
+    dz> run app.package.shareduid -u 10011
 
     UID: 10011 (com.motorola.blur.uid.provider_authenticator:10011)
     Package Name: com.motorola.blur.provider.photobucket

@@ -6,7 +6,7 @@ from drozer.configuration import Configuration
 
 class Remote(object):
     """
-    Remote is a wrapper around a set of Mercury remote repositories, and provides
+    Remote is a wrapper around a set of drozer remote repositories, and provides
     methods for managing them.
     
     A Remote can be instantiated to provide API access to the repository, to
@@ -19,21 +19,21 @@ class Remote(object):
     @classmethod
     def all(cls):
         """
-        Returns all known Mercury remotes.
+        Returns all known drozer remotes.
         
         If the [remotes] section does not exist in the configuration file, we
         create it and add a default repository.
         """
         
         if not Configuration.has_section('remotes'):
-            cls.create("https://raw.github.com/mwrlabs/mercury-modules/repository/")
+            cls.create("https://raw.github.com/mwrlabs/drozer-modules/repository/")
             
         return Configuration.get_all_values('remotes')
         
     @classmethod
     def create(cls, url):
         """
-        Create a new Mercury remote, with the specified URL.
+        Create a new drozer remote, with the specified URL.
         
         If the URL already exists, no remote will be created.
         """
@@ -48,7 +48,7 @@ class Remote(object):
     @classmethod
     def delete(cls, url):
         """
-        Removes a Mercury remote, with the specified URL.
+        Removes a drozer remote, with the specified URL.
         """
         
         if cls.get(url) != None:

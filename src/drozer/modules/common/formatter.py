@@ -1,6 +1,6 @@
 class TableFormatter(object):
     """
-    Mercury Client Library: provides utility methods for formatting tabular data.
+    Utility methods for formatting tabular data.
     """
 
     def print_table(self, rows, show_headers=True, vertical=False):

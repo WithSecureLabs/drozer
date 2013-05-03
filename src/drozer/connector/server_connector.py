@@ -6,7 +6,7 @@ from pydiesel.api.transport.exceptions import ConnectionError
 
 class ServerConnector(SocketTransport):
     """
-    The Server model represents a connection between a Console and a Mercury
+    The Server model represents a connection between a Console and a drozer
     Server (or embedded Agent Server).
 
     The model is responsible for establishing the connection, and sending and

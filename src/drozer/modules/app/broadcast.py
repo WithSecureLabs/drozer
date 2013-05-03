@@ -9,7 +9,7 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
     description = "Get information about exported broadcast receivers."
     examples = """Get receivers exported by the platform:
 
-    mercury> run app.broadcast.info -a android
+    dz> run app.broadcast.info -a android
     Package: android
       Receiver: com.android.server.BootReceiver
         Intent Filters:
@@ -98,7 +98,7 @@ class Send(Module):
     description = "Sends an intent to broadcast receivers."
     examples = """Attempt to send the BOOT_COMPLETED broadcast message:
 
-    mercury> run app.broadcast.send
+    dz> run app.broadcast.send
                 --action android.intent.action.BOOT_COMPLETED
     java.lang.SecurityException: Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMPLETED from pid=955, uid=10044
 

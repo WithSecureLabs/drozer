@@ -7,7 +7,7 @@ class ForIntent(Module, common.PackageManager):
     description = "Find activities that can handle the formulated intent"
     examples = """Find activities that can handle web addresses:
 
-    mercury> run app.activity.forintent
+    dz> run app.activity.forintent
                 --action android.intent.action.VIEW
                 --data http://www.google.com
 
@@ -44,7 +44,7 @@ class Info(Module, common.Filters, common.PackageManager):
     description = "Gets information about exported activities."
     examples = """List activities exported by the Browser:
 
-    mercury> run app.activity.info --package com.android.browser
+    dz> run app.activity.info --package com.android.browser
     Package: com.android.browser
       com.android.browser.BrowserActivity
       com.android.browser.ShortcutActivity
@@ -112,21 +112,21 @@ class Start(Module):
     description = "Starts an Activity using the formulated intent."
     examples = """Start the Browser with an explicit intent:
 
-    mercury> run app.activity.start
+    dz> run app.activity.start
                 --component com.android.browser
                             com.android.browser.BrowserActivity
                 --flags ACTIVITY_NEW_TASK
                 
-If no flags are specified, Mercury will add the ACTIVITY_NEW_TASK flag. To launch an activity with no flags:
+If no flags are specified, drozer will add the ACTIVITY_NEW_TASK flag. To launch an activity with no flags:
 
-    mercury> run app.activity.start
+    dz> run app.activity.start
                 --component com.android.browser
                             com.android.browser.BrowserActivity
                 --flags 0x0
 
 Starting the Browser with an implicit intent:
 
-    mercury> run app.activity.start
+    dz> run app.activity.start
                 --action android.intent.action.VIEW
                 --data-uri http://www.google.com
                 --flags ACTIVITY_NEW_TASK

@@ -2,8 +2,7 @@ from drozer.modules.common import loader
 
 class ZipFile(loader.ClassLoader):
     """
-    Mercury Client Library: provides utility methods for interacting with zipped
-    archive files.
+    Utility methods for interacting with zipped archive files.
     """
 
     def extractFromZip(self, target, source, destination):

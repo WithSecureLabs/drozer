@@ -2,8 +2,7 @@ from drozer.modules.common import loader
 
 class Assets(loader.ClassLoader):
     """
-    Mercury Client Library: contains utility methods for interacting with the
-    Android Asset Manager.
+    Utility methods for interacting with the Android Asset Manager.
     """
 
     def getAndroidManifest(self, package):

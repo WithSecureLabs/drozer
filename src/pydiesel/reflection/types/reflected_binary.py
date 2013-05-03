@@ -16,7 +16,7 @@ class ReflectedBinary(ReflectedString):
     
     def _pb(self):
         """
-        Get the Argument representation of the String, as defined in the Mercury
+        Get the Argument representation of the String, as defined in the drozer
         protocol.
         """
 

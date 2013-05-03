@@ -4,7 +4,7 @@ class SFlagBinaries(Module, common.BusyBox, common.Shell, common.SuperUser):
 
     name = "Find suid/sgid binaries in the given folder (default is /system)."
     description = "Find suid/sgid binaries in the given folder (default is /system). Uses the method from http://hexesec.wordpress.com/2009/10/14/exploiting-suid-binaries/."
-    examples = """mercury> run scanner.misc.sflagbinaries
+    examples = """dz> run scanner.misc.sflagbinaries
 Discovered suid/sgid files in /system:
   /system/xbin/procmem
   /system/xbin/librank

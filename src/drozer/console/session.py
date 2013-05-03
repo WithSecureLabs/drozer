@@ -24,7 +24,7 @@ from drozer.repoman import ModuleManager
 
 class Session(cmd.Cmd):
     """
-    Mercury: the Heavy Metal that Poisoned the Droid
+    drozer: Android Security Assessment Framework
 
     Type `help COMMAND` for more information on a particular command, or `help MODULE` for a particular module.
     """
@@ -41,9 +41,9 @@ class Session(cmd.Cmd):
 
         self.active = True
         self.aliases = { "l": "list", "ls": "list", "ll": "list" }
-        self.intro = "Mercury Console"
-        self.history_file = os.path.sep.join([os.path.expanduser("~"), ".mercury_history"])
-        self.prompt = "mercury> "
+        self.intro = "drozer Console"
+        self.history_file = os.path.sep.join([os.path.expanduser("~"), ".drozer_history"])
+        self.prompt = "dz> "
         self.stdout = ColouredStream(self.stdout)
         self.stderr = ColouredStream(self.stderr)
         self.variables = {  'PATH': '/data/data/com.mwr.droidhg.agent/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
@@ -61,7 +61,7 @@ class Session(cmd.Cmd):
 
     def completemodules(self, text):
         """
-        Provides readline auto-completion for Mercury module names.
+        Provides readline auto-completion for drozer module names.
         """
 
         if self.__base == "":
@@ -73,7 +73,7 @@ class Session(cmd.Cmd):
 
     def completenamespaces(self, text):
         """
-        Provides readline auto-completion for Mercury namespaces.
+        Provides readline auto-completion for drozer namespaces.
         """
 
         if self.__base == "":
@@ -92,29 +92,29 @@ class Session(cmd.Cmd):
 
         The namespace is taken as relative to the current location in the module tree:
 
-            mercury> cd information
-            mercury#information> cd native
-            mercury#information.native>
+            dz> cd information
+            dz#information> cd native
+            dz#information.native>
 
         To specify an absolute path, prefix it with a period character:
 
-            mercury#information.native> cd .package
-            mercury#package>
+            dz#information.native> cd .package
+            dz#package>
 
         It is still possible to run commands from other namespaces, by specifying the absolute path (prefixed by a period) to the `run` command:
 
-            mercury> cd package
-            mercury#package> run .activity.info
+            dz> cd package
+            dz#package> run .activity.info
 
         Passing an empty string to `cd` will switch back to the root namespace:
 
-            mercury#information.native> cd
-            mercury>
+            dz#information.native> cd
+            dz>
 
         Passing '..' will move up one level:
 
-            mercury#information.native> cd ..
-            mercury#information>
+            dz#information.native> cd ..
+            dz#information>
         """
         argv = shlex.split(args, comments=True)
 
@@ -140,13 +140,13 @@ class Session(cmd.Cmd):
         """
         usage: clean
         
-        Cleans APK and DEX files from Mercury's cache.
+        Cleans APK and DEX files from drozer's cache.
         
-        During normal operation, Mercury uploads a number of APK files to your device, and extracts the DEX bytecode from others already on your device. This can start to consume a large amount of space, particularly if you are developing Mercury modules.
+        During normal operation, drozer uploads a number of APK files to your device, and extracts the DEX bytecode from others already on your device. This can start to consume a large amount of space, particularly if you are developing drozer modules.
         
         The `clean` command removes all of these cached files for you.
         
-        Mercury will automatically re-upload any files that it needs as you continue to use it.
+        drozer will automatically re-upload any files that it needs as you continue to use it.
         """
 
         files = clean.clean(self.__reflector)
@@ -155,7 +155,7 @@ class Session(cmd.Cmd):
 
     def do_contributors(self, args):
         """
-        Display a list of Mercury contributors.
+        Display a list of drozer contributors.
         """
         argv = shlex.split(args, comments=True)
 
@@ -176,7 +176,7 @@ class Session(cmd.Cmd):
 
     def do_exit(self, args):
         """
-        Terminate your Mercury session.
+        Terminate your drozer session.
         """
         
         try:
@@ -243,13 +243,13 @@ class Session(cmd.Cmd):
 
         Examples:
 
-            mercury> list
+            dz> list
             activity.forintent
             activity.info
             ... snip ...
-            mercury> list debug
+            dz> list debug
             information.debuggable
-            mercury>
+            dz>
         
         optional arguments:
         
@@ -312,9 +312,9 @@ class Session(cmd.Cmd):
         """
         usage: module [COMMAND]
     
-        Run the Mercury Module and Repository Manager.
+        Run the drozer Module and Repository Manager.
     
-        The Repository Manager handles Mercury modules and module repositories.
+        The Repository Manager handles drozer modules and module repositories.
         """
         
         ModuleManager().run(shlex.split(args, comments=True))
@@ -394,18 +394,18 @@ class Session(cmd.Cmd):
         """
         usage: `! [COMMAND]` or `shell [COMMAND]`
 
-        Execute a Linux command in the context of Mercury.
+        Execute a Linux command in the context of drozer.
 
         If a COMMAND is specified, this is shorthand for `run shell.exec COMMAND`. Otherwise, it will launch an interactive shell.
 
         Example:
 
-            mercury> ! date
+            dz> ! date
             Fri Dec 21 23:59:59 GMT 2012
-            mercury> ! cat /etc/hosts
+            dz> ! cat /etc/hosts
             127.0.0.1  localhost
 
-        The working directory of your shell will be the Mercury Agent root folder.
+        The working directory of your shell will be the drozer Agent root folder.
         """
 
         if len(args) > 0:
@@ -442,7 +442,7 @@ class Session(cmd.Cmd):
 
         Intent Formulation
         ------------------
-        In Mercury, intents are formulated using a set of command-line options. Some of these set a simple String in the Intent:
+        In drozer, intents are formulated using a set of command-line options. Some of these set a simple String in the Intent:
         
           --action ACTION
           --category CATEGORY
@@ -457,11 +457,11 @@ class Session(cmd.Cmd):
           
         Intents can carry messages or commands inside of them in the form of extras. Applications may want to pass additional information inside of the intents they send to one another, possibly containing the data to perform a task on, or any other user-defined task to initiate from the received data.
         
-        Passing the extras is a little more complex. You need to tell Mercury the data type, key and value:
+        Passing the extras is a little more complex. You need to tell drozer the data type, key and value:
           
           --extra TYPE KEY VALUE
         
-        Mercury supports a few common types:
+        drozer supports a few common types:
         
           boolean
           byte
@@ -505,13 +505,13 @@ class Session(cmd.Cmd):
         try:
             message = self.__server.sendAndReceive(message.setSessionId(self.__session_id))
         except ConnectionError:
-            self.stderr.write("We lost your Mercury session.\n\n")
+            self.stderr.write("We lost your drozer session.\n\n")
             self.stderr.write("For some reason the mobile Agent has stopped responding. You will need to restart it, and try again.\n\n")
 
             sys.exit(1)
 
         if message and message.type == Message.REFLECTION_RESPONSE and message.reflection_response.status == Message.ReflectionResponse.FATAL:
-            self.stderr.write("We lost your Mercury session.\n\n")
+            self.stderr.write("We lost your drozer session.\n\n")
             self.stderr.write("The mobile Agent did not like the last message you sent it. It has terminated your session.\n\n")
             self.stderr.write("You will need to reconnect, and may need to restart the mobile Agent.\n\n")
 
@@ -521,7 +521,7 @@ class Session(cmd.Cmd):
 
     def __load_variables(self):
         """
-        Load extra variables, specified in the .mercury_config file.
+        Load extra variables, specified in the .drozer_config file.
         """
         
         for key in Configuration.get_all_keys("vars"):
@@ -647,9 +647,9 @@ class Session(cmd.Cmd):
                 self.stderr.write("no such namespace: %s\n"%base)
 
         if base == "":
-            self.prompt = "mercury> "
+            self.prompt = "dz> "
         else:
-            self.prompt = "mercury#{}> ".format(self.__base[0:len(self.__base)-1])
+            self.prompt = "dz#{}> ".format(self.__base[0:len(self.__base)-1])
 
         return True
 
@@ -662,8 +662,8 @@ class DebugSession(Session):
     def __init__(self, server, session_id):
         Session.__init__(self, server, session_id)
 
-        self.intro = "Mercury Console (debug mode)"
-        self.prompt = "mercury> "
+        self.intro = "drozer Console (debug mode)"
+        self.prompt = "dz> "
         
     def do_reload(self, args):
         """

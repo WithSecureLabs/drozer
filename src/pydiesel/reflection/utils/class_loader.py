@@ -9,8 +9,8 @@ from mwr.common import fs
 
 class ClassLoader(object):
     """
-    Mercury Client Module: provides utility methods for loading Java source code
-    from the local system into the Dalvik VM on the Agent.
+    Provides utility methods for loading Java source code from the local
+    system into the running Dalvik VM, using the reflection API.
     """
     
     def __init__(self, source_or_relative_path, cache_path, construct, system_class_loader, relative_to=None):
@@ -42,7 +42,7 @@ class ClassLoader(object):
                 file_stream.close()
             return self.construct('dalvik.system.DexClassLoader', file_path, self.cache_path, None, self.system_class_loader)
         else:
-            raise RuntimeError("Mercury could not find or compile a required extension library.\n")
+            raise RuntimeError("drozer could not find or compile a required extension library.\n")
 
     def __get_cached_apk_name(self):
         """

@@ -5,8 +5,7 @@ from mwr.common.list import chunk
 
 class FileSystem(object):
     """
-    Mercury Client Library: provides utility methods for interacting with the
-    Agent's file system.
+    Utility methods for interacting with the Agent's file system.
     """
 
     def cacheDir(self):

@@ -9,13 +9,13 @@ from drozer.modules.loader import ModuleLoader
 
 class Module(object):
     """
-    Module is the base class for all Mercury modules.
+    Module is the base class for all drozer Modules.
 
     It provides base services, including initializing your module and access to
     the reflector.
     """
 
-    name = "Un-named Module"
+    name = "drozer Module"
     description = ""
     examples = ""
     author = "Unspecified"
@@ -38,7 +38,7 @@ class Module(object):
 
     def add_arguments(self, parser):
         """
-        Stub Method: override this in a module to add commandline options to the
+        Stub Method: override this in a module to add command-line options to the
         internal ArgumentParser instance.
         """
 
@@ -208,7 +208,7 @@ class Module(object):
             if hasattr(self, 'execute'):
                 result = self.execute(arguments)
             else:
-                self.stderr.write("Mercury doesn't know how to do that :(\n")
+                self.stderr.write("drozer doesn't know how to do that.\n")
                 self.stderr.write("The %s module does not define an execute() method.\n\n" % self.fqmn())
                 
                 result = None

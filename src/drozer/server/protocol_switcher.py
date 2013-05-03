@@ -7,11 +7,11 @@ from drozer.server.droidhg import DroidHG
 class ProtocolSwitcher(Protocol):
     """
     ProtocolSwitcher is a virtual protocol that can differentiate between different
-    protocols being spoken to the Mercury Server.
+    protocols being spoken to the drozer Server.
 
     If the incoming message starts with GET or POST, the server will route the
-    connection to an HTTP server, otherwise it is connected to the Mercury
-    server.
+    connection to an HTTP server, otherwise it is connected to the drozer
+    Server.
     """
 
     enable_http = True

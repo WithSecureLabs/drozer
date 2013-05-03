@@ -1,7 +1,7 @@
 
 def clean(reflector):
     """
-    Remove APK and DEX files cached by Mercury.
+    Remove APK and DEX files cached by drozer.
     """
 
     context = reflector.resolve('com.mwr.droidhg.Agent').getContext()

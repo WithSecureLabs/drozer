@@ -7,13 +7,13 @@ class Info(Module, common.Filters, common.PackageManager):
     description = "Gets information about exported services."
     examples = """List services exported by the Browser:
 
-    mercury> run app.service.info --package com.android.browser
+    dz> run app.service.info --package com.android.browser
     Package: com.android.browser
       No exported services.
 
 List exported services with no permissions required to interact with it:
 
-    mercury> run app.service.info -p null
+    dz> run app.service.info -p null
     Package: com.android.email
       com.android.email.service.EmailBroadcastProcessorService
         Permission: null

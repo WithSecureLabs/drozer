@@ -3,7 +3,7 @@ import glob
 import os
 import setuptools
 
-from mwr.mercury import meta
+from drozer import meta
 
 def find_libs(src):
     matches = []

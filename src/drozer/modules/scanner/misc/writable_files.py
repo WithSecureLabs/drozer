@@ -4,7 +4,7 @@ class WritableFiles(Module, common.BusyBox, common.Shell, common.SuperUser):
 
     name = "Find world-writable files in the given folder"
     description = "Find world-writable files in the given folder"
-    examples = """mercury> run scanner.misc.writablefiles /data --privileged
+    examples = """dz> run scanner.misc.writablefiles /data --privileged
 Discovered world-writable files in /data:
   /data/anr/slow00.txt
   /data/anr/slow01.txt

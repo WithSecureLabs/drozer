@@ -1,7 +1,7 @@
 """
-drozer.modules.common contains Mercury Client Libraries, which provide a
-range of utility methods for modules to implement common tasks such as file
-system access, interacting with the package manager and some template modules.
+drozer Client Libraries, which provide a range of utility methods for modules
+to implement common tasks such as file system access, interacting with the
+package manager and some templates for modules.
 """
 
 from drozer.modules.common.assets import Assets

@@ -58,7 +58,7 @@ class ReflectedObject(ReflectedType):
 
     def _pb(self):
         """
-        Get an Argument representation of the Object, as defined in the Mercury
+        Get an Argument representation of the Object, as defined in the drozer
         protocol.
         """
 

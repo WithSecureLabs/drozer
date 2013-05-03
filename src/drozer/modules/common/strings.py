@@ -1,7 +1,7 @@
 class Strings(object):
     """
-    Mercury Client Library: provides an implementation of the *nix `strings`
-    command, which searches for ASCII strings in a specified file.
+    An implementation of the *nix `strings` command, which searches for ASCII
+    strings in a specified file.
     """
 
     def getStrings(self, path):

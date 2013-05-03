@@ -4,7 +4,7 @@ class ReadableFiles(Module, common.BusyBox, common.Shell, common.SuperUser):
 
     name = "Find world-readable files in the given folder"
     description = "Find world-readable files in the given folder"
-    examples = """mercury> run scanner.misc.readablefiles /data -p
+    examples = """dz> run scanner.misc.readablefiles /data -p
 Discovered world-readable files in /data:
   /data/system/packages-stopped.xml
   /data/system/packages.list

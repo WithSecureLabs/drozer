@@ -15,7 +15,7 @@ class ReflectedArray(ReflectedType):
     @classmethod
     def fromArgument(cls, argument, reflector):
         """
-        Builds a new ReflectedArray, given an Argument as defined in the Mercury
+        Builds a new ReflectedArray, given an Argument as defined in the drozer
         protocol that contains an Array.
         """
 
@@ -50,7 +50,7 @@ class ReflectedArray(ReflectedType):
 
     def native(self):
         """
-        Get the native representation of the Array.
+        Get the native representation of the drozer.
         """
 
         return self._native
@@ -68,7 +68,7 @@ class ReflectedArray(ReflectedType):
 
     def _pb(self):
         """
-        Get an Argument representation of the Array, as defined in the Mercury
+        Get an Argument representation of the Array, as defined in the drozer
         protocol.
         """
 

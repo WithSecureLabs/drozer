@@ -5,14 +5,14 @@ from drozer.configuration import Configuration
 
 class Repository(object):
     """
-    Repository is a wrapper around a set of Mercury repositories, and provides
+    Repository is a wrapper around a set of drozer Repositories, and provides
     methods for managing them.
     """
     
     @classmethod
     def all(cls):
         """
-        Returns all known Mercury repositories. 
+        Returns all known drozer Repositories. 
         """
         
         return Configuration.get_all_values('repositories')
@@ -20,7 +20,7 @@ class Repository(object):
     @classmethod
     def create(cls, path):
         """
-        Create a new Mercury repository at the specified path.
+        Create a new drozer Repository at the specified path.
         
         If the path already exists, no repository will be created.
         """
@@ -29,7 +29,7 @@ class Repository(object):
             os.makedirs(path)
             
             open(os.path.join(path, "__init__.py"), 'w').close()
-            open(os.path.join(path, ".mercury_repository"), 'w').close()
+            open(os.path.join(path, ".drozer_repository"), 'w').close()
         
             cls.enable(path)
         else:
@@ -38,9 +38,9 @@ class Repository(object):
     @classmethod
     def delete(cls, path):
         """
-        Removes a Mercury repository at a specified path.
+        Removes a drozer Repository at a specified path.
         
-        If the path is not a Mercury repository, it will not be removed.
+        If the path is not a drozer Repository, it will not be removed.
         """
         
         if cls.is_repo(path):
@@ -53,7 +53,7 @@ class Repository(object):
     @classmethod
     def disable(cls, path):
         """
-        Remove a Mercury module repository from the collection, but leave the file
+        Remove a drozer Module Repository from the collection, but leave the file
         system intact.
         """
         
@@ -74,7 +74,7 @@ class Repository(object):
     @classmethod
     def enable(cls, path):
         """
-        Re-add a Mercury module repository to the collection, that was created manually
+        Re-add a drozer Module Repository to the collection, that was created manually
         or has previously been removed with #disable().
         """
         
@@ -86,7 +86,7 @@ class Repository(object):
     @classmethod
     def is_repo(cls, path):
         """
-        Tests if a path represents a Mercury repository.
+        Tests if a path represents a drozer Repository.
         """
         
         return path in cls.all() and cls.looks_like_repo(path)
@@ -94,12 +94,12 @@ class Repository(object):
     @classmethod
     def looks_like_repo(cls, path):
         """
-        Tests if a path looks like a Mercury repository.
+        Tests if a path looks like a drozer Repository.
         """
         
         return os.path.exists(path) and \
             os.path.exists(os.path.join(path, "__init__.py"))  and \
-            os.path.exists(os.path.join(path, ".mercury_repository")) 
+            os.path.exists(os.path.join(path, ".drozer_repository")) 
         
 
 class NotEmptyException(Exception):

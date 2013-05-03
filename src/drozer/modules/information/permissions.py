@@ -5,7 +5,7 @@ class Permissions(Module, common.PackageManager):
     name = "Get a list of all permissions used by packages on the device"
     description = "Get a list of all permissions used by packages on the device"
     examples = '''
-    mercury> run information.permissions
+    dz> run information.permissions
     android.permission.ACCESS_ALL_DOWNLOADS
     android.permission.ACCESS_ASSISTED_GPS
     android.permission.ACCESS_AUDIO

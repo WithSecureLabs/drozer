@@ -4,8 +4,7 @@ from drozer.modules.common import file_system, loader
 
 class Shell(file_system.FileSystem, loader.ClassLoader):
     """
-    Mercury Client Library: provides a wrapper around the Android Shell, allowing
-    commands to be executed.
+    Wrapper around the Android Shell, that allows commands to be executed.
     """
 
     def shellExec(self, command):

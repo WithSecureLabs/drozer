@@ -2,8 +2,7 @@ from pydiesel.reflection import ReflectionException
 
 class PackageManager(object):
     """
-    Mercury Client Library: provides utility methods for interacting with the
-    Android Package Manager.
+    Utility methods for interacting with the Android Package Manager.
     """
 
     GET_ACTIVITIES = 0x00000001

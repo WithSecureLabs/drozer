@@ -18,7 +18,7 @@ class ReflectedPrimitive(ReflectedType):
     def fromArgument(cls, argument, reflector):
         """
         Builds a new ReflectedPrimitive, given an Argument as defined in the
-        Mercury protocol that contains a primitive type.
+        drozer protocol that contains a primitive type.
         """
 
         if argument.primitive.type == Message.Primitive.BOOL:
@@ -49,7 +49,7 @@ class ReflectedPrimitive(ReflectedType):
 
     def _pb(self):
         """
-        Get an Argument representation of the primitive, as defined in the Mercury
+        Get an Argument representation of the primitive, as defined in the drozer
         protocol.
         """
 

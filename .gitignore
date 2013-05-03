@@ -7,5 +7,7 @@ build/*
 dist/*
 log/*.log
 obj
+src/drozer/modules/**/*.class
+src/drozer/modules/**/*.apk
 src/mercury.egg-info
 mercury.log

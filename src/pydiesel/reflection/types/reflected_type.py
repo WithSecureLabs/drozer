@@ -29,7 +29,7 @@ class ReflectedType(object):
     def fromArgument(cls, argument, reflector):
         """
         Creates a new ReflectedType, given an Argument message as defined in
-        the Mercury protocol.
+        the drozer protocol.
         """
 
         if isinstance(argument, ReflectedType):

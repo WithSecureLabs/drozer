@@ -6,29 +6,28 @@ from pydiesel.api.transport.exceptions import ConnectionError
 
 from mwr.common import cli, path_completion
 
+from drozer import meta
 from drozer.api.formatters import SystemResponseFormatter
 from drozer.connector import ServerConnector
 from drozer.console.session import Session, DebugSession
 
-from mwr.mercury import meta
-
 class Console(cli.Base):
     """
-    mercury console [OPTIONS] COMMAND
+    drozer console [OPTIONS] COMMAND
     
-    Starts a new Mercury Console to interact with an Agent.
+    Starts a new drozer Console to interact with an Agent.
 
-    The Mercury Console connects to an Agent and allows you to interact with the
+    The drozer Console connects to an Agent and allows you to interact with the
     system from the context of the agent application on the device. The console
     can connect directly to an agent, if its embedded server is enabled, or through
-    a Mercury Server that the agent is connected to.
+    a drozer Server that the agent is connected to.
     """
 
     def __init__(self):
         cli.Base.__init__(self)
         
         self._parser.add_argument("device", default=None, nargs='?', help="the unique identifier of the Agent to connect to")
-        self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the Mercury server")
+        self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
         self._parser.add_argument("--ssl", action="store_true", default=False, help="connect with SSL")
         self._parser.add_argument("--debug", action="store_true", default=False, help="enable debug mode")
         self._parser.add_argument("--password", action="store_true", default=False, help="the agent requires a password")
@@ -79,7 +78,7 @@ class Console(cli.Base):
             self.handle_error(RuntimeError(response.system_response.error_message), fatal=True)
 
     def do_devices(self, arguments):
-        """lists all devices bound to the Mercury server"""
+        """lists all devices bound to the drozer server"""
 
         response = self.__getServerConnector(arguments).listDevices()
 
@@ -88,7 +87,7 @@ class Console(cli.Base):
         self.__getServerConnector(arguments).close()
 
     def do_disconnect(self, arguments):
-        """disconnects a Mercury session"""
+        """disconnects a drozer session"""
 
         response = self.__getServerConnector(arguments).stopSession(arguments.device)
 
@@ -97,7 +96,7 @@ class Console(cli.Base):
         self.__getServerConnector(arguments).close()
         
     def do_version(self, arguments):
-        """display the installed Mercury version"""
+        """display the installed drozer version"""
         
         meta.print_version()
         
@@ -115,13 +114,13 @@ class Console(cli.Base):
         """error handler: shows an exception message, before terminating"""
         
         if str(throwable) == "connection reset by peer":
-            sys.stderr.write("The Mercury server is not available. Please double check the address and port.\n\n")
+            sys.stderr.write("The drozer Server is not available. Please double check the address and port.\n\n")
         elif str(throwable) == "'NoneType' object has no attribute 'id'":
             sys.stderr.write("Expected a response from the server, but there was none.\nThe server may be unavailable, or may be expecting you to connect using SSL.\n\n")
         elif isinstance(throwable, ConnectionError) or fatal == True:
-            sys.stderr.write("There was a problem connecting to the Mercury server.\n\n")
+            sys.stderr.write("There was a problem connecting to the drozer Server.\n\n")
             sys.stderr.write("Things to check:\n\n")
-            sys.stderr.write(" - is the Mercury Server running?\n")
+            sys.stderr.write(" - is the drozer Server running?\n")
             sys.stderr.write(" - have you set up appropriate adb port forwards?\n")
             sys.stderr.write(" - have you specified the correct hostname and port with --server?\n")
             sys.stderr.write(" - is the server protected with SSL (add an --ssl switch)?\n")
@@ -178,7 +177,7 @@ class Console(cli.Base):
         trust_status = provider.trusted(certificate, peer)
             
         if trust_status < 0:
-            print "Mercury has established an SSL Connection to %s:%d." % peer
+            print "drozer has established an SSL Connection to %s:%d." % peer
             print "The server has provided an SSL Certificate with the SHA-1 Fingerprint:"
             print "%s\n" % provider.digest(certificate)
             

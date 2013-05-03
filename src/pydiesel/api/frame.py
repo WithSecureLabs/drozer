@@ -4,8 +4,8 @@ from pydiesel.api.protobuf_pb2 import Message
 
 class Frame:
     """
-    Frame models the Mercury messages as they are sent on-the-wire, with a 16-
-    byte header comprising the version number and payload length.
+    Models a drozer message as it is sent on-the-wire, with a 16-byte header
+    comprising the version number and payload length.
 
     This model is able to read these frames from input streams and sockets, as
     well as build a representation that can be send on-the-wire.

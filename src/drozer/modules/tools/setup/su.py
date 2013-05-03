@@ -5,12 +5,12 @@ class MinimalSu(Module, common.SuperUser, common.Shell):
     name = "Prepare 'minimal-su' binary installation on the device."
     description = """Prepares 'minimal-su' binary installation files on the device in order to provide access to a root shell on demand.
 
-This binary provides Mercury the ability to maintain access to a root shell on the device after obtaining a temporary root shell via the use of an exploit. Just type `su` from a shell to get a root shell.
+This binary provides drozer the ability to maintain access to a root shell on the device after obtaining a temporary root shell via the use of an exploit. Just type `su` from a shell to get a root shell.
 
 WARNING: This minimal version of the su binary is completely unprotected, meaning that any application on the device can obtain a root shell without any user prompting.
 """
     examples = """
-    mercury> run tools.setup.minimalsu
+    dz> run tools.setup.minimalsu
     [*] Uploaded minimal-su
     [*] Uploaded install-minimal-su.sh
     [*] chmod 770 /data/data/com.mwr.droidhg.agent/install-minimal-su.sh

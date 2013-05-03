@@ -1,6 +1,9 @@
 from drozer.modules.common import loader
 
 class ServiceBinding(loader.ClassLoader):
+    """
+    Mixin' for binding to a service, and exchanging messages with it.
+    """
     
     class ServiceBindingProxy(object):
         

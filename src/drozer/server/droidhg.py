@@ -18,7 +18,6 @@ class FrameReceiver(StreamReceiver):
     
     def __init__(self, *args, **kwargs):
         pass
-        #StreamReceiver.__init__(self, *args, **kwargs)
 
     def connectionMade(self):
         """
@@ -51,7 +50,7 @@ class FrameReceiver(StreamReceiver):
 
 class DroidHG(FrameReceiver):
     """
-    Implementation of the Mercury protocol, as a FrameReceiver.
+    Implementation of the drozer Protocol, as a FrameReceiver.
     """
     
     __logger = getLogger(__name__ + '.droidhg')
@@ -69,7 +68,7 @@ class DroidHG(FrameReceiver):
     
     def connectionMade(self):
         """
-        Called whena a connection is made to the Mercury Server. It initialises
+        Called whena a connection is made to the drozer Server. It initialises
         the FrameReceiver, and then sets up the various message handlers and
         forwarders that we require.
         """

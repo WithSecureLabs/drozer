@@ -11,9 +11,6 @@ class Session:
         self.session_id = session_id
         self.device = device
         self.console = console
-
-    def __str__(self):
-        return "<Mercury Session: %s />" % (self.session_id)
     
 
 class SessionCollection(set):

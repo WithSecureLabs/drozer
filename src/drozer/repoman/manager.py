@@ -8,9 +8,9 @@ class ModuleManager(cli.Base):
     """
     module [COMMAND]
     
-    Run the Mercury Module and Repository Manager.
+    Run the drozer Module and Repository Manager.
 
-    The Repository Manager handles Mercury modules and module repositories.
+    The Repository Manager handles drozer Modules and Module Repositories.
     """
     
     exit_on_error = False
@@ -88,7 +88,7 @@ class ModuleManager(cli.Base):
         if len(repositories) == 1:
             return repositories[0]
         elif len(repositories) == 0:
-            print "You do not have a Mercury module repository."
+            print "You do not have a drozer Module Repository."
             if self.confirm("Would you like to create one?") == "y":
                 while True:
                     path = self.ask("Path to new repository: ")
@@ -106,7 +106,7 @@ class ModuleManager(cli.Base):
             else:
                 return None
         else:
-            print "You have %d Mercury module repositories. Which would you like to install into?\n" % len(repositories)
+            print "You have %d drozer Module Repositories. Which would you like to install into?\n" % len(repositories)
             for i in xrange(len(repositories)):
                 print "  %5d  %s" % (i+1, repositories[i])
             print
@@ -158,7 +158,7 @@ class RemoteManager(cli.Base):
     """
     module remote [COMMAND] [OPTIONS]
     
-    Run the remote part of the Mercury Module and Repository Manager.
+    Run the remote part of the drozer Module and Repository Manager.
     """
     
     exit_on_error = False
@@ -181,7 +181,7 @@ class RemoteManager(cli.Base):
             
             print "Added remote: %s.\n" % url
         else:
-            print "usage: mercury module remote create http://path.to.repository/\n"
+            print "usage: drozer module remote create http://path.to.repository/\n"
     
     def do_remove(self, arguments):
         """remove a remote module repository"""
@@ -196,7 +196,7 @@ class RemoteManager(cli.Base):
             except UnknownRemote:
                 print "The target (%s) is not a remote module repository.\n" % url
         else:
-            print "usage: mercury module remote delete http://path.to.repository/\n"
+            print "usage: drozer module remote delete http://path.to.repository/\n"
         
     def do_list(self, arguments):
         """shows a list of all remotes"""
@@ -237,9 +237,9 @@ class RepositoryManager(cli.Base):
     """
     module repository [COMMAND] [OPTIONS]
     
-    Run the repository part of the Mercury Module and Repository Manager.
+    Run the repository part of the drozer Module and Repository Manager.
 
-    The Repository Manager handles Mercury modules and module repositories.
+    The Repository Manager handles drozer Modules and Module Repositories.
     """
     
     exit_on_error = False
@@ -253,7 +253,7 @@ class RepositoryManager(cli.Base):
         self._parser.error = self.__parse_error
         
     def do_create(self, arguments):
-        """create a new Mercury module repository"""
+        """create a new drozer module repository"""
         
         if len(arguments.options) == 1:
             path = arguments.options[0]
@@ -265,10 +265,10 @@ class RepositoryManager(cli.Base):
             except NotEmptyException:
                 print "The target (%s) already exists.\n" % path
         else:
-            print "usage: mercury module repository create /path/to/repository\n"
+            print "usage: drozer module repository create /path/to/repository\n"
     
     def do_delete(self, arguments):
-        """remove a Mercury module repository"""
+        """remove a drozer module repository"""
         
         if len(arguments.options) == 1:
             path = arguments.options[0]
@@ -278,9 +278,9 @@ class RepositoryManager(cli.Base):
                 
                 print "Removed repository at %s.\n" % path
             except UnknownRepository:
-                print "The target (%s) is not a Mercury module repository.\n" % path
+                print "The target (%s) is not a drozer module repository.\n" % path
         else:
-            print "usage: mercury module repository delete /path/to/repository\n"
+            print "usage: drozer module repository delete /path/to/repository\n"
                 
     def do_disable(self, arguments):
         """hide a Module repository, without deleting its contents"""
@@ -293,9 +293,9 @@ class RepositoryManager(cli.Base):
                 
                 print "Hidden repository at %s.\n" % path
             except UnknownRepository:
-                print "The target (%s) is not a Mercury module repository.\n" % path
+                print "The target (%s) is not a drozer module repository.\n" % path
         else:
-            print "usage: mercury module repository disable /path/to/repository\n"
+            print "usage: drozer module repository disable /path/to/repository\n"
     
     def do_enable(self, arguments):
         """enable a previously disabled Module repository"""
@@ -308,9 +308,9 @@ class RepositoryManager(cli.Base):
                 
                 print "Enabled repository at %s.\n" % path
             except UnknownRepository:
-                print "The target (%s) is not a Mercury module repository.\n" % path
+                print "The target (%s) is not a drozer module repository.\n" % path
         else:
-            print "usage: mercury module repository enable /path/to/repository\n"
+            print "usage: drozer module repository enable /path/to/repository\n"
         
     def do_list(self, arguments):
         """list all repositories, both local and remote"""
@@ -338,7 +338,7 @@ class RepositoryManager(cli.Base):
         
     def __list_repositories(self):
         """
-        Print a list of Mercury repositories (a) on the local system, and
+        Print a list of drozer Repositories (a) on the local system, and
         (b) registered as remotes.
         """
         

@@ -5,8 +5,7 @@ from drozer.modules.common.package_manager import PackageManager
 
 class Provider(loader.ClassLoader):
     """
-    Mercury Client Library: provides utility methods for interacting with content
-    providers.
+    Utility methods for interacting with content providers.
     """
 
     __content_resolver_proxy = None
