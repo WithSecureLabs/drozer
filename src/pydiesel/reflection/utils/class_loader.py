@@ -93,47 +93,9 @@ class ClassLoader(object):
             remote_verify = self.construct("com.mwr.droidhg.util.Verify")
             remote_hash = remote_verify.md5sum(remote)
         except ReflectionException:
-            """
-            this means that the agent does not have the hash function
-            """
-            
-            print
-            print "   +------------------------------------------------------------------------+   "
-            print "   | Mercury needs to upload some additional code to run this module. The   |   "
-            print "   | code seems to have already been uploaded, but Mercury cannot verify it |   "
-            print "   | because you seem to be running an old version of the Mercury Agent.    |   "
-            print "   |                                                                        |   "
-            print "   | Mercury can perform this verification locally, but this is typically   |   "
-            print "   | very slow.                                                             |   "
-            print "   |                                                                        |   "
-            print "   | Would you like to verify the remote file? [yN]                         |   "
-            print "   +------------------------------------------------------------------------+   "
-            
-            if(raw_input().lower() == 'y'):
-                remote_hash = self.__local_md5sum(remote)
-            else:
-                print "   +------------------------------------------------------------------------+   "
-                print "   | Skipping Verification.                                                 |   "
-                print "   +------------------------------------------------------------------------+   "
-                print
-                
-                return True
+            return True
             
         local_hash = md5.new(local_data).digest().encode("hex")
         
         return remote_hash == local_hash
-
-    def __local_md5sum(self, remote):
-        """
-        this is really, really slow
-        typically ~100b a second
-        """
-        remote_data = ""
-        remote_file = self.construct("java.io.FileInputStream", remote)
-        
-        # read the file back from the Agent, one byte at a time
-        for i in range(0, remote.length()):
-            remote_data += chr(remote_file.read())
-        
-        return md5.new(remote_data).digest().encode("hex")
         
