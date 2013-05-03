@@ -1,6 +1,6 @@
 import os
 
-from mwr.cinnibar.reflection import utils
+from pydiesel.reflection import utils
 
 from mwr.droidhg.modules.base import Module
 

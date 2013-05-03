@@ -1,4 +1,4 @@
-from mwr.cinnibar.reflection import ReflectionException
+from pydiesel.reflection import ReflectionException
 
 class PackageManager(object):
     """

@@ -1,8 +1,8 @@
 import getpass
 import sys
 
-from mwr.cinnibar.api.protobuf_pb2 import Message
-from mwr.cinnibar.api.transport.exceptions import ConnectionError
+from pydiesel.api.protobuf_pb2 import Message
+from pydiesel.api.transport.exceptions import ConnectionError
 
 from mwr.common import cli, path_completion
 

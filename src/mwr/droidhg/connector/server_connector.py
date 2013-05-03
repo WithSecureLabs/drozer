@@ -1,9 +1,9 @@
 import socket
 import sys
 
-from mwr.cinnibar.api.builders import SystemRequestFactory
-from mwr.cinnibar.api.transport import SocketTransport
-from mwr.cinnibar.api.transport.exceptions import ConnectionError
+from pydiesel.api.builders import SystemRequestFactory
+from pydiesel.api.transport import SocketTransport
+from pydiesel.api.transport.exceptions import ConnectionError
 
 class ServerConnector(SocketTransport):
     """

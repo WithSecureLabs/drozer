@@ -1,4 +1,4 @@
-from mwr.cinnibar.reflection import ReflectionException
+from pydiesel.reflection import ReflectionException
 
 from mwr.droidhg.modules.common import loader
 from mwr.droidhg.modules.common.package_manager import PackageManager

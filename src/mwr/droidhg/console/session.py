@@ -2,14 +2,13 @@ import itertools
 import os
 import re
 import shlex
-import socket
 import sys
 import textwrap
 import traceback
 
-from mwr.cinnibar.api.protobuf_pb2 import Message
-from mwr.cinnibar.api.transport.exceptions import ConnectionError
-from mwr.cinnibar.reflection import Reflector
+from pydiesel.api.protobuf_pb2 import Message
+from pydiesel.api.transport.exceptions import ConnectionError
+from pydiesel.reflection import Reflector
 
 from mwr.common import cmd_ext as cmd
 from mwr.common import console

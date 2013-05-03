@@ -1,4 +1,4 @@
-from mwr.cinnibar.api import handlers, UnexpectedMessageException
+from pydiesel.api import handlers, UnexpectedMessageException
 
 class SystemResponseHandler(handlers.SystemResponseHandler):
     """

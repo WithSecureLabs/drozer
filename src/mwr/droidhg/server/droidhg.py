@@ -1,8 +1,8 @@
 from logging import getLogger
 from time import time
 
-from mwr.cinnibar.api import Frame
-from mwr.cinnibar.api.protobuf_pb2 import Message
+from pydiesel.api import Frame
+from pydiesel.api.protobuf_pb2 import Message
 
 from mwr.common.twisted import StreamReceiver
 

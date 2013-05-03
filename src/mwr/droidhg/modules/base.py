@@ -1,6 +1,7 @@
 import argparse
 
-from mwr.cinnibar.reflection.types import ReflectedType
+from pydiesel.reflection.types import ReflectedType
+
 from mwr.common import argparse_completer, console
 from mwr.common.text import wrap
 

@@ -1,4 +1,4 @@
-from mwr.cinnibar.api.builders import SystemRequestFactory
+from pydiesel.api.builders import SystemRequestFactory
 
 from mwr.droidhg.session import Sessions
 

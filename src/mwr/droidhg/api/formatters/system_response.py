@@ -1,6 +1,6 @@
 from StringIO import StringIO
 
-from mwr.cinnibar.api.protobuf_pb2 import Message
+from pydiesel.api.protobuf_pb2 import Message
 
 class SystemResponseFormatter:
     """

@@ -1,4 +1,4 @@
-from mwr.cinnibar.api.protobuf_pb2 import Message
+from pydiesel.api.protobuf_pb2 import Message
 
 from mwr.droidhg import Sessions
 
