@@ -15,6 +15,7 @@ except ImportError:
 from mwr.common import logger
 from mwr.droidhg.server import DroidHgServer, heartbeat
 from mwr.droidhg.ssl.provider import Provider
+from mwr.mercury import meta
 
 logger.setLevel(logging.DEBUG)
 logger.addStreamHandler()
@@ -34,9 +35,14 @@ parser.add_argument("--no-http", default=False, action="store_true", help="do no
 parser.add_argument("--port", default=31415, metavar="PORT", type=int, help="specify the port on which to bind the server")
 parser.add_argument("--ping-interval", default=15, metavar="SECS", type=int, help="the interval at which to ping connected agents")
 parser.add_argument("--ssl", action=store_zero_or_two(), help="enable SSL, optionally specifying the key and certificate", nargs="*")
+parser.add_argument("--version", action="store_true", help="display the installed Mercury version")
 
 arguments = parser.parse_args(sys.argv[2::])
 
+if arguments.version:
+    meta.print_version()
+    sys.exit(0)
+    
 if arguments.log != None:
     logger.addFileHandler(arguments.log)
 

@@ -3,6 +3,8 @@ import os
 from mwr.common import cli
 from mwr.droidhg.ssl.provider import Provider
 
+from mwr.mercury import meta
+
 class SSLManager(cli.Base):
     """
     mercury ssl {ca,keypair,truststore} [OPTIONS]
@@ -47,6 +49,11 @@ class SSLManager(cli.Base):
             print "         Key Pair:", provider.key_material_valid() and "VALID" or "INVALID"
         else:
             print "SSL has not been provisioned."
+            
+    def do_version(self, arguments):
+        """display the installed Mercury version"""
+        
+        meta.print_version()
             
     def get_completion_suggestions(self, action, text, **kwargs):
         if action.dest == "subject":

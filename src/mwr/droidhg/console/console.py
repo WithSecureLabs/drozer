@@ -10,6 +10,8 @@ from mwr.droidhg.api.formatters import SystemResponseFormatter
 from mwr.droidhg.connector import ServerConnector
 from mwr.droidhg.console.session import Session, DebugSession
 
+from mwr.mercury import meta
+
 class Console(cli.Base):
     """
     mercury console [OPTIONS] COMMAND
@@ -93,6 +95,11 @@ class Console(cli.Base):
         print SystemResponseFormatter.format(response)
         
         self.__getServerConnector(arguments).close()
+        
+    def do_version(self, arguments):
+        """display the installed Mercury version"""
+        
+        meta.print_version()
         
     def get_completion_suggestions(self, action, text, **kwargs):
         if action.dest == "server":
