@@ -21,7 +21,7 @@ class Provider(object):
         Get the path to the CA Certificate.
         """
         
-        return self.__certificate_path("mercury-ca")
+        return self.__certificate_path("drozer-ca")
     
     def ca_path(self, skip_default=False):
         """
@@ -122,7 +122,7 @@ class Provider(object):
                 "-srckeystore", p12_path,
                 "-srcstoretype", "PKCS12",
                 "-srcstorepass", export_password,
-                "-alias", "mercury"]
+                "-alias", "drozer"]
         
         if keytool != None:
             if os.spawnve(os.P_WAIT, argv[0], argv, os.environ) == 0:
@@ -146,17 +146,17 @@ class Provider(object):
                 "-import",
                 "-trustcacerts",
                 "-noprompt",
-                "-alias", "mercuryCA",
+                "-alias", "drozerCA",
                 "-file",  self.ca_certificate_path(),
-                "-keystore", self.__bks_path('mercury-ca'),
+                "-keystore", self.__bks_path('drozer-ca'),
                 "-storetype", "BKS",
-                "-storepass", "mercury",
+                "-storepass", "drozer",
                 "-provider", "org.bouncycastle.jce.provider.BouncyCastleProvider",
                 "-providerpath", os.path.abspath(os.path.join(os.path.dirname(__file__), "bcprov-ext-jdk15on-1.46.jar"))]
         
         if keytool != None:
             if os.spawnve(os.P_WAIT, argv[0], argv, os.environ) == 0:
-                return self.__bks_path('mercury-ca')
+                return self.__bks_path('drozer-ca')
         else:
             argv[0] = "keytool"
             
@@ -176,15 +176,15 @@ class Provider(object):
                 "-import",
                 "-trustcacerts",
                 "-noprompt",
-                "-alias", "mercuryCA",
+                "-alias", "drozerCA",
                 "-file",  self.ca_certificate_path(),
-                "-keystore", self.__jks_path('mercury-ca'),
+                "-keystore", self.__jks_path('drozer-ca'),
                 "-storetype", "JKS",
-                "-storepass", "mercury"]
+                "-storepass", "drozer"]
         
         if keytool != None:
             if os.spawnve(os.P_WAIT, argv[0], argv, os.environ) == 0:
-                return self.__bks_path('mercury-ca')
+                return self.__bks_path('drozer-ca')
         else:
             argv[0] = "keytool"
             
@@ -203,7 +203,7 @@ class Provider(object):
             export_password = ''.join(random.choice(list("abcdefghijklmnopqrstuvwxyz01234556789")) for x in range(12))
         
         pkcs12 = OpenSSL.crypto.PKCS12()
-        pkcs12.set_friendlyname("mercury")
+        pkcs12.set_friendlyname("drozer")
         pkcs12.set_ca_certificates([self.authority.ca_cert])
         pkcs12.set_certificate(cert)
         pkcs12.set_privatekey(key)
@@ -273,7 +273,7 @@ class Provider(object):
         Get the path to the CA Key.
         """
         
-        return self.__key_path("mercury-ca")
+        return self.__key_path("drozer-ca")
     
     def __certificate_path(self, cn, skip_default=False):
         """

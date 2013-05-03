@@ -260,9 +260,9 @@ class Manifest(Module, common.Assets):
     description = "Retrieves AndroidManifest.xml from an installed package."
     examples = """Getting the manifest for drozer
 
-    dz> run app.package.manifest com.mwr.droidhg.agent
+    dz> run app.package.manifest com.mwr.dz
 
-    <manifest versionCode="2" versionName="1.1" package="com.mwr.mercury">
+    <manifest versionCode="2" versionName="1.1" package="com.mwr.dz">
       <uses-sdk minSdkVersion="8" targetSdkVersion="4">
       </uses-sdk>
       <uses-permission name="android.permission.INTERNET">

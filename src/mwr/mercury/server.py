@@ -55,7 +55,7 @@ if arguments.ssl != None:
     if arguments.ssl == []:
         print "Using default SSL key material..."
         
-        arguments.ssl = Provider().get_keypair("mercury-server")
+        arguments.ssl = Provider().get_keypair("drozer-server")
     
     internet.reactor.listenSSL(arguments.port,
                                DroidHgServer(not arguments.no_http),

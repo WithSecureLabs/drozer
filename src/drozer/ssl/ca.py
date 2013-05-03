@@ -38,7 +38,7 @@ class CA(object):
         
         return True
     
-    def create_certificate(self, cn="mercury"):
+    def create_certificate(self, cn="drozer"):
         """
         Create and sign a certificate, using the CA.
         """
@@ -103,10 +103,10 @@ class CA(object):
         
     def __generate_ca_certificate(self, key):
         """
-        Generate a new CA certificate - issued to 'mercury CA' and self-signed.
+        Generate a new CA certificate - issued to 'drozer CA' and self-signed.
         """
         
-        cert = self.__generate_certificate(key, "mercury CA")
+        cert = self.__generate_certificate(key, "drozer CA")
         cert.set_issuer(cert.get_subject())
         self.__sign_certificate(cert)
         

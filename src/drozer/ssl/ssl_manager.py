@@ -7,11 +7,11 @@ from drozer.ssl.provider import Provider
 
 class SSLManager(cli.Base):
     """
-    mercury ssl {ca,keypair,truststore} [OPTIONS]
+    drozer ssl {ca,keypair,truststore} [OPTIONS]
     
-    Run the Mercury SSL Manager.
+    Run the drozer SSL Manager.
 
-    The SSL Manager allows you to generate key material to enable TLS for your Mercury connections.
+    The SSL Manager allows you to generate key material to enable TLS for your drozer connections.
     """
 
     def __init__(self):
@@ -51,7 +51,7 @@ class SSLManager(cli.Base):
             print "SSL has not been provisioned."
             
     def do_version(self, arguments):
-        """display the installed Mercury version"""
+        """display the installed drozer version"""
         
         meta.print_version()
             
@@ -71,8 +71,8 @@ class SSLManager(cli.Base):
         if path == None or not os.path.exists(path):
             path = os.path.abspath(os.curdir)
         
-        if provider.keypair_exists("mercury-ca", skip_default=True):
-            print "A Mercury CA already exists at", path
+        if provider.keypair_exists("drozer-ca", skip_default=True):
+            print "A drozer CA already exists at", path
             
             if not arguments.yes and self.confirm("Do you want to overwrite the existing CA?") == "n":
                 print "Aborted."
