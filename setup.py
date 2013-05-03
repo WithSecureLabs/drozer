@@ -3,6 +3,8 @@ import glob
 import os
 import setuptools
 
+from mwr.mercury import meta
+
 def find_libs(src):
     matches = []
     
@@ -13,15 +15,15 @@ def find_libs(src):
     return map(lambda fn: os.path.basename(fn), matches)
     
 setuptools.setup(
-  name = "mercury",
-  version = "2.2.0",
-  author = "MWR InfoSecurity",
-  author_email = "mercury@mwrinfosecurity.com",
-  description = "The Heavy Metal that Poisoned the Droid.",
+  name = meta.name,
+  version = meta.version,
+  author = meta.vendor,
+  author_email = meta.contact,
+  description = meta.description,
   long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).read(),
-  license = "MWR Code License v2",
-  keywords = "android security framework",
-  url = "http://mwr.to/mercury",
+  license = meta.license,
+  keywords = meta.keywords,
+  url = meta.url,
 
   packages = setuptools.find_packages("src"),
   package_dir = { "": "src" },
