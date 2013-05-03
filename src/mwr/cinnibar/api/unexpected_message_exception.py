@@ -1,3 +1,0 @@
-class UnexpectedMessageException(Exception):
-    pass
-    
