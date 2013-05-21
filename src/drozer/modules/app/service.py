@@ -141,6 +141,7 @@ NB: by default, this module will wait 20 seconds for a reply."""
             else:
                 self.stdout.write("Did not receive a reply from %s/%s.\n" % (arguments.package, arguments.component))
                 
+
 class Start(Module):
 
     name = "Start Service"
