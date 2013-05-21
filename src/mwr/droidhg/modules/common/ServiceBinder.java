@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.StringBuilder;
 import android.os.Message;
 import android.os.Messenger;
 import android.content.Intent;
@@ -48,7 +49,7 @@ public class ServiceBinder {
     //connection handler
     HgServiceConnection serviceConnection;
 
-    public boolean execute(Context context, String package_name, String class_name, Message message) {
+    public boolean execute(Context context, String package_name, String class_name, Message message, int timeout) {
         HandlerThread thread = new HandlerThread("MercuryHandler", Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
         Looper serviceLooper = thread.getLooper();
@@ -62,40 +63,64 @@ public class ServiceBinder {
         if(c == null)
             return false;
 
+        for(String key : message.getData().keySet()){
+    			Log.i("MercuryServiceBinder", "Key: " + key + " : " + message.getData().get(key));
+    	}
+
         Intent i = new Intent();
         i.setComponent(c);
         
-        // bind to the service, and wait for the send/receive to finish
-        synchronized(lock){
-            context.bindService(i, serviceConnection, Context.BIND_AUTO_CREATE);
-            
-            try {
-                lock.wait(20000);
+        if(timeout > -1){
+            // bind to the service, and wait for the send/receive to finish
+            synchronized(lock){
+                context.bindService(i, serviceConnection, Context.BIND_AUTO_CREATE);
+                
+                try {
+                    if(timeout > 0){
+                        lock.wait(timeout);
+                    }else{
+                        lock.wait(20000);
+                    }
+                }
+                catch(InterruptedException e){
+                    return false;
+                }
             }
-            catch(InterruptedException e){
+            
+            // unbind from the service, so we don't leak handles
+            context.unbindService(serviceConnection);
+            
+            // if a response was received, store it in our local variables
+            if(response != null) {
+                this.returnMessage = Message.obtain(this.response);
+                this.returnBundle = this.returnMessage.getData();
+                
+                return true;
+            }
+            else {
                 return false;
             }
         }
-        
-        // unbind from the service, so we don't leak handles
-        context.unbindService(serviceConnection);
-        
-        // if a response was received, store it in our local variables
-        if(response != null) {
-            this.returnMessage = Message.obtain(this.response);
-            this.returnBundle = this.returnMessage.getData();
-            
-            return true;
-        }
-        else {
-            return false;
-        }
+        return false;
     }
 
     // when message is reutnred to the python, the bundle is not returned with it.
     // this method allows you to do so
     public Bundle getData(){
         return this.returnBundle;
+    }
+
+    public String printData(){
+        StringBuilder out = new StringBuilder();
+        if(!this.returnBundle.isEmpty()){
+            for(String key : this.returnBundle.keySet()){
+                Object val = this.returnBundle.get(key);
+                out.append(key + " ("+val.getClass().getSimpleName()+") : "+val + "\n");
+            }
+        }else{
+            out.append("Empty");
+        }
+        return out.toString();
     }
     
     // return the message to client side

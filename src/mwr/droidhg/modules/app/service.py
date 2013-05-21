@@ -78,6 +78,72 @@ List exported services with no permissions required to interact with it:
             self.stdout.write("Package: %s\n" % package.packageName)
             self.stdout.write("  No exported services.\n\n")
 
+class Send(Module, common.ServiceBinding):
+    
+    name = "Send Message"
+    description = """Send a message to a service and return a response if any."""
+
+    examples = """
+        mercury> run app.service.send com.example.littleapp com.example.littleapp.LittleProvider --  msg 0 0 0 --extra float val 0.1324 --extra string testing testest
+
+        Response Message: 0 0 0
+        Data: 
+            val (float) : 0.1324
+            testing (string) : testest
+        
+
+        """
+    author = "MWR InfoSecurity (@mwrlabs)"
+    date = "2013-05-20"
+    license = "MWR Code License"
+    path = ["app", "service"]
+    
+    def add_arguments(self, parser):
+        parser.add_argument("package", help="Package name")
+        parser.add_argument("component", help="Component Name")
+        parser.add_argument("--msg", nargs=3, metavar=("what", "arg1", "arg2"), help="message codes")
+        parser.add_argument("--extra", nargs=3, metavar=("type","key","value"), action="append", help="elements to be placed in the bundle")
+        parser.add_argument("-t", dest="timeout", default="20000", help="specify a timeout in milliseconds (default is 20000)")
+        parser.add_argument("-n", dest="no_response", default=False, help="do not wait for a response from the service")
+
+    def execute(self, arguments):
+
+        if arguments.package is None:
+            self.stderr.write("Error: Please Specify a Package")
+            return
+        if arguments.component is None:
+            self.stderr.write("Error: Please Specify a Component")
+            return
+        if arguments.msg is None or len(arguments.msg) is not 3:
+            self.stderr.write("Error: messages should be in format \"int int int\"")
+            return
+        binder = self.getBinding(arguments.package, arguments.component)
+    
+        if arguments.extra is not None:
+            for extra in arguments.extra:
+                binder.add_extra(extra)
+        else:
+            self.stdout.write("No Extras Added\n")
+
+        self.stdout.write("Sending Message\n")
+        if arguments.no_response:
+            
+            binder.send_message(arguments.msg, -1)
+        else:
+            result = binder.send_message(arguments.msg, arguments.timeout)
+            if result:
+                ret_message = binder.getMessage();
+                ret_bundle = binder.getData();
+
+                self.stdout.write("Response Message: %d %d %d\n" %(int(ret_message.what), int(ret_message.arg1), int(ret_message.arg2)))
+
+                for n in ret_bundle.split('\n'):
+                    self.stdout.write("    %s\n"%n)
+            else:
+                self.stdout.write("Did not get a response from the Service")
+
+    
+        
 class Start(Module):
 
     name = "Start Service"
