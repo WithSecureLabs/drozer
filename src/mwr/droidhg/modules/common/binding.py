@@ -9,7 +9,7 @@ class ServiceBinding(loader.ClassLoader):
             self.package = package
             self.component = component
             
-            self.bundle = self.context.new("android.os.Bundle")
+            self.bundle = None
             self.binder = None
         
         def getData(self):
@@ -17,16 +17,11 @@ class ServiceBinding(loader.ClassLoader):
 
         def getMessage(self):
             return self.binder.getMessage()
-        
-        def obtain_binder(self):
-            if self.binder == None:
-                ServiceBinder = self.context.loadClass("common/ServiceBinder.apk", "ServiceBinder")
-                
-                self.binder = self.context.new(ServiceBinder)
-                
-            return self.binder
 
         def add_extra(self, extra):
+            if self.bundle == None:
+                self.bundle = self.context.new("android.os.Bundle")
+                
             if extra[0] == "integer":
                 self.bundle.putInt(extra[1], int(extra[2]))
             elif extra[0] == "short":
@@ -46,15 +41,23 @@ class ServiceBinding(loader.ClassLoader):
             else:
                 raise TypeError
             
+        def obtain_binder(self):
+            if self.binder == None:
+                ServiceBinder = self.context.loadClass("common/ServiceBinder.apk", "ServiceBinder")
+                
+                self.binder = self.context.new(ServiceBinder)
+                
+            return self.binder
             
         def obtain_message(self, msg):
-            Message = self.context.klass("android.os.Message")
-            return Message.obtain(None, int(msg[0]), int(msg[1]), int(msg[2]))
+            return self.context.klass("android.os.Message").obtain(None, int(msg[0]), int(msg[1]), int(msg[2]))
         
         def send_message(self, msg, timeout):
             binder = self.obtain_binder()
             message = self.obtain_message(msg)
-            message.setData(self.bundle)
+            
+            if self.bundle != None:
+                message.setData(self.bundle)
             
             return binder.execute(self.context.getContext(), self.package, self.component, message, int(timeout))
     
