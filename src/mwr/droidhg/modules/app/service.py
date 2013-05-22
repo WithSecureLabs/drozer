@@ -80,70 +80,67 @@ List exported services with no permissions required to interact with it:
 
 class Send(Module, common.ServiceBinding):
     
-    name = "Send Message"
-    description = """Send a message to a service and return a response if any."""
+    name = "send a Message to a service, and display the reply"
+    description = """Binds to an exported service, and sends a Message to it. If the service sends a reply, display the message received and any data it contains.
 
-    examples = """
-        mercury> run app.service.send com.example.littleapp com.example.littleapp.LittleProvider --  msg 0 0 0 --extra float val 0.1324 --extra string testing testest
-
-        Response Message: 0 0 0
-        Data: 
-            val (float) : 0.1324
-            testing (string) : testest
-        
-
-        """
+NB: by default, this module will wait 20 seconds for a reply."""
+    examples = """Deliver a Message to a dummy application, that simply returns the message:
+    
+    mercury> run app.service.send com.example.srv com.example.srv.Service --msg 1 2 3 --extra float value 0.1324 --extra string test value
+    Got a reply from com.example.srv/com.example.srv.Service:
+      what: 1
+      arg1: 2
+      arg2: 3
+    Data: 
+      value (float) : 0.1324
+      test (string) : value
+    """
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2013-05-20"
     license = "MWR Code License"
     path = ["app", "service"]
     
     def add_arguments(self, parser):
-        parser.add_argument("package", help="Package name")
-        parser.add_argument("component", help="Component Name")
-        parser.add_argument("--msg", nargs=3, metavar=("what", "arg1", "arg2"), help="message codes")
-        parser.add_argument("--extra", nargs=3, metavar=("type","key","value"), action="append", help="elements to be placed in the bundle")
-        parser.add_argument("-t", dest="timeout", default="20000", help="specify a timeout in milliseconds (default is 20000)")
-        parser.add_argument("-n", dest="no_response", default=False, help="do not wait for a response from the service")
+        parser.add_argument("package", help="the package containing the target service")
+        parser.add_argument("component", help="the fully-qualified service name to bind to")
+        parser.add_argument("--msg", nargs=3, metavar=("what", "arg1", "arg2"), help="specify the what, arg1 and arg2 values to use when obtaining the message")
+        parser.add_argument("--extra", action="append", nargs=3, metavar=("type","key","value"), help="add an extra to the message's data bundle")
+        parser.add_argument("--no-response", action="store_true", default=False, help="do not wait for a response from the service")
+        parser.add_argument("--timeout", default="20000", help="specify a timeout in milliseconds (default is 20000)")
 
     def execute(self, arguments):
-
-        if arguments.package is None:
-            self.stderr.write("Error: Please Specify a Package")
+        if arguments.msg is None:
+            self.stderr.write("please specify --msg as \"what arg1 arg2\"\n")
+            
             return
-        if arguments.component is None:
-            self.stderr.write("Error: Please Specify a Component")
-            return
-        if arguments.msg is None or len(arguments.msg) is not 3:
-            self.stderr.write("Error: messages should be in format \"int int int\"")
-            return
+        
         binder = self.getBinding(arguments.package, arguments.component)
     
         if arguments.extra is not None:
             for extra in arguments.extra:
                 binder.add_extra(extra)
-        else:
-            self.stdout.write("No Extras Added\n")
-
-        self.stdout.write("Sending Message\n")
+                
         if arguments.no_response:
-            
             binder.send_message(arguments.msg, -1)
+            
+            self.stdout.write("Sent message, did not wait for a reply from %s/%s.\n" % (arguments.package, arguments.component))
         else:
             result = binder.send_message(arguments.msg, arguments.timeout)
+            
             if result:
-                ret_message = binder.getMessage();
-                ret_bundle = binder.getData();
+                response_message = binder.getMessage();
+                response_bundle = binder.getData();
 
-                self.stdout.write("Response Message: %d %d %d\n" %(int(ret_message.what), int(ret_message.arg1), int(ret_message.arg2)))
+                self.stdout.write("Got a reply from %s/%s:\n" % (arguments.package, arguments.component))
+                self.stdout.write("  what: %d\n" % int(response_message.what))
+                self.stdout.write("  arg1: %d\n" % int(response_message.arg1))
+                self.stdout.write("  arg2: %d\n" % int(response_message.arg2))
 
-                for n in ret_bundle.split('\n'):
-                    self.stdout.write("    %s\n"%n)
+                for n in response_bundle.split('\n'):
+                    self.stdout.write("  %s\n"%n)
             else:
-                self.stdout.write("Did not get a response from the Service")
-
-    
-        
+                self.stdout.write("Did not receive a reply from %s/%s.\n" % (arguments.package, arguments.component))
+                
 class Start(Module):
 
     name = "Start Service"
