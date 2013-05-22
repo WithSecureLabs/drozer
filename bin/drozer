@@ -21,7 +21,7 @@ def print_usage():
 
 if len(sys.argv) > 1:
     if sys.argv[1] in Commands:
-        __import__("mwr.mercury.%s" % (sys.argv[1]))
+        __import__("drozer.cli.%s" % (sys.argv[1]))
     else:
         print "unknown command:", sys.argv[1]
         print_usage()
