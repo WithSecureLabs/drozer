@@ -140,7 +140,7 @@ NB: by default, this module will wait 20 seconds for a reply."""
                     self.stdout.write("  %s\n"%n)
             else:
                 self.stdout.write("Did not receive a reply from %s/%s.\n" % (arguments.package, arguments.component))
-                
+
 
 class Start(Module):
 
