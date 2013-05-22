@@ -51,27 +51,7 @@ class ServiceBinding(loader.ClassLoader):
                 self.binder = self.context.new(ServiceBinder)
                 
             return self.binder
-
-        def add_extra(self, extra):
-            if extra[0] == "integer":
-                self.bundle.putInt(extra[1], int(extra[2]))
-            elif extra[0] == "short":
-                self.bundle.putShort(extra[1], int(extra[2]))
-            elif extra[0] == "float":
-                self.bundle.putFloat(extra[1], float(extra[2]))
-            elif extra[0] == "double":
-                self.bundle.putDouble(extra[1], float(extra[2]))
-            elif extra[0] == "boolean":
-                self.bundle.putBoolean(extra[1], extra[2] == "true")
-            elif extra[0] == "string":
-                self.bundle.putString(extra[1], extra[2])
-            elif extra[0] == "byte":
-                self.bundle.putByte(extra[1], extra[2])
-            elif extra[0] == "char":
-                self.bundle.putChar(extra[1], extra[2])
-            else:
-                raise TypeError
-
+            
         def obtain_message(self, msg):
             return self.context.klass("android.os.Message").obtain(None, int(msg[0]), int(msg[1]), int(msg[2]))
         
