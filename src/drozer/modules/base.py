@@ -137,7 +137,7 @@ class Module(object):
         Gets the context of the running Agent application.
         """
 
-        return self.klass('com.mwr.droidhg.Agent').getContext()
+        return self.klass('com.mwr.dz.Agent').getContext()
 
     def klass(self, class_name):
         """

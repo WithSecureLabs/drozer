@@ -90,7 +90,7 @@ class ClassLoader(object):
         
         remote_hash = ""        
         try:
-            remote_verify = self.construct("com.mwr.droidhg.util.Verify")
+            remote_verify = self.construct("com.mwr.dz.util.Verify")
             remote_hash = remote_verify.md5sum(remote)
         except ReflectionException:
             return True

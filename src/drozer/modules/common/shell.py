@@ -22,7 +22,7 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
         first command.
         """
         
-        shell = self.new("com.mwr.droidhg.shell.Shell")
+        shell = self.new("com.mwr.dz.shell.Shell")
         
         try:
             if shell.valid():
@@ -39,13 +39,13 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
             
             shell.close()
         except ReflectionException as e:
-            if e.message == "valid for class com.mwr.droidhg.shell.Shell":
+            if e.message == "valid for class com.mwr.dz.shell.Shell":
                 self.shellStartCompatibility(command)
             else:
                 raise
     
     def shellStartCompatibility(self, command=""):
-        shell = self.new("com.mwr.droidhg.shell.Shell")
+        shell = self.new("com.mwr.dz.shell.Shell")
         
         self.__send_variables(shell)
         

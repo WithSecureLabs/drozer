@@ -9,7 +9,7 @@ class Strings(object):
         Searches a file for Strings, and returns them in an Array.
         """
 
-        StringsKlass = self.klass("com.mwr.droidhg.util.Strings")
+        StringsKlass = self.klass("com.mwr.dz.util.Strings")
         
         strings = StringsKlass.get(path)
 

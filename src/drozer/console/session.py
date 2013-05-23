@@ -46,8 +46,8 @@ class Session(cmd.Cmd):
         self.prompt = "dz> "
         self.stdout = ColouredStream(self.stdout)
         self.stderr = ColouredStream(self.stderr)
-        self.variables = {  'PATH': '/data/data/com.mwr.droidhg.agent/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
-                            'WD': '/data/data/com.mwr.droidhg.agent' }
+        self.variables = {  'PATH': '/data/data/com.mwr.dz/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
+                            'WD': '/data/data/com.mwr.dz' }
         
         self.__load_variables()
 
@@ -482,10 +482,10 @@ class Session(cmd.Cmd):
         """
         
         if self.__permissions == None:
-            context = self.__reflector.resolve("com.mwr.droidhg.Agent").getContext()
+            context = self.__reflector.resolve("com.mwr.dz.Agent").getContext()
             pm = self.__reflector.resolve("android.content.pm.PackageManager")
             
-            package = context.getPackageManager().getPackageInfo("com.mwr.droidhg.agent", pm.GET_PERMISSIONS)
+            package = context.getPackageManager().getPackageInfo("com.mwr.dz", pm.GET_PERMISSIONS)
             if package.requestedPermissions != None:
                 self.__permissions = map(lambda p: str(p), package.requestedPermissions)
             else:

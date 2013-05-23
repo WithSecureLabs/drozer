@@ -1,5 +1,6 @@
 import getpass
 import sys
+import warnings
 
 from pydiesel.api.protobuf_pb2 import Message
 from pydiesel.api.transport.exceptions import ConnectionError
@@ -40,7 +41,10 @@ class Console(cli.Base):
         """starts a new session with a device"""
         
         if arguments.password:
-            password = getpass.getpass()
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+
+                password = getpass.getpass()
         else:
             password = None
 
