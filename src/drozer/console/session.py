@@ -573,7 +573,10 @@ class Session(cmd.Cmd):
         if permissions == "any":
             required_perms = None
         else:
-            required_perms = self.permissions()
+            try:
+                required_perms = self.permissions()
+            except AttributeError:
+                required_perms = None
 
         if self.__base == "":
             return Module.all(required_perms)
