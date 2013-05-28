@@ -44,7 +44,7 @@ class Session(cmd.Cmd):
         self.intro = "drozer Console"
         self.history_file = os.path.sep.join([os.path.expanduser("~"), ".drozer_history"])
         self.prompt = "dz> "
-        if not arguments.no_color:
+        if hasattr(arguments, 'no_color') and not arguments.no_color:
             self.stdout = ColouredStream(self.stdout)
             self.stderr = ColouredStream(self.stderr)
         else:
