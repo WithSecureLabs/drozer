@@ -31,6 +31,7 @@ class Console(cli.Base):
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
         self._parser.add_argument("--ssl", action="store_true", default=False, help="connect with SSL")
         self._parser.add_argument("--debug", action="store_true", default=False, help="enable debug mode")
+        self._parser.add_argument("--no-color", action="store_true", default=False, help="disable syntax highlighting in drozer output")
         self._parser.add_argument("--password", action="store_true", default=False, help="the agent requires a password")
         self._parser.add_argument("-c", "--command", default=None, dest="onecmd", help="specify a single command to run in the session")
         self._parser.add_argument("-f", "--file", default=[], help="source file", nargs="*")
@@ -59,9 +60,9 @@ class Console(cli.Base):
 
             try:
                 if(arguments.debug):
-                    session = DebugSession(server, session_id)
+                    session = DebugSession(server, session_id, arguments)
                 else:
-                    session = Session(server, session_id)
+                    session = Session(server, session_id, arguments)
 
                 if len(arguments.file) > 0:
                     session.do_load(" ".join(arguments.file))

@@ -13,7 +13,7 @@ from pydiesel.reflection import Reflector
 from mwr.common import cmd_ext as cmd
 from mwr.common import console
 from mwr.common.list import flatten
-from mwr.common.stream import ColouredStream
+from mwr.common.stream import ColouredStream, DecolouredStream
 from mwr.common.text import wrap
 
 from drozer.configuration import Configuration
@@ -29,7 +29,7 @@ class Session(cmd.Cmd):
     Type `help COMMAND` for more information on a particular command, or `help MODULE` for a particular module.
     """
 
-    def __init__(self, server, session_id):
+    def __init__(self, server, session_id, arguments):
         cmd.Cmd.__init__(self)
 
         self.__base = ""
@@ -44,8 +44,12 @@ class Session(cmd.Cmd):
         self.intro = "drozer Console"
         self.history_file = os.path.sep.join([os.path.expanduser("~"), ".drozer_history"])
         self.prompt = "dz> "
-        self.stdout = ColouredStream(self.stdout)
-        self.stderr = ColouredStream(self.stderr)
+        if not arguments.no_color:
+            self.stdout = ColouredStream(self.stdout)
+            self.stderr = ColouredStream(self.stderr)
+        else:
+            self.stdout = DecolouredStream(self.stdout)
+            self.stderr = DecolouredStream(self.stderr)
         self.variables = {  'PATH': '/data/data/com.mwr.dz/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
                             'WD': '/data/data/com.mwr.dz' }
         
@@ -662,8 +666,8 @@ class DebugSession(Session):
     handlers to print stacktrace information.
     """
 
-    def __init__(self, server, session_id):
-        Session.__init__(self, server, session_id)
+    def __init__(self, server, session_id, arguments):
+        Session.__init__(self, server, session_id, arguments)
 
         self.intro = "drozer Console (debug mode)"
         self.prompt = "dz> "
