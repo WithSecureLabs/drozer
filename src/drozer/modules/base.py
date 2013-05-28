@@ -139,6 +139,9 @@ class Module(object):
 
         return self.klass('com.mwr.dz.Agent').getContext()
 
+    def get_reflector(self):
+        return self.__reflector
+
     def klass(self, class_name):
         """
         Resolves a class name, and returns an object reference for the class.
