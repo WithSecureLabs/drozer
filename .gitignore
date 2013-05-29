@@ -9,5 +9,5 @@ log/*.log
 obj
 src/drozer/modules/**/*.class
 src/drozer/modules/**/*.apk
-src/mercury.egg-info
+src/drozer.egg-info
 mercury.log
