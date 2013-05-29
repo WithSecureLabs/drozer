@@ -28,6 +28,6 @@ setuptools.setup(
   packages = setuptools.find_packages("src"),
   package_dir = { "": "src" },
   package_data = { "": ["*.apk", "*.bks", "*.crt", "*.jar", "*.key", "*.sh", "busybox"] + find_libs("src") },
-  scripts = ["bin/mercury"],
+  scripts = ["bin/drozer"],
   install_requires = ["protobuf==2.4.1", "pyopenssl==0.13"],
   classifiers = [])
