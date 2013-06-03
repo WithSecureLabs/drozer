@@ -1,0 +1,171 @@
+from mwr.common.twisted import StreamReceiver
+
+class HttpReceiver(StreamReceiver):
+    """
+    Reads HTTP messages from a StreamReceiver.
+    """
+    
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def connectionMade(self):
+        StreamReceiver.connectionMade(self)
+
+    def buildMessage(self):
+        """
+        Attempts to read an HTTP Request from the stream.
+        """
+        
+        return HTTPRequest.readFrom(self.stream)
+
+    def streamReceived(self):
+        """
+        Called whenever the StreamReceiver is updated. Attempts to read a request from the stream
+        returns the message if it receives one
+        """
+        
+        message = self.buildMessage()
+
+        if message is not None:
+            self.requestReceived(message)
+        else:
+            print "no message"
+            
+
+class HTTPMessage:
+
+    crlf = "\r\n"
+    version = "HTTP/1.1"
+    
+    def __init__(self, headers=None, body=None):
+        """
+        Create an HTTP Message
+        """        
+        
+        self.headers = headers
+        self.body = body
+        
+        if self.headers == None:
+            self.headers = {}
+
+
+class HTTPRequest(HTTPMessage):
+    
+    def __init__(self, verb="GET", resource="/", version="HTTP/1.1", headers=None, body=None):
+        HTTPMessage.__init__(self, headers, body)
+        
+        self.resource = resource
+        self.verb = verb
+        self.version = version
+    
+    def isValid(self):
+        return self.path in ["GET", "POST"] and self.version in ["HTTP/1.0", "HTTP/1.1"] 
+
+    @classmethod
+    def readHeaders(cls, stream):
+        """
+        Read the HTTP headers (terminated by a double-CRLF)
+        """
+        headers = ""
+        
+        bytes_read = 0
+        while bytes_read != -1:
+            pLength = len(headers)
+            headers += stream.read(1)
+            bytes_read = (len(headers) - pLength) -1
+            if str(headers).endswith("\r\n\r\n"):
+                return headers
+            
+        return None
+
+    @classmethod
+    def processHeader(cls, request):
+        headers = []
+        
+        lines = str(request.strip()).rsplit("\r\n")
+        if len(lines) < 1:
+            return None
+        
+        # extract the verb, resource and version from the first line        
+        verb, resource, version = cls.processRequest(lines[0])
+        # then parse the remainder of the request for headers
+        for line in lines[1:]:
+            headers.append(line.split(": "))
+        
+        # formulate an HTTP message
+        return HTTPRequest(verb, resource, version, dict(headers), None)
+    
+    @classmethod
+    def processRequest(cls, line):
+        """
+        Read an HTTP request.
+        """
+        
+        slice1 = line.index(" ")
+        slice2 = line.rindex(" ")
+        
+        return (line[0:slice1], line[slice1+1:slice2], line[slice2+1:])
+
+    @classmethod
+    def contentPresent(cls, message):
+        """
+        get the length of the body
+        returns -1 if not present
+        """
+        for header in message.headers:
+            if header[0] == "Content-Length":
+                try:
+                    return int(header[1])
+                except ValueError: 
+                    return -1
+        return -1
+
+    @classmethod
+    def readFrom(cls, stream):
+        """
+        Try to read HTTP Requests from the stream.
+        """
+        position = stream.tell()
+        message = None
+        header = HTTPRequest.readHeaders(stream)
+        
+        if header == None:
+            stream.seek(position)
+        else:
+            message = HTTPRequest.processHeader(header)
+
+        if message == None:
+            return None
+        else:
+            if "Content-Length" in message.headers:
+                length = int(message.headers["Content-Length"])
+                if length > 0:
+                    body = stream.read(length)
+                    if len(body) >= length:
+                        message.body = body
+                    else:
+                        stream.seek(position)
+                        
+                        return None
+            return message
+            
+            
+
+class HTTPResponse(HTTPMessage):
+    
+    def __init__(self, status=200, version="HTTP/1.1", headers=None, body=None):
+        HTTPMessage.__init__(self, headers, body)
+        
+        self.status = status
+        
+        self.headers["Content-Length"] = len(body)
+    
+    def format_headers(self):
+        return "\r\n".join(map(lambda k: "%s: %s" % (k,self.headers[k]), self.headers))
+    
+    def status_text(self):
+        return { 200: "OK" }[self.status]
+    
+    def __str__(self):
+        return "%s %d %s\r\n%s\r\n\r\n%s" % (self.version, self.status, self.status_text(), self.format_headers(), self.body)
+        

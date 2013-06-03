@@ -1,7 +1,9 @@
 from logging import getLogger
 from twisted.internet.protocol import Protocol
 
-class HTTP(Protocol):
+from drozer.server.receivers.http import HttpReceiver, HTTPResponse
+
+class HTTP(HttpReceiver):
     """
     Basic implementation of an HTTP server.
     """
@@ -10,8 +12,8 @@ class HTTP(Protocol):
     
     name = 'HTTP'
     
-    def __init__(self):
-        pass
+    def __init__(self, file_provider):
+        self.__file_provider = file_provider
     
     def connectionMade(self):
         """
@@ -19,5 +21,13 @@ class HTTP(Protocol):
         placeholder message, for testing.
         """
         
-        self.transport.write("I should be an HTTP Server!\n")
+        HttpReceiver.connectionMade(self)
+        
+    def requestReceived(self, request):
+        """
+        Called when a complete HTTP request has been made to the HTTP server.
+        """
+        
+        self.transport.write(str(HTTPResponse(body=request.resource)))
+        self.transport.loseConnection()
         
