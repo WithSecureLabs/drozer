@@ -10,5 +10,7 @@ class DrozerServer(ServerFactory):
 
     protocol = ProtocolSwitcher
 
-    def __init__(self, enable_http):
+    def __init__(self, credentials, enable_http):
+        self.protocol.credentials = credentials
         self.protocol.enable_http = enable_http
+        

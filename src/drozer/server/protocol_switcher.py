@@ -33,7 +33,7 @@ class ProtocolSwitcher(Protocol):
         """
 
         if self.enable_http and (data.startswith("DELETE") or data.startswith("GET") or data.startswith("POST")):
-            return HTTP(self.__file_provider)
+            return HTTP(self.credentials, self.__file_provider)
         elif self.enable_magics and self.__file_provider.has_magic_for(data.strip()):
             return ByteStream(self.__file_provider)
         else:
