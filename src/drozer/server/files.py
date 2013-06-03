@@ -5,8 +5,8 @@ class FileProvider(object):
     def __init__(self, store={}):
         self.__store = store
     
-    def create(self, resource, body):
-        self.__store[resource] = InMemoryResource(resource, body)
+    def create(self, resource, body, magic=None):
+        self.__store[resource] = InMemoryResource(resource, body, magic=magic)
         
         return self.__store[resource].getBody() == body
         

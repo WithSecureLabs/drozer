@@ -70,7 +70,12 @@ class HTTP(HttpReceiver):
                 if resource != None and resource.reserved:
                     resource = ErrorResource(request.resource, 403, "You are not authorized to write the resource %s.")
                 else:
-                    if self.__file_provider.create(request.resource, request.body):
+                    if "X-Drozer-Magic" in request.headers:
+                        magic = request.headers["X-Drozer-Magic"]
+                    else:
+                        magic = None
+                    
+                    if self.__file_provider.create(request.resource, request.body, magic=magic):
                         resource = ErrorResource(request.resource, 201, "Location: %s")
                     else:
                         resource = ErrorResource(request.resource, 500, "The server encountered an error whilst creating the resource %s.")
