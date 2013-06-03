@@ -31,6 +31,7 @@ def store_zero_or_two():
     return RequiredLength
 
 parser = argparse.ArgumentParser(description='Start a drozer Server, to route agent and console connections.')
+parser.add_argument("--credentials", action="append", nargs=2, metavar=("username", "password"), help="add a username/password pair that can be used to upload files to the server")
 parser.add_argument("--log", default=None, help="specify the log file to write to")
 parser.add_argument("--no-http", default=False, action="store_true", help="do not start the integrated HTTP server")
 parser.add_argument("--port", default=31415, metavar="PORT", type=int, help="specify the port on which to bind the server")
@@ -58,12 +59,12 @@ if arguments.ssl != None:
         arguments.ssl = Provider().get_keypair("drozer-server")
     
     internet.reactor.listenSSL(arguments.port,
-                               DrozerServer(not arguments.no_http),
+                               DrozerServer(dict(arguments.credentials), not arguments.no_http),
                                ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
 else:
     print "Starting drozer Server, listening on 0.0.0.0:%d" % arguments.port
     
     internet.reactor.listenTCP(arguments.port,
-                               DrozerServer(not arguments.no_http))
+                               DrozerServer(dict(arguments.credentials), not arguments.no_http))
 
 internet.reactor.run()
