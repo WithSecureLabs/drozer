@@ -76,7 +76,10 @@ class FileResource(Resource):
         return open(self.path).read()
             
     def getResponse(self):
-        return HTTPResponse(status=200, body=self.getBody())
+        response = HTTPResponse(status=200, body=self.getBody())
+        response.headers["Content-Type"] = "text/html"
+        
+        return response
     
 class InMemoryResource(Resource):
     
