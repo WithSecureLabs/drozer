@@ -1,6 +1,7 @@
 from logging import getLogger
 from twisted.internet.protocol import Protocol
 
+from drozer.server.byte_stream import ByteStream
 from drozer.server.files import FileProvider, FileResource
 from drozer.server.http import HTTP
 from drozer.server.drozer_protocol import Drozer
@@ -19,7 +20,7 @@ class ProtocolSwitcher(Protocol):
     enable_magics = True
     protocol = None
     
-    __file_provider = FileProvider({ "/": FileResource("/", "./res/index.html", True),
+    __file_provider = FileProvider({ "/": FileResource("/", "./res/index.html", magic="I", reserved=True),
                                      "/index.html": FileResource("/index.html", "./res/index.html", True) })
     __logger = getLogger(__name__)
     
@@ -33,6 +34,8 @@ class ProtocolSwitcher(Protocol):
 
         if self.enable_http and (data.startswith("DELETE") or data.startswith("GET") or data.startswith("POST")):
             return HTTP(self.__file_provider)
+        elif self.enable_magics and self.__file_provider.has_magic_for(data.strip()):
+            return ByteStream(self.__file_provider)
         else:
             return Drozer()
     
