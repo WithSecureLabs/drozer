@@ -60,7 +60,7 @@ class HTTP(HttpReceiver):
                 resource = ErrorResource(request.resource, 401, "You must authenticate to write the resource %s.")
                 
                 response = resource.getResponse()
-                response.headers["WWW-Authenticate"] = "Basic realm=\"insert realm\""
+                response.headers["WWW-Authenticate"] = "Basic realm=\"drozer\""
                 self.transport.write(str(response))
                 self.transport.loseConnection()
                 return
