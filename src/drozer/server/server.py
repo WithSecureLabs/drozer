@@ -2,7 +2,7 @@ from twisted.internet.protocol import ServerFactory
 
 from drozer.server.protocol_switcher import ProtocolSwitcher
 
-class DroidHgServer(ServerFactory):
+class DrozerServer(ServerFactory):
     """
     Implements a Twisted ServerFactory, which implements the ProtocolSwitcher
     protocol to support running multiple protocols on a port.

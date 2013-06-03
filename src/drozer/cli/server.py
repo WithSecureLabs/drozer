@@ -15,7 +15,7 @@ except ImportError:
 from mwr.common import logger
 
 from drozer import meta
-from drozer.server import DroidHgServer, heartbeat
+from drozer.server import DrozerServer, heartbeat
 from drozer.ssl.provider import Provider
 
 logger.setLevel(logging.DEBUG)
@@ -58,12 +58,12 @@ if arguments.ssl != None:
         arguments.ssl = Provider().get_keypair("drozer-server")
     
     internet.reactor.listenSSL(arguments.port,
-                               DroidHgServer(not arguments.no_http),
+                               DrozerServer(not arguments.no_http),
                                ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
 else:
     print "Starting drozer Server, listening on 0.0.0.0:%d" % arguments.port
     
     internet.reactor.listenTCP(arguments.port,
-                               DroidHgServer(not arguments.no_http))
+                               DrozerServer(not arguments.no_http))
 
 internet.reactor.run()

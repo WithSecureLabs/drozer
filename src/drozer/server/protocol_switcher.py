@@ -1,8 +1,9 @@
 from logging import getLogger
 from twisted.internet.protocol import Protocol
 
+from drozer.server.files import FileProvider
 from drozer.server.http import HTTP
-from drozer.server.droidhg import DroidHG
+from drozer.server.drozer_protocol import Drozer
 
 class ProtocolSwitcher(Protocol):
     """
@@ -17,6 +18,7 @@ class ProtocolSwitcher(Protocol):
     enable_http = True
     protocol = None
     
+    __file_provider = FileProvider()
     __logger = getLogger(__name__)
     
     def __init__(self):
@@ -28,9 +30,9 @@ class ProtocolSwitcher(Protocol):
         """
 
         if self.enable_http and data.startswith("GET") or data.startswith("POST"):
-            return HTTP()
+            return HTTP(self.__file_provider)
         else:
-            return DroidHG()
+            return Drozer()
     
     def connectionMade(self):
         """

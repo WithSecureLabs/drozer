@@ -1,0 +1,3 @@
+
+class FileProvider(object):
+    pass
