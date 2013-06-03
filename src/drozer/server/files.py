@@ -18,13 +18,30 @@ class FileProvider(object):
             return self.__store[resource]
         else:
             return ErrorResource(resource, 404, "The resource %s could not be found on this server.")
+    
+    def get_by_magic(self, magic):
+        resources = filter(lambda r: self.__store[r].magic == magic, self.__store)
+        
+        if len(resources) == 1:
+            return self.__store[resources[0]]
+        else:
+            return None
+    
+    def has_magic_for(self, magic):
+        resources = filter(lambda r: self.__store[r].magic == magic, self.__store)
+        
+        if len(resources) == 1:
+            return True
+        else:
+            return False
         
         
 class Resource(object):
     
-    def __init__(self, resource, reserved=False):
+    def __init__(self, resource, magic=None, reserved=False):
         self.resource = resource
         self.reserved = reserved
+        self.magic = magic
 
     def getBody(self):
         return None
@@ -50,8 +67,8 @@ class ErrorResource(Resource):
         
 class FileResource(Resource):
     
-    def __init__(self, resource, path, reserved=False):
-        Resource.__init__(self, resource, reserved)
+    def __init__(self, resource, path, magic=None, reserved=False):
+        Resource.__init__(self, resource, magic=magic, reserved=reserved)
         
         self.path = path
     
@@ -63,8 +80,8 @@ class FileResource(Resource):
     
 class InMemoryResource(Resource):
     
-    def __init__(self, resource, body):
-        Resource.__init__(self, resource, False)
+    def __init__(self, resource, body, magic=None):
+        Resource.__init__(self, resource, magic=magic, reserved=False)
         
         self.body = body
     
