@@ -16,9 +16,7 @@ class ProtocolSwitcher(Protocol):
     connection to an HTTP server, otherwise it is connected to the drozer
     Server.
     """
-
-    enable_http = True
-    enable_magics = True
+    
     protocol = None
     
     __web_root = path.join(path.dirname(__file__), "web_root")
@@ -35,9 +33,9 @@ class ProtocolSwitcher(Protocol):
         Selects which protocol to be used, by inspecting the data.
         """
 
-        if self.enable_http and (data.startswith("DELETE") or data.startswith("GET") or data.startswith("POST")):
+        if data.startswith("DELETE") or data.startswith("GET") or data.startswith("POST"):
             return HTTP(self.credentials, self.__file_provider)
-        elif self.enable_magics and self.__file_provider.has_magic_for(data.strip()):
+        elif self.__file_provider.has_magic_for(data.strip()):
             return ByteStream(self.__file_provider)
         else:
             return Drozer()
