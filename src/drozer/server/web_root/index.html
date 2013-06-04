@@ -1,0 +1,23 @@
+<ol>
+	<li><label for="resource">Resource</label> <input type="text" id="resource" /></li>
+	<li><label for="content">Content</label> <textarea id="content"></textarea></li>
+	<li><label for="magic">Magic</label> <input type="text" id="magic" /></li>
+	<li><button type="submit" onclick="createFile()">Create File</button></li>
+</ol>
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script>
+	function createFile() {
+		$.ajax({
+			contentType: "text/plain",
+			data: $("#content").val(),
+			processData: false,
+			type: "post",
+			url: $("#resource").val(),
+			beforeSend: function(r) {
+				if($("#magic").val() != "") {
+					r.setRequestHeader("X-Drozer-Magic", $("#magic").val()); } },
+			success: function(r){
+				console.log(r); } });
+	}
+</script>
