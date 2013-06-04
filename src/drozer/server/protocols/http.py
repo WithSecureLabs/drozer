@@ -75,7 +75,9 @@ class HTTP(HttpReceiver):
                     else:
                         magic = None
                     
-                    if self.__file_provider.create(request.resource, request.body, magic=magic):
+                    if magic != None and self.__file_provider.has_magic_for(magic) and self.__file_provider.get_by_magic(magic).resource != request.resource:
+                        resource = ErrorResource(request.resource, 409, "Could not create %s. The specified magic has already been assigned to another resource.")
+                    elif self.__file_provider.create(request.resource, request.body, magic=magic):
                         resource = ErrorResource(request.resource, 201, "Location: %s")
                     else:
                         resource = ErrorResource(request.resource, 500, "The server encountered an error whilst creating the resource %s.")
