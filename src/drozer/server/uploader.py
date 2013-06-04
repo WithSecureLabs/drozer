@@ -5,17 +5,19 @@ from twisted.internet.protocol import ClientFactory, Protocol
 
 from drozer.server.receivers.http import HTTPRequest, HTTPResponse
 
-def upload(resource, data, magic=None):
-    factory = UploaderFactory(resource, data, magic)
-    #reactor.connectSSL('localhost', 31415, factory, ssl.ClientContextFactory())
-    reactor.connectTCP('localhost', 31415, factory)
+def upload(arguments, resource, data, magic=None):
+    factory = UploaderFactory(arguments, resource, data, magic)
+    if arguments.ssl != None:
+        reactor.connectSSL('localhost', arguments.port, factory, ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
+    else:
+        reactor.connectTCP('localhost', arguments.port, factory)
     reactor.run()
 
 class Uploader(Protocol):
     
     def connectionMade(self):
         request = HTTPRequest(verb="POST", resource=self.factory.resource, body=self.factory.data)
-        request.headers["Authorization"] = "Basic %s" % b64encode("aaa:bbb")
+        request.headers["Authorization"] = "Basic %s" % b64encode(":".join(self.factory.arguments.credentials[0]))
         request.headers["Content-Length"] = len(self.factory.data)
         if self.factory.magic != None:
             request.headers["X-Drozer-Magic"] = self.factory.magic
@@ -37,7 +39,8 @@ class UploaderFactory(ClientFactory):
     
     protocol = Uploader
 
-    def __init__(self, resource, data, magic=None):
+    def __init__(self, arguments, resource, data, magic=None):
+        self.arguments = arguments
         self.resource = resource
         self.data = data
         self.magic = magic

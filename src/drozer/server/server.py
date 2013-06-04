@@ -78,8 +78,7 @@ class Server(cli.Base):
         data = open(arguments.resource[1]).read()
         magic = len(arguments.resource) == 3 and arguments.resource[2] or None
         
-        print magic
-        uploader.upload(resource, data, magic=magic)
+        uploader.upload(arguments, resource, data, magic=magic)
         
     def __build_store_zero_or_two_action(self):
         class RequiredLength(argparse.Action):
