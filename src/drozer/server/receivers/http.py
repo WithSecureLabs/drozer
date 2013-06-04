@@ -47,6 +47,9 @@ class HTTPMessage:
         
         if self.headers == None:
             self.headers = {}
+    
+    def format_headers(self):
+        return "\r\n".join(map(lambda k: "%s: %s" % (k,self.headers[k]), self.headers))
 
 
 class HTTPRequest(HTTPMessage):
@@ -148,8 +151,10 @@ class HTTPRequest(HTTPMessage):
                         
                         return None
             return message
-            
-            
+    
+    def __str__(self):
+        return "%s %s %s\r\n%s\r\n\r\n%s" % (self.verb, self.resource, self.version, self.format_headers(), self.body)
+
 
 class HTTPResponse(HTTPMessage):
     
@@ -160,8 +165,33 @@ class HTTPResponse(HTTPMessage):
         
         self.headers["Content-Length"] = len(body)
     
-    def format_headers(self):
-        return "\r\n".join(map(lambda k: "%s: %s" % (k,self.headers[k]), self.headers))
+    @classmethod
+    def parse(cls, message):
+        lines = message.split("\r\n")
+        
+        version, status = cls.processResponse(lines[0])
+        headers = cls.processHeaders(lines[1:lines.index("")])
+        body = "\r\n".join(lines[lines.index("")+1:])
+        
+        return HTTPResponse(status, version, headers, body)
+    
+    @classmethod
+    def processHeaders(cls, lines):
+        """
+        Read headers from an HTTP response.
+        """
+        
+        return dict(map(lambda l: [l[0:l.index(": ")], l[l.index(": ")+2:]], lines))
+    
+    @classmethod
+    def processResponse(cls, line):
+        """
+        Read an HTTP response.
+        """
+        
+        slices = line.split(" ")
+        
+        return (slices[0], int(slices[1]))
     
     def status_text(self):
         return { 100: "Continue",
