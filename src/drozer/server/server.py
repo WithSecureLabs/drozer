@@ -14,6 +14,7 @@ except ImportError:
 from mwr.common import cli, logger
 
 from drozer import meta
+from drozer.server import uploader
 from drozer.server.heartbeat import heartbeat
 from drozer.server.protocol_switcher import ProtocolSwitcher
 from drozer.ssl.provider import Provider
@@ -36,6 +37,7 @@ class Server(cli.Base):
         self._parser.add_argument("--credentials", action="append", default=[], nargs=2, metavar=("username", "password"), help="add a username/password pair that can be used to upload files to the server")
         self._parser.add_argument("--port", default=31415, metavar="PORT", type=int, help="specify the port on which to bind the server")
         self._parser.add_argument("--ping-interval", default=15, metavar="SECS", type=int, help="the interval at which to ping connected agents")
+        self._parser.add_argument("--resource", action=self.__build_store_two_or_three_action(), nargs="*", help="specify a resource to upload to a drozer Server")
         self._parser.add_argument("--ssl", action=self.__build_store_zero_or_two_action(), help="enable SSL, optionally specifying the key and certificate", nargs="*")
         self._parser.add_argument("--version", action="store_true", help="display the installed drozer version")
     
@@ -62,11 +64,37 @@ class Server(cli.Base):
         
         internet.reactor.run()
     
+    def do_delete(self, arguments):
+        """delete a resource from the drozer Server"""
+        pass
+    
+    def do_upload(self, arguments):
+        """upload a resource to the drozer Server"""
+        
+        if arguments.ssl != None and arguments.ssl == []:
+            arguments.ssl = Provider().get_keypair("drozer-server")
+        
+        resource = arguments.resource[0]
+        data = open(arguments.resource[1]).read()
+        magic = len(arguments.resource) == 3 and arguments.resource[2] or None
+        
+        print magic
+        uploader.upload(resource, data, magic=magic)
+        
     def __build_store_zero_or_two_action(self):
         class RequiredLength(argparse.Action):
             def __call__(self, parser, args, values, option_string=None):
                 if not (len(values) == 0 or len(values) == 2):
                     msg='argument "--{f}" requires either 0 or 2 arguments'.format(f=self.dest)
+                    raise argparse.ArgumentTypeError(msg)
+                setattr(args, self.dest, values)
+        return RequiredLength
+    
+    def __build_store_two_or_three_action(self):
+        class RequiredLength(argparse.Action):
+            def __call__(self, parser, args, values, option_string=None):
+                if not (len(values) == 2 or len(values) == 3):
+                    msg='argument "--{f}" requires either 2 or 3 arguments'.format(f=self.dest)
                     raise argparse.ArgumentTypeError(msg)
                 setattr(args, self.dest, values)
         return RequiredLength
