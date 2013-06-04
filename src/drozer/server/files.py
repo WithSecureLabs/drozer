@@ -67,17 +67,18 @@ class ErrorResource(Resource):
         
 class FileResource(Resource):
     
-    def __init__(self, resource, path, magic=None, reserved=False):
+    def __init__(self, resource, path, magic=None, reserved=False, type="text/plain"):
         Resource.__init__(self, resource, magic=magic, reserved=reserved)
         
         self.path = path
+        self.type = type
     
     def getBody(self):
         return open(self.path).read()
             
     def getResponse(self):
         response = HTTPResponse(status=200, body=self.getBody())
-        response.headers["Content-Type"] = "text/html"
+        response.headers["Content-Type"] = self.type
         
         return response
     
