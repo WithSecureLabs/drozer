@@ -1,10 +1,10 @@
 from logging import getLogger
 from twisted.internet.protocol import Protocol
 
-from drozer.server.byte_stream import ByteStream
+from drozer.server.protocols.byte_stream import ByteStream
 from drozer.server.files import FileProvider, FileResource
-from drozer.server.http import HTTP
-from drozer.server.drozer_protocol import Drozer
+from drozer.server.protocols.http import HTTP
+from drozer.server.protocols.drozerp import Drozer
 
 class ProtocolSwitcher(Protocol):
     """
@@ -20,8 +20,8 @@ class ProtocolSwitcher(Protocol):
     enable_magics = True
     protocol = None
     
-    __file_provider = FileProvider({ "/": FileResource("/", "./res/index.html", magic="I", reserved=True),
-                                     "/index.html": FileResource("/index.html", "./res/index.html", True) })
+    __file_provider = FileProvider({ "/": FileResource("/", "./src/drozer/server/web_root/index.html", magic="I", reserved=True),
+                                     "/index.html": FileResource("/index.html", "./src/drozer/server/web_root/index.html", True) })
     __logger = getLogger(__name__)
     
     def __init__(self):
