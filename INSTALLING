@@ -54,32 +54,16 @@ To test the installation:
 Windows
 -------
 
-Install Dependencies:
-
-    Python:     http://www.python.org/download/
-    setuptools: http://pypi.python.org/pypi/setuptools/0.6c11
-
 The Mercury installation must be performed as a Windows administrator.
 
-Install dependencies:
-
-    > C:\Python27\Scripts\easy_install.exe --allow-hosts pypi.python.org protobuf==2.4.1
-    > C:\Python27\Scripts\easy_install.exe pyopenssl
-    > C:\Python27\Scripts\easy_install.exe pyreadline
-
-If you want to use Infrastructure Mode, you will also need to install the Twisted
-library:
-
-    > C:\Python27\Scripts\easy_install.exe twisted==10.2.0
-    
 Run the Mercury installer.
 
 To test the installation:
 
-    > C:\Python27\python.exe  C:\Python27\Scripts\mercury
+    > C:\Program Files\Mercury\mercury.bat
     usage: mercury [COMMAND]
 
-    >
+    > C:\Program Files\Mercury\mercury.bat console connect
 
 
 Mac OS
