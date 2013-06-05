@@ -188,12 +188,12 @@ class LaunchIntent(Module, common.PackageManager):
         self.stdout.write("  Action: %s\n"%intent.getAction())
         self.stdout.write("  Component: %s\n"%intent.getComponent().toShortString())
         self.stdout.write("  Data: %s\n"%intent.getDataString())
-        if intent.getCategories().size() > 0:
+        if intent.getCategories() == None:
+            self.stdout.write("  Categories: null\n")
+        else:
             self.stdout.write("  Categories: \n")
             for category in intent.getCategories().toArray():
                 self.stdout.write("     - %s\n"%str(category.toString()))
-        else:
-            self.stdout.write("  Categories: null\n")
 
         self.stdout.write("  Flags: %s\n"%self.processFlags(intent.getFlags()))
         self.stdout.write("  Mime Type: %s\n"%intent.getType())
