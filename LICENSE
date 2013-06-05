@@ -1,101 +1,35 @@
-Copyright (c) 2012, MWR InfoSecurity Limited. All rights reserved.
+Copyright (c) 2012, 2013 MWR InfoSecurity
+All rights reserved.
 
-FOR CONTRIBUTORS
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-Any contribution you make will be subject to a short-form online Contributor
-Agreement and your registration. For information on how to register as a
-Mercury contributor, please access the Contributor home page at:
-mwr.to/mercurycontributors.
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
 
-The copyright on the Mercury suite of software is held by MWR InfoSecurity
-Limited ("MWR") but is released on an open-source basis for contributions under
-the following BSD terms:
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-  1.  Redistributions of source code must retain the above copyright notice,
-      this list of conditions and the following disclaimer.
-  2.  Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
-      and/or other materials provided with the distribution.
-  3.  All advertising materials mentioning features or use of this software
-      must display the following acknowledgement: "This product includes
-      software developed by MWR InfoSecurity Limited."
-  4.  Neither the name of MWR InfoSecurity Limited nor the names of its
-      contributors may be used to endorse or promote products derived from this
-      software without specific prior written permission.
 
 This licence does not apply to the following components:
 
    -  BusyBox located at /src/mwr/droidhg/modules/tools/setup/busybox
       Released under a GPLv2 License, and available to download from:
       http://www.busybox.net/
-   -  BouncyCastle Provider located at /src/mwr/droidhg/ssl/bcprov-ext-jdk15on-1.46.jar
+   -  BouncyCastle Provider located at /src/mwr/droidhg/ssl/bcprov-ext-jdk15on-
       Released under a modified MIT X11 License, and available to
       download from: http://www.bouncycastle.org/
-
-For clarity, the entire agreement between us will be governed by:
-
-  1.  The above  BSD terms and copyright notice 
-  2.  The Mercury Licence Agreement http://www.mwrinfosecurity.com/eula save as
-      varied by the above BSD licence terms, which includes important
-      statements regarding the responsible use of the software and limitations
-      on our liability to you, summarised in the disclaimer below.
-  3.  The Contributor Agreement submitted  with each contribution to the
-      exclusion of any other promises, representations or agreement.
-
-
-FOR END-USERS
-
-The Mercury software is subject to the MWR End-User Licence Agreement. Please
-visit http://www.mwrinfosecurity.com/eula to download a copy of this Agreement.
-
-
-DISCLAIMER
-
-ALL DOWNLOADING OF ANY SOFTWARE AVAILABLE ON THIS SITE IS SUBJECT TO THE
-LIABILITY LIMTIATIONS SET OUT IN OUR END-USER LICENCE AGREEMENT (SEE LINK
-ABOVE) WHICH IS SUMMARISED IN THE FOLLOWING DISCLAIMER.PLEASE READ THIS
-CAREFULLY BEFORE YOU DOWNLOAD ANY SOFTWARE.
-
-The Mercury software is in an early stage of development and can only be
-released on an open source basis if recipients download the software at their
-own risk and on an “as is” basis. This means that no warranty is given that the
-software:-
-
-   -  will be error free, bug free or virus free;
-   -  is of merchantable or satisfactory quality, is fit for any particular
-      purpose, or complies with any sample or description;
-   -  will not cause a risk or increased risk to the security of any IT
-      systems (hardware or software) or to the safety of any persons; or
-   -  has been subject to any searches or investigations into the existence of
-      any third party rights or any of the intellectual property in the
-      software is or will be valid or subsisting.
-
-It also means that the recipient acknowledges:
-
-   -  that the software is, as a penetration testing tool, designed to exploit
-      weaknesses in security systems in ways that MWR cannot foresee or have
-      any duty of care to control or manage and that therefore it is for the
-      recipient to take care in the particular environment in which the
-      software is used or developed and that accordingly, MWR shall not be
-      liable, to the fullest extent permitted by law, for any costs, claims,
-      fees expenses, losses or other liabilities, whether arising out of MWR's
-      tort, breach of contract or statutory duty or any other head of claim.
-   -  that neither party shall be liable to the other for any loss of profit,
-      revenue, reputation, opportunity or goodwill, loss of or corruption to
-      data or for any indirect or consequential loss or damage
-   -  that, in downloading the software, it does not do so in reliance on any
-      representation, warranty or other provision and any conditions,
-      warranties or other terms implied by statute or common law are excluded
-      from this Agreement to the fullest extent permitted by law.
-
-The above disclaimer and licensing of the software in general is subject to
-English Law and the exclusive jurisdiction of the English Courts.
-
-
-CONTACT INFORMATION
-
-If you have any questions regarding this website, please contact
-mercury@mwrinfosecurity.com.
