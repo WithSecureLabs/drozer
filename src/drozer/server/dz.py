@@ -1,12 +1,44 @@
 from logging import getLogger
 from os import path
-from twisted.internet.protocol import Protocol
+import sys
 
+try:
+    from twisted.internet import reactor, ssl, task
+    from twisted.internet.protocol import Protocol, ServerFactory
+except ImportError:
+    print "drozer Server requires Twisted to run."
+    print "Run 'easy_install twisted==10.2.0' to fetch this dependency."
+    sys.exit(-1)
+
+from drozer.server.heartbeat import heartbeat
 from drozer.server.protocols.byte_stream import ByteStream
 from drozer.server.files import FileProvider, FileResource
 from drozer.server.protocols.http import HTTP
 from drozer.server.protocols.drozerp import Drozer
+from drozer.ssl.provider import Provider
 
+def serve(arguments):
+    task.LoopingCall(heartbeat).start(arguments.ping_interval)
+        
+    if arguments.ssl != None:
+        print "Starting drozer Server, listening on 0.0.0.0:%d (with SSL)" % arguments.port
+
+        if arguments.ssl == []:
+            print "Using default SSL key material..."
+            
+            arguments.ssl = Provider().get_keypair("drozer-server")
+        
+        reactor.listenSSL(arguments.port,
+                          SwitcherFactoryServer(dict(arguments.credentials)),
+                          ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
+    else:
+        print "Starting drozer Server, listening on 0.0.0.0:%d" % arguments.port
+        
+        reactor.listenTCP(arguments.port,
+                          SwitcherFactoryServer(dict(arguments.credentials)))
+    
+    reactor.run()
+        
 class ProtocolSwitcher(Protocol):
     """
     ProtocolSwitcher is a virtual protocol that can differentiate between different
@@ -34,7 +66,7 @@ class ProtocolSwitcher(Protocol):
         """
 
         if data.startswith("DELETE") or data.startswith("GET") or data.startswith("POST"):
-            return HTTP(self.credentials, self.__file_provider)
+            return HTTP(self.factory.credentials, self.__file_provider)
         elif self.__file_provider.has_magic_for(data.strip()):
             return ByteStream(self.__file_provider)
         else:
@@ -72,3 +104,13 @@ class ProtocolSwitcher(Protocol):
         else:
             self.protocol.dataReceived(data)
             
+class SwitcherFactoryServer(ServerFactory):
+    """
+    Implements a Twisted ServerFactory, which implements the ProtocolSwitcher
+    protocol to support running multiple protocols on a port.
+    """
+
+    protocol = ProtocolSwitcher
+
+    def __init__(self, credentials):
+        self.credentials = credentials
