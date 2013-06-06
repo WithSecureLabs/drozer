@@ -55,7 +55,13 @@ class Base(object):
 
         if argv == None:
             argv = []
-
+            
+        # try to find the command, before we invoke the parser so we can add additional
+        # arguments
+        command_argv = filter(lambda a: "do_" + a in self.__commands(), argv)
+        if(len(command_argv) == 1 and hasattr(self, "args_for_" + command_argv[0])):
+            getattr(self, "args_for_" + command_argv[0])()
+        # parse argv into arguments using the generated ArgumentParser
         arguments = self._parser.parse_args(argv)
 
         try:
