@@ -5,8 +5,16 @@ from twisted.internet.protocol import ClientFactory, Protocol
 
 from drozer.server.receivers.http import HTTPRequest, HTTPResponse
 
+def delete(arguments, resource):
+    factory = UploaderFactory(arguments, "DELETE", resource, "", None)
+    if arguments.ssl != None:
+        reactor.connectSSL('localhost', arguments.port, factory, ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
+    else:
+        reactor.connectTCP('localhost', arguments.port, factory)
+    reactor.run()
+
 def upload(arguments, resource, data, magic=None):
-    factory = UploaderFactory(arguments, resource, data, magic)
+    factory = UploaderFactory(arguments, "POST", resource, data, magic)
     if arguments.ssl != None:
         reactor.connectSSL('localhost', arguments.port, factory, ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
     else:
@@ -16,8 +24,9 @@ def upload(arguments, resource, data, magic=None):
 class Uploader(Protocol):
     
     def connectionMade(self):
-        request = HTTPRequest(verb="POST", resource=self.factory.resource, body=self.factory.data)
-        request.headers["Authorization"] = "Basic %s" % b64encode(":".join(self.factory.arguments.credentials[0]))
+        request = HTTPRequest(verb=self.factory.verb, resource=self.factory.resource, body=self.factory.data)
+        if self.factory.arguments.credentials != None:
+            request.headers["Authorization"] = "Basic %s" % b64encode(":".join(self.factory.arguments.credentials))
         request.headers["Content-Length"] = len(self.factory.data)
         if self.factory.magic != None:
             request.headers["X-Drozer-Magic"] = self.factory.magic
@@ -39,11 +48,12 @@ class UploaderFactory(ClientFactory):
     
     protocol = Uploader
 
-    def __init__(self, arguments, resource, data, magic=None):
+    def __init__(self, arguments, verb, resource, data, magic=None):
         self.arguments = arguments
-        self.resource = resource
         self.data = data
         self.magic = magic
+        self.resource = resource
+        self.verb = verb
         
     def clientConnectionFailed(self, connector, reason):
         reactor.stop()
