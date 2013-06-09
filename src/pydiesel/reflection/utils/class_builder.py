@@ -11,9 +11,9 @@ class ClassBuilder(object):
     file for the Android platform.
     """
     
-    def __init__(self, path):
+    def __init__(self, path, sdk_path):
         self.path = path
-        self.sdk_path = os.getenv("SDK", None)
+        self.sdk_path = sdk_path
         
         self.dx = system.which("dx")
         self.javac = system.which("javac")

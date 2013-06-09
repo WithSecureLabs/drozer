@@ -14,10 +14,12 @@ class ClassLoader(object):
     """
     
     def __init__(self, source_or_relative_path, cache_path, construct, system_class_loader, relative_to=None):
-        self.source = self.__get_source(source_or_relative_path, relative_to=relative_to)
+        self.source_or_relative_path = source_or_relative_path
         
+        self.android_lib = "android.jar"
         self.cache_path = cache_path
         self.construct = construct
+        self.relative_to=relative_to
         self.system_class_loader = system_class_loader
 
     def loadClass(self, klass):
@@ -28,6 +30,8 @@ class ClassLoader(object):
         Gets a DexClassLoader on the agent, given compiled source or an apk
         file from the local system.
         """
+        
+        self.source = self.__get_source(self.source_or_relative_path, relative_to=self.relative_to)
 
         if self.source != None:
             file_path = "/".join([self.cache_path, self.__get_cached_apk_name()])
@@ -71,7 +75,7 @@ class ClassLoader(object):
             if os.path.exists(apk_path):
                 source = fs.read(apk_path)
             elif os.path.exists(java_path):
-                source = ClassBuilder(java_path).build()
+                source = ClassBuilder(java_path, self.android_lib).build()
         else:
             source = source_or_relative_path
 

@@ -7,6 +7,8 @@ JAVAC = javac
 NDKBUILD = ndk-build
 PYTHON = python
 
+SDK = $(CURDIR)/src/drozer/lib/android.jar
+
 all: dist-egg dist-windows
 apks: $(SOURCES:.java=.apk)
 clean:

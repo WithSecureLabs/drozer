@@ -2,6 +2,7 @@ import os
 
 from pydiesel.reflection import utils
 
+from drozer.configuration import Configuration
 from drozer.modules.base import Module
 
 class ClassLoader(object):
@@ -22,6 +23,7 @@ class ClassLoader(object):
         
         if not Module.cached_klass(".".join([source, klass])):
             loader = utils.ClassLoader(source, self.__get_cache_path(), self.__get_constructor(), self.klass('java.lang.ClassLoader').getSystemClassLoader(), relative_to=relative_to)
+            loader.android_lib = Configuration.library("android.jar")
             
             Module.cache_klass(".".join([source, klass]), loader.loadClass(klass))
             
