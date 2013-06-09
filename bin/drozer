@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 Commands = {    'console': 'start the drozer Console',
+                'payload': 'create custom drozer Agents',
                 'server': 'start a drozer Server',
                 'ssl': 'manage drozer SSL key material' }
     
