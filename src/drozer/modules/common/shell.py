@@ -22,39 +22,21 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
         first command.
         """
         
-        shell = self.new("com.mwr.dz.shell.Shell")
+        shell = self.new("com.mwr.jdiesel.util.Shell")
         
-        try:
-            if shell.valid():
-                self.__send_variables(shell)
+        if shell.valid():
+            self.__send_variables(shell)
                     
-            while shell.valid():
-                shell.write(command)
-                response = shell.read()
-                self.stdout.write(response.strip())
-                if not shell.valid():
-                    break
-                self.stdout.write(" ")
-                command = raw_input()
-            
-            shell.close()
-        except ReflectionException as e:
-            if e.message == "valid for class com.mwr.dz.shell.Shell":
-                self.shellStartCompatibility(command)
-            else:
-                raise
-    
-    def shellStartCompatibility(self, command=""):
-        shell = self.new("com.mwr.dz.shell.Shell")
-        
-        self.__send_variables(shell)
-        
-        while command.upper() != "EXIT":
+        while shell.valid():
             shell.write(command)
             response = shell.read()
             self.stdout.write(response.strip())
+            if not shell.valid():
+                break
             self.stdout.write(" ")
             command = raw_input()
+            
+        shell.close()
             
     def __get_variables(self):
         return "; ".join(map(lambda k: "export %s=\"%s\"" % (k, self.variables[k]), self.variables))
