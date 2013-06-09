@@ -71,7 +71,20 @@ class Configuration(object):
         cls.__ensure_config()
         
         return cls.__config.has_section(section)
-            
+    
+    @classmethod
+    def library(cls, name):
+        """
+        Returns the path to a drozer Library
+        """
+        
+        path = os.path.join(os.path.dirname(__file__), "lib", name)
+        
+        if os.path.exists(path):
+            return path
+        else:
+            return None
+        
     @classmethod
     def path(cls):
         """
