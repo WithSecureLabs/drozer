@@ -7,7 +7,7 @@ from drozer.configuration import Configuration
 
 class Packager(command_wrapper.Wrapper):
     
-    __ant = system.which("ant")
+    __ant = Configuration.executable("ant")
     
     __manifest = "AndroidManifest.xml"
     

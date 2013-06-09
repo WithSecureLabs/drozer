@@ -1,6 +1,8 @@
 import ConfigParser
 import os
 
+from mwr.common import system
+
 class Configuration(object):
     """
     Configuration provides a wrapper around a user's drozer configuration, stored
@@ -8,6 +10,18 @@ class Configuration(object):
     """
     
     __config = None
+    
+    @classmethod
+    def executable(cls, name):
+        """
+        Fetch a System executable, as specified in the configuration, or attempt
+        to find it on the PATH
+        """
+        
+        if cls.get("executables", name) == None:
+            return system.which(name)
+        else:
+            return cls.get("executables", name)
     
     @classmethod
     def delete(cls, section, key):

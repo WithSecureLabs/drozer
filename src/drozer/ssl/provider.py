@@ -110,7 +110,7 @@ class Provider(object):
         Prepare a BouncyCastle KeyStore from a PKCS12 bundle.
         """
         
-        keytool = system.which('keytool') 
+        keytool = Configuration.executable('keytool') 
         argv = [keytool,
                 "-importkeystore",
                 "-deststorepass", store_password,
@@ -141,7 +141,7 @@ class Provider(object):
         Prepare a BouncyCastle TrustStore, for the CA.
         """
         
-        keytool = system.which('keytool')
+        keytool = Configuration.executable('keytool')
         argv = [keytool,
                 "-import",
                 "-trustcacerts",
@@ -171,7 +171,7 @@ class Provider(object):
         Prepare a JKS TrustStore, for the CA.
         """
         
-        keytool = system.which('keytool')
+        keytool = Configuration.executable('keytool')
         argv = [keytool,
                 "-import",
                 "-trustcacerts",

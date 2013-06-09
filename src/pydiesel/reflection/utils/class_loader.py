@@ -16,9 +16,11 @@ class ClassLoader(object):
     def __init__(self, source_or_relative_path, cache_path, construct, system_class_loader, relative_to=None):
         self.source_or_relative_path = source_or_relative_path
         
-        self.android_lib = "android.jar"
+        self.android_path = None
         self.cache_path = cache_path
         self.construct = construct
+        self.dx_path = None
+        self.javac_path = None
         self.relative_to=relative_to
         self.system_class_loader = system_class_loader
 
@@ -75,7 +77,7 @@ class ClassLoader(object):
             if os.path.exists(apk_path):
                 source = fs.read(apk_path)
             elif os.path.exists(java_path):
-                source = ClassBuilder(java_path, self.android_lib).build()
+                source = ClassBuilder(java_path, self.dx_path, self.javac_path, self.android_path).build()
         else:
             source = source_or_relative_path
 
