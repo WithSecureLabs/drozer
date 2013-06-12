@@ -1,4 +1,3 @@
-import itertools
 import os
 import re
 import shlex
@@ -12,14 +11,13 @@ from pydiesel.reflection import Reflector
 
 from mwr.common import cmd_ext as cmd
 from mwr.common import console
-from mwr.common.list import flatten
 from mwr.common.stream import ColouredStream, DecolouredStream
 from mwr.common.text import wrap
 
 from drozer.configuration import Configuration
 from drozer.console import clean
 from drozer.console.sequencer import Sequencer
-from drozer.modules import common, Module
+from drozer.modules import collection, common, loader
 from drozer.repoman import ModuleManager
 
 class Session(cmd.Cmd):
@@ -35,15 +33,17 @@ class Session(cmd.Cmd):
         self.__base = ""
         self.__module_pushed_completers = 0
         self.__permissions = None
-        self.__reflector = Reflector(self)
         self.__server = server
         self.__session_id = session_id
+        
+        self.__modules = collection.ModuleCollection(loader.ModuleLoader())
 
         self.active = True
         self.aliases = { "l": "list", "ls": "list", "ll": "list" }
         self.intro = "drozer Console"
         self.history_file = os.path.sep.join([os.path.expanduser("~"), ".drozer_history"])
         self.prompt = "dz> "
+        self.reflector = Reflector(self)
         if hasattr(arguments, 'no_color') and not arguments.no_color:
             self.stdout = ColouredStream(self.stdout)
             self.stderr = ColouredStream(self.stderr)
@@ -68,12 +68,14 @@ class Session(cmd.Cmd):
         Provides readline auto-completion for drozer module names.
         """
 
+        modules = self.__modules.all(permissions=self.permissions(), prefix=self.__base)
+        
         if self.__base == "":
-            return filter(lambda m: m.startswith(text), self.__modules())
+            return filter(lambda m: m.startswith(text), modules)
         elif text.startswith("."):
-            return filter(lambda m: m.startswith(text[1:]), self.__modules())
+            return filter(lambda m: m.startswith(text[1:]), modules)
         else:
-            return map(lambda m: m[len(self.__base):], filter(lambda m: m.startswith(self.__base + text), self.__modules()))
+            return map(lambda m: m[len(self.__base):], filter(lambda m: m.startswith(self.__base + text), modules))
 
     def completenamespaces(self, text):
         """
@@ -153,7 +155,7 @@ class Session(cmd.Cmd):
         drozer will automatically re-upload any files that it needs as you continue to use it.
         """
 
-        files = clean.clean(self.__reflector)
+        files = clean.clean(self.reflector)
         
         self.stdout.write("Removed %d cached files.\n" % files)
 
@@ -161,22 +163,20 @@ class Session(cmd.Cmd):
         """
         Display a list of drozer contributors.
         """
+        
         argv = shlex.split(args, comments=True)
-
+        
         if len(argv) == 1 and (argv[0] == "-h" or argv[0] == "--help"):
             self.do_help("contributors")
             return
-
-        contributors = map(lambda m: Module.get(m).author, Module.all(self.permissions()))
-        contribution = [(c[0], len(list(c[1]))) for c in itertools.groupby(sorted(flatten(contributors)))]
 
         self.stdout.write("Core Contributors:\n")
         for contributor in ['MWR InfoSecurity (@mwrlabs)', 'Luander (luander.r@samsung.com)', 'Rodrigo Chiossi (r.chiossi@samsung.com)']:
             self.stdout.write("  %s\n"%contributor)
 
         self.stdout.write("\nModule Contributors:\n")
-        for contributor in sorted(contribution, key=lambda c: -c[1]):
-            self.stdout.write("  %s\n"%contributor[0])
+        for contributor in self.__modules.contributors():
+            self.stdout.write("  %s\n"%contributor)
 
     def do_exit(self, args):
         """
@@ -208,7 +208,7 @@ class Session(cmd.Cmd):
             return
 
         if len(argv) > 0:
-            if self.__module_name(argv[0]) in Module.all(self.permissions()) or self.__module_name("." + argv[0]) in Module.all(self.permissions()):
+            if self.__module_name(argv[0]) in self.__modules.all(permissions=self.permissions()) or self.__module_name("." + argv[0]) in self.__modules.all(permissions=self.permissions()):
                 self.do_run(" ".join([argv[0], "--help"]))
             else:
                 try:
@@ -265,22 +265,22 @@ class Session(cmd.Cmd):
             self.do_help("list")
             return
         
+        term = len(argv) > 0 and argv[0] or None
+        
+        s_modules = self.__modules.all(contains=term, permissions=self.permissions(), prefix=self.__base)
+        
         if "--unsupported" in argv:
             argv.remove("--unsupported")
             
-            term = len(argv) > 0 and argv[0] or None
-            s_modules = filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules())
-            u_modules = filter(lambda m: (term == None or m.find(term.lower()) >= 0) and not m in s_modules, self.__modules("any"))
+            u_modules = filter(lambda m: not m in s_modules, self.__modules.all(contains=term, permissions=self.permissions(), prefix=self.__base))
         else:
-            term = len(argv) > 0 and argv[0] or None
-            s_modules = filter(lambda m: term == None or m.find(term.lower()) >= 0, self.__modules())
             u_modules = []
 
-        self.stdout.write(console.format_dict(dict(map(lambda m: [m, Module.get(m).name], s_modules))) + "\n")
+        self.stdout.write(console.format_dict(dict(map(lambda m: [m, self.__modules.get(m).name], s_modules))) + "\n")
         
         if len(u_modules) > 0:
             self.stdout.write("\nUnsupported Modules:\n\n")
-            self.stdout.write(console.format_dict(dict(map(lambda m: [m, Module.get(m).name], u_modules))) + "\n")
+            self.stdout.write(console.format_dict(dict(map(lambda m: [m, self.__modules.get(m).name], u_modules))) + "\n")
 
     def do_load(self, args):
         """
@@ -322,7 +322,7 @@ class Session(cmd.Cmd):
         """
         
         ModuleManager().run(shlex.split(args, comments=True))
-        Module.reload()
+        self.__modules.reload()
         
     def do_permissions(self, args):
         """
@@ -416,9 +416,6 @@ class Session(cmd.Cmd):
             return self.do_run(".shell.exec \"%s\"" % args)
         else:
             return self.do_run(".shell.start")
-
-    def get_reflector(self):
-        return self.__reflector
     
     def help_intents(self):
         """
@@ -486,8 +483,8 @@ class Session(cmd.Cmd):
         """
         
         if self.__permissions == None:
-            context = self.__reflector.resolve("com.mwr.dz.Agent").getContext()
-            pm = self.__reflector.resolve("android.content.pm.PackageManager")
+            context = self.reflector.resolve("com.mwr.dz.Agent").getContext()
+            pm = self.reflector.resolve("android.content.pm.PackageManager")
             
             package = context.getPackageManager().getPackageInfo("com.mwr.dz", pm.GET_PERMISSIONS)
             if package.requestedPermissions != None:
@@ -540,13 +537,13 @@ class Session(cmd.Cmd):
         module = None
 
         try:
-            module = Module.get(self.__module_name(key))
+            module = self.__modules.get(self.__module_name(key))
         except KeyError:
             pass
 
         if module == None:
             try:
-                module = Module.get(key)
+                module = self.__modules.get(key)
             except KeyError:
                 pass
 
@@ -569,24 +566,6 @@ class Session(cmd.Cmd):
         else:
             return self.__base + key
 
-    def __modules(self, permissions=None):
-        """
-        Gets a full list of all module identifiers.
-        """
-        
-        if permissions == "any":
-            required_perms = None
-        else:
-            try:
-                required_perms = self.permissions()
-            except AttributeError:
-                required_perms = None
-
-        if self.__base == "":
-            return Module.all(required_perms)
-        else:
-            return filter(lambda m: m.startswith(self.__base), Module.all(required_perms))
-
     def __namespaces(self, global_scope=False):
         """
         Gets a full list of all namespace identifiers, either globally or in
@@ -594,9 +573,11 @@ class Session(cmd.Cmd):
         """
 
         if global_scope:
-            return set(map(lambda m: self.__module("." + m).namespace(), Module.all(self.permissions())))
+            modules = self.__modules.all(permissions=self.permissions(), prefix=None)
         else:
-            return set(map(lambda m: self.__module("." + m).namespace(), self.__modules(self.permissions())))
+            self.__modules.all(permissions=self.permissions(), prefix=self.__base)
+        
+        return set(map(lambda m: self.__module("." + m).namespace(), modules))
     
     def __push_module_completer(self, completer, history_file=None):
         """
@@ -648,7 +629,7 @@ class Session(cmd.Cmd):
             else:
                 target = self.__base + base + "."
 
-            if True in map(lambda m: m.startswith(target), Module.all(self.permissions())):
+            if True in map(lambda m: m.startswith(target), self.__modules.all(permissions=self.permissions())):
                 self.__base = target
             else:
                 self.stderr.write("no such namespace: %s\n"%base)
@@ -679,7 +660,7 @@ class DebugSession(Session):
         Load a fresh copy of all modules from disk.
         """
         
-        Module.reload()
+        self.__modules.reload()
         
         self.stdout.write("Done.\n\n")
 

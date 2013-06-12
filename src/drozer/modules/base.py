@@ -1,11 +1,10 @@
 import argparse
+import textwrap
 
 from pydiesel.reflection.types import ReflectedType
 
 from mwr.common import argparse_completer, console
 from mwr.common.text import wrap
-
-from drozer.modules.loader import ModuleLoader
 
 class Module(object):
     """
@@ -23,18 +22,21 @@ class Module(object):
     license = "Unspecified"
     path = []
     permissions = []
+    module_type = "drozer"
     
     push_completer = None
     pop_completer = None
 
     __klasses = {}
-    __loader = ModuleLoader()
 
     def __init__(self, session):
-        self.__reflector = session.get_reflector()
-        self.stdout = session.stdout
-        self.stderr = session.stderr
-        self.variables = session.variables
+        if self.module_type == "drozer":
+            self.reflector = session.reflector
+            self.stdout = session.stdout
+            self.stderr = session.stderr
+            self.variables = session.variables
+        
+        self.usage = Usage(self)
 
     def add_arguments(self, parser):
         """
@@ -44,15 +46,6 @@ class Module(object):
 
         pass
 
-    @classmethod
-    def all(cls, permissions=None):
-        """
-        Loads all modules from the specified module repositories, and returns a
-        collection of module identifiers.
-        """
-
-        return cls.__loader.all(cls, permissions)
-
     def arg(self, native, obj_type=None):
         """
         Utility method to build a ReflectedType from a native value.
@@ -61,7 +54,7 @@ class Module(object):
         in Java.
         """
 
-        return ReflectedType.fromNative(native, reflector=self.__reflector, obj_type=obj_type)
+        return ReflectedType.fromNative(native, reflector=self.reflector, obj_type=obj_type)
     
     @classmethod
     def cache_klass(cls, klass, ref):
@@ -88,7 +81,7 @@ class Module(object):
 
         Module.__klasses = {}
 
-        self.__reflector.deleteAll()
+        self.reflector.deleteAll()
 
     def complete(self, text, line, begidx, endidx):
         """
@@ -107,14 +100,6 @@ class Module(object):
         """
 
         return ".".join(cls.path + [cls.__name__.lower()])
-
-    @classmethod
-    def get(cls, key):
-        """
-        Gets a module implementation, given its identifier.
-        """
-
-        return cls.__loader.get(cls, key)
     
     @classmethod
     def get_cached_klass(cls, klass):
@@ -139,16 +124,13 @@ class Module(object):
 
         return self.klass('com.mwr.dz.Agent').getContext()
 
-    def get_reflector(self):
-        return self.__reflector
-
     def klass(self, class_name):
         """
         Resolves a class name, and returns an object reference for the class.
         """
 
         if not Module.cached_klass(class_name):
-            Module.cache_klass(class_name, self.__reflector.resolve(class_name))
+            Module.cache_klass(class_name, self.reflector.resolve(class_name))
         
         return Module.get_cached_klass(class_name)
 
@@ -170,25 +152,10 @@ class Module(object):
         else:
             klass = self.klass(class_or_class_name)
 
-        return self.__reflector.construct(klass, *map(lambda arg: self.arg(arg), args))
+        return self.reflector.construct(klass, *map(lambda arg: self.arg(arg), args))
 
     def null_complete(self, text, state):
         return None
-    
-    def reflector(self):
-        """
-        Get the internal Reflector instance in use.
-        """
-
-        return self.__reflector
-    
-    @classmethod
-    def reload(cls):
-        """
-        Reload all modules.
-        """
-        
-        cls.__loader.load(cls)
         
     def run(self, args):
         """
@@ -200,8 +167,8 @@ class Module(object):
 
         parser = self.__prepare_parser()
 
-        parser.description = self.__description()
-        parser.usage = self.__usage(parser)
+        parser.description = self.usage.formatted_description()
+        parser.usage = self.usage.formatted_usage(parser)
 
         if "-h" in args or "--help" in args:
             return parser.print_help()
@@ -219,22 +186,6 @@ class Module(object):
             self.clearObjectStore()
 
             return result
-
-    def __description(self):
-        """
-        Get the description of the module, for inclusion in usage information.
-        """
-
-        description = self.__class__.description + "\n\n"
-        description = description + "Examples:\n" + self.__class__.examples + "\n\n"
-        description = description + "Last Modified: " + self.__class__.date + "\n"
-        if isinstance(self.__class__.author, str):
-            description = description + "Credit: " + self.__class__.author + "\n"
-        else:
-            description = description + "Credit: " + ", ".join(self.__class__.author) + "\n"
-        description = description + "License: " + self.__class__.license + "\n\n"
-
-        return wrap(description, width=console.get_size()[0])
 
     def __parse_error(self, message):
         """
@@ -259,11 +210,65 @@ class Module(object):
         self.add_arguments(parser)
         
         return parser
+        
+
+class Usage(object):
     
-    def __usage(self, parser):
+    def __init__(self, module):
+        self.module = module.__class__
+    
+    def authors(self):
+        """
+        Returns a string containing the module authors, joined with ", " if
+        there is a list provided.
+        """
+        
+        if isinstance(self.module.author, str):
+            return self.module.author
+        else:
+            return ", ".join(self.module.author)
+        
+    def description(self):
+        """
+        Returns a cleaned up version of the module description, which removes
+        any leading indentation.
+        """
+        
+        return textwrap.dedent(self.module.description).strip()
+        
+    def examples(self):
+        """
+        Returns a cleaned up version of the module examples, which removes any
+        leading indentation.
+        """
+        
+        return textwrap.dedent(self.module.examples).strip()
+    
+    def formatted_description(self):
+        """
+        Build a formatted description of a module, including the description,
+        usage information, examples and other metadata.
+        """
+
+        description = self.description() + "\n\n" +\
+                        (self.has_examples() and "Examples:\n" + self.examples() + "\n\n" or "") +\
+                        "Last Modified: " + self.module.date + "\n" +\
+                        "Credit: " + self.authors() + "\n" +\
+                        "License: " + self.module.license + "\n\n"
+
+        return wrap(description, width=console.get_size()[0])
+    
+    def formatted_usage(self, parser):
         """
         Get usage information about the Module.
         """
 
-        return "run {} {}\n\n".format(self.__class__.fqmn(), " ".join(parser.format_usage().split(" ")[2:]))
+        return "run {} {}\n\n".format(self.module.fqmn(), " ".join(parser.format_usage().split(" ")[2:]))
         
+    def has_examples(self):
+        """
+        True, if this Usage has some examples. Otherwise, False.
+        """
+        
+        return self.examples() != ""
+    
