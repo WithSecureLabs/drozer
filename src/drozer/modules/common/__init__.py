@@ -15,6 +15,7 @@ from drozer.modules.common.package_manager import PackageManager
 from drozer.modules.common import path_completion
 from drozer.modules.common.provider import Provider
 from drozer.modules.common.shell import Shell
+from drozer.modules.common.shell_code import ShellCode
 from drozer.modules.common.strings import Strings
 from drozer.modules.common.superuser import SuperUser
 from drozer.modules.common.vulnerability import Vulnerability, VulnerabilityScanner
