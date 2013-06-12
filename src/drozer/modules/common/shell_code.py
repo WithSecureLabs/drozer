@@ -31,6 +31,8 @@ class ShellCode(object):
         
         self.__shell_code = []
         
+        arguments.server = self.parse_server(arguments.server)
+        
         self.generate(arguments)
         
         if arguments.format == "R":
@@ -54,3 +56,10 @@ class ShellCode(object):
     def hexifyString(self, string):
         return map(lambda c: ord(c), string)
     
+    def parse_server(self, server_string):
+        if server_string == None:
+            return ("10.0.2.2", 31415)
+        elif server_string.find(":") == -1:
+            return (server_string, 31415)
+        else:
+            return server_string.split(":", 1)
