@@ -8,6 +8,7 @@ import sys
 Commands = {    'console': 'start the drozer Console',
                 'payload': 'create custom drozer Agents',
                 'server': 'start a drozer Server',
+                'shellcode': 'generate shellcode to deploy drozer',
                 'ssl': 'manage drozer SSL key material' }
     
 def print_usage():
