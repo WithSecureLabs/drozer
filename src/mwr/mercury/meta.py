@@ -1,11 +1,11 @@
 
 name = "mercury"
 vendor = "MWR InfoSecurity"
-version = "2.2.1"
+version = "2.2.2"
 
 contact = "mercury@mwrinfosecurity.com"
 description = "Android Security Testing Framework"
-license = "MWR Code License v2"
+license = "BSD (3-clause)"
 keywords = "android security framework"
 url = "http://mwr.to/mercury"
 
