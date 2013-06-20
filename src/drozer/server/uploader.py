@@ -8,17 +8,17 @@ from drozer.server.receivers.http import HTTPRequest, HTTPResponse
 def delete(arguments, resource):
     factory = UploaderFactory(arguments, "DELETE", resource, "", None)
     if arguments.ssl != None:
-        reactor.connectSSL('localhost', arguments.port, factory, ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
+        reactor.connectSSL(arguments.server[0], arguments.server[1], factory, ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
     else:
-        reactor.connectTCP('localhost', arguments.port, factory)
+        reactor.connectTCP(arguments.server[0], arguments.server[1], factory)
     reactor.run()
 
 def upload(arguments, resource, data, magic=None):
     factory = UploaderFactory(arguments, "POST", resource, data, magic)
     if arguments.ssl != None:
-        reactor.connectSSL('localhost', arguments.port, factory, ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
+        reactor.connectSSL(arguments.server[0], arguments.server[1], factory, ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
     else:
-        reactor.connectTCP('localhost', arguments.port, factory)
+        reactor.connectTCP(arguments.server[0], arguments.server[1], factory)
     reactor.run()
 
 class Uploader(Protocol):
