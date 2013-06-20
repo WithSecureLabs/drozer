@@ -12,6 +12,7 @@ except ImportError:
 
 from drozer.server.heartbeat import heartbeat
 from drozer.server.protocols.byte_stream import ByteStream
+from drozer.server.protocols.shell import ShellCollector, ShellServer
 from drozer.server.files import FileProvider, FileResource
 from drozer.server.protocols.http import HTTP
 from drozer.server.protocols.drozerp import Drozer
@@ -67,6 +68,10 @@ class ProtocolSwitcher(Protocol):
 
         if data.startswith("DELETE") or data.startswith("GET") or data.startswith("POST"):
             return HTTP(self.factory.credentials, self.__file_provider)
+        elif data.startswith("COLLECT"):
+            return ShellCollector()
+        elif data.startswith("S"):
+            return ShellServer()
         elif self.__file_provider.has_magic_for(data.strip()):
             return ByteStream(self.__file_provider)
         else:
