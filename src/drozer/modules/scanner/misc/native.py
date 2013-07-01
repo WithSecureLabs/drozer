@@ -28,7 +28,7 @@ class Native(Module, common.ClassLoader, common.Filters, common.PackageManager):
                     self.__find_libraries(package, arguments.verbose, Native)
     
     def __find_libraries(self, package, verbose, Native):
-        libraries = Native.libraries(package.applicationInfo)
+        libraries = Native.list(package.applicationInfo)
 
         if len(libraries) > 0:
             self.stdout.write("Package: %s\n" % package.packageName)
