@@ -327,7 +327,7 @@ class Native(Module, common.ClassLoader, common.PackageManager):
         Native = self.loadClass("common/Native.apk", "Native")
         
         package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PROVIDERS)
-        libraries = Native.libraries(package.applicationInfo)
+        libraries = Native.list(package.applicationInfo)
 
         if len(libraries) > 0:
             self.stdout.write("Package: %s\n" % package.packageName)
