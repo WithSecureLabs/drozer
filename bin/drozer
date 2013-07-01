@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 Commands = {    'console': 'start the drozer Console',
+                'exploit': 'generate an exploit to deploy drozer',
                 'payload': 'create custom drozer Agents',
                 'server': 'start a drozer Server',
                 'shellcode': 'generate shellcode to deploy drozer',
