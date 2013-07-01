@@ -223,6 +223,7 @@ Finding content providers that do not require permissions to read/write:
         self.stdout.write("  Authority: %s\n" % authority)
         self.stdout.write("    Read Permission: %s\n" % provider.readPermission)
         self.stdout.write("    Write Permission: %s\n" % provider.writePermission)
+        self.stdout.write("    Content Provider: %s\n" % provider.name)
         self.stdout.write("    Multiprocess Allowed: %s\n" % provider.multiprocess)
         self.stdout.write("    Grant Uri Permissions: %s\n" % provider.grantUriPermissions)
         if provider.uriPermissionPatterns != None:
