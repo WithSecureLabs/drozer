@@ -62,4 +62,6 @@ class ShellCode(object):
         elif server_string.find(":") == -1:
             return (server_string, 31415)
         else:
-            return server_string.split(":", 1)
+            (host, port) = server_string.split(":", 1)
+            
+            return (host, int(port))
