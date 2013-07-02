@@ -37,7 +37,7 @@ class Uploader(Protocol):
         response = HTTPResponse.parse(data)
         
         if response.status == 201:
-            print response.body
+            print "Successfully Uploaded %s." % response.headers["Location"]
         else:
             print response.headers
             print response.body

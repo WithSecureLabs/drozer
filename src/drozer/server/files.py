@@ -50,6 +50,22 @@ class Resource(object):
         return None
 
 
+class CreatedResource(Resource):
+    
+    def __init__(self, resource):
+        Resource.__init__(self, resource, False)
+        
+        self.code = 201
+        self.description = "Location: %s"
+        self.resource = resource
+    
+    def getBody(self):
+        return "<h1>%d %s</h1><p>%s</p><hr/><p>drozer Server</p>" % (self.code, HTTPResponse(status=self.code).status_text(), self.description % self.resource)
+    
+    def getResponse(self):
+        return HTTPResponse(status=self.code, headers={ "Location": self.resource }, body=self.getBody())
+        
+    
 class ErrorResource(Resource):
     
     def __init__(self, resource, code, description):

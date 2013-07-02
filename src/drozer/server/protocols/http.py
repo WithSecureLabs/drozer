@@ -2,7 +2,7 @@ from base64 import b64decode
 from logging import getLogger
 from twisted.internet.protocol import Protocol
 
-from drozer.server.files import FileProvider, ErrorResource
+from drozer.server.files import FileProvider, CreatedResource, ErrorResource
 from drozer.server.receivers.http import HttpReceiver, HTTPResponse
 
 class HTTP(HttpReceiver):
@@ -78,7 +78,7 @@ class HTTP(HttpReceiver):
                     if magic != None and self.__file_provider.has_magic_for(magic) and self.__file_provider.get_by_magic(magic).resource != request.resource:
                         resource = ErrorResource(request.resource, 409, "Could not create %s. The specified magic has already been assigned to another resource.")
                     elif self.__file_provider.create(request.resource, request.body, magic=magic):
-                        resource = ErrorResource(request.resource, 201, "Location: %s")
+                        resource = CreatedResource(request.resource)
                     else:
                         resource = ErrorResource(request.resource, 500, "The server encountered an error whilst creating the resource %s.")
         
