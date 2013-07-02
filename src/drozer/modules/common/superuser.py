@@ -52,6 +52,13 @@ class SuperUser(file_system.FileSystem):
         
         return (self.md5sum("/system/bin/su") == fs.md5sum(self._localPathMinimalSu()))
 
+    def suExec(self, command):
+        """
+        Execute a command as root, using minimal-su
+        """
+
+        self.shellExec("su -c \"" + command + "\"")
+
     def uploadMinimalSu(self):
         """
         Upload minimal su to the Agent.

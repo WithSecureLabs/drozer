@@ -13,15 +13,15 @@ WARNING: This minimal version of the su binary is completely unprotected, meanin
     dz> run tools.setup.minimalsu
     [*] Uploaded minimal-su
     [*] Uploaded install-minimal-su.sh
-    [*] chmod 770 /data/data/com.mwr.droidhg.agent/install-minimal-su.sh
-    [*] Ready! Execute /data/data/com.mwr.droidhg.agent/install-minimal-su.sh from root context to install su
+    [*] chmod 770 /data/data/com.mwr.dz/install-minimal-su.sh
+    [*] Ready! Execute /data/data/com.mwr.dz/install-minimal-su.sh from root context to install su
     
     ...insert root exploit here...
-    u0_a95@android:/data/data/com.mwr.droidhg.agent # /data/data/com.mwr.droidhg.agent/install-minimal-su.sh
+    u0_a95@android:/data/data/com.mwr.dz # /data/data/com.mwr.dz/install-minimal-su.sh
     Done. You can now use `su` from a shell.
-    u0_a95@android:/data/data/com.mwr.droidhg.agent # exit
-    u0_a95@android:/data/data/com.mwr.droidhg.agent $ su
-    u0_a95@android:/data/data/com.mwr.droidhg.agent #
+    u0_a95@android:/data/data/com.mwr.dz # exit
+    u0_a95@android:/data/data/com.mwr.dz $ su
+    u0_a95@android:/data/data/com.mwr.dz #
     """
     author = "Tyrone (@mwrlabs)"
     date = "2013-04-22"
@@ -44,11 +44,11 @@ WARNING: This minimal version of the su binary is completely unprotected, meanin
         # Upload install-minimal-su.sh    
         if self.uploadMinimalSuInstallScript():
             self.stdout.write("[+] Uploaded install-minimal-su.sh\n")
-            self.stdout.write("[+] chmod 770 /data/data/com.mwr.droidhg.agent/install-minimal-su.sh\n")
+            self.stdout.write("[+] chmod 770 %s/install-minimal-su.sh\n" % self.workingDir())
         else:
             self.stdout.write("[-] Upload failed (install-minimal-su.sh) - aborting\n")
             return
         
         # Ready to be used from root context
-        self.stdout.write("[+] Ready! Execute /data/data/com.mwr.droidhg.agent/install-minimal-su.sh from root context to install minimal-su\n")
+        self.stdout.write("[+] Ready! Execute %s/install-minimal-su.sh from root context to install minimal-su\n" % self.workingDir())
 
