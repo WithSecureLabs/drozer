@@ -28,8 +28,6 @@ class HttpReceiver(StreamReceiver):
 
         if message is not None:
             self.requestReceived(message)
-        else:
-            print "no message"
             
 
 class HTTPMessage:
@@ -192,6 +190,19 @@ class HTTPResponse(HTTPMessage):
         slices = line.split(" ")
         
         return (slices[0], int(slices[1]))
+    
+    @classmethod
+    def readFrom(cls, socket):
+        """
+        Try to read an HTTP Response from a Socket
+        """
+        
+        resp = ""
+        
+        while resp.find("\r\n\r\n") == -1:
+            resp += socket.recv(10)
+        
+        return HTTPResponse.parse(resp)
     
     def status_text(self):
         return { 100: "Continue",
