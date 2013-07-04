@@ -15,5 +15,5 @@ class ByteStream(Protocol):
         self.transport.loseConnection()
         
     def log(self, method, resource):
-        print "%s - %s - %s" % (strftime("%Y-%M-%D %H:%M:%S %Z"), method, resource)
+        print "%s - %s - %s" % (strftime("%Y-%m-%d %H:%M:%S %Z"), method, resource)
         

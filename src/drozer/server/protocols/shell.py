@@ -1,3 +1,5 @@
+from time import strftime
+
 from twisted.internet.protocol import Protocol
 
 shells = {}
@@ -44,8 +46,13 @@ class ShellServer(Protocol):
         peer = self.transport.getPeer()
         
         shells["%s:%d" % (str(peer[1]), peer[2])] = self
+        
+        self.log("shell", "accepted shell from %s:%d" % (str(peer[1]), peer[2]))
     
     def dataReceived(self, data):
         if self.collector != None:
             self.collector.transport.write(data)
-            
+        
+    def log(self, method, resource):
+        print "%s - %s - %s" % (strftime("%Y-%m-%d %H:%M:%S %Z"), method, resource)
+        
