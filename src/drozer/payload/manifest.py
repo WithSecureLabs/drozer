@@ -16,10 +16,13 @@ class Endpoint(object):
         self.ts_path = data['ts_path']
     
     def put_server(self, server):
-        if server.find(":") > -1:
-            self.host, self.port = server.split(":")
+        if isinstance(server, tuple):
+            self.host, self.port = server
         else:
-            self.host = server
+            if server.find(":") > -1:
+                self.host, self.port = server.split(":")
+            else:
+                self.host = server
     
     def write(self):
         h = open(self.__path, 'w')
