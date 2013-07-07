@@ -31,7 +31,8 @@ class ShellCode(object):
         
         self.__shell_code = []
         
-        arguments.server = self.parse_server(arguments.server)
+        if not isinstance(arguments.server, tuple):
+            arguments.server = self.parse_server(arguments.server)
         
         self.generate(arguments)
         
