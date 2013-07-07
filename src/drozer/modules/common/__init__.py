@@ -7,6 +7,7 @@ package manager and some templates for modules.
 from drozer.modules.common.assets import Assets
 from drozer.modules.common.binding import ServiceBinding
 from drozer.modules.common.busy_box import BusyBox
+from drozer.modules.common.exploit import Exploit
 from drozer.modules.common.file_system import FileSystem
 from drozer.modules.common.filtering import Filters
 from drozer.modules.common.formatter import TableFormatter
