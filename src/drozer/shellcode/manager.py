@@ -1,4 +1,6 @@
-from mwr.common import cli
+import sys
+
+from mwr.common import cli, console
 
 from drozer.shellcode import builder
 
@@ -35,5 +37,7 @@ class ShellCodeManager(cli.Base):
     def do_list(self, arguments):
         """list the available shellcode modules"""
         
-        print builder.Builder().modules()
+        shellcode_builder = builder.Builder() 
+        
+        sys.stdout.write(console.format_dict(dict(map(lambda m: [m, shellcode_builder.module(m).name], shellcode_builder.modules()))) + "\n")
         

