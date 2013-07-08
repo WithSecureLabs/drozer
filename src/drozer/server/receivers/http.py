@@ -150,6 +150,15 @@ class HTTPRequest(HTTPMessage):
                         return None
             return message
     
+    def writeTo(self, socket):
+        request_data = str(self)
+        sent = 0
+        
+        while sent < len(request_data):
+            sent += socket.send(request_data[sent:])
+        
+        return sent
+    
     def __str__(self):
         return "%s %s %s\r\n%s\r\n\r\n%s" % (self.verb, self.resource, self.version, self.format_headers(), self.body)
 

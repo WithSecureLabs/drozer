@@ -6,15 +6,16 @@ from drozer.server.receivers.http import HTTPRequest, HTTPResponse
 from drozer.ssl.provider import Provider
 
 def delete(arguments, resource):
-    pass
-    #factory = UploaderFactory(arguments, "DELETE", resource, "", None)
-    #if arguments.ssl != None:
-    #    reactor.connectSSL(arguments.server[0], arguments.server[1], factory, ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
-    #else:
-    #    reactor.connectTCP(arguments.server[0], arguments.server[1], factory)
-    #reactor.run()
+    sock = get_socket(arguments)
+    
+    request = HTTPRequest(verb="DELETE", resource=resource)
+    
+    request.writeTo(sock)
+    response = HTTPResponse.readFrom(sock)
+    
+    return response.code == 200
 
-def upload(arguments, resource, data, magic=None, headers=None):
+def get_socket(arguments):
     sock = socket()
     
     if arguments.ssl:
@@ -25,6 +26,11 @@ def upload(arguments, resource, data, magic=None, headers=None):
     sock.settimeout(90.0)
     sock.connect(arguments.server)
     
+    return sock
+    
+def upload(arguments, resource, data, magic=None, headers=None):
+    sock = get_socket(arguments)
+    
     request = HTTPRequest(verb="POST", resource=resource, headers=headers, body=data)
     if arguments.credentials != None:
         request.headers["Authorization"] = "Basic %s" % b64encode(":".join(arguments.credentials))
@@ -32,12 +38,7 @@ def upload(arguments, resource, data, magic=None, headers=None):
     if magic != None:
         request.headers["X-Drozer-Magic"] = magic
         
-    request_data = str(request)
-    sent = 0
-    
-    while sent < len(request_data):
-        sent += sock.send(request_data[sent:])
-    
+    request.writeTo(sock)
     response = HTTPResponse.readFrom(sock)
 
     return response.status == 201
