@@ -55,7 +55,7 @@ class ProtocolSwitcher(Protocol):
     __web_root = path.join(path.dirname(__file__), "web_root")
     __file_provider = FileProvider({ "/": FileResource("/", path.join(__web_root, "index.html"), magic="I", reserved=True, type="text/html"),
                                      "/index.html": FileResource("/index.html", path.join(__web_root, "index.html"), reserved=True, type="text/html"),
-                                     "/agent-std.apk": FileResource("/agent-std.apk", path.join(__web_root, "agent-std.apk"), magic="A", type="application/vnd.android.package-archive") })
+                                     "/agent-std.apk": FileResource("/agent-std.apk", path.join(__web_root, "agent-std.apk"), type="application/vnd.android.package-archive") })
     __logger = getLogger(__name__)
     
     def __init__(self):
