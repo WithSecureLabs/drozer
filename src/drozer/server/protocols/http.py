@@ -81,15 +81,19 @@ class HTTP(HttpReceiver):
                         magic = request.headers["X-Drozer-Magic"]
                     else:
                         magic = None
+                    if "X-Drozer-Vary-UA" in request.headers and request.headers["X-Drozer-Vary-UA"].startswith("true"):
+                        multipart = request.headers["X-Drozer-Vary-UA"].split(";")[1].strip()
+                    else:
+                        multipart = None
                     
                     if magic != None and self.__file_provider.has_magic_for(magic) and self.__file_provider.get_by_magic(magic).resource != request.resource:
                         resource = ErrorResource(request.resource, 409, "Could not create %s. The specified magic has already been assigned to another resource.")
-                    elif self.__file_provider.create(request.resource, request.body, magic=magic):
+                    elif self.__file_provider.create(request.resource, request.body, magic=magic, multipart=multipart):
                         resource = CreatedResource(request.resource)
                     else:
                         resource = ErrorResource(request.resource, 500, "The server encountered an error whilst creating the resource %s.")
         
-        self.transport.write(str(resource.getResponse()))
+        self.transport.write(str(resource.getResponse(request)))
         self.transport.loseConnection()
         
     def log(self, method, resource):

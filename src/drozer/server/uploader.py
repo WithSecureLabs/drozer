@@ -14,8 +14,7 @@ def delete(arguments, resource):
     #    reactor.connectTCP(arguments.server[0], arguments.server[1], factory)
     #reactor.run()
 
-def upload(arguments, resource, data, magic=None):
-    #factory = UploaderFactory(arguments, "POST", resource, data, magic)
+def upload(arguments, resource, data, magic=None, headers=None):
     sock = socket()
     
     if arguments.ssl:
@@ -26,10 +25,7 @@ def upload(arguments, resource, data, magic=None):
     sock.settimeout(90.0)
     sock.connect(arguments.server)
     
-    #if arguments.ssl:
-        #trust_callback(provider, sock.getpeercert(True), sock.getpeername())
-    
-    request = HTTPRequest(verb="POST", resource=resource, body=data)
+    request = HTTPRequest(verb="POST", resource=resource, headers=headers, body=data)
     if arguments.credentials != None:
         request.headers["Authorization"] = "Basic %s" % b64encode(":".join(arguments.credentials))
     request.headers["Content-Length"] = len(data)

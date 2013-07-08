@@ -1,3 +1,5 @@
+import re
+
 from drozer.server.receivers.http import HTTPResponse
 
 class FileProvider(object):
@@ -5,10 +7,15 @@ class FileProvider(object):
     def __init__(self, store={}):
         self.__store = store
     
-    def create(self, resource, body, magic=None):
-        self.__store[resource] = InMemoryResource(resource, body, magic=magic)
-        
-        return self.__store[resource].getBody() == body
+    def create(self, resource, body, magic=None, multipart=None):
+        if multipart == None:
+            self.__store[resource] = InMemoryResource(resource, body, magic=magic)
+            
+            return self.__store[resource].getBody() == body
+        else:
+            self.__store[resource] = InMemoryMultipartResource(resource, body, boundary=multipart.split("=")[1], magic=magic)
+            
+            return self.__store[resource].valid()
         
     def delete(self, resource):
         del self.__store[resource]
@@ -46,7 +53,7 @@ class Resource(object):
     def getBody(self):
         return None
     
-    def getResponse(self):
+    def getResponse(self, request):
         return None
 
 
@@ -62,7 +69,7 @@ class CreatedResource(Resource):
     def getBody(self):
         return "<h1>%d %s</h1><p>%s</p><hr/><p>drozer Server</p>" % (self.code, HTTPResponse(status=self.code).status_text(), self.description % self.resource)
     
-    def getResponse(self):
+    def getResponse(self, request):
         return HTTPResponse(status=self.code, headers={ "Location": self.resource }, body=self.getBody())
         
     
@@ -77,7 +84,7 @@ class ErrorResource(Resource):
     def getBody(self):
         return "<h1>%d %s</h1><p>%s</p><hr/><p>drozer Server</p>" % (self.code, HTTPResponse(status=self.code).status_text(), self.description % self.resource)
     
-    def getResponse(self):
+    def getResponse(self, request):
         return HTTPResponse(status=self.code, body=self.getBody())
         
         
@@ -92,11 +99,45 @@ class FileResource(Resource):
     def getBody(self):
         return open(self.path).read()
             
-    def getResponse(self):
+    def getResponse(self, request):
         response = HTTPResponse(status=200, body=self.getBody())
         response.headers["Content-Type"] = self.type
         
         return response
+
+class InMemoryMultipartResource(Resource):
+    
+    def __init__(self, resource, body, boundary, magic=None):
+        Resource.__init__(self, resource, magic=magic, reserved=False)
+        
+        self.body = {}
+        self.__valid = False
+        
+        for part in re.split("^--" + boundary + "; ([^$]+)$", body):
+            if part.strip() == "":
+                continue
+            
+            self.body[part[0:part.find("\n")]]  = part[part.find("\n")+1:]
+        
+        self.__valid = len(self.body) > 0
+    
+    def getBody(self, user_agent):
+        for k in self.body:
+            if re.match(k, user_agent) != None:
+                return self.body[k]
+            
+        return None
+    
+    def getResponse(self, request):
+        body = self.getBody(request.headers['User-Agent'])
+        
+        if body != None:
+            return HTTPResponse(status=200, body=body)
+        else:
+            return ErrorResource(request.resource, 404, "The resource %s could not be found on this server.").getResponse(request)
+    
+    def valid(self):
+        return self.__valid
     
 class InMemoryResource(Resource):
     
@@ -108,6 +149,6 @@ class InMemoryResource(Resource):
     def getBody(self):
         return self.body
             
-    def getResponse(self):
+    def getResponse(self, request):
         return HTTPResponse(status=200, body=self.getBody())
     
