@@ -105,7 +105,10 @@ class Configuration(object):
         Returns the path to the configuration file.
         """
         
-        return os.path.sep.join([os.path.expanduser("~"), ".drozer_config"])
+        if os.path.exists(os.path.sep.join([".", ".drozer_config"])):
+            return os.path.sep.join([".", ".drozer_config"])
+        else:
+            return os.path.sep.join([os.path.expanduser("~"), ".drozer_config"])
     
     @classmethod
     def set(cls, section, key, value):
