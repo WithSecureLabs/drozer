@@ -35,8 +35,13 @@ class ClassLoader(object):
         """
         Get a working path, to which the compiled will be unpacked.
         """
-
-        return self.getContext().getCacheDir().getAbsolutePath().native()
+        
+        if self.has_context():
+            # if context is available, we will read the cache directory from it
+            return self.getContext().getCacheDir().getAbsolutePath().native()
+        else:
+            # otherwise, we must make a best effort guess
+            return self.new("java.io.File", ".").getCanonicalPath().native()
 
     def __get_constructor(self):
         """
