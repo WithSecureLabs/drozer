@@ -31,6 +31,7 @@ class Session(cmd.Cmd):
         cmd.Cmd.__init__(self)
 
         self.__base = ""
+        self.__has_context = None
         self.__module_pushed_completers = 0
         self.__permissions = None
         self.__server = server
@@ -92,6 +93,12 @@ class Session(cmd.Cmd):
         else:
             return map(lambda m: m[len(self.__base):], filter(lambda m: m.startswith(self.__base + text), self.__namespaces()))
 
+    def context(self):
+        if self.has_context():
+            return self.reflector.resolve("com.mwr.dz.Agent").getContext()
+        else:
+            return None
+        
     def do_cd(self, args):
         """
         usage: cd NAMESPACE
@@ -265,14 +272,18 @@ class Session(cmd.Cmd):
             self.do_help("list")
             return
         
+        include_unsupported = False
+        if "--unsupported" in argv:
+            argv.remove("--unsupported")
+            
+            include_unsupported = True
+        
         term = len(argv) > 0 and argv[0] or None
         
         s_modules = self.__modules.all(contains=term, permissions=self.permissions(), prefix=self.__base)
         
-        if "--unsupported" in argv:
-            argv.remove("--unsupported")
-            
-            u_modules = filter(lambda m: not m in s_modules, self.__modules.all(contains=term, permissions=self.permissions(), prefix=self.__base))
+        if include_unsupported:
+            u_modules = filter(lambda m: not m in s_modules, self.__modules.all(contains=term, permissions=None, prefix=self.__base))
         else:
             u_modules = []
 
@@ -331,8 +342,14 @@ class Session(cmd.Cmd):
         Prints out the permissions granted to the agent being used in this session.
         """
         
-        for permission in sorted(self.permissions()):
-            self.stdout.write("%s\n" % (permission))
+        if self.has_context():
+            self.stdout.write("Has ApplicationContext: YES\n")
+            self.stdout.write("Available Permissions:\n")
+            for permission in sorted(self.permissions()):
+                if permission != "com.mwr.dz.permissions.GET_CONTEXT":
+                    self.stdout.write(" - %s\n" % (permission))
+        else:
+            self.stdout.write("Has ApplicationContext: NO\n")
         
     def do_run(self, args):
         """
@@ -476,21 +493,30 @@ class Session(cmd.Cmd):
         """
         
         self.stdout.write(wrap(textwrap.dedent(self.help_intents.__doc__).strip() + "\n\n", console.get_size()[0]))
-        
+    
+    def has_context(self):
+        if self.__has_context == None:
+            self.__has_context = not self.reflector.resolve("com.mwr.dz.Agent").getContext() == None
+            
+        return self.__has_context == True
+    
     def permissions(self):
         """
         Retrieves the set of permissions that we have in this session.
         """
         
-        if self.__permissions == None:
-            context = self.reflector.resolve("com.mwr.dz.Agent").getContext()
+        if self.__permissions == None and self.has_context():
             pm = self.reflector.resolve("android.content.pm.PackageManager")
             
-            package = context.getPackageManager().getPackageInfo("com.mwr.dz", pm.GET_PERMISSIONS)
+            package = self.context().getPackageManager().getPackageInfo("com.mwr.dz", pm.GET_PERMISSIONS)
             if package.requestedPermissions != None:
                 self.__permissions = map(lambda p: str(p), package.requestedPermissions)
             else:
                 self.__permissions = []
+            
+            self.__permissions.append("com.mwr.dz.permissions.GET_CONTEXT")
+        elif self.__permissions == None:
+            self.__permissions = []
         
         return self.__permissions
         
