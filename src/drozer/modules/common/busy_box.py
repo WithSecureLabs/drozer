@@ -7,7 +7,7 @@ class BusyBox(shell.Shell):
     Utility methods for installing and using Busybox on the Agent.
     """
 
-    def __agentPath(self):
+    def busyboxPath(self):
         """
         Get the path to which Busybox is installed on the Agent.
         """
@@ -26,27 +26,27 @@ class BusyBox(shell.Shell):
         Execute a command using Busybox.
         """
 
-        return self.shellExec("%s %s" % (self.__agentPath(), command))
+        return self.shellExec("%s %s" % (self.busyboxPath(), command))
 
     def isBusyBoxInstalled(self):
         """
         Test whether Busybox is installed on the Agent.
         """
 
-        return self.exists(self.__agentPath())
+        return self.exists(self.busyboxPath())
 
     def installBusyBox(self):
         """
         Install Busybox on the Agent.
         """
 
-        if self.ensureDirectory(self.__agentPath()[0:self.__agentPath().rindex("/")]):
-            bytes_copied = self.uploadFile(self._localPath(), self.__agentPath())
+        if self.ensureDirectory(self.busyboxPath()[0:self.busyboxPath().rindex("/")]):
+            bytes_copied = self.uploadFile(self._localPath(), self.busyboxPath())
     
             if bytes_copied != os.path.getsize(self._localPath()):
                 return False
             else:
-                self.shellExec("chmod 775 " + self.__agentPath())
+                self.shellExec("chmod 775 " + self.busyboxPath())
                 
                 return True
         else:

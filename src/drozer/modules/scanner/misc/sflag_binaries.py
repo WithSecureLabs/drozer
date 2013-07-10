@@ -26,12 +26,12 @@ Discovered suid/sgid files in /system:
 
     def execute(self, arguments):
         if self.isBusyBoxInstalled():
-            command = "busybox find %s -type f \( -perm -04000 -o -perm -02000 \) \-exec ls {} \;" % arguments.target
+            command = self.busyboxPath() + " find %s -type f \( -perm -04000 -o -perm -02000 \) \-exec ls {} \;" % arguments.target
             privileged = arguments.privileged
             
             if privileged:
                 if self.isAnySuInstalled():
-                    command = "su -c \"%s\"" % command
+                    command = self.suPath() + " -c \"%s\"" % command
                 else:
                     self.stdout.write("su is not installed...reverting back to unprivileged mode\n")
                     privileged = False

@@ -9,7 +9,7 @@ class SuperUser(file_system.FileSystem):
     of "minimal su" on the Agent.
     """
 
-    def __agentPathMinimalSu(self):
+    def suPath(self):
         """
         Get the path to which su is uploaded on the Agent.
         """
@@ -67,7 +67,7 @@ class SuperUser(file_system.FileSystem):
         # Remove existing uploads of su
         self.shellExec("rm %s/su" % (self.workingDir()))
 
-        bytes_copied = self.uploadFile(self._localPathMinimalSu(), self.__agentPathMinimalSu())
+        bytes_copied = self.uploadFile(self._localPathMinimalSu(), self.suPath())
 
         if bytes_copied == os.path.getsize(self._localPathMinimalSu()):
             return True

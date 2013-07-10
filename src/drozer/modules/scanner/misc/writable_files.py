@@ -21,12 +21,12 @@ Discovered world-writable files in /data:
 
     def execute(self, arguments):
         if self.isBusyBoxInstalled():
-            command = "busybox find %s \( -type b -o -type c -o -type f -o -type s \) -perm -o=w \-exec ls {} \;" % arguments.target
+            command = self.busyboxPath() + " find %s \( -type b -o -type c -o -type f -o -type s \) -perm -o=w \-exec ls {} \;" % arguments.target
             privileged = arguments.privileged
             
             if privileged:
                 if self.isAnySuInstalled():
-                    command = "su -c \"%s\"" % command
+                    command = self.suPath() + " -c \"%s\"" % command
                 else:
                     self.stdout.write("su is not installed...reverting back to unprivileged mode\n")
                     privileged = False

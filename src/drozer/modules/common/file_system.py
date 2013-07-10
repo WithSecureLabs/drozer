@@ -176,7 +176,12 @@ class FileSystem(object):
         Get the full path to the Agent's working directory.
         """
 
-        return str(self.getContext().getApplicationInfo().dataDir)
+        if self.has_context():
+            # if context is available, we will ask it for the data directory
+            return str(self.getContext().getApplicationInfo().dataDir)
+        else:
+            # otherwise, we must make a best effort guess
+            return self.new("java.io.File", ".").getCanonicalPath().native()
 
     def writeFile(self, destination, data, block_size=65536):
         """
