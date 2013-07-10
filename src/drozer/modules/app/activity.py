@@ -1,3 +1,5 @@
+from xml.etree import ElementTree
+
 from drozer import android
 from drozer.modules import common, Module
 
@@ -39,7 +41,7 @@ class ForIntent(Module, common.PackageManager):
                            "extras", "flags", "mimetype"]:
             return android.Intent.get_completion_suggestions(action, text, **kwargs)
 
-class Info(Module, common.Filters, common.PackageManager):
+class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.PackageManager):
     
     name = "Gets information about exported activities."
     description = "Gets information about exported activities."
@@ -62,6 +64,7 @@ class Info(Module, common.Filters, common.PackageManager):
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", default=None, help="specify the package to inspect")
         parser.add_argument("-f", "--filter", default=None, help="specify a filter term for the activity name")
+        parser.add_argument("-i", "--show-intent-filters", action="store_true", default=False, help="specify whether to include intent filters")
         parser.add_argument("-u", "--unexported", action="store_true", default=False, help="include activities that are not exported")
         parser.add_argument("-v", "--verbose", action="store_true", default=False, help="be verbose")
 
@@ -73,6 +76,16 @@ class Info(Module, common.Filters, common.PackageManager):
             package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_ACTIVITIES)
 
             self.__get_activities(arguments, package)
+    
+    def __find_intent_filters(self, activity):
+        filters = set([])
+
+        xml = ElementTree.fromstring(self.getAndroidManifest(activity.packageName))
+
+        filters.update(map(self.__unpack_intent, xml.findall("./application/activity[@name='" + str(activity.name)[len(activity.packageName):] + "']/intent-filter")))
+        filters.update(map(self.__unpack_intent, xml.findall("./application/activity[@name='" + str(activity.name) + "']/intent-filter")))
+        
+        return filters
 
     def __get_activities(self, arguments, package):
         activities = self.match_filter(package.activities, 'name', arguments.filter)
@@ -85,20 +98,20 @@ class Info(Module, common.Filters, common.PackageManager):
 
             if not arguments.unexported:
                 for activity in exported_activities:
-                    self.__print_activity(package, activity, "  ")
+                    self.__print_activity(package, activity, "  ", arguments.show_intent_filters)
             else:
                 self.stdout.write("  Exported Activities:\n")
                 for activity in exported_activities:
-                    self.__print_activity(package, activity, "    ")
+                    self.__print_activity(package, activity, "    ", arguments.show_intent_filters)
                 self.stdout.write("  Hidden Activities:\n")
                 for activity in hidden_activities:
-                    self.__print_activity(package, activity, "    ")
+                    self.__print_activity(package, activity, "    ", arguments.show_intent_filters)
             self.stdout.write("\n")
         elif arguments.package or arguments.verbose:
             self.stdout.write("Package: %s\n" % package.packageName)
             self.stdout.write("  No matching activities.\n\n")
     
-    def __print_activity(self, package, activity, prefix):
+    def __print_activity(self, package, activity, prefix, include_intent_filters):
         self.stdout.write("%s%s\n" % (prefix, activity.name))
         
         if(activity.parentActivityName != None):
@@ -107,6 +120,25 @@ class Info(Module, common.Filters, common.PackageManager):
             self.stdout.write("%s  Permission: %s\n" % (prefix, activity.permission))
         if(activity.targetActivity != None):
             self.stdout.write("%s  Target Activity: %s\n" % (prefix, activity.targetActivity))
+        if include_intent_filters:
+            self.stdout.write("%s  Intent Filters:\n" % (prefix))
+            intents = self.__find_intent_filters(activity)
+            
+            if len(intents) > 0:
+                for intent in intents:
+                    for key in ["action", "category", "component", "extras", "flags", "mimetype"]:
+                        if getattr(intent, key) != None:
+                            self.stdout.write("%s    %s: %s\n" % (prefix, key, getattr(intent, key)))
+            else:
+                self.stdout.write("      None.\n")
+    
+    def __unpack_intent(self, element):
+        intent = android.Intent()
+        
+        for child in element.getchildren():
+            setattr(intent, child.tag, child.attrib['name'])
+        
+        return intent
                 
 class Start(Module):
 
