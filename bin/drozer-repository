@@ -3,10 +3,10 @@
 import os
 import sys
 
-from mwr.droidhg.repoman.repository_builder import RepositoryBuilder
+from drozer.repoman.repository_builder import RepositoryBuilder
 
 if len(sys.argv) != 2:
-    print "usage: mercury-build-repository TARGET"
+    print "usage: drozer-repository TARGET"
     sys.exit(-1)
 else:
 	RepositoryBuilder(os.getcwd(), sys.argv[1]).build()
