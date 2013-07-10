@@ -123,6 +123,13 @@ class Module(object):
         """
 
         return self.klass('com.mwr.dz.Agent').getContext()
+    
+    def has_context(self):
+        """
+        Test if Context is available to this module.
+        """
+        
+        return not self.getContext() == None
 
     def klass(self, class_name):
         """
