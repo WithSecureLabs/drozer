@@ -20,6 +20,7 @@ class Permissions(Module, common.PackageManager):
     date = "2012-12-20"
     license = "MWR Code License"
     path = ["information"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def execute(self, arguments):
         

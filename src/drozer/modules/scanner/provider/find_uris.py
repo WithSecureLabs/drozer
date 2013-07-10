@@ -11,6 +11,7 @@ class FindUris(Module, common.FileSystem, common.PackageManager, common.Provider
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["scanner", "provider"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", help="specify a package to search")

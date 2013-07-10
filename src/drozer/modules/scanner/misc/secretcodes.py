@@ -9,6 +9,7 @@ class SecretCodes(Module, common.ClassLoader, common.PackageManager):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["scanner", "misc"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-v", "--verbose", action="store_true", default=False, help="be verbose")

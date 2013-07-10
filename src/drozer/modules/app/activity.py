@@ -17,6 +17,7 @@ class ForIntent(Module, common.PackageManager):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "activity"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         android.Intent.addArgumentsTo(parser)
@@ -56,6 +57,7 @@ class Info(Module, common.Filters, common.PackageManager):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "activity"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", default=None, help="specify the package to inspect")
@@ -136,6 +138,7 @@ For more information on how to formulate an Intent, type 'help intents'."""
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "activity"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         android.Intent.addArgumentsTo(parser)

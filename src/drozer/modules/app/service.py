@@ -29,6 +29,7 @@ List exported services with no permissions required to interact with it:
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "service"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", default=None, help="specify the package to inspect")
@@ -99,6 +100,7 @@ NB: by default, this module will wait 20 seconds for a reply."""
     date = "2013-05-20"
     license = "MWR Code License"
     path = ["app", "service"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
     
     def add_arguments(self, parser):
         parser.add_argument("package", help="the package containing the target service")
@@ -153,6 +155,7 @@ For more information on how to formulate an Intent, type 'help intents'."""
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "service"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         android.Intent.addArgumentsTo(parser)
@@ -179,6 +182,7 @@ class Stop(Module):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "service"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         android.Intent.addArgumentsTo(parser)

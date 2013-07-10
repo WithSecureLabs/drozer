@@ -19,6 +19,7 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "package"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("package", help="the identifier of the package to inspect")
@@ -93,6 +94,7 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "package"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", default=None, help="the identifier of the package to inspect")
@@ -166,6 +168,7 @@ class LaunchIntent(Module, common.PackageManager):
     date = "2013-03-06"
     license = "MWR Code License"
     path = ["app", "package"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("package", help="the identifier of the package to inspect")
@@ -236,6 +239,7 @@ class List(Module, common.PackageManager):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "package"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-d", "--defines-permission", default=None, help="filter by the permissions a package defines")
@@ -274,6 +278,7 @@ class Manifest(Module, common.Assets):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "package"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("package", help="the identifier of the package")
@@ -319,6 +324,7 @@ class Native(Module, common.ClassLoader, common.PackageManager):
     date = "2013-03-23"
     license = "MWR Code License"
     path = ["app", "package"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("package", help="the identifier of the package")
@@ -371,6 +377,7 @@ class SharedUID(Module, common.PackageManager):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "package"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-u", "--uid", default=None, help="specify uid")

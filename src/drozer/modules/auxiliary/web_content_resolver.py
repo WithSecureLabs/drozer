@@ -20,6 +20,7 @@ class WebContentResolver(Module, common.PackageManager, common.Provider):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["auxiliary"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-p", "--port", default=8080, help="the port to start the WebContentResolver on")

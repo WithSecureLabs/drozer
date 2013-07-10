@@ -9,6 +9,7 @@ class Debuggable(Module, common.Filters, common.PackageManager):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["app", "package"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     FLAG_DEBUGGABLE = 0x00000002
 
