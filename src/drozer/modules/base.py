@@ -31,6 +31,7 @@ class Module(object):
 
     def __init__(self, session):
         if self.module_type == "drozer":
+            self.modules = session.modules
             self.reflector = session.reflector
             self.stdout = session.stdout
             self.stderr = session.stderr
