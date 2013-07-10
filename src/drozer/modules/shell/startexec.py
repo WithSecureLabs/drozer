@@ -11,6 +11,7 @@ class Start(Module, common.Shell):
     date = "2012-11-06"
     license = "MWR Code License"
     path = ["shell"]
+    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         pass
