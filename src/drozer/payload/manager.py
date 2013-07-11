@@ -20,7 +20,6 @@ class PayloadManager(cli.Base):
         """build a drozer Agent"""
         
         source = arguments.no_gui and "guiless-agent" or "gui-agent"
-        print source
         packager = builder.Packager()
         packager.copy_sources_from(source)
         

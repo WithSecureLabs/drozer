@@ -17,6 +17,7 @@ class Packager(command_wrapper.Wrapper):
     def copy_sources_from(self, name):
         shutil.copytree(os.path.join(Configuration.library(name)), os.path.join(self.__wd, "agent"))
         shutil.copytree(os.path.join(Configuration.library("jdiesel")), os.path.join(self.__wd, "jdiesel"))
+        shutil.copytree(os.path.join(Configuration.library("mwr-android")), os.path.join(self.__wd, "mwr-android"))
         shutil.copytree(os.path.join(Configuration.library("mwr-tls")), os.path.join(self.__wd, "mwr-tls"))
     
     def endpoint_path(self):
