@@ -13,3 +13,6 @@
 [submodule "src/drozer/lib/jdiesel"]
 	path = src/drozer/lib/jdiesel
 	url = https://github.com/mwrlabs/cinnibar
+[submodule "src/drozer/lib/gui-agent"]
+	path = src/drozer/lib/gui-agent
+	url = https://github.com/mwrlabs/mercury-agent
