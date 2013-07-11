@@ -7,3 +7,9 @@
 [submodule "src/drozer/lib/mwr-android"]
 	path = src/drozer/lib/mwr-android
 	url = https://github.com/mwrlabs/mwr-android
+[submodule "src/drozer/lib/guiless-agent"]
+	path = src/drozer/lib/guiless-agent
+	url = https://github.com/mwrlabs/rogue-agent
+[submodule "src/drozer/lib/jdiesel"]
+	path = src/drozer/lib/jdiesel
+	url = https://github.com/mwrlabs/cinnibar
