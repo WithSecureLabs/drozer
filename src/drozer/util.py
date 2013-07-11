@@ -1,4 +1,5 @@
 import argparse
+import socket
     
 DefaultHost = "localhost"
 DefaultPort = 31415
@@ -8,14 +9,16 @@ def parse_server(server_string):
     Decode the Server endpoint parameters, as we expect them to be passed into a CLI.
     This extracts the hostname and port, assigning a default if they are not provided.
     """
-    if server_string == None:
-        return (DefaultHost, DefaultPort)
-    elif server_string.find(":") == -1:
-        return (server_string, DefaultPort)
-    else:
-        (host, port) = server_string.split(":", 1)
-        
-        return (host, int(port))
+    
+    host = DefaultHost
+    port = DefaultPort
+    
+    if server_string != None and server_string.find(":") == -1:
+        host = server_string
+    elif server_string != None:
+        host, port = server_string.split(":", 1)
+    
+    return (socket.gethostbyname(host), int(port))
         
 class StoreZeroOrTwo(argparse.Action):
     
