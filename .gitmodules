@@ -1,3 +1,9 @@
 [submodule "common"]
 	path = common
 	url = https://github.com/mwrlabs/mercury-common.git
+[submodule "src/drozer/lib/mwr-tls"]
+	path = src/drozer/lib/mwr-tls
+	url = https://github.com/mwrlabs/mwr-tls
+[submodule "src/drozer/lib/mwr-android"]
+	path = src/drozer/lib/mwr-android
+	url = https://github.com/mwrlabs/mwr-android
