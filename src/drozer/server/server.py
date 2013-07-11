@@ -2,8 +2,8 @@ import argparse
 
 from mwr.common import cli
 
+from drozer import util
 from drozer.server import dz, uploader
-from drozer.util import StoreZeroOrTwo
 
 class Server(cli.Base):
     """
@@ -17,16 +17,13 @@ class Server(cli.Base):
     streams to assist you in deploying payloads to devices.
     """
     
-    DefaultHost = "localhost"
-    DefaultPort = 31415
-    
     def __init__(self):
         cli.Base.__init__(self)
         
     def do_delete(self, arguments):
         """delete a resource from the drozer Server"""
         
-        arguments.server = self.__parse_server(arguments.server)
+        arguments.server = util.parse_server(arguments.server)
         if arguments.ssl != None and arguments.ssl == []:
             arguments.ssl = Provider().get_keypair("drozer-server")
         
@@ -36,7 +33,7 @@ class Server(cli.Base):
         self._parser.add_argument("resource", help="specify a resource to upload to a drozer Server")
         self._parser.add_argument("--credentials", default=None, nargs=2, metavar=("username", "password"), help="add a username/password pair that can be used to upload files to the server")
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
-        self._parser.add_argument("--ssl", action=StoreZeroOrTwo, help="enable SSL, optionally specifying the key and certificate", nargs="*")
+        self._parser.add_argument("--ssl", action=util.StoreZeroOrTwo, help="enable SSL, optionally specifying the key and certificate", nargs="*")
     
     def do_start(self, arguments):
         """start a drozer Server"""
@@ -47,12 +44,12 @@ class Server(cli.Base):
         self._parser.add_argument("--credentials", action="append", default=[], nargs=2, metavar=("username", "password"), help="add a username/password pair that can be used to upload files to the server")
         self._parser.add_argument("--ping-interval", default=15, metavar="SECS", type=int, help="the interval at which to ping connected agents")
         self._parser.add_argument("--port", default=31415, metavar="PORT", type=int, help="specify the port on which to bind the server")
-        self._parser.add_argument("--ssl", action=StoreZeroOrTwo, help="enable SSL, optionally specifying the key and certificate", nargs="*")
+        self._parser.add_argument("--ssl", action=util.StoreZeroOrTwo, help="enable SSL, optionally specifying the key and certificate", nargs="*")
     
     def do_upload(self, arguments):
         """upload a resource to the drozer Server"""
         
-        arguments.server = self.__parse_server(arguments.server)
+        arguments.server = util.parse_server(arguments.server)
         if arguments.ssl != None and arguments.ssl == []:
             arguments.ssl = Provider().get_keypair("drozer-server")
         
@@ -64,26 +61,4 @@ class Server(cli.Base):
         self._parser.add_argument("magic", nargs="?", help="specify a resource to upload to a drozer Server")
         self._parser.add_argument("--credentials", default=None, nargs=2, metavar=("username", "password"), help="add a username/password pair that can be used to upload files to the server")
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
-        self._parser.add_argument("--ssl", action=StoreZeroOrTwo, help="enable SSL, optionally specifying the key and certificate", nargs="*")
-    
-    def __parse_server(self, server):
-        """
-        Decode the Server endpoint parameters, from an ArgumentParser arguments
-        object with a server member.
-
-        This extracts the hostname and port, assigning a default if they are
-        not provided.
-        """
-
-        if server != None:
-            endpoint = server
-        else:
-            endpoint = ":".join([self.DefaultHost, str(self.DefaultPort)])
-
-        if ":" in endpoint:
-            host, port = endpoint.split(":")
-        else:
-            host = endpoint
-            port = self.DefaultPort
-        
-        return (host, int(port))
+        self._parser.add_argument("--ssl", action=util.StoreZeroOrTwo, help="enable SSL, optionally specifying the key and certificate", nargs="*")
