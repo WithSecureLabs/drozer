@@ -4,6 +4,7 @@ from mwr.common import cli
 
 from drozer import util
 from drozer.server import dz, uploader
+from drozer.ssl.provider import Provider
 
 class Server(cli.Base):
     """

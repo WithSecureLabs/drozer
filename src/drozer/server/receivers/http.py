@@ -210,6 +210,9 @@ class HTTPResponse(HTTPMessage):
         
         while resp.find("\r\n\r\n") == -1:
             resp += socket.recv(10)
+            
+            if len(resp) == 0:
+                return None
         
         return HTTPResponse.parse(resp)
     
