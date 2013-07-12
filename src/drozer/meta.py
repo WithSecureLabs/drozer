@@ -1,11 +1,11 @@
 
 name = "drozer"
 vendor = "MWR InfoSecurity"
-version = "2.2.1"
+version = "2.3.0"
 
-contact = "drozer.oss@mwrinfosecurity.com"
-description = "Android Security Testing Framework"
-license = "MWR Code License v2"
+contact = "drozer@mwrinfosecurity.com"
+description = "The Leading Android Security Testing Framework"
+license = "BSD (3 clause)"
 keywords = "drozer android security framework"
 url = "http://mwr.to/drozer"
 
