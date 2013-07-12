@@ -24,7 +24,7 @@ def get_socket(arguments):
         sock = ssl.wrap_socket(sock, cert_reqs=ssl.CERT_REQUIRED, ca_certs=provider.ca_certificate_path())
 
     sock.settimeout(5.0)
-    if arguments.push_server != None:
+    if hasattr(arguments, 'push_server') and arguments.push_server != None:
         sock.connect(arguments.push_server)
     else:
         sock.connect(arguments.server)
