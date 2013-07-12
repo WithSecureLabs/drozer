@@ -9,7 +9,7 @@ PYTHON = python
 
 SDK = $(CURDIR)/src/drozer/lib/android.jar
 
-all: dist-egg dist-windows
+all: dist-egg
 apks: $(SOURCES:.java=.apk)
 clean:
 	find -name *.pyc |xargs rm -f
@@ -17,8 +17,6 @@ clean:
 	rm -rf build/* dist/*
 dist-egg: sources apks native-libraries
 	$(PYTHON) setup.py bdist_egg
-dist-windows: sources apks native-libraries
-	$(PYTHON) setup.py bdist_wininst
 lint: force
 	cd src && pylint . -d C0103,C0301,E1101,R0201,R0902,R0903,R0904,R0911,R0913,W0108,W0141,W0142,W0631 --ignore protobuf_pb2.py,app,auxiliary,exploit,information,scanner,shell,tools |less
 native-libraries: $(NATIVES)
