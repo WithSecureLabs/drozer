@@ -66,7 +66,7 @@ class HTTP(HttpReceiver):
             if not "Authorization" in request.headers or not self.authenticated(request.headers["Authorization"]):
                 resource = ErrorResource(request.resource, 401, "You must authenticate to write the resource %s.")
                 
-                response = resource.getResponse()
+                response = resource.getResponse(request)
                 response.headers["WWW-Authenticate"] = "Basic realm=\"drozer\""
                 self.transport.write(str(response))
                 self.transport.loseConnection()

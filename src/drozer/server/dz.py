@@ -10,6 +10,7 @@ except ImportError:
     print "Run 'easy_install twisted==10.2.0' to fetch this dependency."
     sys.exit(-1)
 
+from drozer.configuration import Configuration
 from drozer.server.heartbeat import heartbeat
 from drozer.server.protocols.byte_stream import ByteStream
 from drozer.server.protocols.shell import ShellCollector, ShellServer
@@ -54,8 +55,12 @@ class ProtocolSwitcher(Protocol):
     
     __web_root = path.join(path.dirname(__file__), "web_root")
     __file_provider = FileProvider({ "/": FileResource("/", path.join(__web_root, "index.html"), magic="I", reserved=True, type="text/html"),
+                                     "/agent.apk": FileResource("/agent.apk", Configuration.library("agent.apk"), type="application/vnd.android.package-archive"),
+                                     "/agent.jar": FileResource("/agent.jar", Configuration.library("agent.jar"), reserved=False, type="application/vnd.android.package-archive"),
+                                     "/favicon.ico": FileResource("/favicon.ico", path.join(__web_root, "favicon.ico"), reserved=True, type="image/x-icon"),
                                      "/index.html": FileResource("/index.html", path.join(__web_root, "index.html"), reserved=True, type="text/html"),
-                                     "/agent-std.apk": FileResource("/agent-std.apk", path.join(__web_root, "agent-std.apk"), type="application/vnd.android.package-archive") })
+                                     "/jquery.js": FileResource("/jquery.js", path.join(__web_root, "jquery.js"), reserved=True, type="text/javascript"),
+                                     "/labs.png": FileResource("/labs.png", path.join(__web_root, "labs.png"), reserved=True, type="image/png") })
     __logger = getLogger(__name__)
     
     def __init__(self):
