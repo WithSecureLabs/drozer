@@ -5,6 +5,7 @@
 .profile
 build/*
 dist/*
+drozer.egg-info
 log/*.log
 obj
 src/drozer/modules/**/*.class
