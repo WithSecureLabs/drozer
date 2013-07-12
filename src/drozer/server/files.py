@@ -1,5 +1,7 @@
 import re
 
+from mwr.common import fs
+
 from drozer.server.receivers.http import HTTPResponse
 
 class FileProvider(object):
@@ -97,7 +99,7 @@ class FileResource(Resource):
         self.type = type
     
     def getBody(self):
-        return open(self.path).read()
+        return fs.read(self.path)
             
     def getResponse(self, request):
         response = HTTPResponse(status=200, body=self.getBody())
