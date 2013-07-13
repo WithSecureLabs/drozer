@@ -57,6 +57,7 @@ class ProtocolSwitcher(Protocol):
     __file_provider = FileProvider({ "/": FileResource("/", path.join(__web_root, "index.html"), magic="I", reserved=True, type="text/html"),
                                      "/agent.apk": FileResource("/agent.apk", Configuration.library("agent.apk"), type="application/vnd.android.package-archive"),
                                      "/agent.jar": FileResource("/agent.jar", Configuration.library("agent.jar"), reserved=False, type="application/vnd.android.package-archive"),
+                                     "/drozer.png": FileResource("/drozer.png", path.join(__web_root, "drozer.png"), reserved=True, type="image/png"),
                                      "/favicon.ico": FileResource("/favicon.ico", path.join(__web_root, "favicon.ico"), reserved=True, type="image/x-icon"),
                                      "/index.html": FileResource("/index.html", path.join(__web_root, "index.html"), reserved=True, type="text/html"),
                                      "/jquery.js": FileResource("/jquery.js", path.join(__web_root, "jquery.js"), reserved=True, type="text/javascript"),
