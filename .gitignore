@@ -5,7 +5,10 @@
 .profile
 build/*
 dist/*
+drozer.egg-info
 log/*.log
 obj
-src/mercury.egg-info
+src/drozer/modules/**/*.class
+src/drozer/modules/**/*.apk
+src/drozer.egg-info
 mercury.log
