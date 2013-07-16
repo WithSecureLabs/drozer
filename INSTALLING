@@ -1,72 +1,75 @@
-Installing Mercury Console
-==========================
+drozer Installation
+===================
 
-The Mercury Console and Server should be installed on your PC. They are
-implemented using Python, and have a few dependencies that must be met.
+To get drozer running you will need:
 
-It is recommended that you use Python 2.7 to run Mercury.
+ * a PC
+ * an Android device or emulator, running Android 2.1 (Eclair) or later
 
-Download the latest version of Mercury from the project site (mwr.to/mercury).
-Mercury is available in the Python Egg format, or as an installer for Microsoft
-Windows.
+To get the most from drozer, your system will need a number of packages installed:
 
-Follow the instructions for your platform.
+ * Java Development Kit (JDK)
+ * Apache ANT
+ * Android Software Development Kit (SDK)
+ * Android Native Development Kit (NDK)
 
-Note: before upgrading, you should remove the previous version of Mercury from
-your system. This will avoid potential problems with Mercury using parts of the
-old codebase.
+You should ensure that each of these is on your system path (you should be able
+to execute ant, javac, dx and ndk-build).
+
+Additionally, you should set an environment variable ANDROID_HOME that points
+to your copy of the Android SDK.
+
+Then, follow the instructions for your platform.
+
+Note: before upgrading, you should remove all previous version of drozer or
+      Mercury from your system. This will avoid potential problems with drozer
+      using parts of the old codebase.
 
 
 Linux
 -----
 
-Install dependencies:
+Download the latest version of drozer from the project site (mwr.to/drozer),
+these contain a Python .egg file to install drozer.
 
-    On Debian-based Systems:
+First, you need to install drozer's dependencies, which should be available in
+your distributions package repository.
 
-        $ apt-get install build-essential python-dev python-setuptools
+ * Python 2.7 with development headers
+ * Python Setuptools
 
-    On Fedora-based Systems:
+Then, install drozer's Python dependencies:
 
-        $ yum install make gcc gcc-c++ python-devel python-setuptools
+ $ easy_install --allow-hosts pypi.python.org protobuf==2.4.1
+ $ easy_install twisted==10.2.0
 
-Install the required dependencies:
+Next, install drozer itself:
 
-    $ easy_install --allow-hosts pypi.python.org protobuf==2.4.1
-
-If you want to use Infrastructure Mode, you will also need to install the
-Twisted library:
-
-    $ easy_install twisted==10.2.0
-
-Install Mercury:
-
-    $ easy_install ./mercury-2.0.0-py2.7.egg
+ $ easy_install ./drozer-2.3.0-py2.7.egg
 
 To test the installation:
 
-    $ mercury
-    usage: mercury [COMMAND]
+ $ drozer
+ usage: drozer [COMMAND]
 
-    $
+ $
+
+Congratulations, you are ready to go.
 
 
 Windows
 -------
 
-The Mercury installation must be performed as a Windows administrator.
+A Windows Installer is available for drozer, which builds a complete Python
+environment on your PC with most of drozer's dependencies built in.
 
-Run the Mercury installer.
+Before you start, make sure that you have the Java JDK installed, and your
+JAVA_HOME environment variable points to this folder.
+
+The drozer installation must be run as a Windows administrator.
 
 To test the installation:
 
-    > C:\Program Files\Mercury\mercury.bat
-    usage: mercury [COMMAND]
+ > C:\Program Files\drozer\drozer.bat
+ usage: drozer [COMMAND]
 
-    > C:\Program Files\Mercury\mercury.bat console connect
-
-
-Mac OS
-------
-
-No instructions yet.

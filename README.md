@@ -1,10 +1,9 @@
-Mercury: the Heavy Metal that Poisoned the Droid
-================================================
+drozer
+======
 
 Mercury is a security assessment framework for the Android platform. It allows you to dynamically interact with the IPC endpoints exported by an application installed on a device.
 
-Mercury is open source software, maintained by MWR InfoSecurity, and can be downloaded
-from:
+Mercury is open source software, maintained by MWR InfoSecurity, and can be downloaded from:
 
     mwr.to/mercury
 
@@ -20,22 +19,23 @@ See INSTALLING.
 License
 -------
 
-Mercury is released under a 3-clause BSD License.
-See LICENSE for full details.
+drozer is released under a 3-clause BSD License. See LICENSE for full details.
 
 
 Contacting the Project
 ----------------------
 
-The public source repository for Mercury is hosted on GitHub:
+drozer is Open Source software, made great by contributions from the community.
 
-  https://github.com/mwrlabs/mercury
+For full source code, to report bugs, suggest features and contribute patches please see our Github project:
 
-Bug reports, feature requests, comments and questions can be submitted through the GitHub Issues feature, or sent to:
+  https://github.com/mwrlabs/drozer
 
-  mercury [at] mwrinfosecurity.com
+Bug reports, feature requests, comments and questions can be submitted sent to:
 
-Follow the Mercury Project on Twitter:
+  drozer [at] mwrinfosecurity.com
 
-  @droidhg
+Follow the latest drozer news, follow the project on Twitter:
+
+  @mwrdrozer
 
