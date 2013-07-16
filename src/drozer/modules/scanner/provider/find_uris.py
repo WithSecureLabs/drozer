@@ -9,7 +9,7 @@ class FindUris(Module, common.FileSystem, common.PackageManager, common.Provider
     examples = "run scanner.provider.finduris"
     author = "Luander (luander.r@samsung.com)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["scanner", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

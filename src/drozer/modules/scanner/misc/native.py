@@ -7,7 +7,7 @@ class Native(Module, common.ClassLoader, common.Filters, common.PackageManager):
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["scanner", "misc"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

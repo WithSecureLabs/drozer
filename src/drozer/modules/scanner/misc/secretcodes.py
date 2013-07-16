@@ -7,7 +7,7 @@ class SecretCodes(Module, common.ClassLoader, common.PackageManager):
     examples = ""
     author = "Mike (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["scanner", "misc"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

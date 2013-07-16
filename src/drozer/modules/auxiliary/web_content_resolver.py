@@ -18,7 +18,7 @@ class WebContentResolver(Module, common.PackageManager, common.Provider):
     Ctrl+C to Stop"""
     author = "Nils (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["auxiliary"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

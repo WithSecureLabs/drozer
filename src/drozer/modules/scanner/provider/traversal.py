@@ -9,7 +9,7 @@ class Traversal(Module, common.FileSystem, common.PackageManager, common.Provide
     examples = ""
     author = "Nils (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["scanner", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

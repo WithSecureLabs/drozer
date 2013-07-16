@@ -25,7 +25,7 @@ WARNING: This minimal version of the su binary is completely unprotected, meanin
     """
     author = "Tyrone (@mwrlabs)"
     date = "2013-04-22"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["tools", "setup"]
 
     def execute(self, arguments):

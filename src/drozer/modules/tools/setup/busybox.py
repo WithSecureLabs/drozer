@@ -11,7 +11,7 @@ Typically, you require root access to the device to install Busybox. drozer can 
     examples = ""
     author = "Tyrone (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["tools", "setup"]
 
     def execute(self, arguments):

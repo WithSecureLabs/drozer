@@ -9,7 +9,7 @@ This module executes `nc IP PORT -e ash -i`, using BusyBox. This will send an AS
     examples = ""
     author = "Tyrone (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["shell"]
 
     def add_arguments(self, parser):

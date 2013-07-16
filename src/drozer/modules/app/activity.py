@@ -17,7 +17,7 @@ class ForIntent(Module, common.PackageManager):
     Target activity: com.android.browser.BrowserActivity"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "activity"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -57,7 +57,7 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
       com.android.browser.widget.BookmarkWidgetConfigure"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "activity"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -168,7 +168,7 @@ Starting the Browser with an implicit intent:
 For more information on how to formulate an Intent, type 'help intents'."""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "activity"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

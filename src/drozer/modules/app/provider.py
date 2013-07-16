@@ -13,7 +13,7 @@ class Columns(Module, common.Provider, common.TableFormatter):
     | _id | name | value |"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -42,7 +42,7 @@ class Delete(Module, common.Provider):
                 --selection-args my_setting"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -66,7 +66,7 @@ class Download(Module, common.Provider):
     Written 25 bytes"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -113,7 +113,7 @@ This module uses a number of strategies to identify a content URI, including ins
     content://browser/bookmarks/search_suggest_query"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-13-18"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -165,7 +165,7 @@ Finding content providers that do not require permissions to read/write:
     ..."""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -256,7 +256,7 @@ class Insert(Module, common.Provider):
                 --integer _id 7"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -323,7 +323,7 @@ Querying, with a WHERE clause in the SELECT statement:
     | 10  | sys_storage_full_threshold_bytes        | 2097152 |"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -355,7 +355,7 @@ class Read(Module, common.Provider):
     java.io.FileNotFoundException: No files supported by provider at content://settings/secure/../../../system/etc/hosts"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -378,7 +378,7 @@ class Update(Module, common.Provider):
     Done."""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

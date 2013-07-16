@@ -7,7 +7,7 @@ class Download(Module, common.ClassLoader, common.FileSystem):
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
@@ -35,7 +35,7 @@ class Size(Module, common.FileSystem):
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
@@ -63,7 +63,7 @@ class MD5Sum(Module, common.ClassLoader, common.FileSystem):
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
@@ -88,7 +88,7 @@ class Upload(Module, common.ClassLoader, common.FileSystem):
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["tools", "file"]
 
     def add_arguments(self, parser):

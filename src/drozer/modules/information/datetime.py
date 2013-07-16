@@ -7,7 +7,7 @@ class DateTime(Module):
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["information"]
 
     def execute(self, arguments):

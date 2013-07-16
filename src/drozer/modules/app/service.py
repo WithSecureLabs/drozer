@@ -27,7 +27,7 @@ List exported services with no permissions required to interact with it:
         Permission: null"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "service"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -98,7 +98,7 @@ NB: by default, this module will wait 20 seconds for a reply."""
     """
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2013-05-20"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "service"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
     
@@ -153,7 +153,7 @@ For more information on how to formulate an Intent, type 'help intents'."""
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "service"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -180,7 +180,7 @@ class Stop(Module):
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "service"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

@@ -9,7 +9,7 @@ class SqlTables(Module, common.FileSystem, common.PackageManager, common.Provide
     examples = ""
     author = "Rijnard"
     date = "2013-01-23"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["scanner", "provider"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

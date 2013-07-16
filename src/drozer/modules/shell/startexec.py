@@ -9,7 +9,7 @@ class Start(Module, common.Shell):
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["shell"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -28,7 +28,7 @@ class Exec(Module, common.Shell):
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["shell"]
 
     def add_arguments(self, parser):

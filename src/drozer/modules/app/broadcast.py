@@ -19,7 +19,7 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
         Permission: android.permission.MASTER_CLEAR"""
     author = ["MWR InfoSecurity (@mwrlabs)", "Luander (luander.r@samsung.com)"]
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "broadcast"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -106,7 +106,7 @@ class Send(Module):
 For more information on how to formulate an Intent, type 'help intents'."""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "broadcast"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

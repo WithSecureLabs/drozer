@@ -17,7 +17,7 @@ Discovered suid/sgid files in /system:
 """
     author = "Tyrone (@mwrlabs)"
     date = "2013-04-18"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["scanner", "misc"]
 
     def add_arguments(self, parser):

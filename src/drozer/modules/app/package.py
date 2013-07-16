@@ -17,7 +17,7 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
     0 services exported"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "package"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -92,7 +92,7 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
       - android.permission.READ_EXTERNAL_STORAGE"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "package"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -166,7 +166,7 @@ class LaunchIntent(Module, common.PackageManager):
       Extras: null"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2013-03-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "package"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -237,7 +237,7 @@ class List(Module, common.PackageManager):
     com.android.browser"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "package"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -276,7 +276,7 @@ class Manifest(Module, common.Assets):
     </manifest>"""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "package"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -322,7 +322,7 @@ class Native(Module, common.ClassLoader, common.PackageManager):
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2013-03-23"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "package"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
@@ -375,7 +375,7 @@ class SharedUID(Module, common.PackageManager):
     Accumulated permissions: com.motorola.blur.setupprovider.Permissions.ACCESS_ACCOUNTS; ..."""
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2012-11-06"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["app", "package"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 

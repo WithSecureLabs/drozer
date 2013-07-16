@@ -18,7 +18,7 @@ class Permissions(Module, common.PackageManager):
     '''
     author = "Tyrone (@mwrlabs)"
     date = "2012-12-20"
-    license = "MWR Code License"
+    license = "BSD (3 clause)"
     path = ["information"]
     permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
 
