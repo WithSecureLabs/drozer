@@ -12,7 +12,7 @@
 	url = https://github.com/mwrlabs/rogue-agent
 [submodule "src/drozer/lib/jdiesel"]
 	path = src/drozer/lib/jdiesel
-	url = https://github.com/mwrlabs/cinnibar
+	url = https://github.com/mwrlabs/jdiesel
 [submodule "src/drozer/lib/gui-agent"]
 	path = src/drozer/lib/gui-agent
 	url = https://github.com/mwrlabs/mercury-agent
