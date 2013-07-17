@@ -4,18 +4,18 @@ class ARMEABI(Module, common.ShellCode):
 
     name = "weasel through a reverse TCP Shell (ARMEABI)"
     description = """
-    Run weasel through a reverse TCP Shell, to establish a foothold on the
+    Run weasel through a reverse TCP shell connection, to establish a foothold on the
     device.
     
     This module connects to the drozer Server, and sends 0x57 (W) to request
-    weasel. The drozer Server will attempt to install weasel, and establish
+    weasel. The drozer Server will attempt to transfer and run weasel, establishing
     some kind of connection back to the server.
     
     weasel will establish a connection back in one of a few ways:
     
       * a full Agent
       * a stripped-down Agent
-      * a bind Shell  
+      * a reverse shell
     
     You can collect the shell by connecting to the server and sending 'COLLECT'
     as the first line.
