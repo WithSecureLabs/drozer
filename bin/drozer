@@ -1,13 +1,10 @@
 #!/usr/bin/python
 
-import os
-import platform
-import subprocess
 import sys
 
-Commands = {    'console': 'start the drozer Console',
+Commands = {    'agent': 'create custom drozer Agents',
+                'console': 'start the drozer Console',
                 'exploit': 'generate an exploit to deploy drozer',
-                'payload': 'create custom drozer Agents',
                 'server': 'start a drozer Server',
                 'shellcode': 'generate shellcode to deploy drozer',
                 'ssl': 'manage drozer SSL key material' }

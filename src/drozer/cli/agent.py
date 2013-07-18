@@ -5,9 +5,9 @@ import sys
 
 from mwr.common import logger
 
-from drozer.payload.manager import PayloadManager
+from drozer.agent.manager import AgentManager
 
 logger.setLevel(logging.DEBUG)
 logger.addStreamHandler()
 
-PayloadManager().run(sys.argv[2::])
+AgentManager().run(sys.argv[2::])

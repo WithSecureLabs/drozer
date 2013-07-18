@@ -1,12 +1,12 @@
 from mwr.common import cli
 
-from drozer.payload import builder, manifest
+from drozer.agent import builder, manifest
 
-class PayloadManager(cli.Base):
+class AgentManager(cli.Base):
     """
-    drozer payload COMMAND [OPTIONS]
+    drozer agent COMMAND [OPTIONS]
     
-    A utility for building custom drozer Agents to use as payloads.
+    A utility for building custom drozer Agents.
     """
     
     def __init__(self):
