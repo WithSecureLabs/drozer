@@ -36,13 +36,14 @@ class ShellCode(object):
         if not isinstance(arguments.server, tuple):
             arguments.server = util.parse_server(arguments.server)
         
+        self.format = arguments.format
         self.generate(arguments)
         
-        if arguments.format == "R":
+        if self.format == "R":
             return self.asRaw()
-        elif arguments.format == "U":
+        elif self.format == "U":
             return self.asUnicode()
-        elif arguments.format == "X":
+        elif self.format == "X":
             return self.asHex()
 
     def hexifyInetAddr(self, inet_addr):
