@@ -48,6 +48,6 @@ class PayloadManager(cli.Base):
         
         args, unknown = self._parser.parse_known_args(argv)
         
-        if args.module != None:
+        if hasattr(args, 'module') and args.module != None:
             self.builder.module(args.module).add_arguments(self._parser)
             
