@@ -61,6 +61,8 @@ class Base(object):
         command_argv = filter(lambda a: "do_" + a in self.__commands(), argv)
         if(len(command_argv) == 1 and hasattr(self, "args_for_" + command_argv[0])):
             getattr(self, "args_for_" + command_argv[0])()
+        if hasattr(self, "before_parse_args"):
+            self.before_parse_args(argv)
         # parse argv into arguments using the generated ArgumentParser
         arguments = self._parser.parse_args(argv)
 
