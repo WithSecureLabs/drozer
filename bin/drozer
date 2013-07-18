@@ -5,8 +5,8 @@ import sys
 Commands = {    'agent': 'create custom drozer Agents',
                 'console': 'start the drozer Console',
                 'exploit': 'generate an exploit to deploy drozer',
+                'payload': 'generate payloads to deploy drozer',
                 'server': 'start a drozer Server',
-                'shellcode': 'generate shellcode to deploy drozer',
                 'ssl': 'manage drozer SSL key material' }
     
 def print_usage():

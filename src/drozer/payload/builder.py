@@ -14,4 +14,4 @@ class Builder(object):
         return self.__modules.get(key)(None)
     
     def modules(self):
-        return self.__modules.all(module_type="shellcode")
+        return self.__modules.all(module_type="payload")

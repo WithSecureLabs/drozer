@@ -5,9 +5,9 @@ import sys
 
 from mwr.common import logger
 
-from drozer.shellcode.manager import ShellCodeManager
+from drozer.payload.manager import PayloadManager
 
 logger.setLevel(logging.DEBUG)
 logger.addStreamHandler()
 
-ShellCodeManager().run(sys.argv[2::])
+PayloadManager().run(sys.argv[2::])
