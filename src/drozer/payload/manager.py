@@ -41,3 +41,13 @@ class PayloadManager(cli.Base):
         
         sys.stdout.write(console.format_dict(dict(map(lambda m: [m, payload_builder.module(m).name], payload_builder.modules()))) + "\n")
         
+    def before_parse_args(self, argv):
+        """
+        Allow payload modules to add additional arguments.
+        """
+        
+        args, unknown = self._parser.parse_known_args(argv)
+        
+        if args.module != None:
+            self.builder.module(args.module).add_arguments(self._parser)
+            
