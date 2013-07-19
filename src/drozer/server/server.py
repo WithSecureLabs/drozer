@@ -1,6 +1,4 @@
-import argparse
-
-from mwr.common import cli
+from mwr.common import cli, path_completion
 
 from drozer import util
 from drozer.server import dz, uploader
@@ -59,7 +57,16 @@ class Server(cli.Base):
     def args_for_upload(self):
         self._parser.add_argument("resource", help="specify a resource to upload to a drozer Server")
         self._parser.add_argument("file", help="specify a resource to upload to a drozer Server")
-        self._parser.add_argument("magic", nargs="?", help="specify a resource to upload to a drozer Server")
+        self._parser.add_argument("--magic", help="specify a magic byte for the resource")
         self._parser.add_argument("--credentials", default=None, nargs=2, metavar=("username", "password"), help="add a username/password pair that can be used to upload files to the server")
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
         self._parser.add_argument("--ssl", action=util.StoreZeroOrTwo, help="enable SSL, optionally specifying the key and certificate", nargs="*")
+        
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "server":
+            return ["localhost:31415"]
+        elif action.dest == "file":
+            return path_completion.complete(text)
+        elif action.dest == "resource":
+            return ["/view.jsp"]
+            
