@@ -31,13 +31,15 @@ def get_socket(arguments):
     
     return sock
     
-def upload(arguments, resource, data, magic=None, headers=None):
+def upload(arguments, resource, data, magic=None, mimetype=None, headers=None):
     sock = get_socket(arguments)
     
     request = HTTPRequest(verb="POST", resource=resource, headers=headers, body=data)
     if arguments.credentials != None:
         request.headers["Authorization"] = "Basic %s" % b64encode(":".join(arguments.credentials))
     request.headers["Content-Length"] = len(data)
+    if mimetype != None:
+        request.headers["Content-Type"] = mimetype
     if magic != None:
         request.headers["X-Drozer-Magic"] = magic
         

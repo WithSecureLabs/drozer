@@ -77,6 +77,10 @@ class HTTP(HttpReceiver):
                 if resource != None and resource.reserved:
                     resource = ErrorResource(request.resource, 403, "You are not authorized to write the resource %s.")
                 else:
+                    if "Content-Type" in request.headers:
+                        mimetype = request.headers["Content-Type"]
+                    else:
+                        mimetype = None
                     if "X-Drozer-Magic" in request.headers:
                         magic = request.headers["X-Drozer-Magic"]
                     else:
@@ -88,7 +92,7 @@ class HTTP(HttpReceiver):
                     
                     if magic != None and self.__file_provider.has_magic_for(magic) and self.__file_provider.get_by_magic(magic).resource != request.resource:
                         resource = ErrorResource(request.resource, 409, "Could not create %s. The specified magic has already been assigned to another resource.")
-                    elif self.__file_provider.create(request.resource, request.body, magic=magic, multipart=multipart):
+                    elif self.__file_provider.create(request.resource, request.body, magic=magic, mimetype=mimetype, multipart=multipart):
                         resource = CreatedResource(request.resource)
                     else:
                         resource = ErrorResource(request.resource, 500, "The server encountered an error whilst creating the resource %s.")
