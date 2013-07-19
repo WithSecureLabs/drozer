@@ -49,6 +49,6 @@ setuptools.setup(
                               map(lambda f: f[11:], find_files("src/drozer/lib/mwr-tls")) + \
                             [ "lib/weasel/*",
                               "server/web_root/*" ] },
-  scripts = ["bin/drozer"],
+  scripts = ["bin/drozer", "bin/drozer-complete"],
   install_requires = ["protobuf==2.4.1", "pyopenssl==0.13"],
   classifiers = [])
