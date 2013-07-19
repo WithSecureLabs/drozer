@@ -5,6 +5,7 @@ import sys
 from mwr.common import argparse_completer
 
 from drozer.console import Console
+from drozer.exploit.manager import ExploitManager
 from drozer.payload.manager import PayloadManager
 from drozer.server import Server
 from drozer.ssl import SSLManager
@@ -20,7 +21,7 @@ word = words[offset]
 begidx = len(" ".join(words))
 endidx = begidx + len(word)
 
-providers = { "console": Console, "payload": PayloadManager, "server": Server, "ssl": SSLManager }
+providers = { "console": Console, "exploit": ExploitManager, "payload": PayloadManager, "server": Server, "ssl": SSLManager }
 
 class ArgumentSuggestor(object):
     
@@ -36,6 +37,7 @@ elif offset == 2:
 else:
     # we are typing arguments to a command
     provider = providers[words[1]]()
+    provider._parser.error = lambda x: None
     provider.prepare_argument_parser(words[2:])
     
     print " ".join(argparse_completer\
