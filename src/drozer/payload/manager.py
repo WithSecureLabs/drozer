@@ -48,6 +48,11 @@ class PayloadManager(cli.Base):
         
         args, unknown = self._parser.parse_known_args(argv)
         
-        if hasattr(args, 'module') and args.module != None:
+        if hasattr(args, 'module') and args.module != None and args.module != "":
             self.builder.module(args.module).add_arguments(self._parser)
-            
+        
+    def get_completion_suggestions(self, action, text, **kwargs):
+        if action.dest == "module":
+            return self.builder.modules()
+        elif action.dest == "server":
+            return ["localhost:31415"]
