@@ -3,7 +3,7 @@ import os
 from drozer.configuration import Configuration
 from drozer.modules import common, Module
 
-class Shell(Module, common.ShellCode):
+class ARMEABI(Module, common.ShellCode):
 
     name = "Deploy weasel, through a Shell"
     description = """
@@ -24,13 +24,13 @@ class Shell(Module, common.ShellCode):
     as the first line.
     """
     examples = """
-    $ drozer payload build weasel.shell  --server 10.0.2.2:31420
+    $ drozer payload build weasel.shell.armeabi  --server 10.0.2.2:31420
     """
     author = "MWR InfoSecurity (@mwrlabs)"
     date = "2013-07-18"
     license = "BSD (3 clause)"
     module_type = "payload"
-    path = ["weasel"]
+    path = ["weasel.shell"]
     
     def __init__(self, session, loader):
         Module.__init__(self, session)
