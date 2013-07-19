@@ -30,12 +30,14 @@ class Console(cli.Base):
         self._parser.add_argument("device", default=None, nargs='?', help="the unique identifier of the Agent to connect to")
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
         self._parser.add_argument("--ssl", action="store_true", default=False, help="connect with SSL")
+        self._parser.add_argument("--accept-certificate", action="store_true", default=False, help="accept any SSL certificate with a valid trust chain")
         self._parser.add_argument("--debug", action="store_true", default=False, help="enable debug mode")
         self._parser.add_argument("--no-color", action="store_true", default=False, help="disable syntax highlighting in drozer output")
         self._parser.add_argument("--password", action="store_true", default=False, help="the agent requires a password")
         self._parser.add_argument("-c", "--command", default=None, dest="onecmd", help="specify a single command to run in the session")
         self._parser.add_argument("-f", "--file", default=[], help="source file", nargs="*")
         
+        self.__accept_certificate = False
         self.__server = None
         
     def do_connect(self, arguments):
@@ -137,6 +139,14 @@ class Console(cli.Base):
             sys.exit(1)
         else:
             cli.Base.handle_error(self, throwable)
+    
+    def parse_arguments(self, parser, arguments):
+        parsed_arguments = parser.parse_args(arguments)
+        
+        if parsed_arguments.accept_certificate:
+            self.__accept_certificate = True
+        
+        return parsed_arguments
 
     def __get_device(self, arguments):
         """
@@ -182,6 +192,13 @@ class Console(cli.Base):
         trust_status = provider.trusted(certificate, peer)
             
         if trust_status < 0:
+            if self.__accept_certificate:
+                """
+                If the --accept-certificate option indicates we should blindly accept
+                this certificate, carry on.
+                """
+                return
+            
             print "drozer has established an SSL Connection to %s:%d." % peer
             print "The server has provided an SSL Certificate with the SHA-1 Fingerprint:"
             print "%s\n" % provider.digest(certificate)

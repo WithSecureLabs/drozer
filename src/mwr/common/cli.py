@@ -46,6 +46,9 @@ class Base(object):
         """
         
         return self.choose(prompt, ["y", "n"])
+    
+    def parse_arguments(self, parser, arguments):
+        return parser.parse_args(arguments)
         
     def run(self, argv=None):
         """
@@ -64,7 +67,7 @@ class Base(object):
         if hasattr(self, "before_parse_args"):
             self.before_parse_args(argv)
         # parse argv into arguments using the generated ArgumentParser
-        arguments = self._parser.parse_args(argv)
+        arguments = self.parse_arguments(self._parser, argv)
 
         try:
             self.__invokeCommand(arguments)
