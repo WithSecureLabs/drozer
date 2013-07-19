@@ -49,6 +49,15 @@ class Base(object):
     
     def parse_arguments(self, parser, arguments):
         return parser.parse_args(arguments)
+    
+    def prepare_argument_parser(self, argv):
+        # try to find the command, before we invoke the parser so we can add additional arguments
+        command_argv = filter(lambda a: "do_" + a in self.__commands(), argv)
+        
+        if(len(command_argv) == 1 and hasattr(self, "args_for_" + command_argv[0])):
+            getattr(self, "args_for_" + command_argv[0])()
+        if hasattr(self, "before_parse_args"):
+            self.before_parse_args(argv)
         
     def run(self, argv=None):
         """
@@ -58,14 +67,8 @@ class Base(object):
 
         if argv == None:
             argv = []
-            
-        # try to find the command, before we invoke the parser so we can add additional
-        # arguments
-        command_argv = filter(lambda a: "do_" + a in self.__commands(), argv)
-        if(len(command_argv) == 1 and hasattr(self, "args_for_" + command_argv[0])):
-            getattr(self, "args_for_" + command_argv[0])()
-        if hasattr(self, "before_parse_args"):
-            self.before_parse_args(argv)
+        
+        self.prepare_argument_parser(argv)
         # parse argv into arguments using the generated ArgumentParser
         arguments = self.parse_arguments(self._parser, argv)
 

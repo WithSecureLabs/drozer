@@ -17,7 +17,7 @@ class ArgumentParserCompleter(object):
         self.parser = parser
         self.provider = provider
     
-    def get_suggestions(self, text, line, begidx, endidx):
+    def get_suggestions(self, text, line, begidx, endidx, offs=0):
         """
         readline should immediately defer to get_suggestions() when its completer is
         invoked. get_suggestions() accepts the arguments available to readline at
@@ -28,8 +28,8 @@ class ArgumentParserCompleter(object):
         
         suggestions = []
 
-        if word < len(self.__get_positional_actions()):
-            suggestions.extend(filter(lambda s: s.startswith(text), self.__get_suggestions_for(self.__get_positional_action(word), text)))
+        if word - offs <= len(self.__get_positional_actions()):
+            suggestions.extend(filter(lambda s: s.startswith(text), self.__get_suggestions_for(self.__get_positional_action(word - offs - 1), text)))
         else:
             offer_flags = True
         
