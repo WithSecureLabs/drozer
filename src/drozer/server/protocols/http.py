@@ -63,7 +63,7 @@ class HTTP(HttpReceiver):
         elif request.verb == "POST":
             self.log("POST", request.resource)
             
-            if not "Authorization" in request.headers or not self.authenticated(request.headers["Authorization"]):
+            if len(self.__credentials) > 0 and (not "Authorization" in request.headers or not self.authenticated(request.headers["Authorization"])):
                 resource = ErrorResource(request.resource, 401, "You must authenticate to write the resource %s.")
                 
                 response = resource.getResponse(request)
