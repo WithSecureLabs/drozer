@@ -19,9 +19,9 @@ class AgentManager(cli.Base):
     def do_build(self, arguments):
         """build a drozer Agent"""
         
-        source = arguments.no_gui and "guiless-agent" or "gui-agent"
+        source = arguments.no_gui and "rogue-agent" or "standard-agent"
         packager = builder.Packager()
-        packager.copy_sources_from(source)
+        packager.unpack(source)
         
         if arguments.no_gui:
             e = manifest.Endpoint(packager.endpoint_path())

@@ -1,38 +1,47 @@
 import os
-import shutil
 
-from mwr.common import command_wrapper, system
+from mwr.common import command_wrapper
 
 from drozer.configuration import Configuration
 
 class Packager(command_wrapper.Wrapper):
     
-    __ant = Configuration.executable("ant")
+    __aapt = Configuration.library("aapt")
+    __apk_tool = Configuration.library("apktool.jar")
+    __certificate = Configuration.library("certificate.pem")
+    __key = Configuration.library("key.pk8")
+    __java = Configuration.executable("java")
+    __sign_apk = Configuration.library("signapk.jar")
     
+    __endpoint = "endpoint.txt"
     __manifest = "AndroidManifest.xml"
     
     def __init__(self):
         self.__wd = self._get_wd()
-    
-    def copy_sources_from(self, name):
-        shutil.copytree(os.path.join(Configuration.library(name)), os.path.join(self.__wd, "agent"))
-        shutil.copytree(os.path.join(Configuration.library("jdiesel")), os.path.join(self.__wd, "jdiesel"))
-        shutil.copytree(os.path.join(Configuration.library("mwr-android")), os.path.join(self.__wd, "mwr-android"))
-        shutil.copytree(os.path.join(Configuration.library("mwr-tls")), os.path.join(self.__wd, "mwr-tls"))
+        
+    def apk_path(self, signed=True):
+        if signed:
+            return os.path.join(self.__wd, "agent.apk")
+        else:
+            return os.path.join(self.__wd, "agent-unsigned.apk")
     
     def endpoint_path(self):
-        return os.path.join(self.__wd, "agent", "res", "raw", "endpoint.txt")
+        return os.path.join(self.__wd, "agent", "res", "raw", self.__endpoint)
     
     def manifest_path(self):
-        return os.path.join(self.__wd, "agent", "AndroidManifest.xml")
+        return os.path.join(self.__wd, "agent", self.__manifest)
     
     def package(self):
-        cwd = os.getcwd()
-        os.chdir(os.path.join(self.__wd, "agent"))
+        if self._execute([self.__java, "-jar", self.__apk_tool, "build", "-a", self.__aapt, self.source_dir(), self.apk_path(False)]) != 0:
+            raise RuntimeError("could not repack the agent sources")
+        if self._execute([self.__java, "-jar", self.__sign_apk, self.__certificate, self.__key, self.apk_path(False), self.apk_path(True)]) != 0:
+            raise RuntimeError("could not sign the agent package")
         
-        if self._execute([self.__ant, "debug"]) != 0:
-            raise RuntimeError("failed to build")
-        
-        os.chdir(cwd)
-        
-        return os.path.join(self.__wd, "agent", "bin", "agent-debug.apk")
+        return os.path.join(self.__wd, "agent.apk")
+    
+    def source_dir(self):
+        return os.path.join(self.__wd, "agent")
+    
+    def unpack(self, name):
+        if self._execute([self.__java, "-jar", self.__apk_tool, "decode", Configuration.library(name + ".apk"), self.source_dir()]) != 0:
+            raise RuntimeError("could not unpack " + name)

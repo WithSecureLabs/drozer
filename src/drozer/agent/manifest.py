@@ -45,7 +45,7 @@ class Manifest(object):
     
     def add_permission(self, name):
         node = xml.Element('uses-permission')
-        node.attrib["name"] = name
+        node.attrib["ns0:name"] = name
         
         self.__doc.insert(len(self.__doc.getchildren()) - 1, node)
         
