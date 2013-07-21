@@ -5,7 +5,7 @@ from drozer.modules import common, Module
 
 class ARMEABI(Module, common.ShellCode):
 
-    name = "Deploy weasel, through a Shell"
+    name = "Deploy weasel, through a set of Shell commands (ARMEABI)"
     description = """
     Run weasel given a shell to execute code in, to establish a foothold on the
     device.
