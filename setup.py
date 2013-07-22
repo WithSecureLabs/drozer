@@ -40,14 +40,12 @@ setuptools.setup(
                     "mwr": "src/mwr",
                     "pydiesel": "src/pydiesel" },
   package_data = { "": ["*.apk", "*.bks", "*.crt", "*.jar", "*.key", "*.sh", "busybox"] + find_libs("src"),
-                   "drozer": ["lib/*.apk",
-                              "lib/*.jar" ] + \
-                              map(lambda f: f[11:], find_files("src/drozer/lib/gui-agent")) + \
-                              map(lambda f: f[11:], find_files("src/drozer/lib/guiless-agent")) + \
-                              map(lambda f: f[11:], find_files("src/drozer/lib/jdiesel")) + \
-                              map(lambda f: f[11:], find_files("src/drozer/lib/mwr-android")) + \
-                              map(lambda f: f[11:], find_files("src/drozer/lib/mwr-tls")) + \
-                            [ "lib/weasel/*",
+                   "drozer": ["lib/aapt",
+                              "lib/*.apk",
+                              "lib/*.jar",
+                              "lib/*.pem",
+                              "lib/*.pk8",
+                              "lib/weasel/*",
                               "server/web_root/*" ] },
   scripts = ["bin/drozer", "bin/drozer-complete"],
   install_requires = ["protobuf==2.4.1", "pyopenssl==0.13"],
