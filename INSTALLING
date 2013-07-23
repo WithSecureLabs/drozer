@@ -50,12 +50,12 @@ your distributions package repository.
  * Python 2.7 with development headers
  * Python Setuptools
 
-Then, install drozer's Python dependencies:
+Then, as root, install drozer's Python dependencies:
 
  $ easy_install --allow-hosts pypi.python.org protobuf==2.4.1
  $ easy_install twisted==10.2.0
 
-Next, install drozer itself:
+Next, as root, install drozer itself:
 
  $ easy_install ./drozer-2.3.0-py2.7.egg
 
