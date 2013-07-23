@@ -8,22 +8,34 @@ To get drozer running you will need:
 
 To get the most from drozer, your system will need a number of packages installed:
 
- * Java Development Kit (JDK)
- * Apache ANT
+ * Java
  * Android Software Development Kit (SDK)
- * Android Native Development Kit (NDK)
 
 You should ensure that each of these is on your system path (you should be able
-to execute ant, javac, dx and ndk-build).
-
-Additionally, you should set an environment variable ANDROID_HOME that points
-to your copy of the Android SDK.
+to execute adb and java).
 
 Then, follow the instructions for your platform.
 
 Note: before upgrading, you should remove all previous version of drozer or
       Mercury from your system. This will avoid potential problems with drozer
       using parts of the old codebase.
+
+
+Windows
+-------
+
+A Windows Installer is available for drozer, which builds a complete Python
+environment on your PC with most of drozer's dependencies built in.
+
+Before you start, make sure that you have the Java JDK installed, and your
+JAVA_HOME environment variable points to this folder.
+
+The drozer installation must be run as a Windows administrator.
+
+To test the installation:
+
+ > C:\Program Files\drozer\drozer.bat
+ usage: drozer [COMMAND]
 
 
 Linux
@@ -57,19 +69,28 @@ To test the installation:
 Congratulations, you are ready to go.
 
 
-Windows
--------
+Bash Completion
+---------------
 
-A Windows Installer is available for drozer, which builds a complete Python
-environment on your PC with most of drozer's dependencies built in.
+drozer support Bash Completion on Linux.
 
-Before you start, make sure that you have the Java JDK installed, and your
-JAVA_HOME environment variable points to this folder.
+To enable this, create a file in /etc/bash_completion.d/drozer that contains:
 
-The drozer installation must be run as a Windows administrator.
+    _drozer()
+    {
+        local cur prev opts
+        COMPREPLY=()
+        cur="${COMP_WORDS[COMP_CWORD]}"
+        prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-To test the installation:
+        opts=`/path/to/drozer-complete ${COMP_WORDS[@]} $COMP_CWORD 2> /dev/null`
 
- > C:\Program Files\drozer\drozer.bat
- usage: drozer [COMMAND]
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+    }
+    complete -F _drozer drozer
+
+Then run:
+
+    $ . /etc/bash_completion
 
