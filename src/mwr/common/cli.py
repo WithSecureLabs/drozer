@@ -50,6 +50,17 @@ class Base(object):
     def parse_arguments(self, parser, arguments):
         return parser.parse_args(arguments)
     
+    def parse_known_args(self, parser, arguments):
+        parser_print_help = self._parser.print_help
+        parser_exit = self._parser.exit
+        self._parser.print_help = lambda: None
+        self._parser.exit = lambda: None
+        args, unknown = self._parser.parse_known_args(arguments)
+        self._parser.print_help = parser_print_help
+        self._parser.exit = parser_exit
+        
+        return (args, unknown)
+    
     def prepare_argument_parser(self, argv):
         # try to find the command, before we invoke the parser so we can add additional arguments
         command_argv = filter(lambda a: "do_" + a in self.__commands(), argv)

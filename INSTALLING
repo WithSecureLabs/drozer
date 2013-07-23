@@ -8,53 +8,17 @@ To get drozer running you will need:
 
 To get the most from drozer, your system will need a number of packages installed:
 
- * Java Development Kit (JDK)
- * Apache ANT
+ * Java
  * Android Software Development Kit (SDK)
- * Android Native Development Kit (NDK)
 
 You should ensure that each of these is on your system path (you should be able
-to execute ant, javac, dx and ndk-build).
-
-Additionally, you should set an environment variable ANDROID_HOME that points
-to your copy of the Android SDK.
+to execute adb and java).
 
 Then, follow the instructions for your platform.
 
 Note: before upgrading, you should remove all previous version of drozer or
       Mercury from your system. This will avoid potential problems with drozer
       using parts of the old codebase.
-
-
-Linux
------
-
-Download the latest version of drozer from the project site (mwr.to/drozer),
-these contain a Python .egg file to install drozer.
-
-First, you need to install drozer's dependencies, which should be available in
-your distributions package repository.
-
- * Python 2.7 with development headers
- * Python Setuptools
-
-Then, install drozer's Python dependencies:
-
- $ easy_install --allow-hosts pypi.python.org protobuf==2.4.1
- $ easy_install twisted==10.2.0
-
-Next, install drozer itself:
-
- $ easy_install ./drozer-2.3.0-py2.7.egg
-
-To test the installation:
-
- $ drozer
- usage: drozer [COMMAND]
-
- $
-
-Congratulations, you are ready to go.
 
 
 Windows
@@ -72,4 +36,61 @@ To test the installation:
 
  > C:\Program Files\drozer\drozer.bat
  usage: drozer [COMMAND]
+
+
+Linux
+-----
+
+Download the latest version of drozer from the project site (mwr.to/drozer),
+these contain a Python .egg file to install drozer.
+
+First, you need to install drozer's dependencies, which should be available in
+your distributions package repository.
+
+ * Python 2.7 with development headers
+ * Python Setuptools
+
+Then, as root, install drozer's Python dependencies:
+
+ $ easy_install --allow-hosts pypi.python.org protobuf==2.4.1
+ $ easy_install twisted==10.2.0
+
+Next, as root, install drozer itself:
+
+ $ easy_install ./drozer-2.3.0-py2.7.egg
+
+To test the installation:
+
+ $ drozer
+ usage: drozer [COMMAND]
+
+ $
+
+Congratulations, you are ready to go.
+
+
+Bash Completion
+---------------
+
+drozer support Bash Completion on Linux.
+
+To enable this, create a file in /etc/bash_completion.d/drozer that contains:
+
+    _drozer()
+    {
+        local cur prev opts
+        COMPREPLY=()
+        cur="${COMP_WORDS[COMP_CWORD]}"
+        prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+        opts=`/path/to/drozer-complete ${COMP_WORDS[@]} $COMP_CWORD 2> /dev/null`
+
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+    }
+    complete -F _drozer drozer
+
+Then run:
+
+    $ . /etc/bash_completion
 

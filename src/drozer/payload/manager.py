@@ -46,7 +46,7 @@ class PayloadManager(cli.Base):
         Allow payload modules to add additional arguments.
         """
         
-        args, unknown = self._parser.parse_known_args(argv)
+        args, unknown = self.parse_known_args(self._parser, argv)
         
         if hasattr(args, 'module') and args.module != None and args.module != "":
             self.builder.module(args.module).add_arguments(self._parser)
