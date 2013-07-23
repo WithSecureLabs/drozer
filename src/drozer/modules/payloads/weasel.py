@@ -32,19 +32,25 @@ class ARMEABI(Module, common.ShellCode):
     module_type = "payload"
     path = ["weasel.shell"]
     
-    def __init__(self, session, loader):
+    def __init__(self, session, loader, exploit=None):
         Module.__init__(self, session)
         
+        self.__exploit = exploit
         self.__loader = loader
     
     def add_arguments(self, parser):
-        parser.add_argument("--working-directory", default="/data/data/com.android.browser", help="specify the directory that weasel will execute in")
+        parser.add_argument("--working-directory", default=None, help="specify the directory that weasel will execute in")
 
     def generate(self, arguments):
         self.format = "R"   # we only support RAW format
         
         architecture = "armeabi"
-        directory = arguments.working_directory#"/data/data/com.android.browser"
+        if arguments.working_directory != None:
+            directory = arguments.working_directory
+        elif self.__exploit != None:
+            directory = self.__exploit.working_directory
+        else:
+            directory = "/data/data/com.android.browser"
         weasel = Configuration.library(os.path.join("weasel", architecture))
         
         self.append(self.hexifyString("cd %s\n" % directory))

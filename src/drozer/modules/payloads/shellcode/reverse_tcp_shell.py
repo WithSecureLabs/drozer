@@ -22,9 +22,10 @@ class ARMEABI(Module, common.ShellCode):
     module_type = "payload"
     path = ["shell.reverse_tcp"]
     
-    def __init__(self, session, loader):
+    def __init__(self, session, loader, exploit=None):
         Module.__init__(self, session)
         
+        self.__exploit = exploit
         self.__loader = loader
     
     def generate(self, arguments):
