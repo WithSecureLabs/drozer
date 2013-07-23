@@ -1,5 +1,6 @@
 from mwr.common import cli
 
+from drozer import android
 from drozer.agent import builder, manifest
 
 class AgentManager(cli.Base):
@@ -8,6 +9,8 @@ class AgentManager(cli.Base):
     
     A utility for building custom drozer Agents.
     """
+    
+    __default_permissions = android.permissions
     
     def __init__(self):
         cli.Base.__init__(self)
@@ -30,10 +33,14 @@ class AgentManager(cli.Base):
             e.write()
         
         if arguments.permission != None:
-            m = manifest.Manifest(packager.manifest_path())
-            for p in arguments.permission:
-                m.add_permission(p)
-            m.write()
+            permissions = self.__default_permissions.union(arguments.permission)
+        else:
+            permissions = self.__default_permissions
+        # add extra permissions to the Manifest file
+        m = manifest.Manifest(packager.manifest_path())
+        for p in permissions:
+            m.add_permission(p)
+        m.write()
         
         built = packager.package()
         
