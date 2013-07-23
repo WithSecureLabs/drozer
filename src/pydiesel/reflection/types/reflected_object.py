@@ -46,6 +46,13 @@ class ReflectedObject(ReflectedType):
             except ReflectionException:
                 self._not_field_names.add(attr)
 
+    def _has_property(self, attr):
+        """
+        Test if a name is a property of the underlying Java object.
+        """
+        
+        return not isinstance(self.__getattr__(attr), partial)
+    
     def _invoker(self, method_name, *args, **kwargs):
         """
         Invokes methods on the object, in the Java VM, proxying through the

@@ -114,7 +114,7 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
     def __print_activity(self, package, activity, prefix, include_intent_filters):
         self.stdout.write("%s%s\n" % (prefix, activity.name))
         
-        if(activity.parentActivityName != None):
+        if(activity._has_property("parentActivityName") and activity.parentActivityName != None):
             self.stdout.write("%s  Parent Activity: %s\n" % (prefix, activity.parentActivityName))
         if(activity.permission != None):
             self.stdout.write("%s  Permission: %s\n" % (prefix, activity.permission))
