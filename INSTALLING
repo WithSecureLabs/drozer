@@ -34,7 +34,7 @@ The drozer installation must be run as a Windows administrator.
 
 To test the installation:
 
- > C:\Program Files\drozer\drozer.bat
+ > C:\drozer\drozer.bat
  usage: drozer [COMMAND]
 
 
