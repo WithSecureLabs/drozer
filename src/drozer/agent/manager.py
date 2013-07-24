@@ -10,7 +10,7 @@ class AgentManager(cli.Base):
     A utility for building custom drozer Agents.
     """
     
-    __default_permissions = android.permissions
+    __default_permissions = set(android.permissions)
     
     def __init__(self):
         cli.Base.__init__(self)
