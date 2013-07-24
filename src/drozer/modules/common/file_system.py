@@ -38,7 +38,7 @@ class FileSystem(object):
             if os.path.isdir(destination):
                 destination = os.path.sep.join([destination, source.split("/")[-1]])
                 
-            output = open(destination, 'w')
+            output = open(destination, 'wb')
             output.write(str(data))
             output.close()
 
