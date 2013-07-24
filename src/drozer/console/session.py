@@ -14,6 +14,7 @@ from mwr.common import console
 from mwr.common.stream import ColouredStream, DecolouredStream
 from mwr.common.text import wrap
 
+from drozer import meta
 from drozer.configuration import Configuration
 from drozer.console import clean
 from drozer.console.sequencer import Sequencer
@@ -37,10 +38,9 @@ class Session(cmd.Cmd):
         self.__server = server
         self.__session_id = session_id
         
-
         self.active = True
         self.aliases = { "l": "list", "ls": "list", "ll": "list" }
-        self.intro = "drozer Console"
+        self.intro = "drozer Console (v%s)" % meta.version
         self.history_file = os.path.sep.join([os.path.expanduser("~"), ".drozer_history"])
         self.modules = collection.ModuleCollection(loader.ModuleLoader())
         self.prompt = "dz> "
@@ -55,6 +55,9 @@ class Session(cmd.Cmd):
                             'WD': '/data/data/com.mwr.dz' }
         
         self.__load_variables()
+        
+        if arguments.onecmd == None:
+            self.__print_banner()
 
     def completefilename(self, text, line, begidx, endidx):
         """
@@ -624,6 +627,24 @@ class Session(cmd.Cmd):
         self.__module_pushed_completers -= 1
         
         self.pop_completer()
+    
+    def __print_banner(self):
+        print "            ..                    ..:."
+        print "           ..o..                  .r.."
+        print "            ..a..  . ....... .  ..nd"
+        print "              ro..idsnemesisand..pr"
+        print "              .otectorandroidsneme."
+        print "           .,sisandprotectorandroids+."
+        print "         ..nemesisandprotectorandroidsn:."
+        print "        .emesisandprotectorandroidsnemes.."
+        print "      ..isandp,..,rotectorandro,..,idsnem."
+        print "      .isisandp..rotectorandroid..snemisis."
+        print "      ,andprotectorandroidsnemisisandprotec."
+        print "     .torandroidsnemesisandprotectorandroid."
+        print "     .snemisisandprotectorandroidsnemesisan:"
+        print "     .dprotectorandroidsnemesisandprotector."
+        print
+
 
     def __setBase(self, base):
         """
@@ -676,7 +697,7 @@ class DebugSession(Session):
     def __init__(self, server, session_id, arguments):
         Session.__init__(self, server, session_id, arguments)
 
-        self.intro = "drozer Console (debug mode)"
+        self.intro = "drozer Console (v%s debug mode)" % meta.version
         self.prompt = "dz> "
         
     def do_reload(self, args):
