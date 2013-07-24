@@ -1,5 +1,6 @@
 import ConfigParser
 import os
+import sys
 
 from mwr.common import system
 
@@ -18,10 +19,16 @@ class Configuration(object):
         to find it on the PATH
         """
         
+        path = None
         if cls.get("executables", name) == None:
-            return system.which(name)
+            path = system.which(name)
         else:
-            return cls.get("executables", name)
+            path = cls.get("executables", name)
+        
+        if path == None or path == "":
+            sys.stderr.write("Could not find %s.\nEnsure that %s is installed and on your PATH. If this error persists please add the path to your .drozer_config.\n" % (name, name))
+            
+        return path
     
     @classmethod
     def delete(cls, section, key):
