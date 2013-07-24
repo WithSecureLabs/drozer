@@ -41,6 +41,7 @@ setuptools.setup(
                     "pydiesel": "src/pydiesel" },
   package_data = { "": ["*.apk", "*.bks", "*.crt", "*.jar", "*.key", "*.sh", "busybox"] + find_libs("src"),
                    "drozer": ["lib/aapt",
+                              "lib/aapt.exe",
                               "lib/*.apk",
                               "lib/*.jar",
                               "lib/*.pem",
