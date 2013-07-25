@@ -69,7 +69,7 @@ class CreatedResource(Resource):
         self.resource = resource
     
     def getBody(self):
-        return "<h1>%d %s</h1><p>%s</p><hr/><p>drozer Server</p>" % (self.code, HTTPResponse(status=self.code).status_text(), self.description % self.resource)
+        return "<h1>%d %s</h1><p>%s</p><hr/><p>Web Server</p>" % (self.code, HTTPResponse(status=self.code).status_text(), self.description % self.resource)
     
     def getResponse(self, request):
         return HTTPResponse(status=self.code, headers={ "Location": self.resource }, body=self.getBody())
@@ -84,7 +84,7 @@ class ErrorResource(Resource):
         self.description = description
     
     def getBody(self):
-        return "<h1>%d %s</h1><p>%s</p><hr/><p>drozer Server</p>" % (self.code, HTTPResponse(status=self.code).status_text(), self.description % self.resource)
+        return "<h1>%d %s</h1><p>%s</p><hr/><p>Web Server</p>" % (self.code, HTTPResponse(status=self.code).status_text(), self.description % self.resource)
     
     def getResponse(self, request):
         return HTTPResponse(status=self.code, body=self.getBody())
