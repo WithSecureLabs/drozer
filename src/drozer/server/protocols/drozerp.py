@@ -34,10 +34,10 @@ class Drozer(FrameReceiver):
 
         FrameReceiver.connectionMade(self)
 
-        self.request_forwarder = ReflectionRequestForwarder(self)
-        self.request_handler = SystemRequestHandler(self)
-        self.response_forwarder = ReflectionResponseForwarder(self)
-        self.response_handler = SystemResponseHandler(self)
+        self.request_forwarder = ReflectionRequestForwarder(self, self.__logger)
+        self.request_handler = SystemRequestHandler(self, self.__logger)
+        self.response_forwarder = ReflectionResponseForwarder(self, self.__logger)
+        self.response_handler = SystemResponseHandler(self, self.__logger)
         
         self.device = None
     

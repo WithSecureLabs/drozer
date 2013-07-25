@@ -13,8 +13,9 @@ class ReflectionRequestForwarder:
     The Handler returns a reply that is wishes to send.
     """
     
-    def __init__(self, connection):
+    def __init__(self, connection, logger):
         self.connection = connection
+        self.__logger = logger
     
     def handle(self, message):
         """

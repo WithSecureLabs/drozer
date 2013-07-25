@@ -7,10 +7,11 @@ class SystemResponseHandler(handlers.SystemResponseHandler):
     on it.
     """
 
-    def __init__(self, connection):
+    def __init__(self, connection, logger):
         handlers.SystemResponseHandler.__init__(self)
         
         self.connection = connection
+        self.__logger = logger
 
     def bound(self, message):
         """

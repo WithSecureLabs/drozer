@@ -9,8 +9,9 @@ class ReflectionResponseForwarder:
     forwards the Message to the Console.
     """
     
-    def __init__(self, connection):
+    def __init__(self, connection, logger):
         self.connection = connection
+        self.__logger = logger
     
     def handle(self, message):
         """

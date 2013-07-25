@@ -19,10 +19,11 @@ class SystemRequestHandler(handlers.SystemRequestHandler):
     The Handler returns a reply that is wishes to send.
     """
     
-    def __init__(self, connection):
+    def __init__(self, connection, logger):
         handlers.SystemRequestHandler.__init__(self)
         
         self.connection = connection
+        self.__logger = logger
     
     def bindDevice(self, message):
         """
@@ -51,6 +52,7 @@ class SystemRequestHandler(handlers.SystemRequestHandler):
 
                 reactor.callLater(1.0, enumerateSessions)
                 
+                print "accepted connection from " + device.device_id
                 return SystemResponseFactory.bound(device)\
                     .inReplyTo(message)\
                     .build()
