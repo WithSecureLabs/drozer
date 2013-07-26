@@ -10,8 +10,6 @@ class AgentManager(cli.Base):
     A utility for building custom drozer Agents.
     """
     
-    __default_permissions = set(android.permissions)
-    
     def __init__(self):
         cli.Base.__init__(self)
         
@@ -31,11 +29,14 @@ class AgentManager(cli.Base):
             if arguments.server != None:
                 e.put_server(arguments.server)
             e.write()
+            
+            permissions = set(android.permissions)
+        else:
+            permissions = set([])
         
         if arguments.permission != None:
-            permissions = self.__default_permissions.union(arguments.permission)
-        else:
-            permissions = self.__default_permissions
+            permissions = permissions.union(arguments.permission)
+
         # add extra permissions to the Manifest file
         m = manifest.Manifest(packager.manifest_path())
         for p in permissions:
