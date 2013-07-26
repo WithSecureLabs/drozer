@@ -4,7 +4,7 @@ Provides a handlful of utility methods to simplify setting up a logger.
 
 import logging
 
-logger = logging.getLogger('mwr')
+logger = logging.getLogger('drozer')
 
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 

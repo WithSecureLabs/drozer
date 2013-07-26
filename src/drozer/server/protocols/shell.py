@@ -1,4 +1,4 @@
-from time import strftime
+from logging import getLogger
 
 from twisted.internet.protocol import Protocol
 
@@ -37,6 +37,8 @@ class ShellServer(Protocol):
     collector = None
     name = "shell"
     
+    __logger = getLogger(__name__)
+    
     def connectionLost(self, reason):
         peer = self.transport.getPeer()
         
@@ -47,12 +49,9 @@ class ShellServer(Protocol):
         
         shells["%s:%d" % (str(peer[1]), peer[2])] = self
         
-        self.log("shell", "accepted shell from %s:%d" % (str(peer[1]), peer[2]))
+        self.__logger.info("accepted shell from %s:%d" % (str(peer[1]), peer[2]))
     
     def dataReceived(self, data):
         if self.collector != None:
             self.collector.transport.write(data)
-        
-    def log(self, method, resource):
-        print "%s - %s - %s" % (strftime("%Y-%m-%d %H:%M:%S %Z"), method, resource)
         

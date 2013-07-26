@@ -51,8 +51,8 @@ class SystemRequestHandler(handlers.SystemRequestHandler):
                     device.enumerateSessions()
 
                 reactor.callLater(1.0, enumerateSessions)
-                
-                print "accepted connection from " + device.device_id
+                print self.__logger
+                self.__logger.info("accepted connection from " + device.device_id)
                 return SystemResponseFactory.bound(device)\
                     .inReplyTo(message)\
                     .build()

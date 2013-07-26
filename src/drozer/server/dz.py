@@ -88,7 +88,7 @@ class ProtocolSwitcher(Protocol):
         When a connection is first established, no protocol is selected.
         """
 
-        self.__logger.info("accepted incoming connection from " + str(self.transport.getPeer()))
+        self.__logger.debug("accepted incoming connection from " + str(self.transport.getPeer()))
         
         self.protocol = None
     
@@ -102,7 +102,7 @@ class ProtocolSwitcher(Protocol):
             protocol = self.__chooseProtocol(data)
             
             if protocol is not None:
-                self.__logger.info("switching protocol to " + protocol.name + " for " + str(self.transport.getPeer()))
+                self.__logger.debug("switching protocol to " + protocol.name + " for " + str(self.transport.getPeer()))
                 
                 self.protocol = protocol
                 

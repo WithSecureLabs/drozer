@@ -1,10 +1,8 @@
 from base64 import b64decode
 from logging import getLogger
-from time import strftime
-from twisted.internet.protocol import Protocol
 
-from drozer.server.files import FileProvider, CreatedResource, ErrorResource
-from drozer.server.receivers.http import HttpReceiver, HTTPResponse
+from drozer.server.files import CreatedResource, ErrorResource
+from drozer.server.receivers.http import HttpReceiver
 
 class HTTP(HttpReceiver):
     """
@@ -46,7 +44,7 @@ class HTTP(HttpReceiver):
         resource = None
         
         if request.verb == "DELETE":
-            self.log("DELETE", request.resource)
+            self.__logger.info("DELETE %s" % request.resource)
             
             resource = self.__file_provider.get(request.resource)
             
@@ -57,11 +55,11 @@ class HTTP(HttpReceiver):
                 
                 resource = ErrorResource(request.resource, 200, "Deleted: %s")
         elif request.verb == "GET":
-            self.log("GET", request.resource)
+            self.__logger.info("GET %s" % request.resource)
             
             resource = self.__file_provider.get(request.resource)
         elif request.verb == "POST":
-            self.log("POST", request.resource)
+            self.__logger.info("POST %s (%d bytes)" % (request.resource, len(request.body)))
             
             if len(self.__credentials) > 0 and (not "Authorization" in request.headers or not self.authenticated(request.headers["Authorization"])):
                 resource = ErrorResource(request.resource, 401, "You must authenticate to write the resource %s.")
@@ -99,7 +97,4 @@ class HTTP(HttpReceiver):
         
         self.transport.write(str(resource.getResponse(request)))
         self.transport.loseConnection()
-        
-    def log(self, method, resource):
-        print "%s - %s - %s" % (strftime("%Y-%m-%d %H:%M:%S %Z"), method, resource)
         

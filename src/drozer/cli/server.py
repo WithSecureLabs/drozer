@@ -7,7 +7,7 @@ from mwr.common import logger
 
 from drozer.server import Server
 
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 logger.addStreamHandler()
 
 Server().run(sys.argv[2::])
