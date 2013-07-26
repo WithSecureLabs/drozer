@@ -32,7 +32,7 @@ class ARMEABI(Module, common.ShellCode):
         self.__loader = loader
     
     def add_arguments(self, parser):
-        parser.add_argument("--mode", default="ARM", help="specify which mode the CPU is in at the point where shellcode is executed")
+        parser.add_argument("--mode", choices=["ARM", "THUMB"], default="ARM", help="specify which mode the CPU is in at the point where shellcode is executed")
     
     def generate(self, arguments):
 
