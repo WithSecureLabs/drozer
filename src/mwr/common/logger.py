@@ -3,6 +3,7 @@ Provides a handlful of utility methods to simplify setting up a logger.
 """
 
 import logging
+import sys
 
 logger = logging.getLogger('drozer')
 
@@ -28,7 +29,7 @@ def addStreamHandler():
     Add a stream handler to the default logger.
     """
 
-    addHandler(logging.StreamHandler())
+    addHandler(logging.StreamHandler(stream=sys.stdout))
 
 def setLevel(level):
     """
