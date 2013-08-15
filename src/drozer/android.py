@@ -291,7 +291,7 @@ optional arguments:
         """
 
         parser.add_argument("--action", help="specify the action to include in the Intent")
-        parser.add_argument("--category", help="specify the category to include in the Intent")
+        parser.add_argument("--category", nargs="+", help="specify the category to include in the Intent")
         parser.add_argument("--component", help="specify the component name to include in the Intent",
                             nargs=2, metavar=('PACKAGE', 'COMPONENT'))
         parser.add_argument("--data-uri", help="specify a Uri to attach as data in the Intent")
@@ -348,7 +348,7 @@ optional arguments:
         intent = module.new("android.content.Intent")
 
         self.__add_action_to(intent, module)
-        self.__add_category_to(intent, module)
+        self.__add_categories_to(intent, module)
         self.__add_component_to(intent, module)
         self.__add_data_uri_to(intent, module)
         self.__add_extras_to(intent, module)
@@ -373,13 +373,14 @@ optional arguments:
         if self.action != None:
             intent.setAction(self.action)
     
-    def __add_category_to(self, intent, context):
+    def __add_categories_to(self, intent, context):
         """
         Set the CATEGORY of intent, iff we have a value to set.
         """
         
         if self.category != None:
-            intent.addCategory(self.category)
+            for category in self.category:
+                intent.addCategory(category)
     
     def __add_component_to(self, intent, context):
         """
