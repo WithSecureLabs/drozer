@@ -11,6 +11,7 @@ from drozer.modules.common.exploit import Exploit
 from drozer.modules.common.file_system import FileSystem
 from drozer.modules.common.filtering import Filters
 from drozer.modules.common.formatter import TableFormatter
+from drozer.modules.common.intent_filter import IntentFilter
 from drozer.modules.common.loader import ClassLoader
 from drozer.modules.common.package_manager import PackageManager
 from drozer.modules.common import path_completion
