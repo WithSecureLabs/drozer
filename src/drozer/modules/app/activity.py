@@ -39,7 +39,7 @@ class ForIntent(Module, common.PackageManager):
                            "extras", "flags", "mimetype"]:
             return android.Intent.get_completion_suggestions(action, text, **kwargs)
 
-class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.IntentFilter, common.PackageManager):
+class Info(Module, common.Filters, common.IntentFilter, common.PackageManager):
     
     name = "Gets information about exported activities."
     description = "Gets information about exported activities."

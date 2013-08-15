@@ -1,6 +1,8 @@
 from xml.etree import ElementTree
 
-class IntentFilter(object):
+from drozer.modules.common import assets, loader
+
+class IntentFilter(assets.Assets, loader.ClassLoader):
     """
     This drozer module mixin provides features for extracting Intent Filters
     for IPC endpoints, by parsing the AndroidManifest.xml file.

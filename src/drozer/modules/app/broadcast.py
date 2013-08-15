@@ -3,7 +3,7 @@ from xml.etree import ElementTree
 from drozer import android
 from drozer.modules import common, Module
 
-class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.IntentFilter, common.PackageManager):
+class Info(Module, common.Filters, common.IntentFilter, common.PackageManager):
 
     name = "Get information about broadcast receivers"
     description = "Get information about exported broadcast receivers."
@@ -70,26 +70,26 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Int
             self.stdout.write("  No matching receivers.\n\n")
 
     def __print_receiver(self, package, receiver, prefix, include_intent_filters=False):
-            self.stdout.write("%sReceiver: %s\n" % (prefix, receiver.name))
+        self.stdout.write("%sReceiver: %s\n" % (prefix, receiver.name))
             
-            if include_intent_filters:
-                intent_filters = self.find_intent_filters(receiver, 'receiver')
+        if include_intent_filters:
+            intent_filters = self.find_intent_filters(receiver, 'receiver')
             
-                if len(intent_filters) > 0:
-                    for intent_filter in intent_filters:
-                        self.stdout.write("%s  Intent Filter:\n" % (prefix))
-                        if len(intent_filter.actions) > 0:
-                            self.stdout.write("%s    Actions:\n" % (prefix))
-                            for action in intent_filter.actions:
-                                self.stdout.write("%s      - %s\n" % (prefix, action))
-                        if len(intent_filter.categories) > 0:
-                            self.stdout.write("%s    Categories:\n" % (prefix))
-                            for category in intent_filter.categories:
-                                self.stdout.write("%s      - %s\n" % (prefix, category))
-                        if len(intent_filter.datas) > 0:
-                            self.stdout.write("%s    Data:\n" % (prefix))
-                            for data in intent_filter.datas:
-                                self.stdout.write("%s      - %s\n" % (prefix, data))
+            if len(intent_filters) > 0:
+                for intent_filter in intent_filters:
+                    self.stdout.write("%s  Intent Filter:\n" % (prefix))
+                    if len(intent_filter.actions) > 0:
+                        self.stdout.write("%s    Actions:\n" % (prefix))
+                        for action in intent_filter.actions:
+                            self.stdout.write("%s      - %s\n" % (prefix, action))
+                    if len(intent_filter.categories) > 0:
+                        self.stdout.write("%s    Categories:\n" % (prefix))
+                        for category in intent_filter.categories:
+                            self.stdout.write("%s      - %s\n" % (prefix, category))
+                    if len(intent_filter.datas) > 0:
+                        self.stdout.write("%s    Data:\n" % (prefix))
+                        for data in intent_filter.datas:
+                            self.stdout.write("%s      - %s\n" % (prefix, data))
             self.stdout.write("%s  Permission: %s\n" % (prefix, receiver.permission))
 
 class Send(Module):
