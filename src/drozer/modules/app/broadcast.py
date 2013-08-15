@@ -3,7 +3,7 @@ from xml.etree import ElementTree
 from drozer import android
 from drozer.modules import common, Module
 
-class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.PackageManager):
+class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.IntentFilter, common.PackageManager):
 
     name = "Get information about broadcast receivers"
     description = "Get information about exported broadcast receivers."
@@ -56,42 +56,41 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Pac
 
             if not arguments.unexported:
                 for receiver in exported_receivers:
-                    self.__print_receiver(receiver, arguments.show_intent_filters)
+                    self.__print_receiver(package, receiver, "  ", arguments.show_intent_filters)
             else:
                 self.stdout.write("  Exported Receivers:\n")
                 for receiver in exported_receivers:
-                    self.__print_receiver(receiver, arguments.show_intent_filters)
+                    self.__print_receiver(package, receiver, "    ", arguments.show_intent_filters)
                 self.stdout.write("  Hidden Receivers:\n")
                 for receiver in hidden_receivers:
-                    self.__print_receiver(receiver, arguments.show_intent_filters)
+                    self.__print_receiver(package, receiver, "    ", arguments.show_intent_filters)
             self.stdout.write("\n")
         elif arguments.package or arguments.verbose:
             self.stdout.write("Package: %s\n" % package.packageName)
             self.stdout.write("  No matching receivers.\n\n")
 
-    def __print_receiver(self, receiver, include_intent_filters=False):
-            self.stdout.write("  Receiver: %s\n" % receiver.name)
+    def __print_receiver(self, package, receiver, prefix, include_intent_filters=False):
+            self.stdout.write("%sReceiver: %s\n" % (prefix, receiver.name))
             
             if include_intent_filters:
-                self.stdout.write("    Intent Filters:\n")
-                receiver_actions = self.__find_receiver_actions(receiver)
-                
-                if len(receiver_actions) > 0:
-                    for intent_filter in receiver_actions:
-                        self.stdout.write("      action: %s\n" % intent_filter)
-                else:
-                    self.stdout.write("      None.\n")
-            self.stdout.write("    Permission: %s\n" % receiver.permission)
-
-    def __find_receiver_actions(self, receiver):
-        actions = set([])
-
-        xml = ElementTree.fromstring(self.getAndroidManifest(receiver.packageName))
-
-        actions.update(map(lambda r: r.attrib['name'], xml.findall("./application/receiver[@name='" + str(receiver.name)[len(receiver.packageName):] + "']/intent-filter/action")))
-        actions.update(map(lambda r: r.attrib['name'], xml.findall("./application/receiver[@name='" + str(receiver.name) + "']/intent-filter/action")))
-
-        return actions
+                intent_filters = self.find_intent_filters(receiver, 'receiver')
+            
+                if len(intent_filters) > 0:
+                    for intent_filter in intent_filters:
+                        self.stdout.write("%s  Intent Filter:\n" % (prefix))
+                        if len(intent_filter.actions) > 0:
+                            self.stdout.write("%s    Actions:\n" % (prefix))
+                            for action in intent_filter.actions:
+                                self.stdout.write("%s      - %s\n" % (prefix, action))
+                        if len(intent_filter.categories) > 0:
+                            self.stdout.write("%s    Categories:\n" % (prefix))
+                            for category in intent_filter.categories:
+                                self.stdout.write("%s      - %s\n" % (prefix, category))
+                        if len(intent_filter.datas) > 0:
+                            self.stdout.write("%s    Data:\n" % (prefix))
+                            for data in intent_filter.datas:
+                                self.stdout.write("%s      - %s\n" % (prefix, data))
+            self.stdout.write("%s  Permission: %s\n" % (prefix, receiver.permission))
 
 class Send(Module):
 
