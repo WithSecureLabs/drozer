@@ -1,7 +1,7 @@
 from drozer import android
 from drozer.modules import common, Module
 
-class Info(Module, common.Filters, common.PackageManager):
+class Info(Module, common.Filters, common.IntentFilter, common.PackageManager):
 
     name = "Get information about exported services"
     description = "Gets information about exported services."
@@ -34,6 +34,7 @@ List exported services with no permissions required to interact with it:
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", default=None, help="specify the package to inspect")
         parser.add_argument("-f", "--filter", metavar='<filter>')
+        parser.add_argument("-i", "--show-intent-filters", action="store_true", default=False, help="specify whether to include intent filters")
         parser.add_argument("-p", "--permission", metavar='<filter>')
         parser.add_argument("-u", "--unexported", action="store_true", default=False, help="include receivers that are not exported")
         parser.add_argument("-v", action="store_true", dest="verbose", default=False)
@@ -63,21 +64,41 @@ List exported services with no permissions required to interact with it:
 
             if not arguments.unexported:
                 for service in exported_services:
-                    self.stdout.write("  {}\n".format(service.name))
-                    self.stdout.write("    Permission: {}\n".format(service.permission))
+                    self.__print_service(package, service, "  ", arguments.show_intent_filters)
             else:
                 self.stdout.write("  Exported Services:\n")
                 for service in exported_services:
-                    self.stdout.write("    {}\n".format(service.name))
-                    self.stdout.write("      Permission: {}\n".format(service.permission))
+                    self.__print_service(package, service, "    ", arguments.show_intent_filters)
                 self.stdout.write("  Hidden Services:\n")
                 for service in hidden_services:
-                    self.stdout.write("    {}\n".format(service.name))
-                    self.stdout.write("      Permission: {}\n".format(service.permission))
+                    self.__print_service(package, service, "    ", arguments.show_intent_filters)
             self.stdout.write("\n")
         elif arguments.package or arguments.verbose:
             self.stdout.write("Package: %s\n" % package.packageName)
             self.stdout.write("  No exported services.\n\n")
+
+    def __print_service(self, package, service, prefix, include_intent_filters=False):
+        self.stdout.write("%s%s\n" % (prefix, service.name))
+            
+        if include_intent_filters:
+            intent_filters = self.find_intent_filters(service, 'service')
+            
+            if len(intent_filters) > 0:
+                for intent_filter in intent_filters:
+                    self.stdout.write("%s  Intent Filter:\n" % (prefix))
+                    if len(intent_filter.actions) > 0:
+                        self.stdout.write("%s    Actions:\n" % (prefix))
+                        for action in intent_filter.actions:
+                            self.stdout.write("%s      - %s\n" % (prefix, action))
+                    if len(intent_filter.categories) > 0:
+                        self.stdout.write("%s    Categories:\n" % (prefix))
+                        for category in intent_filter.categories:
+                            self.stdout.write("%s      - %s\n" % (prefix, category))
+                    if len(intent_filter.datas) > 0:
+                        self.stdout.write("%s    Data:\n" % (prefix))
+                        for data in intent_filter.datas:
+                            self.stdout.write("%s      - %s\n" % (prefix, data))
+        self.stdout.write("%s  Permission: %s\n" % (prefix, service.permission))
 
 class Send(Module, common.ServiceBinding):
     
