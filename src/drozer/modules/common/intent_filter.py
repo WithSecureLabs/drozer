@@ -8,15 +8,8 @@ class IntentFilter(object):
 
     __filter_xpath = "./application/%s[@name='%s']/intent-filter"
 
-    def find_intent_filters(self, endpoint):
+    def find_intent_filters(self, endpoint, endpoint_type):
         filters = set([])
-
-        if "Activity" in endpoint.toString():
-            endpoint_type = 'activity'
-        elif "Service" in endpoint.toString():
-            endpoint_type = 'service'
-        else:
-            raise "Unknown Type: " + endpoint.toString()
 
         xml = ElementTree.fromstring(self.getAndroidManifest(endpoint.packageName))
 
