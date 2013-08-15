@@ -109,13 +109,13 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Int
         if(activity.targetActivity != None):
             self.stdout.write("%s  Target Activity: %s\n" % (prefix, activity.targetActivity))
         if include_intent_filters:
-            intent_filters = self.find_intent_filters(activity)
+            intent_filters = self.find_intent_filters(activity, 'activity')
             
             if len(intent_filters) > 0:
                 for intent_filter in intent_filters:
                     self.stdout.write("%s  Intent Filter:\n" % (prefix))
-                    self.stdout.write("%s    Actions:\n" % (prefix))
                     if len(intent_filter.actions) > 0:
+                        self.stdout.write("%s    Actions:\n" % (prefix))
                         for action in intent_filter.actions:
                             self.stdout.write("%s      - %s\n" % (prefix, action))
                     if len(intent_filter.categories) > 0:
@@ -126,8 +126,6 @@ class Info(Module, common.Assets, common.ClassLoader, common.Filters, common.Int
                         self.stdout.write("%s    Data:\n" % (prefix))
                         for data in intent_filter.datas:
                             self.stdout.write("%s      - %s\n" % (prefix, data))
-            else:
-                self.stdout.write("      None.\n")
                 
 class Start(Module):
 
