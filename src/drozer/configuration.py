@@ -1,5 +1,6 @@
 import ConfigParser
 import os
+import platform
 import sys
 
 from mwr.common import system
@@ -26,7 +27,7 @@ class Configuration(object):
             path = cls.get("executables", name)
         
         if path == None or path == "":
-            sys.stderr.write("Could not find %s.\nEnsure that %s is installed and on your PATH. If this error persists please add the path to your .drozer_config.\n" % (name, name))
+            sys.stderr.write("Could not find %s. Please ensure that it is installed and on your PATH.\n\nIf this error persists, specify the path in the ~/.drozer_config file:\n\n    [executables]\n    %s = %s\n" % (name, name, platform.system() == "Windows" and "C:\\path\\to\\" + name or "/path/to/" + name))
             
         return path
     
