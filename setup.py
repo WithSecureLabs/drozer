@@ -39,7 +39,7 @@ setuptools.setup(
   package_dir = {   "drozer": "src/drozer",
                     "mwr": "src/mwr",
                     "pydiesel": "src/pydiesel" },
-  package_data = { "": ["*.apk", "*.bks", "*.crt", "*.jar", "*.key", "*.sh", "busybox"] + find_libs("src"),
+  package_data = { "": ["*.apk", "*.bks", "*.crt", "*.docx", "*.jar", "*.key", "*.sh", "*.xml", "busybox"] + find_libs("src"),
                    "drozer": ["lib/aapt",
                               "lib/aapt.exe",
                               "lib/*.apk",
