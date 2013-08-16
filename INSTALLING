@@ -16,6 +16,10 @@ to execute adb and java).
 
 Then, follow the instructions for your platform.
 
+If you run anti-virus software on your system, it is recommended to exclude the
+directory that you will install drozer into. Otherwise, parts of the
+exploitation tools may be detected and removed.
+
 Note: before upgrading, you should remove all previous version of drozer or
       Mercury from your system. This will avoid potential problems with drozer
       using parts of the old codebase.
