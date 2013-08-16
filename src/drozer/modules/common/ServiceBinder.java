@@ -3,7 +3,9 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.lang.StringBuilder;
+import java.lang.StringBuffer;
 import android.os.Message;
 import android.os.Messenger;
 import android.content.Intent;
@@ -104,23 +106,58 @@ public class ServiceBinder {
         return false;
     }
 
-    // when message is reutnred to the python, the bundle is not returned with it.
+    // when message is returned to python, the bundle is not returned with it.
     // this method allows you to do so
     public Bundle getData(){
         return this.returnBundle;
     }
 
     public String printData(){
+        Log.i("Drozer", "Printing Bundle Data");
         StringBuilder out = new StringBuilder();
         if(!this.returnBundle.isEmpty()){
-            for(String key : this.returnBundle.keySet()){
-                Object val = this.returnBundle.get(key);
-                out.append(key + " ("+val.getClass().getSimpleName()+") : "+val + "\n");
-            }
+            out.append("Extras\n"+this.printBundle(this.returnBundle, 2) + "\n");
         }else{
             out.append("Empty");
         }
         return out.toString();
+    }
+
+    private String printBundle(Bundle bundle, int tab){
+        Log.i("Drozer", "Internal Bundle");
+        String tabs;
+        StringBuffer tb = new StringBuffer();
+        for(int i = 0; i < tab; i++){
+            tb.append(" ");
+        }
+        tabs = tb.toString();
+        StringBuilder out = new StringBuilder();
+        for(String key : bundle.keySet()){
+            Object val = bundle.get(key);
+            if(val instanceof Bundle){
+                out.append(tabs + key + " (Bundle)\n"+this.printBundle((Bundle) val, tab+2));
+            }else if(val.getClass().isArray()){
+                out.append(tabs + key + " ("+val.getClass().getSimpleName()+") : "+ this.printArray(val) + "\n");
+            }else{
+                out.append(tabs + key + " ("+val.getClass().getSimpleName()+") : "+val + "\n");
+            }
+        }
+        return out.toString();
+    }
+
+    private String printArray(Object val){
+        if(val instanceof int[])
+            return Arrays.toString((int[])val);
+        else if(val instanceof char[])
+            return Arrays.toString((char[])val);
+        else if(val instanceof float[])
+            return Arrays.toString((float[])val);
+        else if(val instanceof double[])
+            return Arrays.toString((double[])val);
+        else if(val instanceof byte[])
+            return Arrays.toString((byte[])val);
+        else
+            return Arrays.deepToString((Object[])val);
     }
     
     // return the message to client side
