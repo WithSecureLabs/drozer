@@ -53,6 +53,7 @@ your distributions package repository.
 
  * Python 2.7 with development headers
  * Python Setuptools
+ * ia-32libs (if you have a 64-bit system)
 
 Then, as root, install drozer's Python dependencies:
 
@@ -62,6 +63,14 @@ Then, as root, install drozer's Python dependencies:
 Next, as root, install drozer itself:
 
  $ easy_install ./drozer-2.3.0-py2.7.egg
+
+It is recommended to double check the file permissions of the bundled aapt
+executable. This is typically installed to:
+
+  /usr/local/lib/python2.7/dist-packages/drozer-<version>-py2.7.egg/
+    drozer/lib/aapt
+
+It should have 755 permissions.
 
 To test the installation:
 
