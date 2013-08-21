@@ -75,6 +75,19 @@ class PackageManager(object):
             for i in xrange(packages.size()):
                 yield packages.get(i)
 
+        def getApplicationLabel(self, package, flags=0):
+            """
+            Get the 'app_name' string for a package.
+            """
+            try:
+                pkg = self.__package_manager.getApplicationInfo(package, flags)
+                return self.__package_manager.getApplicationLabel(pkg)
+            except ReflectionException as e:
+                if e.message == package:
+                    raise PackageManager.NoSuchPackageException(package)
+                else:
+                    raise
+
         def getPackagesForUid(self, uid):
             """
             Get all packages with a specified UID.
