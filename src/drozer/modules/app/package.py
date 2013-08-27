@@ -122,6 +122,7 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
 
         if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
             self.stdout.write("Package: %s\n" % application.packageName)
+            self.stdout.write("  Application Label: %s\n" % self.packageManager().getApplicationLabel(application.packageName))
             self.stdout.write("  Process Name: %s\n" % application.processName)
             self.stdout.write("  Version: %s\n" % package.versionName)
             self.stdout.write("  Data Directory: %s\n" % application.dataDir)
@@ -247,7 +248,7 @@ class List(Module, common.PackageManager):
         parser.add_argument("-g", "--gid", default=None, help="filter packages by GID")
         parser.add_argument("-p", "--permission", default=None, help="permission filter conditions")
         parser.add_argument("-u", "--uid", default=None, help="filter packages by UID")
-        parser.add_argument("-a", "--app_name", action="store_true", default=False, help="print the app name")
+        parser.add_argument("-n", "--no_app_name", action="store_true", default=False, help="do not print the app name")
 
     def execute(self, arguments):
         for package in self.packageManager().getPackages(common.PackageManager.GET_PERMISSIONS | common.PackageManager.GET_CONFIGURATIONS | common.PackageManager.GET_GIDS | common.PackageManager.GET_SHARED_LIBRARY_FILES):
@@ -257,10 +258,11 @@ class List(Module, common.PackageManager):
         application = package.applicationInfo
 
         if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
-            if arguments.app_name:
-                self.stdout.write("%s (%s)\n" % (application.packageName, self.packageManager().getApplicationLabel(application.packageName)))
-            else:
+            if arguments.no_app_name:
                 self.stdout.write("%s\n" % application.packageName)
+            else:
+                self.stdout.write("%s (%s)\n" % (application.packageName, self.packageManager().getApplicationLabel(application.packageName)))
+                
 
 class Manifest(Module, common.Assets):
 
