@@ -9,16 +9,25 @@ PYTHON = python
 
 SDK = $(CURDIR)/src/drozer/lib/android.jar
 
-all: dist-egg
+all: sources apks native-libraries
+	@echo
+	@echo "----------------------------------------"
+	@echo
+	@echo "drozer"
+	@echo "You are almost ready to run drozer..."
+	@echo
+	@echo "To finish preparing your environment run:"
+	@echo
+	@echo "  $$ source ENVIRONMENT"
+	@echo
+	@echo "Then you should be able to run 'drozer' to see the available commands."
+	@echo
+	@echo "----------------------------------------"
+	@echo
 apks: $(SOURCES:.java=.apk)
 clean:
 	find -name *.pyc |xargs rm -f
 	rm -f $(SOURCES:.java=.class) $(SOURCES:.java=.apk)
-	rm -rf build/* dist/*
-dist-egg: sources apks native-libraries
-	$(PYTHON) setup.py bdist_egg
-lint: force
-	cd src && pylint drozer mwr pydiesel -d C0103,C0301,E1101,R0201,R0902,R0903,R0904,R0911,R0913,W0108,W0141,W0142,W0631 --ignore protobuf_pb2.py,app,auxiliary,exploit,information,scanner,shell,tools |less
 native-libraries: $(NATIVES)
 sources: src/pydiesel/api/protobuf_pb2.py
 test: force
@@ -31,6 +40,8 @@ test: force
 %.mk: force
 	cd $(dir $@); $(NDKBUILD)
 
+common/protobuf.proto:
+	git submodule init && git submodule update
 src/pydiesel/api/protobuf_pb2.py: common/protobuf.proto
 	cd common; protoc --python_out=../src/pydiesel/api/ protobuf.proto
 
