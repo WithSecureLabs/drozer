@@ -22,7 +22,7 @@ def find_libs(src):
         for filename in fnmatch.filter(dirnames, 'libs'):
             matches.extend(glob.glob(os.path.join(root, filename, "*", "*")))
 
-    return map(lambda fn: os.path.basename(fn), matches)
+    return map(lambda fn: os.path.basename(fn), filter(lambda fn: os.path.isfile(fn), matches))
     
 setuptools.setup(
   name = meta.name,
