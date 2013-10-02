@@ -1,7 +1,7 @@
 
 name = "drozer"
 vendor = "MWR InfoSecurity"
-version = "2.3.1"
+version = "2.3.2"
 
 contact = "drozer@mwrinfosecurity.com"
 description = "The Leading Android Security Testing Framework"
