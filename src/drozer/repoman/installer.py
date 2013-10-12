@@ -7,7 +7,7 @@ from xml.etree import ElementTree as xml
 
 from mwr.common import fs
 
-from drozer.repoman.remotes import Remote
+from drozer.repoman.remotes import Remote, NetworkException
 
 class ModuleInfo(object):
     """
@@ -65,8 +65,12 @@ class ModuleInstaller(object):
                 fetch = self.__read_local_module
                 _modules = [pattern]
             else:
-                fetch = self.__read_remote_module
-                _modules = self.search_index(pattern)
+                try:
+                    fetch = self.__read_remote_module
+                    _modules = self.search_index(pattern)
+                except NetworkException as e:
+                    status['fail'][pattern] = str(e)
+                    _modules = []
             
             for module in _modules:
                 print "Processing %s..." % module,

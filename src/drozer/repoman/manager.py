@@ -1,7 +1,7 @@
 from mwr.common import cli, console, text
 
 from drozer.repoman.installer import ModuleInstaller
-from drozer.repoman.remotes import Remote, UnknownRemote
+from drozer.repoman.remotes import Remote, NetworkException, UnknownRemote
 from drozer.repoman.repositories import Repository, NotEmptyException, UnknownRepository
 
 class ModuleManager(cli.Base):
@@ -138,20 +138,24 @@ class ModuleManager(cli.Base):
         """
         
         installer = ModuleInstaller(None)
-        modules = installer.search_index(term)
-        
-        if len(modules) > 0:
-            for module in modules:
-                print module
-                
-                if include_descriptions:
-                    if module.description != None:
-                        print "%s\n" % text.indent(text.wrap(module.description, console.get_size()[0] - 4), "    ")
-                    else:
-                        print text.indent("No description given.\n", "    ")
-            print
-        else:
-            print "No modules found.\n"
+
+        try:
+            modules = installer.search_index(term)
+            
+            if len(modules) > 0:
+                for module in modules:
+                    print module
+                    
+                    if include_descriptions:
+                        if module.description != None:
+                            print "%s\n" % text.indent(text.wrap(module.description, console.get_size()[0] - 4), "    ")
+                        else:
+                            print text.indent("No description given.\n", "    ")
+                print
+            else:
+                print "No modules found.\n"
+        except NetworkException:
+            print "There was a problem accessing one-or-more of the remote repositories.\n\nMake sure that you have a working network connection.\n"
 
 
 class RemoteManager(cli.Base):
@@ -204,6 +208,11 @@ class RemoteManager(cli.Base):
         print "Remote repositories:"
         for url in Remote.all():
             print "  %s" % url
+
+            try:
+                Remote(url).download("INDEX.xml")
+            except NetworkException:
+                print "    INACCESSIBLE"
         print
 
     def run(self, argv=None):
