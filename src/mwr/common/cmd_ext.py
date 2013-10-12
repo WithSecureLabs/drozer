@@ -54,10 +54,6 @@ class Cmd(cmd.Cmd):
         if self.use_rawinput and self.completekey:
             self.push_completer(self.complete, self.history_file)
         try:
-            if intro is not None:
-                self.intro = intro
-            if self.intro:
-                self.stdout.write(str(self.intro)+"\n")
             stop = None
             while not stop:
                 if self.cmdqueue:
@@ -256,6 +252,10 @@ class Cmd(cmd.Cmd):
 
         return line
     
+    def preloop(self):
+        if self.intro:
+            self.stdout.write(str(self.intro)+"\n")
+
     def push_completer(self, completer, history_file=None):
         if "readline" in sys.modules:
             self.__completer_stack.append(readline.get_completer())
