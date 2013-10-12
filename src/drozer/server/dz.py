@@ -54,14 +54,14 @@ class ProtocolSwitcher(Protocol):
     protocol = None
     
     __web_root = path.join(path.dirname(__file__), "web_root")
-    __file_provider = FileProvider({ "/": FileResource("/", path.join(__web_root, "index.html"), magic="I", reserved=False, type="text/html"),
-                                     "/agent.apk": FileResource("/agent.apk", Configuration.library("standard-agent.apk"), type="application/vnd.android.package-archive"),
-                                     "/agent.jar": FileResource("/agent.jar", Configuration.library("agent.jar"), reserved=False, type="application/vnd.android.package-archive"),
-                                     "/drozer.png": FileResource("/drozer.png", path.join(__web_root, "drozer.png"), reserved=True, type="image/png"),
-                                     "/favicon.png": FileResource("/favicon.png", path.join(__web_root, "favicon.png"), reserved=True, type="image/png"),
-                                     "/index.html": FileResource("/index.html", path.join(__web_root, "index.html"), reserved=True, type="text/html"),
-                                     "/jquery.js": FileResource("/jquery.js", path.join(__web_root, "jquery.js"), reserved=True, type="text/javascript"),
-                                     "/labs.png": FileResource("/labs.png", path.join(__web_root, "labs.png"), reserved=True, type="image/png") })
+    __file_provider = FileProvider({ "/$": FileResource("/", path.join(__web_root, "index.html"), magic="I", reserved=False, type="text/html"),
+                                     "/agent\\.apk": FileResource("/agent.apk", Configuration.library("standard-agent.apk"), type="application/vnd.android.package-archive"),
+                                     "/agent\\.jar": FileResource("/agent.jar", Configuration.library("agent.jar"), reserved=False, type="application/vnd.android.package-archive"),
+                                     "/drozer\\.png": FileResource("/drozer.png", path.join(__web_root, "drozer.png"), reserved=True, type="image/png"),
+                                     "/favicon\\.png": FileResource("/favicon.png", path.join(__web_root, "favicon.png"), reserved=True, type="image/png"),
+                                     "/index\\.html": FileResource("/index.html", path.join(__web_root, "index.html"), reserved=True, type="text/html"),
+                                     "/jquery\\.js": FileResource("/jquery.js", path.join(__web_root, "jquery.js"), reserved=True, type="text/javascript"),
+                                     "/labs\\.png": FileResource("/labs.png", path.join(__web_root, "labs.png"), reserved=True, type="image/png") })
     __logger = getLogger(__name__)
     
     def __init__(self):
