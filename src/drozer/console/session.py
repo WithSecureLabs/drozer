@@ -525,6 +525,16 @@ class Session(cmd.Cmd):
             self.__permissions = []
         
         return self.__permissions
+
+    def preloop(self):
+        cmd.Cmd.preloop(self)
+
+        latest = meta.latest_version()
+        if latest != None:
+            if meta.version > latest:
+                print "It seems that you are running a drozer pre-release. Brilliant!\n\nPlease send any bugs, feature requests or other feedback to our Github project:\nhttp://github.com/mwrlabs/drozer.\n\nYour contributions help us to make drozer awesome.\n"
+            elif meta.version < latest:
+                print "It seems that you are running an old version of drozer. drozer v%s was\nreleased on %s. We suggest that you update your copy to make sure that\nyou have the latest features and fixes.\n\nTo download the latest drozer visit: http://mwr.to/drozer/\n" % (latest, latest.date)
         
     def sendAndReceive(self, message):
         """
