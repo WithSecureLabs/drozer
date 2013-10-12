@@ -23,10 +23,11 @@ class FileProvider(object):
         del self.__store[resource]
         
     def get(self, resource):
-        if resource in self.__store:
-            return self.__store[resource]
-        else:
-            return ErrorResource(resource, 404, "The resource %s could not be found on this server.")
+        for key in self.__store:
+            if re.match(key, resource) != None:
+                return self.__store[key]
+        
+        return ErrorResource(resource, 404, "The resource %s could not be found on this server.")
     
     def get_by_magic(self, magic):
         resources = filter(lambda r: self.__store[r].magic == magic, self.__store)
