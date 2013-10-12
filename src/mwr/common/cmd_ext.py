@@ -168,6 +168,17 @@ class Cmd(cmd.Cmd):
         """
         
         print self.__do_substitutions(arguments)
+
+    def do_env(self, arguments):
+        """
+        usage: env
+
+        Prints out all environment variables, that can be used to substitute values in commands, and are passed into the Android shell
+        """
+
+        for key in self.variables:
+            print "%s=%s" % (key, self.variables[key])
+        print
     
     def do_set(self, arguments):
         """
@@ -195,7 +206,8 @@ class Cmd(cmd.Cmd):
         """
         
         for key in shlex.split(arguments):
-            del self.variables[key]
+            if key in self.variables:
+                del self.variables[key]
 
     def emptyline(self):
         """
