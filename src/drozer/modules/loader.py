@@ -18,7 +18,7 @@ class ModuleLoader(object):
         """
 
         if(len(self.__modules) == 0):
-            self.load(base)
+            self.__load(base)
 
         return sorted(self.__modules.keys())
 
@@ -28,11 +28,32 @@ class ModuleLoader(object):
         """
 
         if(len(self.__modules) == 0):
-            self.load(base)
+            self.__load(base)
         
         return self.__modules[key]
 
-    def load(self, base):
+    def reload(self):
+        self.__modules = {}
+
+    def __import_modules(self, modules):
+        """
+        Import all modules, given a collection of Python modules.
+        """
+
+        for i in modules.keys():
+            if modules[i] is not None and modules[i] != "drozer.modules.base":
+                try:
+                    __import__(modules[i])
+                    # Reload the module in case the source has changed. We don't
+                    # need to be careful over i, because the import must have
+                    # been successful to get here.
+                    if modules[i] in sys.modules:
+                        reload(sys.modules[modules[i]])
+                except ImportError:
+                    sys.stderr.write("Skipping source file at %s. Unable to load Python module.\n" % modules[i])
+                    raise
+
+    def __load(self, base):
         """
         Load all modules from module repositories.
         """
@@ -47,24 +68,6 @@ class ModuleLoader(object):
                     self.__modules[klass.fqmn()] = klass
                 else:
                     self.__modules[klass.fqmn()] = self.__conflict_resolver().resolve(self.__modules[klass.fqmn()], klass)
-
-    def __import_modules(self, modules):
-        """
-        Import all modules, given a collection of Python modules.
-        """
-
-        for i in modules.keys():
-            if modules[i] is not None:
-                try:
-                    __import__(modules[i])
-                    # Reload the module in case the source has changed. We don't
-                    # need to be careful over i, because the import must have
-                    # been successful to get here.
-                    if modules[i] in sys.modules:
-                        reload(sys.modules[modules[i]])
-                except ImportError:
-                    sys.stderr.write("Skipping source file at %s. Unable to load Python module.\n" % modules[i])
-                    raise
 
     def __locate(self):
         """
