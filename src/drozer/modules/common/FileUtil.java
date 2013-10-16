@@ -21,7 +21,15 @@ public class FileUtil {
     while((count = file_stream.read(buf, 0, BUFFER_SIZE)) != -1)
       digest.update(buf, 0, count);
 
-    return new BigInteger(1, digest.digest()).toString(16);
+    String result = new BigInteger(1, digest.digest()).toString(16);
+    int paddingNeeded = 32 - result.length(); // Need to re-add any leading zeros that BigInteger's toString will have omitted
+    if (paddingNeeded > 0) {
+      StringBuilder sb = new StringBuilder(result);
+      while (paddingNeeded-- > 0)
+        sb.insert(0, "0");
+      result = sb.toString();
+    }
+    return result;
   }
 
   public static StringBuffer read(File file) throws IOException {
