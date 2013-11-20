@@ -1,5 +1,4 @@
 from drozer.modules import common, Module
-import thread
 
 class NCPortForward(Module, common.BusyBox):
 
