@@ -1,9 +1,9 @@
-import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.IOException;
 
 public class ByteStreamWriter {
 
-  public static boolean writeHexStream(FileOutputStream stream, String hex_stream) throws IOException {
+  public static boolean writeHexStream(OutputStream stream, String hex_stream) throws IOException {
     int len = hex_stream.length();
     byte[] byte_stream = new byte[len / 2];
 
@@ -14,5 +14,4 @@ public class ByteStreamWriter {
 
     return true;
   }
-
 }
