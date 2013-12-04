@@ -37,7 +37,7 @@ class Session(cmd.Cmd):
         self.__permissions = None
         self.__server = server
         self.__session_id = session_id
-        
+        self.__onecmd = arguments.onecmd
         self.active = True
         self.aliases = { "l": "list", "ls": "list", "ll": "list" }
         self.intro = "drozer Console (v%s)" % meta.version
@@ -528,7 +528,8 @@ class Session(cmd.Cmd):
 
     def preloop(self):
         cmd.Cmd.preloop(self)
-
+        if(self.__onecmd):
+            return
         latest = meta.latest_version()
         if latest != None:
             if meta.version > latest:
