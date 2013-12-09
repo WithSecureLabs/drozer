@@ -30,10 +30,13 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
         while shell.valid():
             shell.write(command)
             response = shell.read()
-            self.stdout.write(response.strip())
+            
             if not shell.valid():
                 break
-            self.stdout.write(" ")
+            self.stdout.write(response.strip())
+            self.stdout.write("\n")
+            shell.write("echo $PS1")
+            self.stdout.write(shell.read().strip() + " ")
             command = raw_input()
             
         shell.close()
