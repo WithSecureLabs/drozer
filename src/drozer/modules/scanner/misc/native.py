@@ -20,26 +20,37 @@ class Native(Module, common.ClassLoader, common.Filters, common.PackageManager):
         Native = self.loadClass("common/Native.apk", "Native")
 
         if arguments.package != None:
-            package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PROVIDERS)
+            package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PROVIDERS | common.PackageManager.GET_SHARED_LIBRARY_FILES)
             
             self.__find_libraries(package, True, Native)
         else:
-            for package in self.packageManager().getPackages(common.PackageManager.GET_PERMISSIONS):
+            for package in self.packageManager().getPackages(common.PackageManager.GET_PERMISSIONS | common.PackageManager.GET_SHARED_LIBRARY_FILES):
                 if arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0:
                     self.__find_libraries(package, arguments.verbose, Native)
     
     def __find_libraries(self, package, verbose, Native):
-        libraries = Native.list(package.applicationInfo)
+        bundled_libraries = Native.list(package.applicationInfo)
+        shared_libraries = package.applicationInfo.sharedLibraryFiles
 
-        if len(libraries) > 0:
-            self.stdout.write("Package: %s\n" % package.packageName)
-            self.stdout.write("  Native Libraries:\n")
 
-            for library in libraries:
+
+        self.stdout.write("Package: %s\n" % package.packageName)
+
+        if len(bundled_libraries) > 0:
+            self.stdout.write("  Bundled Native Libraries:\n")
+
+            for library in bundled_libraries:
                 self.stdout.write("   - %s\n"%library)
             self.stdout.write("\n")
-        elif verbose:
-            self.stdout.write("Package: %s\n" % package.packageName)
+
+        if shared_libraries != None:
+            self.stdout.write("  Shared Native Libraries:\n")
+
+            for library in shared_libraries:
+                self.stdout.write("   - %s\n"%library)
+                self.stdout.write("\n")
+
+        if shared_libraries == None and len(bundled_libraries) == 0 and verbose:
             self.stdout.write("  No Native Libraries.\n")
             self.stdout.write("\n")
             
