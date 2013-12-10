@@ -42,6 +42,7 @@ class Manifest(object):
     def __init__(self, path):
         self.__path = path
         self.__doc = xml.fromstring(file(self.__path).read())
+        
     
     def add_permission(self, name):
         node = xml.Element('uses-permission')
@@ -54,4 +55,7 @@ class Manifest(object):
 
     def write(self):
         xml.ElementTree(self.__doc).write(self.__path)
+
+    def version(self):
+        return self.__doc.attrib['{http://schemas.android.com/apk/res/android}versionName']
         
