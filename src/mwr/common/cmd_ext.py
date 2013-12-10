@@ -303,6 +303,10 @@ class Cmd(cmd.Cmd):
         Perform substitution of Bash-style variables.
         """
 
+        # len(argv) ends up < 1 if line is blank, will cause an exception if not checked
+        if not line:
+            return "" 
+
         # perform any arbitrary variable substitutions, from the dictionary
         for name in self.variables:
             line = line.replace("$%s" % name, self.variables[name])
