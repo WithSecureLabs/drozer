@@ -514,7 +514,7 @@ class Session(cmd.Cmd):
         if self.__permissions == None and self.has_context():
             pm = self.reflector.resolve("android.content.pm.PackageManager")
             
-            package = self.context().getPackageManager().getPackageInfo("com.mwr.dz", pm.GET_PERMISSIONS)
+            package = self.context().getPackageManager().getPackageInfo(self.context().getPackageName(), pm.GET_PERMISSIONS)
             if package.requestedPermissions != None:
                 self.__permissions = map(lambda p: str(p), package.requestedPermissions)
             else:
