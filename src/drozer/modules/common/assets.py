@@ -16,7 +16,12 @@ class Assets(loader.ClassLoader):
         asset_manager = self.getAssetManager(package)
         xml = asset_manager.openXmlResourceParser("AndroidManifest.xml")
 
-        return str(XmlAssetReader.read(xml))
+        xml_string = str(XmlAssetReader.read(xml))
+
+        self.reflector.delete(asset_manager)
+        self.reflector.delete(xml)
+
+        return xml_string 
 
     def getAssetManager(self, package):
         """
@@ -24,4 +29,3 @@ class Assets(loader.ClassLoader):
         """
 
         return self.getContext().createPackageContext(package, 0).getAssets()
-        
