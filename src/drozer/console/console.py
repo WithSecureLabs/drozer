@@ -107,7 +107,7 @@ class Console(cli.Base):
         
         meta.print_version()
         
-    def get_completion_suggestions(self, action, text, **kwargs):
+    def get_completion_suggestions(self, action, text, line, **kwargs):
         if action.dest == "server":
             return ["localhost:31415"]
         elif action.dest == "file":
