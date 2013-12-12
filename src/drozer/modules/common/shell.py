@@ -34,7 +34,7 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
             if not shell.valid():
                 break
             self.stdout.write(response.strip())
-            self.stdout.write("\n")
+            #self.stdout.write("\n")
             shell.write("echo $PS1")
             self.stdout.write(shell.read().strip() + " ")
             command = raw_input()
