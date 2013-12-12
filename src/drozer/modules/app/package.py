@@ -139,35 +139,36 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
 
         intent_matches = not (arguments.show_intent_filters and arguments.filter)
 
-        if not intent_matches and arguments.filter != None and (activities != None or services != None):
-            for activity in activities:
-                if not intent_matches:
-                    for intent_filter in self.find_intent_filters(activity, 'activity'):
-                        if len(intent_filter.actions) > 0:
-                            for action in intent_filter.actions:
-                                if action != None and action.upper().find(arguments.filter.upper()) >= 0:
-                                    intent_matches = True
-                                    break
-                            for category in intent_filter.categories:
-                                if category.upper().find(arguments.filter.upper()) >= 0:
-                                    intent_matches = True
-                                    break
-                    break
-
-            for service in services:
-                if not intent_matches:
-                    for intent_filter in self.find_intent_filters(service, 'service'):
-                        if len(intent_filter.actions) > 0:
-                            for action in intent_filter.actions:
-                                if action != None and action.upper().find(arguments.filter.upper()) >= 0:
-                                    intent_matches = True
-                                    break
-                            for category in intent_filter.categories:
-                                if category.upper().find(arguments.filter.upper()) >= 0:
-                                    intent_matches = True
-                                    break
-                else:
-                    break
+        if not intent_matches and arguments.filter != None: 
+            if activities != None:
+                for activity in activities:
+                    if not intent_matches:
+                        for intent_filter in self.find_intent_filters(activity, 'activity'):
+                            if len(intent_filter.actions) > 0:
+                                for action in intent_filter.actions:
+                                    if action != None and action.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+                                for category in intent_filter.categories:
+                                    if category.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+                        break
+            if services != None:
+                for service in services:
+                    if not intent_matches:
+                        for intent_filter in self.find_intent_filters(service, 'service'):
+                            if len(intent_filter.actions) > 0:
+                                for action in intent_filter.actions:
+                                    if action != None and action.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+                                for category in intent_filter.categories:
+                                    if category.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+                    else:
+                        break
 
         if (intent_matches or arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0 or self.packageManager().getApplicationLabel(package.packageName).upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)): 
             self.stdout.write("Package: %s\n" % application.packageName)
@@ -196,12 +197,15 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
             else:
                 self.stdout.write("  - None\n")
             if arguments.show_intent_filters:
+                ifcount = 0
                 self.stdout.write("  Intent Filters:\n")
 
                 if activities != None:
                     for activity in activities:
                        intent_filters = self.find_intent_filters(activity, 'activity')
                        if len(intent_filters) > 0:
+                           ifcount += len(intent_filters)
+                           
                            self.stdout.write("  - %s\n" % activity.name)
                            self.__print_intent_filters(intent_filters)
 
@@ -209,10 +213,13 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
                     for service in services:
                         intent_filters = self.find_intent_filters(service, 'service')
                         if len(intent_filters) > 0:
+                            ifcount += len(intent_filters)
+
                             self.stdout.write("  - %s\n" % service.name)
                             self.__print_intent_filters(intent_filters)
-                        else:
-                            self.stdout.write("  - No service intent filters\n")
+
+                if ifcount==0:
+                    self.stdout.write("  - None")
             self.stdout.write("\n")
 
                 
