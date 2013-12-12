@@ -19,8 +19,6 @@ class ModuleCollection(object):
         modules = self.__loader.all(self.__base)
         modules = filter(lambda m: self.get(m).module_type == module_type, modules)
 
-        print "exploit:" + exploit
-
         if contains != None:
             modules = filter(lambda m: m.find(contains.lower()) >= 0, modules)
         if permissions != None:
