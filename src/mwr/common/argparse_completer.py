@@ -25,9 +25,10 @@ class ArgumentParserCompleter(object):
         """
         real_offset, text, words, word = self.__get_additional_metadata(text, line, begidx, endidx)
         
+        
         suggestions = []
-
-        if word - offs <= len(self.__get_positional_actions()):
+        
+        if (word - offs) < len(self.__get_positional_actions()):
             suggestions.extend(filter(lambda s: s.startswith(text), self.__get_suggestions_for(self.__get_positional_action(word - offs - 1), text, line)))
         else:
             offer_flags = True
@@ -47,6 +48,7 @@ class ArgumentParserCompleter(object):
             # suggestions
             if offer_flags:
                 suggestions.extend(map(lambda os: os[begidx-real_offset:], filter(lambda s: s.startswith(text), self.__offer_flag_suggestions())))
+        
         
         return suggestions
 
@@ -73,7 +75,6 @@ class ArgumentParserCompleter(object):
          - a list of the tokens in line; and
          - the index of our current token in the list of tokens.
         """
-        
         i = begidx
         # for some reason, readline strips any dashes from the start of text
         # before we get it; so we must rewind the line a little to make sure we
@@ -84,8 +85,10 @@ class ArgumentParserCompleter(object):
             
         # identify the unique tokens in the command-so-far
         words = line.split(" ")
+        
         # identify which word we are trying to complete
-        word = line[0:begidx].count(" ")
+        word = line[:begidx].count(" ")
+
         # TODO: this isn't a very good representation, multiple spaces between
         # adjacent words would f*** it up, as would escaped spaces and such
         
@@ -121,7 +124,8 @@ class ArgumentParserCompleter(object):
         Fetch the argparse.Action object corresponding to the word-th positional
         argument.
         """
-        
+        if len(self.parser._positionals._group_actions) == 0:
+            return None
         return self.parser._positionals._group_actions[word]
     
     def __get_positional_actions(self):

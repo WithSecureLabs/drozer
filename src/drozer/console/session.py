@@ -75,11 +75,16 @@ class Session(cmd.Cmd):
         modules = self.modules.all(permissions=self.permissions(), prefix=self.__base)
         
         if self.__base == "":
-            return filter(lambda m: m.startswith(text), modules)
+            modules = filter(lambda m: m.startswith(text), modules)
         elif text.startswith("."):
-            return filter(lambda m: m.startswith(text[1:]), modules)
+            modules = filter(lambda m: m.startswith(text[1:]), modules)
         else:
-            return map(lambda m: m[len(self.__base):], filter(lambda m: m.startswith(self.__base + text), modules))
+            modules = map(lambda m: m[len(self.__base):], filter(lambda m: m.startswith(self.__base + text), modules))
+        
+        #if len(modules) == 1 and text == modules[0]:
+        #    return []
+
+        return modules
 
     def completenamespaces(self, text):
         """
@@ -412,6 +417,8 @@ class Session(cmd.Cmd):
             offset = len(_line.group(0))
             # we pass over the arguments for autocompletion, but strip off the command and module
             # name for simplicity
+            
+            #return self.__module(_line.group(2)).complete(text, line, begidx, endidx)
             return self.__module(_line.group(2)).complete(text, line[offset:], begidx - offset, endidx - offset)
 
     def do_shell(self, args):

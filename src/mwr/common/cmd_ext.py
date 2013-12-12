@@ -107,7 +107,6 @@ class Cmd(cmd.Cmd):
                 if begidx > 0:
                     if ">" in line and begidx > line.index(">"):
                         self.completion_matches = self.completefilename(text, line, begidx, endidx)
-    
                         return self.completion_matches[0]
                         
                     command = self.parseline(line)[0]
@@ -120,7 +119,8 @@ class Cmd(cmd.Cmd):
                             compfunc = self.completedefault
                 else:
                     compfunc = self.completenames
-                self.completion_matches = compfunc(text, line, begidx, endidx)
+                self.completion_matches = map(lambda s: s+" ", compfunc(text, line, begidx, endidx))
+
 
         try:
             return self.completion_matches[state]
