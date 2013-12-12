@@ -9,13 +9,14 @@ class FileProvider(object):
     def __init__(self, store={}):
         self.__store = store
     
-    def create(self, resource, body, magic=None, mimetype=None, multipart=None):
+    def create(self, resource, body, magic=None, mimetype=None, multipart=None, custom_headers=None):
         if multipart == None:
-            self.__store[resource] = InMemoryResource(resource, body, magic=magic, mimetype=mimetype)
+            self.__store[resource] = InMemoryResource(resource, body, magic=magic, mimetype=mimetype, custom_headers=custom_headers)
             
             return self.__store[resource].getBody() == body
         else:
-            self.__store[resource] = InMemoryMultipartResource(resource, body, boundary=multipart.split("=")[1], magic=magic, mimetype=mimetype)
+            self.__store[resource] = InMemoryMultipartResource(resource, body, boundary=multipart.split("=")[1], magic=magic, mimetype=mimetype, custom_headers=custom_headers)
+            
             
             return self.__store[resource].valid()
         
@@ -48,14 +49,15 @@ class FileProvider(object):
         
 class Resource(object):
     
-    def __init__(self, resource, magic=None, reserved=False):
+    def __init__(self, resource, magic=None, reserved=False, custom_headers=None):
         self.resource = resource
         self.reserved = reserved
         self.magic = magic
+        self.custom_headers = custom_headers
 
     def getBody(self):
         return None
-    
+
     def getResponse(self, request):
         return None
 
@@ -93,8 +95,8 @@ class ErrorResource(Resource):
         
 class FileResource(Resource):
     
-    def __init__(self, resource, path, magic=None, reserved=False, type="text/plain"):
-        Resource.__init__(self, resource, magic=magic, reserved=reserved)
+    def __init__(self, resource, path, magic=None, reserved=False, type="text/plain", custom_headers=None):
+        Resource.__init__(self, resource, magic=magic, reserved=reserved, custom_headers=custom_headers)
         
         self.path = path
         self.type = type
@@ -110,8 +112,8 @@ class FileResource(Resource):
 
 class InMemoryMultipartResource(Resource):
     
-    def __init__(self, resource, body, boundary, magic=None, mimetype=None):
-        Resource.__init__(self, resource, magic=magic, reserved=False)
+    def __init__(self, resource, body, boundary, magic=None, mimetype=None, custom_headers=None):
+        Resource.__init__(self, resource, magic=magic, reserved=False, custom_headers=custom_headers)
         
         self.body = {}
         self.mimetype = mimetype
@@ -138,6 +140,8 @@ class InMemoryMultipartResource(Resource):
             headers['Content-Type'] = self.mimetype
             
         body = self.getBody(request.headers['User-Agent'])
+
+        headers = dict(headers.items() + self.custom_headers.items())
         
         if body != None:
             return HTTPResponse(status=200, headers=headers, body=body)
@@ -149,8 +153,8 @@ class InMemoryMultipartResource(Resource):
     
 class InMemoryResource(Resource):
     
-    def __init__(self, resource, body, magic=None, mimetype=None):
-        Resource.__init__(self, resource, magic=magic, reserved=False)
+    def __init__(self, resource, body, magic=None, mimetype=None, custom_headers=None):
+        Resource.__init__(self, resource, magic=magic, reserved=False, custom_headers=custom_headers)
         
         self.body = body
         self.mimetype = mimetype
@@ -162,6 +166,8 @@ class InMemoryResource(Resource):
         headers = {}
         if self.mimetype != None:
             headers['Content-Type'] = self.mimetype
+
+        headers = dict(headers.items() + self.custom_headers.items())
         
         return HTTPResponse(status=200, headers=headers, body=self.getBody())
     

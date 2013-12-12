@@ -87,10 +87,17 @@ class HTTP(HttpReceiver):
                         multipart = request.headers["X-Drozer-Vary-UA"].split(";")[1].strip()
                     else:
                         multipart = None
+
+                    custom_headers = {}
+                    for key, value in request.headers.items():
+                        if key.startswith("X-Drozer-Set-Header-"):
+                            custom_headers[key.split("X-Drozer-Set-Header-")[1]] = value
+
+                    print request.headers
                     
                     if magic != None and self.__file_provider.has_magic_for(magic) and self.__file_provider.get_by_magic(magic).resource != request.resource:
                         resource = ErrorResource(request.resource, 409, "Could not create %s. The specified magic has already been assigned to another resource.")
-                    elif self.__file_provider.create(request.resource, request.body, magic=magic, mimetype=mimetype, multipart=multipart):
+                    elif self.__file_provider.create(request.resource, request.body, magic=magic, mimetype=mimetype, multipart=multipart, custom_headers=custom_headers):
                         resource = CreatedResource(request.resource)
                     else:
                         resource = ErrorResource(request.resource, 500, "The server encountered an error whilst creating the resource %s.")

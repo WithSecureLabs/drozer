@@ -170,7 +170,8 @@ class HTTPResponse(HTTPMessage):
         
         self.status = status
         
-        self.headers["Content-Length"] = len(body)
+        if "Content-Length" not in self.headers:
+            self.headers["Content-Length"] = len(body)
     
     @classmethod
     def parse(cls, message):
