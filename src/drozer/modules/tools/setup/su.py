@@ -24,7 +24,7 @@ WARNING: This minimal version of the su binary is completely unprotected, meanin
     u0_a95@android:/data/data/com.mwr.dz #
     """
     author = "Tyrone (@mwrlabs)"
-    date = "2013-04-22"
+    date = "2013-12-12"
     license = "BSD (3 clause)"
     path = ["tools", "setup"]
 
@@ -33,6 +33,12 @@ WARNING: This minimal version of the su binary is completely unprotected, meanin
         # Check for existence of any su binaries
         if self.isAnySuInstalled():
             self.stdout.write("[!] A version of su is already installed\n")
+
+        # ARCH check
+        if "ARM" not in str(self.klass('java.lang.System').getProperty("os.arch")).upper():
+            response = raw_input("[-] Unsupported CPU architecture - ARM only. Continue anyway (y/n)? ")
+            if "Y" not in response.upper():
+                return
         
         # Upload su binary
         if self.uploadMinimalSu():
