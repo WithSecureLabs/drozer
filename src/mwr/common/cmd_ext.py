@@ -119,9 +119,13 @@ class Cmd(cmd.Cmd):
                             compfunc = self.completedefault
                 else:
                     compfunc = self.completenames
-                self.completion_matches = map(lambda s: s+" ", compfunc(text, line, begidx, endidx))
 
-
+                matches = compfunc(text, line, begidx, endidx)
+                if len(matches) == 1 and matches[0].endswith(os.path.sep):
+                    self.completion_matches = matches
+                else:
+                    self.completion_matches = map(lambda s: s+" ", matches)
+                
         try:
             return self.completion_matches[state]
         except IndexError:
