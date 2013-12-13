@@ -149,11 +149,15 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
                                     if action != None and action.upper().find(arguments.filter.upper()) >= 0:
                                         intent_matches = True
                                         break
+
+                            if len(intent_filter.categories) > 0:
                                 for category in intent_filter.categories:
-                                    if category.upper().find(arguments.filter.upper()) >= 0:
+                                    if category != None and category.upper().find(arguments.filter.upper()) >= 0:
                                         intent_matches = True
                                         break
+                    else:
                         break
+
             if services != None:
                 for service in services:
                     if not intent_matches:
@@ -163,6 +167,8 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
                                     if action != None and action.upper().find(arguments.filter.upper()) >= 0:
                                         intent_matches = True
                                         break
+
+                            if len(intent_filter.categories) > 0:
                                 for category in intent_filter.categories:
                                     if category.upper().find(arguments.filter.upper()) >= 0:
                                         intent_matches = True
@@ -170,7 +176,7 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
                     else:
                         break
 
-        if (intent_matches or arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0 or self.packageManager().getApplicationLabel(package.packageName).upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)): 
+        if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0 or self.packageManager().getApplicationLabel(package.packageName).upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)) or intent_matches: 
             self.stdout.write("Package: %s\n" % application.packageName)
             self.stdout.write("  Application Label: %s\n" % self.packageManager().getApplicationLabel(application.packageName))
             self.stdout.write("  Process Name: %s\n" % application.processName)
