@@ -5,6 +5,7 @@ import sys
 Commands = {    'agent': 'create custom drozer Agents',
                 'console': 'start the drozer Console',
                 'exploit': 'generate an exploit to deploy drozer',
+                'module': 'manage drozer modules',
                 'payload': 'generate payloads to deploy drozer',
                 'server': 'start a drozer Server',
                 'ssl': 'manage drozer SSL key material' }
