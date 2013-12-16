@@ -30,7 +30,6 @@ class Session(cmd.Cmd):
 
     def __init__(self, server, session_id, arguments):
         cmd.Cmd.__init__(self)
-
         self.__base = ""
         self.__has_context = None
         self.__module_pushed_completers = 0
@@ -537,13 +536,16 @@ class Session(cmd.Cmd):
         cmd.Cmd.preloop(self)
         if(self.__onecmd):
             return
-        latest = meta.latest_version()
-        if latest != None:
-            if meta.version > latest:
-                print "It seems that you are running a drozer pre-release. Brilliant!\n\nPlease send any bugs, feature requests or other feedback to our Github project:\nhttp://github.com/mwrlabs/drozer.\n\nYour contributions help us to make drozer awesome.\n"
-            elif meta.version < latest:
-                print "It seems that you are running an old version of drozer. drozer v%s was\nreleased on %s. We suggest that you update your copy to make sure that\nyou have the latest features and fixes.\n\nTo download the latest drozer visit: http://mwr.to/drozer/\n" % (latest, latest.date)
-        
+        try:
+            latest = meta.latest_version()
+            if latest != None:
+                if meta.version > latest:
+                    print "It seems that you are running a drozer pre-release. Brilliant!\n\nPlease send any bugs, feature requests or other feedback to our Github project:\nhttp://github.com/mwrlabs/drozer.\n\nYour contributions help us to make drozer awesome.\n"
+                elif meta.version < latest:
+                    print "It seems that you are running an old version of drozer. drozer v%s was\nreleased on %s. We suggest that you update your copy to make sure that\nyou have the latest features and fixes.\n\nTo download the latest drozer visit: http://mwr.to/drozer/\n" % (latest, latest.date)
+        except Exception, e:
+            pass #TODO figure out what this exception is and handle appropriately (exp. IOError)
+
     def sendAndReceive(self, message):
         """
         Delivers a message to the Agent, and returns the response.
@@ -737,6 +739,5 @@ class DebugSession(Session):
         Invoked whenever an exception is triggered by a module, to handle the
         throwable and display some information to the user.
         """
-
         self.stderr.write("exception in module: {}: {}\n".format(e.__class__.__name__, str(e)))
         self.stderr.write("%s\n"%traceback.format_exc())

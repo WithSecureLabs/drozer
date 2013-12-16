@@ -43,5 +43,5 @@ else:
     
     print " ".join(argparse_completer\
         .ArgumentParserCompleter(provider._parser, provider)\
-        .get_suggestions(word, " ".join(words), begidx, endidx, offs=1))
+        .get_suggestions(word, " ".join(words), begidx, endidx, offs=2))
         

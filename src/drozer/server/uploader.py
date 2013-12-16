@@ -20,7 +20,6 @@ def get_socket(arguments):
     
     if arguments.ssl:
         provider = Provider()
-        
         sock = ssl.wrap_socket(sock, cert_reqs=ssl.CERT_REQUIRED, ca_certs=provider.ca_certificate_path())
 
     sock.settimeout(5.0)

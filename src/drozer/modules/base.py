@@ -89,7 +89,7 @@ class Module(object):
         Intercept all readline completion requests for argument strings, and delegate
         them to the ArgumentParserCompleter to get suitable suggestions.
         """
-        return argparse_completer.ArgumentParserCompleter(self.__prepare_parser(), self).get_suggestions(text, line, begidx, endidx)
+        return argparse_completer.ArgumentParserCompleter(self.__prepare_parser(), self).get_suggestions(text, line, begidx, endidx, offs=0)
 
     @classmethod
     def fqmn(cls):

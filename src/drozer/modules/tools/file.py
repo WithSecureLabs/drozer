@@ -11,9 +11,8 @@ class Download(Module, common.ClassLoader, common.FileSystem):
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
-        parser.add_argument("destination")
         parser.add_argument("source")
-        
+        parser.add_argument("destination")
 
     def execute(self, arguments):
         length = self.downloadFile(arguments.source, arguments.destination)
@@ -93,8 +92,8 @@ class Upload(Module, common.ClassLoader, common.FileSystem):
     path = ["tools", "file"]
 
     def add_arguments(self, parser):
-        parser.add_argument("destination")
         parser.add_argument("source")
+        parser.add_argument("destination")
         
 
     def execute(self, arguments):

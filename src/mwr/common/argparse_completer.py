@@ -1,4 +1,4 @@
-import argparse
+import argparse, re
 
 from mwr.common import path_completion
 
@@ -28,8 +28,10 @@ class ArgumentParserCompleter(object):
         
         suggestions = []
         
-        if (word - offs) < len(self.__get_positional_actions()):
-            suggestions.extend(filter(lambda s: s.startswith(text), self.__get_suggestions_for(self.__get_positional_action(word - offs - 1), text, line)))
+        pos_actions = self.__get_positional_actions()
+        offset = word - offs
+        if pos_actions is not None and (offset < len(pos_actions)):
+            suggestions.extend(filter(lambda s: s.startswith(text), self.__get_suggestions_for(self.__get_positional_action(offset), text, line)))
         else:
             offer_flags = True
         
@@ -48,9 +50,8 @@ class ArgumentParserCompleter(object):
             # suggestions
             if offer_flags:
                 suggestions.extend(map(lambda os: os[begidx-real_offset:], filter(lambda s: s.startswith(text), self.__offer_flag_suggestions())))
-        
-        
-        return suggestions
+
+        return suggestions        
 
     def __get_action(self, flag):
         """
@@ -83,12 +84,12 @@ class ArgumentParserCompleter(object):
             text = "-" + text
             i -= 1
             
+        split_line = [s for s in re.split("((?<!\\\\)\\s)", line)]
         # identify the unique tokens in the command-so-far
-        words = line.split(" ")
-        
+        words =  [s for s in split_line if s != " "]
         # identify which word we are trying to complete
-        word = line[:begidx].count(" ")
-
+        word = len([x.start() for x in re.finditer("((?<!\\\\)\\s)", line[:begidx])])
+       
         # TODO: this isn't a very good representation, multiple spaces between
         # adjacent words would f*** it up, as would escaped spaces and such
         
@@ -126,6 +127,10 @@ class ArgumentParserCompleter(object):
         """
         if len(self.parser._positionals._group_actions) == 0:
             return None
+        
+        #if self.parser._positionals._group_actions[0].dest != "command":
+        #    word = word-1
+
         return self.parser._positionals._group_actions[word]
     
     def __get_positional_actions(self):
@@ -133,8 +138,9 @@ class ArgumentParserCompleter(object):
         Fetch argparse.Action objects for each of the positional arguments.
         """
         
-        return self.parser._positionals._group_actions
-    
+        pos = (self.parser._positionals._group_actions)
+        filter(lambda p: p.dest !="command" and  p.required, pos)
+        return pos
     def __get_suggestions_for(self, action, text, line, **kwargs):
         """
         Calculate suggestions for a particular action, given some initial text.

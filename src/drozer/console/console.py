@@ -42,7 +42,6 @@ class Console(cli.Base):
         
     def do_connect(self, arguments):
         """starts a new session with a device"""
-        
         if arguments.password:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")

@@ -1,6 +1,5 @@
 import cmd
 import os
-
 try:
     import readline
 except ImportError:
@@ -49,7 +48,6 @@ class Cmd(cmd.Cmd):
         off the received input, and dispatch to action methods, passing them
         the remainder of the line as argument.
         """
-
         self.preloop()
         if self.use_rawinput and self.completekey:
             self.push_completer(self.complete, self.history_file)
@@ -84,6 +82,9 @@ class Cmd(cmd.Cmd):
                     else:
                         raise
             self.postloop()
+        except Exception, e:
+            pass
+            
         finally:
             if self.use_rawinput and self.completekey:
                 self.pop_completer()
@@ -259,7 +260,7 @@ class Cmd(cmd.Cmd):
     def preloop(self):
         if self.intro:
             self.stdout.write(str(self.intro)+"\n")
-
+        
     def push_completer(self, completer, history_file=None):
         if "readline" in sys.modules:
             self.__completer_stack.append(readline.get_completer())
