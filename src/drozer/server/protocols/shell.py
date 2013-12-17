@@ -42,14 +42,14 @@ class ShellServer(Protocol):
     def connectionLost(self, reason):
         peer = self.transport.getPeer()
         
-        del(shells["%s:%d" % (str(peer[1]), peer[2])])
+        del(shells["%s:%d" % (str(peer.host), peer.port)])
         
     def connectionMade(self):
         peer = self.transport.getPeer()
         
-        shells["%s:%d" % (str(peer[1]), peer[2])] = self
+        shells["%s:%d" % (str(peer.host), peer.port)] = self
         
-        self.__logger.info("accepted shell from %s:%d" % (str(peer[1]), peer[2]))
+        self.__logger.info("accepted shell from %s:%d" % (str(peer.host), peer.port))
     
     def dataReceived(self, data):
         if self.collector != None:
