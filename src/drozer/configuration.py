@@ -16,14 +16,19 @@ class Configuration(object):
     @classmethod
     def executable(cls, name):
         """
-        Fetch a System executable, as specified in the configuration, or attempt
-        to find it on the PATH
+        Fetch an executable, could be bundled in the lib, specified in the configuration, or attempt to find it on the PATH
         """
         
         path = None
-        if cls.get("executables", name) == None:
+
+        #check the library
+        path = cls.library(name)
+
+        #is the required exe available on the PATH?
+        if path == None and cls.get("executables", name) == None:
             path = system.which(name)
-        else:
+        
+        if path == None:
             path = cls.get("executables", name)
         
         if path == None or path == "":
