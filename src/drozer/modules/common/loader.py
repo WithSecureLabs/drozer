@@ -1,4 +1,4 @@
-import os
+import os, platform
 
 from pydiesel.reflection import utils
 
@@ -24,7 +24,7 @@ class ClassLoader(object):
         if not Module.cached_klass(".".join([source, klass])):
             loader = utils.ClassLoader(source, self.__get_cache_path(), self.__get_constructor(), self.klass('java.lang.ClassLoader').getSystemClassLoader(), relative_to=relative_to)
             loader.android_path = Configuration.library("android.jar")
-            loader.dx_path = Configuration.executable("dx")
+            loader.dx_path = Configuration.executable("dx.bat") if platform.system() == "Windows" else Configuration.executable("dx")
             loader.javac_path = Configuration.executable("javac")
             
             Module.cache_klass(".".join([source, klass]), loader.loadClass(klass))

@@ -10,7 +10,6 @@ from drozer.ssl.provider import Provider # TODO: eugh
 class SocketTransport(Transport):
     
     def __init__(self, arguments, trust_callback=None):
-        print "socket_transport"
         Transport.__init__(self)
         self.__socket = socket.socket()
         

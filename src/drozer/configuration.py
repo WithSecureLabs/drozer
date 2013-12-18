@@ -19,7 +19,7 @@ class Configuration(object):
         Fetch an executable, could be bundled in the lib, specified in the configuration, or attempt to find it on the PATH
         """
         
-        path = None
+  
 
         #check the library
         path = cls.library(name)
