@@ -13,6 +13,9 @@ REM WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 REM See the License for the specific language governing permissions and
 REM limitations under the License.
 
+REM NOTE: This file has been edited by MWRInfosecurity to work directly with drozer
+REM       For more infomation please visit the drozer websiZte
+
 REM don't modify the caller's environment
 setlocal
 
@@ -85,16 +88,7 @@ set a=%~1
 :endArgs
 
 set javaOpts=%javaOpts% %defaultXmx% %defaultXss%
-echo cmd.exe 
-echo /c
-echo %java_exe%
-echo %javaOpts%
-echo -Djava.ext.dirs="%frameworkdir%"
-echo -jar
-echo "%jarpath%"
-echo %params%
 
-REM start /i /d %CD% cmd.exe /k SET
 call "%java_exe%" %javaOpts% -Djava.ext.dirs="%frameworkdir%" -jar "%jarpath%" %params%
 
 goto :EOF
