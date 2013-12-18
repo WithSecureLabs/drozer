@@ -150,6 +150,12 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
                                         intent_matches = True
                                         break
 
+                            if len(intent_filter.datas) > 0:
+                                for data in intent_filter.datas:
+                                    if data.scheme != None and data.scheme != False and data.scheme.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+
                             if len(intent_filter.categories) > 0:
                                 for category in intent_filter.categories:
                                     if category != None and category.upper().find(arguments.filter.upper()) >= 0:
@@ -168,9 +174,15 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
                                         intent_matches = True
                                         break
 
+                            if len(intent_filter.uris) > 0:
+                                for data in intent_filter.datas:
+                                    if data.scheme != None and data.scheme != False and data.scheme.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+
                             if len(intent_filter.categories) > 0:
                                 for category in intent_filter.categories:
-                                    if category.upper().find(arguments.filter.upper()) >= 0:
+                                    if category != None and category.upper().find(arguments.filter.upper()) >= 0:
                                         intent_matches = True
                                         break
                     else:
