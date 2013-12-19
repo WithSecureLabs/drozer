@@ -44,4 +44,8 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
         
     def __send_variables(self, shell):
         shell.write(self.__get_variables())
+
+        if 'WD' in self.variables:
+            shell.write("cd %s" % (self.variables['WD']))
+
         shell.read()

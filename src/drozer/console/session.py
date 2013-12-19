@@ -450,10 +450,7 @@ class Session(cmd.Cmd):
         if len(args) > 0:
             return self.do_run(".shell.exec \"%s\"" % args)
         else:
-            if self.has_context():
-                return self.do_run(".shell.start")
-            else:
-                self.stdout.write("Has ApplicationContext: NO\n")
+            return self.do_run(".shell.start")
     
     def help_intents(self):
         """
