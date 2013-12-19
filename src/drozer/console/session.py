@@ -18,7 +18,7 @@ from drozer import meta
 from drozer.configuration import Configuration
 from drozer.console import clean
 from drozer.console.sequencer import Sequencer
-from drozer.modules import collection, common, loader
+from drozer.modules import collection, common, loader, Module
 from drozer.repoman import ModuleManager
 
 class Session(cmd.Cmd):
@@ -50,8 +50,17 @@ class Session(cmd.Cmd):
         else:
             self.stdout = DecolouredStream(self.stdout)
             self.stderr = DecolouredStream(self.stderr)
-        self.variables = {  'PATH': '/data/data/com.mwr.dz/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
-                            'WD': '/data/data/com.mwr.dz' }
+
+
+        m = Module(self)
+
+        if m.has_context():
+            dataDir = str(m.getContext().getApplicationInfo().dataDir)
+        else:
+            dataDir = str(m.new("java.io.File", ".").getAbsolutePath())[:-2]
+
+        self.variables = {  'PATH': dataDir +'/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
+                            'WD': dataDir }
         
         self.__load_variables()
         
