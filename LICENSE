@@ -47,6 +47,6 @@ This licence does not apply to the following components:
      /src/drozer/lib/signapk.jar
     The following bits are part of the Android SDK but have been edited to be used by drozer
      /src/drozer/lib/dx.bat
-     /src/drozer/lib/dx.exe
-    Owned by Google and available to download from: http://developer.android.com/
+     /src/drozer/lib/find_java.bat
+    Released under an Apache 2 License and is available to download from: http://developer.android.com/
 

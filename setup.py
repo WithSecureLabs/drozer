@@ -26,7 +26,7 @@ def find_libs(src):
     
 setuptools.setup(
   name = meta.name,
-  version = meta.version,
+  version = str(meta.version),
   author = meta.vendor,
   author_email = meta.contact,
   description = meta.description,
