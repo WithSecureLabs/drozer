@@ -3,7 +3,7 @@ import pdb
 
 class Backup(Module, common.Filters, common.PackageManager):
 
-    name = "Lists packages that use the backup API (retruns true on FLAG_ALLOW_BACKUP)"
+    name = "Lists packages that use the backup API (returns true on FLAG_ALLOW_BACKUP)"
     description = "Lists packages that use the backup API (retruns true on FLAG_ALLOW_BACKUP)"
     examples = ""
     author = "MWR InfoSecurity (@mwrlabs)"
@@ -17,7 +17,6 @@ class Backup(Module, common.Filters, common.PackageManager):
 
     def add_arguments(self, parser):
         parser.add_argument("-f", "--filter", action="store", dest="filter", default=None, help="filter term (By Package Name)")
-        parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", default=False, help="be verbose")
         parser.add_argument("-k", "--api-keys", action="store_true", dest="api_key", default=False, help="Only print packages that contain api keys")
     def execute(self, arguments):
         if arguments.api_key:
