@@ -58,6 +58,10 @@ class ModuleManager(cli.Base):
 
         self.__search_remotes(len(arguments.options) > 0 and arguments.options[0] or "", arguments.descriptions)
 
+    def get_completion_suggestions(self, action, text, **kwargs):
+        return []
+
+
     def run(self, argv=None):
         """
         Run is the main entry point of the console, called by the runtime. It
