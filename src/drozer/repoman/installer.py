@@ -253,7 +253,7 @@ class ModuleInstaller(object):
         files = archive.infolist()
         # if force is set, we dont care if it overwrites an existing file
         # ensure we are not about to overwrite any existing files
-        if True in map(lambda f: f.filename != "__init__.py" and os.path.exists(os.path.join(package, f.filename)), files) and not force:
+        if True in map(lambda f: f.filename != "__init__.py" and f.filename != ".drozer_package" and os.path.exists(os.path.join(package, f.filename)), files) and not force:
             raise AlreadyInstalledError("Installing this module would overwrite one-or-more files in your repository.")
         # extract each file, in turn
         try:
