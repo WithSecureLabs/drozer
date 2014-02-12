@@ -1,6 +1,11 @@
 #!/usr/bin/python
 
 import sys
+import os
+import platform
+
+if platform.linux_distribution()[0] in ["Fedora", "CentOS Linux"]:
+    os.putenv("TERM", "vt100")
 
 from mwr.common import argparse_completer
 
