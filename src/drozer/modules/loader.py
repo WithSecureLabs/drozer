@@ -52,6 +52,9 @@ class ModuleLoader(object):
                 except ImportError:
                     sys.stderr.write("Skipping source file at %s. Unable to load Python module.\n" % modules[i])
                     raise
+                except IndentationError:
+                    sys.stderr.write("Skipping source file at %s. Indentation Error.\n" % modules[i])
+                    pass
 
     def __load(self, base):
         """
@@ -138,4 +141,3 @@ class ModuleLoader(object):
                 yield c
                 
         yield klass
-        
