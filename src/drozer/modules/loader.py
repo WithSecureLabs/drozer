@@ -51,7 +51,7 @@ class ModuleLoader(object):
                         reload(sys.modules[modules[i]])
                 except ImportError:
                     sys.stderr.write("Skipping source file at %s. Unable to load Python module.\n" % modules[i])
-                    raise
+                    pass 
                 except IndentationError:
                     sys.stderr.write("Skipping source file at %s. Indentation Error.\n" % modules[i])
                     pass
