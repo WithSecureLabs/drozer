@@ -1,3 +1,4 @@
+import itertools
 from mwr.common import cli
 
 from drozer import android, meta
@@ -15,6 +16,7 @@ class AgentManager(cli.Base):
         
         self._parser.add_argument("--no-gui", action="store_true", default=False, help="create an agent with no GUI")
         self._parser.add_argument("--permission", "-p", nargs="+", help="add permissions to the Agent manifest")
+        self._parser.add_argument("--define-permission", "-d", metavar="name protectionLevel", nargs="+", help="define a permission and protectionLevel in the Agent manifest")
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
         
     def do_build(self, arguments):
@@ -37,6 +39,10 @@ class AgentManager(cli.Base):
         if arguments.permission != None:
             permissions = permissions.union(arguments.permission)
 
+        defined_permissions = {}
+        if arguments.define_permission != None:
+            defined_permissions = dict(itertools.izip_longest(*[iter(arguments.define_permission)] * 2, fillvalue=""))
+
         # add extra permissions to the Manifest file
         m = manifest.Manifest(packager.manifest_path()) 
         
@@ -50,8 +56,12 @@ class AgentManager(cli.Base):
 
         for p in permissions:
             m.add_permission(p)
+
+        for name, protectionLevel in defined_permissions.iteritems():
+            m.define_permission(name, protectionLevel)
+
         m.write()
-        
+
         built = packager.package()
         
         print "Done:", built
