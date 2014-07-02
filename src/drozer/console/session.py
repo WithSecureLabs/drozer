@@ -525,12 +525,18 @@ class Session(cmd.Cmd):
         
         if self.__permissions == None and self.has_context():
             pm = self.reflector.resolve("android.content.pm.PackageManager")
+            packageName = str(self.context().getPackageName())
+            packageManager = self.context().getPackageManager()
             
-            package = self.context().getPackageManager().getPackageInfo(self.context().getPackageName(), pm.GET_PERMISSIONS)
+            package = packageManager.getPackageInfo(packageName, pm.GET_PERMISSIONS)
+            self.__permissions = []
             if package.requestedPermissions != None:
-                self.__permissions = map(lambda p: str(p), package.requestedPermissions)
-            else:
-                self.__permissions = []
+                requestedPermissions = map(lambda p: str(p), package.requestedPermissions)
+                
+                for permission in requestedPermissions:
+                    #Check for PERMISSION_GRANTED
+                    if (packageManager.checkPermission(str(permission), packageName) == pm.PERMISSION_GRANTED):
+                        self.__permissions.append(str(permission))
             
             self.__permissions.append("com.mwr.dz.permissions.GET_CONTEXT")
         elif self.__permissions == None:
