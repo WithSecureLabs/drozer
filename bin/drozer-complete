@@ -35,7 +35,7 @@ class ArgumentSuggestor(object):
         return []
 
 if offset == 1:
-    # we are selecting the Mercury sub-program
+    # we are selecting the drozer sub-program
     print "agent console exploit module payload server ssl"
 elif offset == 2:
     # we are selecting the command

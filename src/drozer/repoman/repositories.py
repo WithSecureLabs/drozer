@@ -63,9 +63,9 @@ class Repository(object):
             raise UnknownRepository(path)
         
     @classmethod
-    def droidhg_modules_path(cls):
+    def drozer_modules_path(cls):
         """
-        Returns the DROIDHG_MODULE_PATH, that was previously stored in an environment
+        Returns the DROZER_MODULE_PATH, that was previously stored in an environment
         variable.
         """
         

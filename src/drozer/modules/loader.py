@@ -102,10 +102,10 @@ class ModuleLoader(object):
     def __module_path(self):
         """
         Calculate the full set of module paths, by combining internal paths with
-        those specified in the DROIDHG_MODULE_PATH environment variable.
+        those specified in the DROZER_MODULE_PATH environment variable.
         """
 
-        return self.__module_paths + ":" + Repository.droidhg_modules_path()
+        return self.__module_paths + ":" + Repository.drozer_modules_path()
         
     def __paths(self):
         """
