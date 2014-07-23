@@ -45,6 +45,9 @@ class ServiceBinding(loader.ClassLoader):
             else:
                 raise TypeError
 
+        def setBundle(self, bundle):
+            self.bundle = bundle
+
         def obtain_binder(self):
             if self.binder == None:
                 ServiceBinder = self.context.loadClass("common/ServiceBinder.apk", "ServiceBinder")
