@@ -13,11 +13,21 @@ class Info(Module, common.Filters, common.IntentFilter, common.PackageManager):
 
     dz> run app.broadcast.info -a android
     Package: android
-      Receiver: com.android.server.BootReceiver
-        Intent Filters:
+      com.android.server.BootReceiver
         Permission: null
-      Receiver: com.android.server.MasterClearReceiver
-        Intent Filters:
+      com.android.server.updates.CertPinInstallReceiver
+        Permission: null
+      com.android.server.updates.IntentFirewallInstallReceiver
+        Permission: null
+      com.android.server.updates.SmsShortCodesInstallReceiver
+        Permission: null
+      com.android.server.updates.CarrierProvisioningUrlsInstallReceiver
+        Permission: null
+      com.android.server.updates.TZInfoInstallReceiver
+        Permission: null
+      com.android.server.updates.SELinuxPolicyInstallReceiver
+        Permission: null
+      com.android.server.MasterClearReceiver
         Permission: android.permission.MASTER_CLEAR"""
     author = ["MWR InfoSecurity (@mwrlabs)", "Luander (luander.r@samsung.com)"]
     date = "2012-11-06"
@@ -72,7 +82,7 @@ class Info(Module, common.Filters, common.IntentFilter, common.PackageManager):
             self.stdout.write("  No matching receivers.\n\n")
 
     def __print_receiver(self, package, receiver, prefix, include_intent_filters=False):
-        self.stdout.write("%sReceiver: %s\n" % (prefix, receiver.name))
+        self.stdout.write("%s%s\n" % (prefix, receiver.name))
             
         if include_intent_filters:
             intent_filters = self.find_intent_filters(receiver, 'receiver')
