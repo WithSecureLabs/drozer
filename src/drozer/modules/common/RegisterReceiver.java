@@ -29,12 +29,17 @@ public class RegisterReceiver
 
                 Bundle bundle = intent.getExtras();
 
-                for (String key : bundle.keySet())
+                //Check if bundle is null e.g. am broadcast -a com.test.bla
+                if (bundle != null)
                 {
-                    Object value = bundle.get(key);
-                    RegisterReceiver.output += "Extra: " + String.format("%s=%s (%s)", key,  
-                    value.toString(), value.getClass().getName()) + "\n";
+                    for (String key : bundle.keySet())
+                    {
+                        Object value = bundle.get(key);
+                        RegisterReceiver.output += "Extra: " + String.format("%s=%s (%s)", key,  
+                        value.toString(), value.getClass().getName()) + "\n";
+                    }    
                 }
+                
 
                 RegisterReceiver.output += "\n";
             }
