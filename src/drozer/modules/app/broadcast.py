@@ -92,7 +92,7 @@ class Info(Module, common.Filters, common.IntentFilter, common.PackageManager):
                         self.stdout.write("%s    Data:\n" % (prefix))
                         for data in intent_filter.datas:
                             self.stdout.write("%s      - %s\n" % (prefix, data))
-            self.stdout.write("%s  Permission: %s\n" % (prefix, receiver.permission))
+        self.stdout.write("%s  Permission: %s\n" % (prefix, receiver.permission))
 
 class Send(Module):
 
