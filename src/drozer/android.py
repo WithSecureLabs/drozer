@@ -227,7 +227,8 @@ class Intent(object):
                     'long',
                     'parcelable',
                     'short',
-                    'string' ]
+                    'string',
+                    'bytearray' ]
     flags = {       'ACTIVITY_BROUGHT_TO_FRONT': 0x00400000,
                     'ACTIVITY_CLEAR_TASK': 0x00008000,
                     'ACTIVITY_CLEAR_TOP': 0x04000000,
@@ -426,6 +427,11 @@ optional arguments:
                     extras.putLong(extra[1], context.arg(long(extra[2]), obj_type="long"))
                 elif extra[0] == "short":
                     extras.putShort(extra[1], context.arg(int(extra[2]), obj_type="short"))
+                elif extra[0] == "bytearray":
+                    wrapper = context.new("java.io.ByteArrayOutputStream")
+                    for i in map(ord,extra[2]):
+                        wrapper.write(i)
+                    extras.putByteArray(extra[1],wrapper.toByteArray())
                 elif extra[0] == "string":
                     extras.putString(extra[1], extra[2])
                 else:
