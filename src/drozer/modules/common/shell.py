@@ -21,20 +21,34 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
         Create an interactive Linux shell on the Agent, optionally passing the
         first command.
         """
-        
-        shell = self.new("com.mwr.jdiesel.util.Shell")
-        
+        try:
+            shell = self.new("com.mwr.jdiesel.util.Shell")
+            in_shell = True
+        except ReflectionException as e:
+            raise e
+
         if shell.valid():
             self.__send_variables(shell)
-                    
-        while shell.valid():
-            shell.write(command)
-            response = shell.read()
-            self.stdout.write(response.strip())
-            if not shell.valid():
-                break
-            self.stdout.write(" ")
-            command = raw_input()
+        else:
+            in_shell = False
+            self.stderr.write("Unable to connect to shell")             
+        while in_shell:
+            try:
+                shell.write(command)
+                response = shell.read()
+                
+                if not shell.valid():
+                    in_shell = False
+                    continue
+                
+                self.stdout.write(response.strip())
+                self.stdout.write(shell.read().strip() + " ")
+                command = raw_input()
+            except ReflectionException as e:
+                if str(e.message) == "Broken pipe":
+                    in_shell = False
+                else:
+                    raise
             
         shell.close()
             
@@ -43,4 +57,8 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
         
     def __send_variables(self, shell):
         shell.write(self.__get_variables())
+
+        if 'WD' in self.variables:
+            shell.write("cd %s" % (self.variables['WD']))
+
         shell.read()

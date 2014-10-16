@@ -18,7 +18,7 @@ from drozer import meta
 from drozer.configuration import Configuration
 from drozer.console import clean
 from drozer.console.sequencer import Sequencer
-from drozer.modules import collection, common, loader
+from drozer.modules import collection, common, loader, Module
 from drozer.repoman import ModuleManager
 
 class Session(cmd.Cmd):
@@ -30,14 +30,13 @@ class Session(cmd.Cmd):
 
     def __init__(self, server, session_id, arguments):
         cmd.Cmd.__init__(self)
-
         self.__base = ""
         self.__has_context = None
         self.__module_pushed_completers = 0
         self.__permissions = None
         self.__server = server
         self.__session_id = session_id
-        
+        self.__onecmd = arguments.onecmd
         self.active = True
         self.aliases = { "l": "list", "ls": "list", "ll": "list" }
         self.intro = "drozer Console (v%s)" % meta.version
@@ -51,8 +50,17 @@ class Session(cmd.Cmd):
         else:
             self.stdout = DecolouredStream(self.stdout)
             self.stderr = DecolouredStream(self.stderr)
-        self.variables = {  'PATH': '/data/data/com.mwr.dz/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
-                            'WD': '/data/data/com.mwr.dz' }
+
+
+        m = Module(self)
+
+        if m.has_context():
+            dataDir = str(m.getContext().getApplicationInfo().dataDir)
+        else:
+            dataDir = str(m.new("java.io.File", ".").getAbsolutePath())[:-2]
+
+        self.variables = {  'PATH': dataDir +'/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
+                            'WD': dataDir }
         
         self.__load_variables()
         
@@ -75,11 +83,16 @@ class Session(cmd.Cmd):
         modules = self.modules.all(permissions=self.permissions(), prefix=self.__base)
         
         if self.__base == "":
-            return filter(lambda m: m.startswith(text), modules)
+            modules = filter(lambda m: m.startswith(text), modules)
         elif text.startswith("."):
-            return filter(lambda m: m.startswith(text[1:]), modules)
+            modules = filter(lambda m: m.startswith(text[1:]), modules)
         else:
-            return map(lambda m: m[len(self.__base):], filter(lambda m: m.startswith(self.__base + text), modules))
+            modules = map(lambda m: m[len(self.__base):], filter(lambda m: m.startswith(self.__base + text), modules))
+        
+        #if len(modules) == 1 and text == modules[0]:
+        #    return []
+
+        return modules
 
     def completenamespaces(self, text):
         """
@@ -412,6 +425,8 @@ class Session(cmd.Cmd):
             offset = len(_line.group(0))
             # we pass over the arguments for autocompletion, but strip off the command and module
             # name for simplicity
+            
+            #return self.__module(_line.group(2)).complete(text, line, begidx, endidx)
             return self.__module(_line.group(2)).complete(text, line[offset:], begidx - offset, endidx - offset)
 
     def do_shell(self, args):
@@ -435,10 +450,7 @@ class Session(cmd.Cmd):
         if len(args) > 0:
             return self.do_run(".shell.exec \"%s\"" % args)
         else:
-            if self.has_context():
-                return self.do_run(".shell.start")
-            else:
-                self.stdout.write("Has ApplicationContext: NO\n")
+            return self.do_run(".shell.start")
     
     def help_intents(self):
         """
@@ -514,7 +526,7 @@ class Session(cmd.Cmd):
         if self.__permissions == None and self.has_context():
             pm = self.reflector.resolve("android.content.pm.PackageManager")
             
-            package = self.context().getPackageManager().getPackageInfo("com.mwr.dz", pm.GET_PERMISSIONS)
+            package = self.context().getPackageManager().getPackageInfo(self.context().getPackageName(), pm.GET_PERMISSIONS)
             if package.requestedPermissions != None:
                 self.__permissions = map(lambda p: str(p), package.requestedPermissions)
             else:
@@ -525,7 +537,26 @@ class Session(cmd.Cmd):
             self.__permissions = []
         
         return self.__permissions
-        
+
+    def preloop(self):
+        cmd.Cmd.preloop(self)
+
+        #should we wish to change the prompt :D
+        if not self.has_context():
+            self.prompt = self.prompt.replace(">","-limited>")
+
+        if(self.__onecmd):
+            return
+        try:
+            latest = meta.latest_version()
+            if latest != None:
+                if meta.version > latest:
+                    print "It seems that you are running a drozer pre-release. Brilliant!\n\nPlease send any bugs, feature requests or other feedback to our Github project:\nhttp://github.com/mwrlabs/drozer.\n\nYour contributions help us to make drozer awesome.\n"
+                elif meta.version < latest:
+                    print "It seems that you are running an old version of drozer. drozer v%s was\nreleased on %s. We suggest that you update your copy to make sure that\nyou have the latest features and fixes.\n\nTo download the latest drozer visit: http://mwr.to/drozer/\n" % (latest, latest.date)
+        except Exception, e:
+            pass #TODO figure out what this exception is and handle appropriately (exp. IOError)
+
     def sendAndReceive(self, message):
         """
         Delivers a message to the Agent, and returns the response.
@@ -719,6 +750,5 @@ class DebugSession(Session):
         Invoked whenever an exception is triggered by a module, to handle the
         throwable and display some information to the user.
         """
-
         self.stderr.write("exception in module: {}: {}\n".format(e.__class__.__name__, str(e)))
         self.stderr.write("%s\n"%traceback.format_exc())

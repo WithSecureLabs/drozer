@@ -9,6 +9,7 @@ from drozer.exploit.manager import ExploitManager
 from drozer.payload.manager import PayloadManager
 from drozer.server import Server
 from drozer.ssl import SSLManager
+from drozer.repoman import ModuleManager
 
 words = sys.argv[1:-1]
 offset = int(sys.argv[-1])
@@ -21,7 +22,7 @@ word = words[offset]
 begidx = len(" ".join(words))
 endidx = begidx + len(word)
 
-providers = { "console": Console, "exploit": ExploitManager, "payload": PayloadManager, "server": Server, "ssl": SSLManager }
+providers = { "console": Console, "exploit": ExploitManager, "module": ModuleManager, "payload": PayloadManager, "server": Server, "ssl": SSLManager }
 
 class ArgumentSuggestor(object):
     
@@ -30,7 +31,7 @@ class ArgumentSuggestor(object):
 
 if offset == 1:
     # we are selecting the Mercury sub-program
-    print "agent console exploit payload server ssl"
+    print "agent console exploit module payload server ssl"
 elif offset == 2:
     # we are selecting the command
     print " ".join(map(lambda c: c.replace("do_", ""), providers[words[1]]()._Base__commands()))
@@ -42,5 +43,5 @@ else:
     
     print " ".join(argparse_completer\
         .ArgumentParserCompleter(provider._parser, provider)\
-        .get_suggestions(word, " ".join(words), begidx, endidx, offs=1))
+        .get_suggestions(word, " ".join(words), begidx, endidx, offs=2))
         

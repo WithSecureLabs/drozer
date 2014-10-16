@@ -89,10 +89,7 @@ class Module(object):
         Intercept all readline completion requests for argument strings, and delegate
         them to the ArgumentParserCompleter to get suitable suggestions.
         """
-        
-        return argparse_completer\
-            .ArgumentParserCompleter(self.__prepare_parser(), self)\
-            .get_suggestions(text, line, begidx, endidx)
+        return argparse_completer.ArgumentParserCompleter(self.__prepare_parser(), self).get_suggestions(text, line, begidx, endidx, offs=0)
 
     @classmethod
     def fqmn(cls):
@@ -110,12 +107,11 @@ class Module(object):
         
         return Module.__klasses[klass]
     
-    def get_completion_suggestions(self, action, text, **kwargs):
+    def get_completion_suggestions(self, action, text, line, **kwargs):
         """
         Stub Method: invoked during completion of module arguments, to allow the module
         to provide suggestions.
         """
-        
         pass
 
     def getContext(self):
@@ -216,7 +212,6 @@ class Module(object):
         parser.add_argument("-h", "--help", action="store_true", dest="help", default=False)
 
         self.add_arguments(parser)
-        
         return parser
         
 

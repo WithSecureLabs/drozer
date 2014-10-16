@@ -1,6 +1,5 @@
 import cmd
 import os
-
 try:
     import readline
 except ImportError:
@@ -49,15 +48,10 @@ class Cmd(cmd.Cmd):
         off the received input, and dispatch to action methods, passing them
         the remainder of the line as argument.
         """
-
         self.preloop()
         if self.use_rawinput and self.completekey:
             self.push_completer(self.complete, self.history_file)
         try:
-            if intro is not None:
-                self.intro = intro
-            if self.intro:
-                self.stdout.write(str(self.intro)+"\n")
             stop = None
             while not stop:
                 if self.cmdqueue:
@@ -88,6 +82,9 @@ class Cmd(cmd.Cmd):
                     else:
                         raise
             self.postloop()
+        except Exception, e:
+            pass
+            
         finally:
             if self.use_rawinput and self.completekey:
                 self.pop_completer()
@@ -111,7 +108,6 @@ class Cmd(cmd.Cmd):
                 if begidx > 0:
                     if ">" in line and begidx > line.index(">"):
                         self.completion_matches = self.completefilename(text, line, begidx, endidx)
-    
                         return self.completion_matches[0]
                         
                     command = self.parseline(line)[0]
@@ -124,8 +120,13 @@ class Cmd(cmd.Cmd):
                             compfunc = self.completedefault
                 else:
                     compfunc = self.completenames
-                self.completion_matches = compfunc(text, line, begidx, endidx)
 
+                matches = compfunc(text, line, begidx, endidx)
+                if len(matches) == 1 and matches[0].endswith(os.path.sep):
+                    self.completion_matches = matches
+                else:
+                    self.completion_matches = map(lambda s: s+" ", matches)
+                
         try:
             return self.completion_matches[state]
         except IndexError:
@@ -168,6 +169,17 @@ class Cmd(cmd.Cmd):
         """
         
         print self.__do_substitutions(arguments)
+
+    def do_env(self, arguments):
+        """
+        usage: env
+
+        Prints out all environment variables, that can be used to substitute values in commands, and are passed into the Android shell
+        """
+
+        for key in self.variables:
+            print "%s=%s" % (key, self.variables[key])
+        print
     
     def do_set(self, arguments):
         """
@@ -195,7 +207,8 @@ class Cmd(cmd.Cmd):
         """
         
         for key in shlex.split(arguments):
-            del self.variables[key]
+            if key in self.variables:
+                del self.variables[key]
 
     def emptyline(self):
         """
@@ -244,6 +257,10 @@ class Cmd(cmd.Cmd):
 
         return line
     
+    def preloop(self):
+        if self.intro:
+            self.stdout.write(str(self.intro)+"\n")
+        
     def push_completer(self, completer, history_file=None):
         if "readline" in sys.modules:
             self.__completer_stack.append(readline.get_completer())
@@ -290,6 +307,10 @@ class Cmd(cmd.Cmd):
         """
         Perform substitution of Bash-style variables.
         """
+
+        # len(argv) ends up < 1 if line is blank, will cause an exception if not checked
+        if not line:
+            return "" 
 
         # perform any arbitrary variable substitutions, from the dictionary
         for name in self.variables:

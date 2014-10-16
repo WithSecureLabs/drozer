@@ -118,10 +118,10 @@ class FileSystem(object):
         """
         Gets a list of all files in the folder target.
         """
-        
+        #TODO does not work past the first folder
         file_io = self.new("java.io.File", target)
         
-        return file_io.list()
+        return ["%s%s" %(s, '/') if file_io.isDirectory() else s for s in file_io.list()]
         
     def md5sum(self, source):
         """

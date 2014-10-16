@@ -7,7 +7,7 @@ from xml.etree import ElementTree as xml
 
 from mwr.common import fs
 
-from drozer.repoman.remotes import Remote
+from drozer.repoman.remotes import Remote, NetworkException
 
 class ModuleInfo(object):
     """
@@ -65,8 +65,12 @@ class ModuleInstaller(object):
                 fetch = self.__read_local_module
                 _modules = [pattern]
             else:
-                fetch = self.__read_remote_module
-                _modules = self.search_index(pattern)
+                try:
+                    fetch = self.__read_remote_module
+                    _modules = self.search_index(pattern)
+                except NetworkException as e:
+                    status['fail'][pattern] = str(e)
+                    _modules = []
             
             for module in _modules:
                 print "Processing %s..." % module,
@@ -78,7 +82,7 @@ class ModuleInstaller(object):
                     status['success'].append(module)
                 except AlreadyInstalledError as e:
                     print "Already Installed."
-                    
+
                     status['existing'].append(module)
                 except InstallError as e:
                     print "Failed."
@@ -249,7 +253,7 @@ class ModuleInstaller(object):
         files = archive.infolist()
         # if force is set, we dont care if it overwrites an existing file
         # ensure we are not about to overwrite any existing files
-        if True in map(lambda f: os.path.exists(os.path.join(package, f.filename)), files) and not force:
+        if True in map(lambda f: f.filename != "__init__.py" and os.path.exists(os.path.join(package, f.filename)), files) and not force:
             raise AlreadyInstalledError("Installing this module would overwrite one-or-more files in your repository.")
         # extract each file, in turn
         try:

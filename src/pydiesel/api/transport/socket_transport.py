@@ -11,12 +11,10 @@ class SocketTransport(Transport):
     
     def __init__(self, arguments, trust_callback=None):
         Transport.__init__(self)
-        
         self.__socket = socket.socket()
         
         if arguments.ssl:
             provider = Provider()
-            
             self.__socket = ssl.wrap_socket(self.__socket, cert_reqs=ssl.CERT_REQUIRED, ca_certs=provider.ca_certificate_path())
 
         self.setTimeout(90.0)

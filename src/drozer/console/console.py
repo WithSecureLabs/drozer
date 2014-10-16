@@ -42,7 +42,6 @@ class Console(cli.Base):
         
     def do_connect(self, arguments):
         """starts a new session with a device"""
-        
         if arguments.password:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
@@ -107,7 +106,7 @@ class Console(cli.Base):
         
         meta.print_version()
         
-    def get_completion_suggestions(self, action, text, **kwargs):
+    def get_completion_suggestions(self, action, text, line, **kwargs):
         if action.dest == "server":
             return ["localhost:31415"]
         elif action.dest == "file":

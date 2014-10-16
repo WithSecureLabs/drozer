@@ -77,7 +77,7 @@ class ClassLoader(object):
             if os.path.exists(apk_path):
                 source = fs.read(apk_path)
             elif os.path.exists(java_path):
-                source = ClassBuilder(java_path, self.dx_path, self.javac_path, self.android_path).build()
+                source = ClassBuilder(java_path, self.dx_path(), self.javac_path(), self.android_path()).build()
         else:
             source = source_or_relative_path
 

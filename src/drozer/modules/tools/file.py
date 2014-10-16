@@ -22,7 +22,7 @@ class Download(Module, common.ClassLoader, common.FileSystem):
         else:
             self.stderr.write("Could not download file. The file may not exist.\n")
     
-    def get_completion_suggestions(self, action, text, **kwargs):
+    def get_completion_suggestions(self, action, text, line, **kwargs):
         if action.dest == "source":
             return common.path_completion.on_agent(text, self)
         elif action.dest == "destination":
@@ -77,7 +77,7 @@ class MD5Sum(Module, common.ClassLoader, common.FileSystem):
         else:
             self.stderr.write("Could not calculate the md5 checksum. The file may not exist.\n")
 
-    def get_completion_suggestions(self, action, text, **kwargs):
+    def get_completion_suggestions(self, action, text, line, **kwargs):
         if action.dest == "target":
             return common.path_completion.on_agent(text)
 
@@ -94,6 +94,7 @@ class Upload(Module, common.ClassLoader, common.FileSystem):
     def add_arguments(self, parser):
         parser.add_argument("source")
         parser.add_argument("destination")
+        
 
     def execute(self, arguments):
         length = self.uploadFile(arguments.source, arguments.destination)
@@ -103,7 +104,7 @@ class Upload(Module, common.ClassLoader, common.FileSystem):
         else:
             self.stderr.write("Could not upload file.\n")
 
-    def get_completion_suggestions(self, action, text, **kwargs):
+    def get_completion_suggestions(self, action, text, line, **kwargs):
         if action.dest == "source":
             return common.path_completion.on_console(text)
         elif action.dest == "destination":

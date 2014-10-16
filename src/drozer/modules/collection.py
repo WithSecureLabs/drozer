@@ -7,23 +7,26 @@ from drozer.modules import base
 class ModuleCollection(object):
     
     def __init__(self, loader):
+        self.__base = base.Module
         self.__loader = loader
         
-    def all(self, contains=None, permissions=None, prefix=None, module_type="drozer"):
+    def all(self, contains=None, permissions=None, prefix=None,exploit=None, module_type="drozer"):
         """
         Loads all modules from the specified module repositories, and returns a
         collection of module identifiers.
         """
 
-        modules = self.__loader.all(base.Module)
+        modules = self.__loader.all(self.__base)
         modules = filter(lambda m: self.get(m).module_type == module_type, modules)
-        
+
         if contains != None:
             modules = filter(lambda m: m.find(contains.lower()) >= 0, modules)
         if permissions != None:
             modules = filter(lambda m: len(set(self.get(m).permissions).difference(permissions)) == 0, modules)
         if prefix != None:
             modules = filter(lambda m: m.startswith(prefix), modules)
+        if module_type =="payload" and exploit is not None:
+            modules = filter(lambda m: m in self.get(exploit).payloads, modules)
             
         return modules
 
@@ -43,12 +46,12 @@ class ModuleCollection(object):
         Gets a module implementation, given its identifier.
         """
 
-        return self.__loader.get(base.Module, key)
+        return self.__loader.get(self.__base, key)
     
     def reload(self):
         """
         Reload all modules.
         """
         
-        self.__loader.load(base.Module)
+        self.__loader.reload()
         

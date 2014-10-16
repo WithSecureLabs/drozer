@@ -87,10 +87,10 @@ class Remote(object):
             return self.getPath(module)
         except urllib2.HTTPError:
             # such as not found: there is no module to download
-            return None
-        except urllib2.URLError:
+            raise NetworkException()
+        except urllib2.URLError as e:
             # such as connection refused: the server simply isn't there
-            return None
+            raise NetworkException()
     
     def getPath(self, path):
         """
@@ -105,7 +105,7 @@ class Remote(object):
         response.begin()
         data = response.read()
         response.close()
-        
+
         return data
             
         
@@ -118,6 +118,17 @@ class FakeSocket(StringIO.StringIO):
     def makefile(self, *args, **kwargs):
         return self
     
+class NetworkException(Exception):
+    """
+    Raised if a Remote is not available, becaues of some network error.
+    """
+
+    def __init__(self):
+        Exception.__init__(self)
+
+    def __str__(self):
+        return "There was a problem accessing the remote."
+
 class UnknownRemote(Exception):
     """
     Raised if a Remote is specified that isn't in the configuration.

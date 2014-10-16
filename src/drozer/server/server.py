@@ -62,7 +62,7 @@ class Server(cli.Base):
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
         self._parser.add_argument("--ssl", action=util.StoreZeroOrTwo, help="enable SSL, optionally specifying the key and certificate", nargs="*")
         
-    def get_completion_suggestions(self, action, text, **kwargs):
+    def get_completion_suggestions(self, action, text, line, **kwargs):
         if action.dest == "server":
             return ["localhost:31415"]
         elif action.dest == "file":

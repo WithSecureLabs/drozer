@@ -48,7 +48,7 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
         else:
             self.stdout.write("No package specified\n")
 
-class Info(Module, common.Filters, common.PackageManager):
+class Info(Module, common.Filters, common.PackageManager, common.IntentFilter):
 
     name = "Get information about installed packages"
     description = "List all installed packages on the device with optional filters. Specify optional keywords to search for in the package information, or granted permissions."
@@ -103,24 +103,92 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
         parser.add_argument("-g", "--gid", default=None, help="filter packages by GID")
         parser.add_argument("-p", "--permission", default=None, help="permission filter conditions")
         parser.add_argument("-u", "--uid", default=None, help="filter packages by UID")
+        parser.add_argument("-i", "--show-intent-filters", action="store_true", default=False , help="show intent filters")
 
     def execute(self, arguments):
         if arguments.package == None:
-            for package in self.packageManager().getPackages(common.PackageManager.GET_PERMISSIONS | common.PackageManager.GET_CONFIGURATIONS | common.PackageManager.GET_GIDS | common.PackageManager.GET_SHARED_LIBRARY_FILES):
-                self.__get_package(arguments, package)
+            for package in self.packageManager().getPackages(common.PackageManager.GET_PERMISSIONS | common.PackageManager.GET_CONFIGURATIONS | common.PackageManager.GET_GIDS | common.PackageManager.GET_SHARED_LIBRARY_FILES | common.PackageManager.GET_ACTIVITIES):
+               self.__get_package(arguments, package) 
         else:
-            package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PERMISSIONS | common.PackageManager.GET_CONFIGURATIONS | common.PackageManager.GET_GIDS | common.PackageManager.GET_SHARED_LIBRARY_FILES)
-
+            package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_PERMISSIONS | common.PackageManager.GET_CONFIGURATIONS | common.PackageManager.GET_GIDS | common.PackageManager.GET_SHARED_LIBRARY_FILES | common.PackageManager.GET_ACTIVITIES)
             self.__get_package(arguments, package)
             
     def get_completion_suggestions(self, action, text, **kwargs):
         if action.dest == "permission":
             return android.permissions
 
+    def __print_intent_filters(self, intent_filters):
+        for intent_filter in intent_filters:
+            if len(intent_filter.actions) > 0:
+                self.stdout.write("    - Actions:\n")
+                for action in intent_filter.actions:
+                    self.stdout.write("      - %s\n" % action)
+            if len(intent_filter.categories) > 0:
+                self.stdout.write("    - Categories:\n")
+                for category in intent_filter.categories:
+                    self.stdout.write("      - %s\n" % category)
+            if len(intent_filter.datas) > 0:
+                self.stdout.write("    - Data:\n" )
+                for data in intent_filter.datas:
+                    self.stdout.write("      - %s\n" % data)
+
     def __get_package(self, arguments, package):
         application = package.applicationInfo
+        activities = package.activities
+        services = package.services
 
-        if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
+        intent_matches = not (arguments.show_intent_filters and arguments.filter)
+
+        if not intent_matches and arguments.filter != None: 
+            if activities != None:
+                for activity in activities:
+                    if not intent_matches:
+                        for intent_filter in self.find_intent_filters(activity, 'activity'):
+                            if len(intent_filter.actions) > 0:
+                                for action in intent_filter.actions:
+                                    if action != None and action.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+
+                            if len(intent_filter.datas) > 0:
+                                for data in intent_filter.datas:
+                                    if data.scheme != None and data.scheme != False and data.scheme.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+
+                            if len(intent_filter.categories) > 0:
+                                for category in intent_filter.categories:
+                                    if category != None and category.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+                    else:
+                        break
+
+            if services != None:
+                for service in services:
+                    if not intent_matches:
+                        for intent_filter in self.find_intent_filters(service, 'service'):
+                            if len(intent_filter.actions) > 0:
+                                for action in intent_filter.actions:
+                                    if action != None and action.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+
+                            if len(intent_filter.uris) > 0:
+                                for data in intent_filter.datas:
+                                    if data.scheme != None and data.scheme != False and data.scheme.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+
+                            if len(intent_filter.categories) > 0:
+                                for category in intent_filter.categories:
+                                    if category != None and category.upper().find(arguments.filter.upper()) >= 0:
+                                        intent_matches = True
+                                        break
+                    else:
+                        break
+
+        if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0 or self.packageManager().getApplicationLabel(package.packageName).upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)) or intent_matches: 
             self.stdout.write("Package: %s\n" % application.packageName)
             self.stdout.write("  Application Label: %s\n" % self.packageManager().getApplicationLabel(application.packageName))
             self.stdout.write("  Process Name: %s\n" % application.processName)
@@ -146,8 +214,34 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
                     self.stdout.write("  - %s\n" % permission.name)
             else:
                 self.stdout.write("  - None\n")
+            if arguments.show_intent_filters:
+                ifcount = 0
+                self.stdout.write("  Intent Filters:\n")
+
+                if activities != None:
+                    for activity in activities:
+                       intent_filters = self.find_intent_filters(activity, 'activity')
+                       if len(intent_filters) > 0:
+                           ifcount += len(intent_filters)
+                           
+                           self.stdout.write("  - %s\n" % activity.name)
+                           self.__print_intent_filters(intent_filters)
+
+                if services!= None:
+                    for service in services:
+                        intent_filters = self.find_intent_filters(service, 'service')
+                        if len(intent_filters) > 0:
+                            ifcount += len(intent_filters)
+
+                            self.stdout.write("  - %s\n" % service.name)
+                            self.__print_intent_filters(intent_filters)
+
+                if ifcount==0:
+                    self.stdout.write("  - None")
             self.stdout.write("\n")
 
+                
+                                                       
 class LaunchIntent(Module, common.PackageManager):
 
     name = "Get launch intent of package"
@@ -257,7 +351,7 @@ class List(Module, common.PackageManager):
     def __get_package(self, arguments, package):
         application = package.applicationInfo
 
-        if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
+        if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0 or self.packageManager().getApplicationLabel(application.packageName).upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
             if arguments.no_app_name:
                 self.stdout.write("%s\n" % application.packageName)
             else:
@@ -294,6 +388,7 @@ class Manifest(Module, common.Assets):
             self.stderr.write("No package provided.\n")
         else:
             self.__write_manifest(self.getAndroidManifest(arguments.package))
+           
     
     def __write_manifest(self, manifest):
         lines = manifest.split("\n")
