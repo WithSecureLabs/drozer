@@ -15,6 +15,7 @@ class AgentManager(cli.Base):
         cli.Base.__init__(self)
         
         self._parser.add_argument("--no-gui", action="store_true", default=False, help="create an agent with no GUI")
+        self._parser.add_argument("--granular", action="store_true", default=False, help="don't request all permissions when building GUI-less agent")
         self._parser.add_argument("--permission", "-p", nargs="+", help="add permissions to the Agent manifest")
         self._parser.add_argument("--define-permission", "-d", metavar="name protectionLevel", nargs="+", help="define a permission and protectionLevel in the Agent manifest")
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
@@ -32,7 +33,10 @@ class AgentManager(cli.Base):
                 e.put_server(arguments.server)
             e.write()
             
-            permissions = set(android.permissions)
+            if not arguments.granular:
+                permissions = set(android.permissions)
+            else:
+                permissions = set([])
         else:
             permissions = set([])
         
