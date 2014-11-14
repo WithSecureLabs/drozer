@@ -57,7 +57,7 @@ class Session(cmd.Cmd):
         if m.has_context():
             dataDir = str(m.getContext().getApplicationInfo().dataDir)
         else:
-            dataDir = str(m.new("java.io.File", ".").getAbsolutePath())[:-2]
+            dataDir = str(m.new("java.io.File", ".").getCanonicalPath().native())
 
         self.variables = {  'PATH': dataDir +'/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
                             'WD': dataDir }
