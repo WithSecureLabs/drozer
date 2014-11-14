@@ -1,4 +1,4 @@
-import os
+import os, tempfile
 from mwr.common import fs
 
 from drozer.modules.common import file_system
@@ -29,13 +29,6 @@ class SuperUser(file_system.FileSystem):
         """
 
         return "%s/install-minimal-su.sh" % (self.workingDir())
-
-    def _localPathScript(self):
-        """
-        Get the path to the install script on the local system.
-        """
-
-        return os.path.join(os.path.dirname(__file__) , "..", "tools", "setup", "minimal-su", "install-su.sh")
 
     def isAnySuInstalled(self):
         """
@@ -80,11 +73,25 @@ class SuperUser(file_system.FileSystem):
         """
 
         # Remove existing uploads of su install script
-        self.shellExec("rm %s/install-su.sh" % (self.workingDir()))
+        self.shellExec("rm %s/install-minimal-su.sh" % (self.workingDir()))
 
-        bytes_copied = self.uploadFile(self._localPathScript(), self.__agentPathScript())
+        minimal_su_script = """#!/system/bin/sh
 
-        if bytes_copied == os.path.getsize(self._localPathScript()):
+mount -o remount,rw /system
+cat $REPLACEME$/su > /system/bin/su
+chmod 4755 /system/bin/su
+echo 'Done. You can now use `su` from a drozer shell.'
+"""
+
+        minimal_su_script = minimal_su_script.replace("$REPLACEME$", self.workingDir())
+
+        tempDir = tempfile.mkdtemp()
+        localPathScript = os.path.join(tempDir, "install-su.sh")
+        fs.write(localPathScript, minimal_su_script)
+
+        bytes_copied = self.uploadFile(localPathScript, self.__agentPathScript())
+
+        if bytes_copied == os.path.getsize(localPathScript):
             self.shellExec("chmod 770 " + self.__agentPathScript())
             return True
         else:
