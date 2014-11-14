@@ -19,7 +19,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *pvt)
     jmethodID method;
     jobject activityThread, context, objPattern, objMatcher;
     jstring match, pattern, strResult, file_path, jar_file, string_host, package_name;
-    jstring agent_class = (*env)->NewStringUTF(env, "com.mwr.dz.ContextAgent");
+    jstring agent_class = (*env)->NewStringUTF(env, "com.mwr.dz.Agent");
     const char *result[1035];
     const char *filePath[1024];
     const char *jarFile[1024];
