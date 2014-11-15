@@ -4,6 +4,8 @@ from drozer import util
 from drozer.server import dz, uploader
 from drozer.ssl.provider import Provider
 
+import sys
+
 class Server(cli.Base):
     """
     drozer console COMMAND [OPTIONS]
@@ -26,10 +28,13 @@ class Server(cli.Base):
         if arguments.ssl != None and arguments.ssl == []:
             arguments.ssl = Provider().get_keypair("drozer-server")
         
-        uploader.delete(arguments, arguments.resource)
+        if uploader.delete(arguments, arguments.resource):
+            sys.stdout.write("Success\n")
+        else:
+            sys.stdout.write("Failed\n")
 
     def args_for_delete(self):
-        self._parser.add_argument("resource", help="specify a resource to upload to a drozer Server")
+        self._parser.add_argument("resource", help="specify a resource path on the drozer Server")
         self._parser.add_argument("--credentials", default=None, nargs=2, metavar=("username", "password"), help="add a username/password pair that can be used to upload files to the server")
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
         self._parser.add_argument("--ssl", action=util.StoreZeroOrTwo, help="enable SSL, optionally specifying the key and certificate", nargs="*")
@@ -52,11 +57,14 @@ class Server(cli.Base):
         if arguments.ssl != None and arguments.ssl == []:
             arguments.ssl = Provider().get_keypair("drozer-server")
         
-        uploader.upload(arguments, arguments.resource, open(arguments.file).read(), magic=arguments.magic)
+        if uploader.upload(arguments, arguments.resource, open(arguments.file).read(), magic=arguments.magic):
+            sys.stdout.write("Success\n")
+        else:
+            sys.stdout.write("Failed\n")
     
     def args_for_upload(self):
-        self._parser.add_argument("resource", help="specify a resource to upload to a drozer Server")
-        self._parser.add_argument("file", help="specify a resource to upload to a drozer Server")
+        self._parser.add_argument("resource", help="specify a resource path on the drozer Server")
+        self._parser.add_argument("file", help="specify a file to upload to the drozer Server")
         self._parser.add_argument("--magic", help="specify a magic byte for the resource")
         self._parser.add_argument("--credentials", default=None, nargs=2, metavar=("username", "password"), help="add a username/password pair that can be used to upload files to the server")
         self._parser.add_argument("--server", default=None, metavar="HOST[:PORT]", help="specify the address and port of the drozer server")
