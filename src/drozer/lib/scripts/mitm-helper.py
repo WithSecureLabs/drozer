@@ -187,7 +187,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
         # Set the response if the content changed and add to log
         if body != changedContent:
             messageInfo.setResponse(final)
-            self.addLog(self._helpers.analyzeRequest(messageInfo).getUrl(), "Injected drozer invocation with pwn://")
+            self.addLog(self._helpers.analyzeRequest(messageInfo).getUrl(), "Injected custom URI")
 
         return
 
