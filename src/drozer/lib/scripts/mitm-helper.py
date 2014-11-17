@@ -3,6 +3,7 @@ from burp import ITab
 from burp import IHttpListener
 from burp import IMessageEditorController
 from javax import swing
+import java.awt
 from java import awt
 from javax.swing.border import *
 from java.io import PrintWriter
