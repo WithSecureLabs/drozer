@@ -20,7 +20,7 @@ public class ZipUtil {
       String zipEntryName = zip_entry.getName();
 
       if (zip_entry.getName().toUpperCase().equals(target.toUpperCase())) {
-        file = new File(destination, zip_entry.getName());
+        file = new File(destination, System.currentTimeMillis() + ".tmp");
 
         BufferedOutputStream file_stream = new BufferedOutputStream(new FileOutputStream(file), BUFFER_SIZE);
         
