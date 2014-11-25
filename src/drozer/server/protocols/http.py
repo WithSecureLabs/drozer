@@ -103,6 +103,8 @@ class HTTP(HttpReceiver):
                         resource = ErrorResource(request.resource, 500, "The server encountered an error whilst creating the resource %s.")
 
         httpResponse = resource.getResponse(request)
+        if httpResponse != None and request.verb == "GET":
+            resource.downloadCount += 1
         if httpResponse != None and request.verb == "HEAD":
             httpResponse.body = None
  

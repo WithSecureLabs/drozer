@@ -50,6 +50,7 @@ class FileProvider(object):
 class Resource(object):
     
     def __init__(self, resource, magic=None, reserved=False, custom_headers=None):
+        self.downloadCount = 0
         self.resource = resource
         self.reserved = reserved
         self.magic = magic
