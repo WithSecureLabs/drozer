@@ -104,7 +104,7 @@ class HTTP(HttpReceiver):
 
         httpResponse = resource.getResponse(request)
         if httpResponse != None and request.verb == "GET":
-            resource.downloadCount += 1
+            resource.download(request.resource)
         if httpResponse != None and request.verb == "HEAD":
             httpResponse.body = None
  

@@ -14,7 +14,7 @@ from drozer.configuration import Configuration
 from drozer.server.heartbeat import heartbeat
 from drozer.server.protocols.byte_stream import ByteStream
 from drozer.server.protocols.shell import ShellCollector, ShellServer
-from drozer.server.files import FileProvider, FileResource
+from drozer.server.files import FileProvider, FileResource, StatusResource
 from drozer.server.protocols.http import HTTP
 from drozer.server.protocols.drozerp import Drozer
 from drozer.ssl.provider import Provider
@@ -62,6 +62,7 @@ class ProtocolSwitcher(Protocol):
                                      "/index\\.html": FileResource("/index.html", path.join(__web_root, "index.html"), reserved=False, type="text/html"),
                                      "/jquery\\.js": FileResource("/jquery.js", path.join(__web_root, "jquery.js"), reserved=False, type="text/javascript"),
                                      "/labs\\.png": FileResource("/labs.png", path.join(__web_root, "labs.png"), reserved=False, type="image/png") })
+    __file_provider.add("/status\\?.*", StatusResource("/status", __file_provider))
     __logger = getLogger(__name__)
     
     def __init__(self):

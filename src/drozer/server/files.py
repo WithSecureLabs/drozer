@@ -8,6 +8,12 @@ class FileProvider(object):
     
     def __init__(self, store={}):
         self.__store = store
+
+    def add(self, path, resource):
+        self.__store[path] = resource
+
+    def count(self):
+        return len(self.__store)
     
     def create(self, resource, body, magic=None, mimetype=None, multipart=None, custom_headers=None):
         if multipart == None:
@@ -50,12 +56,18 @@ class FileProvider(object):
 class Resource(object):
     
     def __init__(self, resource, magic=None, reserved=False, custom_headers=None):
-        self.downloadCount = 0
+        self.downloadCount = {}
         self.resource = resource
         self.reserved = reserved
         self.magic = magic
         self.custom_headers = custom_headers
 
+    def download(self, path):
+        if not path in self.downloadCount:
+            self.downloadCount[path] = 1
+        else:
+            self.downloadCount[path] += 1
+ 
     def getBody(self):
         return None
 
@@ -171,4 +183,25 @@ class InMemoryResource(Resource):
         headers = dict(headers.items() + self.custom_headers.items())
         
         return HTTPResponse(status=200, headers=headers, body=self.getBody())
-    
+   
+class StatusResource(Resource):
+
+    def __init__(self, resource, fileProvider):
+        Resource.__init__(self, resource, False)
+
+        self.__fileProvider = fileProvider
+
+    def getBody(self, path):
+        if path == "":
+            return "This server has " + str(self.__fileProvider.count()) + " files."
+        else:
+            downloadCounts = self.__fileProvider.get(path).downloadCount
+
+            if path in downloadCounts:
+                return str(downloadCounts[path])
+            else:
+                return "0"
+
+    def getResponse(self, request):
+        return HTTPResponse(status=200, headers={}, body=self.getBody(request.resource[8:]))
+ 
