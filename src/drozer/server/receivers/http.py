@@ -262,7 +262,7 @@ class HTTPResponse(HTTPMessage):
     
     def __str__(self):
         if self.body == None:
-            return "%s %d %s\r\n%s" % (self.version, self.status, self.status_text(), self.format_headers())
+            return "%s %d %s\r\n%s\r\n\r\n" % (self.version, self.status, self.status_text(), self.format_headers())
         else:
             return "%s %d %s\r\n%s\r\n\r\n%s" % (self.version, self.status, self.status_text(), self.format_headers(), self.body)
         
