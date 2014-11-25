@@ -72,7 +72,7 @@ class ProtocolSwitcher(Protocol):
         Selects which protocol to be used, by inspecting the data.
         """
 
-        if data.startswith("DELETE") or data.startswith("GET") or data.startswith("POST"):
+        if data.startswith("DELETE") or data.startswith("GET") or data.startswith("HEAD") or data.startswith("POST"):
             return HTTP(self.factory.credentials, self.__file_provider)
         elif data.startswith("COLLECT"):
             return ShellCollector()

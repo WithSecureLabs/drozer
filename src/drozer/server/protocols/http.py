@@ -54,7 +54,7 @@ class HTTP(HttpReceiver):
                 self.__file_provider.delete(request.resource)
                 
                 resource = ErrorResource(request.resource, 200, "Deleted: %s")
-        elif request.verb == "GET":
+        elif request.verb == "GET" or request.verb == "HEAD":
             self.__logger.info("GET %s" % request.resource)
             
             resource = self.__file_provider.get(request.resource)
@@ -101,7 +101,11 @@ class HTTP(HttpReceiver):
                         resource = CreatedResource(request.resource)
                     else:
                         resource = ErrorResource(request.resource, 500, "The server encountered an error whilst creating the resource %s.")
-        
-        self.transport.write(str(resource.getResponse(request)))
+
+        httpResponse = resource.getResponse(request)
+        if httpResponse != None and request.verb == "HEAD":
+            httpResponse.body = None
+ 
+        self.transport.write(str(httpResponse))
         self.transport.loseConnection()
         
