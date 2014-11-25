@@ -55,7 +55,7 @@ class HTTP(HttpReceiver):
                 
                 resource = ErrorResource(request.resource, 200, "Deleted: %s")
         elif request.verb == "GET" or request.verb == "HEAD":
-            self.__logger.info("GET %s" % request.resource)
+            self.__logger.info("%s %s" % (request.verb, request.resource))
             
             resource = self.__file_provider.get(request.resource)
         elif request.verb == "POST":
