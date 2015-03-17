@@ -247,8 +247,7 @@ class Cmd(cmd.Cmd):
         """ 
 
         # perform Bash-style substitutions
-        if line.find("!!") >= 0 or line.find("!$") >= 0 or line.find("!^") >= 0 or line.find("!*") >= 0:
-            line = self.__do_substitutions(line)
+        line = self.__do_substitutions(line)
 
         parsed_line = shlex.split(line)
         # perform output stream redirection (as in the `tee` command)
@@ -317,6 +316,12 @@ class Cmd(cmd.Cmd):
             line = line.replace("$%s" % name, self.variables[name])
         
         # perform special variable substitutions, referencing the previous command
+        if line.find("!!") >= 0 or line.find("!$") >= 0 or line.find("!^") >= 0 or line.find("!*") >= 0:
+            line = self.__do_last_command_substitutions(line)
+
+        return line
+
+    def __do_last_command_substitutions(self, line):
         if self.lastcmd != "":
             argv = shlex.split(self.lastcmd)
             
