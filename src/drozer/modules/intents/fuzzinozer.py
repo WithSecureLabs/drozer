@@ -137,6 +137,7 @@ def log_in_logcat(log,device):
     else:
         getoutput("adb logcat -c ")
         log_command = "adb shell log -p f -t %s" % (str(log))
+        #os.system(log_command)
         getoutput(log_command)
 
 
@@ -313,7 +314,7 @@ class Fuzzinozer(Module,common.PackageManager):
             seed_file=arguments.run_seed
             if seed_file is not "":
                 print "RUN INTENTS FROM " +  seed_file
-                total_intents=self.run_seed_file(seed_file)
+                total_intents=self.run_seed_file(seed_file,device)
 
         if arguments.package_name or arguments.test_all:
             if os.path.isfile("all_intents.txt"):
@@ -326,7 +327,7 @@ class Fuzzinozer(Module,common.PackageManager):
                        found=1
                        pm=self.packageManager()
                        receivers=[]
-                       receivers=FuzzinozerPackageManager(self) .getReceivers(packageNameString)
+                       receivers=FuzzinozerPackageManager(self).getReceivers(packageNameString)
                        if (receivers is not None):
                             for val in receivers:
                                 msg="broadcast_intent " + "type: broadcast"+" package: "+ packageNameString + " component: "+ str(val) + " " 
@@ -472,7 +473,7 @@ class Fuzzinozer(Module,common.PackageManager):
   
                                   
 
-    def run_seed_file(self,file_name):
+    def run_seed_file(self,file_name,device):
         '''
         Fuction for runing all intents from a seed file
         '''	
@@ -483,7 +484,6 @@ class Fuzzinozer(Module,common.PackageManager):
                 print("Number of intents:"+ str(intents) + "\n")
                 for line in lines:
                     parse_intent=line.split(" ")
-                    print str(parse_intent)
                     intent_type=parse_intent[2]
                     package_name=parse_intent[4]
                     component=parse_intent[6]
@@ -495,8 +495,10 @@ class Fuzzinozer(Module,common.PackageManager):
                         extra_type=parse_intent[16]
                         key=parse_intent[18]
                         extra_value=parse_intent[20]
-                        print intent_type + " " + package_name + " " + component + " " + uri + " " + cat + " " + ac + " " + fl+ " " + extra_type+ " " + key + " " + extra_value + "\n"
-                        try:
+                        msg=intent_type + " " + package_name + " " + component + " " + uri + " " + cat + " " + ac + " " + fl+ " " + extra_type+ " " + key + " " + extra_value
+                        print msg 
+			log_in_logcat(str(msg),device)	                        
+			try:
                             intent = android.Intent(component=(package_name ,str(component)),flags=[fl],data_uri=uri,category=cat,action=ac,extras=[(str(extra_type), str(key), str(extra_value))])
                             intent.flags.append("ACTIVITY_NEW_TASK")
                             self.getContext().startActivity(intent.buildIn(self))
@@ -505,6 +507,9 @@ class Fuzzinozer(Module,common.PackageManager):
               
                     elif intent_type=='broadcast':
                         intent = android.Intent(component=(package_name,str(component)))
+                        msg=intent_type + " " + package_name + " " + component
+                        print msg
+			log_in_logcat(str(msg),device)    
                         try:
                             self.getContext().sendBroadcast(intent.buildIn(self))
                         except:
@@ -577,4 +582,3 @@ class FuzzinozerPackageManager(common.PackageManager.PackageManagerProxy):
             for activity in activities :
                 activities_array.append(str(activity.name))
             return activities_array
-		 
