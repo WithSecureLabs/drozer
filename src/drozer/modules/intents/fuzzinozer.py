@@ -321,7 +321,7 @@ class Fuzzinozer(Module,common.PackageManager):
                 
             if arguments.broadcast_intent:
                 for package in self.packageManager().getPackages():
-                    packageNameString = package.applicationInfo.packageName
+                    packageNameString = str(package.applicationInfo.packageName)
                     if (packageNameString==package_name or test_all==1):
                        found=1
                        pm=self.packageManager()
@@ -329,7 +329,7 @@ class Fuzzinozer(Module,common.PackageManager):
                        receivers=FuzzinozerPackageManager(self) .getReceivers(packageNameString)
                        if (receivers is not None):
                             for val in receivers:
-                                msg="broadcast_intent " + "type: broadcast"+" package: "+ package_name + " component: "+ str(val) + " " 
+                                msg="broadcast_intent " + "type: broadcast"+" package: "+ packageNameString + " component: "+ str(val) + " " 
                                 print msg
                                 log_in_logcat(str(msg),device)
                                 intent = android.Intent(component=(packageNameString,str(val)))
