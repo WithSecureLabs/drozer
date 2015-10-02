@@ -497,8 +497,8 @@ class Fuzzinozer(Module,common.PackageManager):
                         extra_value=parse_intent[20]
                         msg=intent_type + " " + package_name + " " + component + " " + uri + " " + cat + " " + ac + " " + fl+ " " + extra_type+ " " + key + " " + extra_value
                         print msg 
-			log_in_logcat(str(msg),device)	                        
-			try:
+                        log_in_logcat(str(msg),device)	                        
+                        try:
                             intent = android.Intent(component=(package_name ,str(component)),flags=[fl],data_uri=uri,category=cat,action=ac,extras=[(str(extra_type), str(key), str(extra_value))])
                             intent.flags.append("ACTIVITY_NEW_TASK")
                             self.getContext().startActivity(intent.buildIn(self))
@@ -509,7 +509,7 @@ class Fuzzinozer(Module,common.PackageManager):
                         intent = android.Intent(component=(package_name,str(component)))
                         msg=intent_type + " " + package_name + " " + component
                         print msg
-			log_in_logcat(str(msg),device)    
+                        log_in_logcat(str(msg),device)    
                         try:
                             self.getContext().sendBroadcast(intent.buildIn(self))
                         except:
