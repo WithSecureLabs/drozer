@@ -260,7 +260,6 @@ class Fuzzinozer(Module,common.PackageManager):
         pm=self.packageManager() 
         env=os.environ.get("FUZZ_RES")
         if env is None:
-            os.system('bash -c \'echo "export FUZZ_RES=~/fuzzinozer_results" >> ~/.bashrc\'') 
             os.environ["FUZZ_RES"]=os.path.expanduser("~")+"/fuzzinozer_results"
             env=os.environ.get("FUZZ_RES")
         self.current_dir=str(env) 
