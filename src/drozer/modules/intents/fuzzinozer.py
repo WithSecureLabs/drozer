@@ -227,8 +227,8 @@ class Fuzzinozer(Module,common.PackageManager):
     description = "Android intent fuzzing module "
     examples = ""
     author = "Popescu Cristina Stefania "
-    date = "2015-07-29"
-    license = "none"
+    date = "2015-10-08"
+    license = "3 clause BSD"
     path = ["intents"]
 
     def add_arguments(self, parser):
@@ -241,7 +241,7 @@ class Fuzzinozer(Module,common.PackageManager):
         parser.add_argument("--run_seed", help="select the seed file you want to run")
         parser.add_argument("--device", help="used only for automated tests")
         parser.add_argument("--template_fuzz_parameters_number", help="give the number of the parameters you want to fuzz; you also need to select --fuzzing_intent and --package_name or --test_all params")
-        parser.add_argument("--buffer_overflow_attack", help="give the number of intents you want to test")
+        parser.add_argument("--dos_attack", help="give the number of intents you want to test")
                         
     def execute(self, arguments):
         package_name=""
@@ -266,7 +266,8 @@ class Fuzzinozer(Module,common.PackageManager):
         self.current_dir=str(env) 
         if not os.path.isdir(env):
             getoutput("mkdir " + env)
-           
+        
+        found=0  
         if arguments.select_fuzz_parameters:
             params=arguments.select_fuzz_parameters
 
@@ -275,9 +276,10 @@ class Fuzzinozer(Module,common.PackageManager):
             fuzz_parameters=self.generate_templates(fuzz_number)
             intents=len(fuzz_parameters)
 
-        if arguments.buffer_overflow_attack:
-            nr=int(arguments.buffer_overflow_attack)
-            self.buffer_overflow(nr)
+        if arguments.dos_attack:
+            found=1
+            nr=int(arguments.dos_attack)
+            self.dos(nr)
             total_intents=nr
 
         if arguments.complete_test:
@@ -307,7 +309,7 @@ class Fuzzinozer(Module,common.PackageManager):
                 total_intents=total_intents+intents*len(activities)
             print("Number of intents:"+ str(total_intents) + "\n")
         
-        found=0
+       
         seed_file=""
         if arguments.run_seed:
             found=1
@@ -422,11 +424,11 @@ class Fuzzinozer(Module,common.PackageManager):
   
       
 
-    def buffer_overflow(self,intents):
+    def dos(self,intents):
         '''
         Function for generating intents of random sizes;
         '''
-        print "BUFFER OVERFLOW ATTEMPT against BLUETOOTH"
+        print "DoS against BLUETOOTH"
         os.system("touch buffer.sh")
         fileName="buffer.sh"
 	#hardcoded package activity
