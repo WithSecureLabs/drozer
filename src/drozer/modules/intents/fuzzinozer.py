@@ -181,7 +181,7 @@ def parse_logcat(file_name,fuzz_type,component,package,current_dir):
                 if (line.startswith("E/") & ("Caused by" in line)) :
                     found_exception=True
                     exception_line=line
-                    exception=exception_line.split(":")[2]
+                    exception=exception_line.split(":")[2].strip()
                     new_file_name = str(current_dir) + "/Results_"+str(fuzz_type)+"_"+str(package)+"/seedfile_"+str(component)+"_"+exception+".txt"
                     if os.path.isfile("all_intents.txt"):
                         shutil.copy2("all_intents.txt", new_file_name)
