@@ -44,7 +44,7 @@ class Packager(command_wrapper.Wrapper):
         else:
             aapt = self.__aapt
         
-        if self._execute([self.__java, "-jar", self.__apk_tool, "-q", "build", "-a", aapt, self.source_dir(), self.apk_path(False)]) != 0:
+        if self._execute([self.__java, "-jar", self.__apk_tool, "build", self.source_dir(), "-o",self.apk_path(False)]) != 0:
             raise RuntimeError("could not repack the agent sources")
         if self._execute([self.__java, "-jar", self.__sign_apk, self.__certificate, self.__key, self.apk_path(False), self.apk_path(True)]) != 0:
             raise RuntimeError("could not sign the agent package")
@@ -55,5 +55,5 @@ class Packager(command_wrapper.Wrapper):
         return os.path.join(self.__wd, "agent")
     
     def unpack(self, name):
-        if self._execute([self.__java, "-jar", self.__apk_tool, "-q", "decode", Configuration.library(name + ".apk"), self.source_dir()]) != 0:
+        if self._execute([self.__java, "-jar", self.__apk_tool,"decode", Configuration.library(name + ".apk"), "-o",self.source_dir()]) != 0:
             raise RuntimeError("could not unpack " + name)
