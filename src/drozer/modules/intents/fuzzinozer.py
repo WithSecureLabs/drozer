@@ -17,6 +17,7 @@ import sys
 import shutil
 import itertools
 import subprocess
+import time
 actions = [     'android.intent.action.MAIN',
                     'android.intent.action.VIEW',
                     'android.intent.action.ATTACH_DATA',
@@ -137,7 +138,6 @@ def log_in_logcat(log,device):
     else:
         getoutput("adb logcat -c ")
         log_command = "adb shell log -p f -t %s" % (str(log))
-        #os.system(log_command)
         getoutput(log_command)
 
 
@@ -151,16 +151,20 @@ def save_logcat(fuzz_type,package,component,device,current_dir):
         os.mkdir(result_folder) 
     file_name=result_folder+"/logcat_"+str(component)+".txt"
     if device is not "":
+        event="adb -s %s shell input keyevent 66"%(str(device))
         logcat_cmd = "adb -s %s logcat -d "%(str(device))
     else:
-        logcat_cmd = "adb logcat -d "
+        event="adb shell input keyevent 66"
+        logcat_cmd = "adb logcat -d *:E "
+    getoutput(event)
+    getoutput(event)
     logcat = getoutput(logcat_cmd)
     with open(file_name,'a+') as f:
         f.write(str(logcat))
         f.close()
 
     parse_logcat(file_name,str(fuzz_type),str(component),str(package),current_dir)
-
+    
 
 def parse_logcat(file_name,fuzz_type,component,package,current_dir):
     '''
@@ -175,7 +179,7 @@ def parse_logcat(file_name,fuzz_type,component,package,current_dir):
         if lines is not None:
             for line in lines:
                 if (line.startswith("F/") & ("type" in line)):
-                    with open("all_intents.txt",'a') as intents_files:
+                    with open("all_intents.txt",'a+') as intents_files:
                         session=line.split("):")
                         intents_files.write(session[1])
                 if (line.startswith("E/") & ("Caused by" in line)) :
@@ -185,7 +189,6 @@ def parse_logcat(file_name,fuzz_type,component,package,current_dir):
                     new_file_name = str(current_dir) + "/Results_"+str(fuzz_type)+"_"+str(package)+"/seedfile_"+str(component)+"_"+exception+".txt"
                     if os.path.isfile("all_intents.txt"):
                         shutil.copy2("all_intents.txt", new_file_name)
-
         if not(found_exception):
             os.remove(file_name)
         
@@ -238,6 +241,8 @@ class Fuzzinozer(Module,common.PackageManager):
         parser.add_argument("--fuzzing_intent", action='store_true', help="send intent with random action,category,flag; you also need to select --package_name or --test_all params")
         parser.add_argument("--complete_test", action='store_true', help="test with all actions,categories,flags,extras existent in Android; you also need to select --package_name or --test_all params")
         parser.add_argument("--select_fuzz_parameters", help="give the parameters you want to fuzz (action,category,flag,extras); you also need to select --fuzzing_intent and--package_name or --test_all params")
+        parser.add_argument("--save_state",action='store_true', help="save the running state from complete_test session")
+        parser.add_argument("--reload", help="reload the running state parameters in terms of component,action,category,flag,key as indices")
         parser.add_argument("--run_seed", help="select the seed file you want to run")
         parser.add_argument("--device", help="used only for automated tests")
         parser.add_argument("--template_fuzz_parameters_number", help="give the number of the parameters you want to fuzz; you also need to select --fuzzing_intent and --package_name or --test_all params")
@@ -249,6 +254,7 @@ class Fuzzinozer(Module,common.PackageManager):
         fuzz_number=7
         device=""
         intents=1
+
 
         if arguments.device:
             device=arguments.device
@@ -265,7 +271,6 @@ class Fuzzinozer(Module,common.PackageManager):
         self.current_dir=str(env) 
         if not os.path.isdir(env):
             getoutput("mkdir " + env)
-        
         found=0  
         if arguments.select_fuzz_parameters:
             params=arguments.select_fuzz_parameters
@@ -283,6 +288,7 @@ class Fuzzinozer(Module,common.PackageManager):
 
         if arguments.complete_test:
             intents=len(actions)*len(flags)*len(extra_keys)*len(extra_types)*len(categories)
+	    
 
         total_intents=0
         if arguments.test_all:
@@ -413,7 +419,15 @@ class Fuzzinozer(Module,common.PackageManager):
                     packageNameString = package.applicationInfo.packageName
                     if (packageNameString==package_name or arguments.test_all):
                         found=1
-                        self.test_all_possible(packageNameString,device)
+                        save_state=False
+                        reload_option=False
+                        aux_num=" "
+                        if arguments.save_state:
+                            save_state=True
+                        if arguments.reload:
+                            reload_option=True
+                            aux_num=arguments.reload
+                        self.test_all_possible(packageNameString,device,self.current_dir,save_state,reload_option,aux_num)
                         print("Total number of intents:"+ str(total_intents) + "\n")
             else:
                 print "Wrong parameters!! run help to see the parameters"
@@ -454,22 +468,46 @@ class Fuzzinozer(Module,common.PackageManager):
 
 
 
-    def test_all_possible(self,package_name,device):
+    def test_all_possible(self,package_name,device,current_dir,save_state,reload_option,aux_num):
         '''
         Fuction for runing a complete test (with all categories,flags and actions) for a package
         '''
         activities=[]
-        pm=self.packageManager()
-        activities=pm.getActivities(package_name)
+        activities=FuzzinozerPackageManager(self).getActivities(package_name)
+        aux_comp=0
+        aux_cat=0
+        aux_ac=0
+        aux_fl=0
+        aux_key=0
+        if (reload_option):
+            aux_comp=int(aux_num.split(" ")[0])
+            if (aux_comp<0) or (aux_comp>len(activities)):
+                aux_comp=0
+            aux_ac=int(aux_num.split(" ")[1])
+            if (aux_ac<0) or (aux_ac>len(actions)):
+                aux_ac=0
+            aux_cat=int(aux_num.split(" ")[2])
+            if (aux_cat<0) or (aux_cat>len(categories)):
+                aux_cat=0
+            aux_fl=int(aux_num.split(" ")[3])
+            if (aux_fl<0) or (aux_fl>len(flags)):
+                aux_fl=0
+            aux_key=int(aux_num.split(" ")[4])
+            if (aux_key<0) or (aux_key>len(extra_keys)):
+                aux_key=0
         if (activities is not None):
-            for component in activities:
-                for ac in actions:
-                    for cat in categories:
-                        for fl in flags:
-                            for key in extra_keys:
+            for component in activities[aux_comp:]:
+                for ac in actions[aux_ac:]:
+                    for cat in categories[aux_cat:]:
+                        for fl in flags[aux_fl:]:
+                            for key in extra_keys[aux_key:]:
                                 for extra_type in extra_types:
                                     extra_value=random_value(extra_type)
                                     uri=generate_random_uri()
+                                    if (save_state):
+                                        with open(str(current_dir+"/complete_test-saved.txt"),'w+') as f:
+                                            f.write(str(activities.index(component))+ " " + str(actions.index(ac)) + " " +str(categories.index(cat)) + " " + str(flags.index(fl)) + " " + str(extra_keys.index(key)))
+                                            f.close()
                                     self.run_intent(package_name,component,uri,ac,cat,fl,extra_type,key,extra_value,device)
   
                                   
