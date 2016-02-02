@@ -49,5 +49,5 @@ setuptools.setup(
                               "lib/weasel/armeabi/w",
                               "server/web_root/*" ] },
   scripts = ["bin/drozer", "bin/drozer-complete"],
-  install_requires = ["protobuf==2.4.1", "pyopenssl==0.15"],
+  install_requires = ["protobuf==2.6.1", "pyopenssl==0.15"],
   classifiers = [])
