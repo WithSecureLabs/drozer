@@ -51,13 +51,13 @@ class AgentManager(cli.Base):
         # add extra permissions to the Manifest file
         m = manifest.Manifest(packager.manifest_path()) 
         
-        m_ver = m.version()
-        c_ver = meta.version.__str__()
+       # m_ver = m.version()
+       # c_ver = meta.version.__str__()
 
-        if m_ver != c_ver:
-            print "Version Mismatch: Consider updating your build(s)"
-            print "Agent Version: %s" % m_ver
-            print "drozer Version: %s" % c_ver
+       # if m_ver != c_ver:
+        #    print "Version Mismatch: Consider updating your build(s)"
+         #   print "Agent Version: %s" % m_ver
+          #  print "drozer Version: %s" % c_ver
 
         for p in permissions:
             m.add_permission(p)
