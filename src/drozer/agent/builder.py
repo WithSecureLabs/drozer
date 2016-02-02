@@ -18,7 +18,8 @@ class Packager(command_wrapper.Wrapper):
     
     __endpoint = "endpoint.txt"
     __manifest = "AndroidManifest.xml"
-    
+    __apktool_yml = "apktool.yml"
+
     def __init__(self):
         self.__wd = self._get_wd()
         
@@ -34,6 +35,9 @@ class Packager(command_wrapper.Wrapper):
     def manifest_path(self):
         return os.path.join(self.__wd, "agent", self.__manifest)
     
+    def apktool_yml_path(self):
+        return os.path.join(self.__wd,"agent",self.__apktool_yml)
+
     def package(self):
         platform_name = platform.system()
 
