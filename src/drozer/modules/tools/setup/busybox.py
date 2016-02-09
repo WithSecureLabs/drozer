@@ -4,6 +4,7 @@ class BusyBox(Module, common.BusyBox, common.Shell):
 
     name = "Install Busybox."
     description = """Installs Busybox on the Agent.
+    # 09/02/2016 - Updated binary for PIE Support
 
 Busybox provides a number of *nix utilities that are missing from Android. Some modules require Busybox to be installed.
 
@@ -19,17 +20,19 @@ Typically, you require root access to the device to install Busybox. drozer can 
             self.stdout.write("BusyBox is already installed.\n")
         else:
             # ARCH check
-            if "ARM" not in str(self.klass('java.lang.System').getProperty("os.arch")).upper():
-                response = raw_input("[-] Unsupported CPU architecture - ARM only. Continue anyway (y/n)? ")
-                if "Y" not in response.upper():
-                    return
+            # if "ARM" not in str(self.klass('java.lang.System').getProperty("os.arch")).upper():
+            #     response = raw_input("[-] Unsupported CPU architecture - ARM only. Continue anyway (y/n)? ")
+            #     if "Y" not in response.upper():
+            #         return
 
-            # Android 5.0 >= check
             if self.klass("android.os.Build$VERSION").SDK_INT >= 21:
-                self.stdout.write("[-] This module is not supported on Android 5.0 and above yet. This is due to the enforcement of PIE binaries and will be updated in future versions of drozer.\n")
-                return
-
-            if self.installBusyBox():
-                self.stdout.write("BusyBox installed.\n")
+                if self.installBusyBox(True):
+                    self.stdout.write("BusyBox installed " + + self.BusyBoxPath() + "\n")
+                else:
+                    self.stdout.write("BusyBox installation failed.\n")
             else:
-                self.stdout.write("BusyBox installation failed.\n")
+                if self.installBusyBox(False):
+                    self.stdout.write("BusyBox installed. " + self.BusyBoxPath() + "\n")
+                else:
+                    self.stdout.write("BusyBox installation failed.\n")
+

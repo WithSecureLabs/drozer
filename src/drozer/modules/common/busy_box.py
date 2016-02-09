@@ -14,12 +14,15 @@ class BusyBox(shell.Shell):
 
         return self.workingDir() + "/bin/busybox"
 
-    def _localPath(self):
+    def _localPath(self, pie):
         """
         Get the path to the Busybox binary on the local system.
         """
+        if pie == True:
+            return os.path.join(os.path.dirname(__file__) , "..", "tools", "setup", "pie", "busybox")
+        else:
+            return os.path.join(os.path.dirname(__file__) , "..", "tools", "setup", "nopie","busybox")
 
-        return os.path.join(os.path.dirname(__file__) , "..", "tools", "setup", "busybox")
 
     def busyBoxExec(self, command):
         """
@@ -35,15 +38,15 @@ class BusyBox(shell.Shell):
 
         return self.exists(self.busyboxPath())
 
-    def installBusyBox(self):
+    def installBusyBox(self,pie):
         """
         Install Busybox on the Agent.
         """
 
         if self.ensureDirectory(self.busyboxPath()[0:self.busyboxPath().rindex("/")]):
-            bytes_copied = self.uploadFile(self._localPath(), self.busyboxPath())
+            bytes_copied = self.uploadFile(self._localPath(pie), self.busyboxPath())
     
-            if bytes_copied != os.path.getsize(self._localPath()):
+            if bytes_copied != os.path.getsize(self._localPath(pie)):
                 return False
             else:
                 self.shellExec("chmod 775 " + self.busyboxPath())
