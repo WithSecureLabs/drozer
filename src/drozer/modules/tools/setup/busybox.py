@@ -27,12 +27,12 @@ Typically, you require root access to the device to install Busybox. drozer can 
 
             if self.klass("android.os.Build$VERSION").SDK_INT >= 21:
                 if self.installBusyBox(True):
-                    self.stdout.write("BusyBox installed " + + self.BusyBoxPath() + "\n")
+                    self.stdout.write("BusyBox installed " + + self.busyboxPath() + "\n")
                 else:
                     self.stdout.write("BusyBox installation failed.\n")
             else:
                 if self.installBusyBox(False):
-                    self.stdout.write("BusyBox installed. " + self.BusyBoxPath() + "\n")
+                    self.stdout.write("BusyBox installed. " + self.busyboxPath() + "\n")
                 else:
                     self.stdout.write("BusyBox installation failed.\n")
 
