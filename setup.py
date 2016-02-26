@@ -42,6 +42,7 @@ setuptools.setup(
   package_data = { "": ["*.apk", "*.bks", "*.crt", "*.docx", "*.jar", "*.key", "*.sh", "*.xml", "busybox"] + find_libs("src"),
                    "drozer": ["lib/aapt",
                               "lib/aapt.exe",
+                              "lib/aapt-osx",
                               "lib/*.apk",
                               "lib/*.jar",
                               "lib/*.pem",
