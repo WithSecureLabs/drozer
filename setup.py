@@ -50,5 +50,8 @@ setuptools.setup(
                               "lib/weasel/armeabi/w",
                               "server/web_root/*" ] },
   scripts = ["bin/drozer", "bin/drozer-complete"],
+  data_files=[
+        ('/etc/bash_completion.d', ['extras/drozer_bashcompletion']),
+    ],
   install_requires = ["protobuf==2.6.1", "pyopenssl==0.15", "pyyaml==3.11"],
   classifiers = [])
