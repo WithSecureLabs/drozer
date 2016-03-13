@@ -501,8 +501,10 @@ class SharedUID(Module, common.PackageManager):
                 permissions = set([])
 
                 for packageName in packages:
-                    package = self.packageManager().getPackageInfo(packageName, common.PackageManager.GET_PERMISSIONS)
-
+                    try:
+                        package = self.packageManager().getPackageInfo(packageName, common.PackageManager.GET_PERMISSIONS)
+                    except:
+                        continue
                     self.stdout.write("  Package: %s\n"%packageName)
 
                     if package.requestedPermissions != None:
