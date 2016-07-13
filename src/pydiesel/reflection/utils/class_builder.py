@@ -33,7 +33,7 @@ class ClassBuilder(object):
             # switch our working directory to the source directory
             os.chdir(os.path.dirname(self.path))
             # compile the java sources (%.java => %.class)
-            if not self.__execute(self.javac , "-source 1.6 -target 1.6", "-cp", self.sdk_path, os.path.basename(self.path)):
+            if not self.__execute(self.javac , "-source","1.6","-target", "1.6", "-cp", self.sdk_path, os.path.basename(self.path)):
                 raise RuntimeError("Error whilst compiling the Java sources.")
 
             # collect any sub-classes that we generated
