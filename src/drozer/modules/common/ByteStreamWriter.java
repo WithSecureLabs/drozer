@@ -14,5 +14,4 @@ public class ByteStreamWriter {
 
     return true;
   }
-
 }
