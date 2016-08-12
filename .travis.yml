@@ -5,7 +5,6 @@ python:
 
 os:
   - linux
-  - osx
 
 before_install:
 - export PYTHONPATH=$PYTHONPATH:$(pwd)/src
