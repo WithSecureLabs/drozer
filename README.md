@@ -48,7 +48,6 @@ Drozer can be installed using Android Debug Bridge (adb).
 
 `$ adb install drozer.apk`
 
-* * *
 
 ### Starting a Session
 
