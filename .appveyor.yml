@@ -11,7 +11,7 @@ init:
 
 install:
   - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
-  - set PYTHONPATH=%PYTHONPATH%;%cd%
+  - set PYTHONPATH=%PYTHONPATH%;%cd%\src;%PYTHON%\\Lib;%PYTHON\\DLLs
   - "python setup.py build"
   - "python setup.py install"
 
