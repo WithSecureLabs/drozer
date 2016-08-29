@@ -23,10 +23,6 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 
 ## Installing
 
-### Debian / Ubuntu
-
-`apt-get install drozer`
-
 ### Arch Linux
 
 `yaourt -S drozer`
