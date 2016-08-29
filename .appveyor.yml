@@ -1,0 +1,27 @@
+environment:
+
+  matrix:
+    - PYTHON: "C:\\Python27"
+    - PYTHON: "C:\\Python27-x64"
+
+init:
+  - ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%
+
+
+
+install:
+  - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
+  - "python setup.py build"
+  - "python setup.py install"
+
+
+build: off
+
+# test_script:
+
+# after_test:
+
+# artifacts:
+#   - path: dist\*
+
+#on_success:
