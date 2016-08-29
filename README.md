@@ -21,6 +21,10 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 
 [![Build Status](https://travis-ci.org/mwrlabs/drozer.svg?branch=master)](https://travis-ci.org/mwrlabs/drozer)
 
+### Windows
+
+[![Build status](https://ci.appveyor.com/api/projects/status/9d4f3qx2sn2yf8tm/branch/develop?svg=true)](https://ci.appveyor.com/project/HenryHoggard/drozer/branch/develop)
+
 ## Installing
 
 ### Arch Linux
