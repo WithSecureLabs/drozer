@@ -3,19 +3,19 @@ import glob
 import os
 import setuptools
 
-from drozer import meta
+from src.drozer import meta
 
 def find_files(src):
     matches = []
-    
+
     for root, dirnames, filenames in os.walk(src):
         matches.extend(map(lambda f: os.path.join(root, f), filenames))
-    
+
     return matches
 
 def find_libs(src):
     matches = []
-    
+
     for root, dirnames, filenames in os.walk(src):
         for filename in fnmatch.filter(dirnames, 'lib'):
             matches.extend(glob.glob(os.path.join(root, filename, "*", "*")))
@@ -23,7 +23,7 @@ def find_libs(src):
             matches.extend(glob.glob(os.path.join(root, filename, "*", "*")))
 
     return map(lambda fn: os.path.basename(fn), filter(lambda fn: os.path.isfile(fn), matches))
-    
+
 setuptools.setup(
   name = meta.name,
   version = str(meta.version),
