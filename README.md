@@ -27,10 +27,6 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 
 ## Installing
 
-### Arch Linux
-
-`yaourt -S drozer`
-
 ### Building from Source
 
 ```
@@ -39,6 +35,21 @@ cd drozer
 python setup.py build
 python setup.py install
 ```
+### Installing .egg
+
+```
+sudo easy_install drozer-2.x.x-py2.7.egg
+```
+
+### Installing .deb (Debian/Ubuntu)
+
+``` 
+sudo dpkg -i drozer-2.x.x.deb
+```
+
+### Arch Linux
+
+`yaourt -S drozer`
 
 ## Usage
 
@@ -46,7 +57,9 @@ python setup.py install
 
 Drozer can be installed using Android Debug Bridge (adb).
 
-`$ adb install drozer.apk`
+Download the latest Drozer Agent [here](https://github.com/mwrlabs/drozer/releases/download/2.3.4/drozer-agent-2.3.4.apk).
+
+`$ adb install drozer-agent-2.x.x.apk`
 
 
 ### Starting a Session
@@ -111,12 +124,11 @@ For full source code, to report bugs, suggest features and contribute patches pl
 
   <https://github.com/mwrlabs/drozer>
 
-Bug reports, feature requests, comments and questions can be submitted sent to:
-
-  drozer [at] mwrinfosecurity.com
-
+Bug reports, feature requests, comments and questions can be submitted [here](https://github.com/mwrlabs/drozer/issues).
+  
 Follow the latest drozer news, follow the project on Twitter:
 
   [@mwrdrozer](https://twitter.com/mwrdrozer)
+
 
 
