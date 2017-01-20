@@ -13,8 +13,11 @@ class SuperUser(file_system.FileSystem):
         """
         Get the path to which su is uploaded on the Agent.
         """
+        if self.exists("/su/bin/su"):
+            return "/su/bin/su"
+        else:
+            return "%s/su" % (self.workingDir())
 
-        return "%s/su" % (self.workingDir())
 
     def _localPathMinimalSu(self):
         """
@@ -35,7 +38,7 @@ class SuperUser(file_system.FileSystem):
         Test whether any su binary is installed on the Agent.
         """
         
-        return (self.exists("/system/bin/su") or self.exists("/system/xbin/su"))
+        return (self.exists("/system/bin/su") or self.exists("/system/xbin/su") or self.exists("/su/bin/su"))
             
     def isMinimalSuInstalled(self):
         """
