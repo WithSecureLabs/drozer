@@ -1,6 +1,6 @@
 from drozer.modules import common, Module
 
-class BusyBox(Module, common.BusyBox, common.Shell):
+class BusyBox(Module, common.BusyBox, common.Shell, common.Platform):
 
     name = "Install Busybox."
     description = """Installs Busybox on the Agent.
@@ -25,9 +25,9 @@ Typically, you require root access to the device to install Busybox. drozer can 
             #     if "Y" not in response.upper():
             #         return
 
-            if self.klass("android.os.Build$VERSION").SDK_INT >= 21:
+            if self.isPIE():
                 if self.installBusyBox(True):
-                    self.stdout.write("BusyBox installed " + + self.busyboxPath() + "\n")
+                    self.stdout.write("BusyBox installed " + self.busyboxPath() + "\n")
                 else:
                     self.stdout.write("BusyBox installation failed.\n")
             else:
@@ -35,4 +35,5 @@ Typically, you require root access to the device to install Busybox. drozer can 
                     self.stdout.write("BusyBox installed. " + self.busyboxPath() + "\n")
                 else:
                     self.stdout.write("BusyBox installation failed.\n")
+
 
