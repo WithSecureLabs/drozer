@@ -15,6 +15,7 @@ from drozer.modules.common.intent_filter import IntentFilter
 from drozer.modules.common.loader import ClassLoader
 from drozer.modules.common.package_manager import PackageManager
 from drozer.modules.common import path_completion
+from drozer.modules.common.platform import Platform
 from drozer.modules.common.provider import Provider
 from drozer.modules.common.shell import Shell
 from drozer.modules.common.shell_code import ShellCode
