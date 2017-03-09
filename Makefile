@@ -2,7 +2,7 @@
 NATIVES = $(shell find src/drozer/modules -name Android.mk)
 SOURCES = $(shell find src/drozer/modules -name *.java)
 
-DX = dx
+DX = $(CURDIR)/src/drozer/lib/dx
 JAVAC = javac
 NDKBUILD = ndk-build
 PYTHON = python
