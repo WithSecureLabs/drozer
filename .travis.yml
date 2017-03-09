@@ -35,7 +35,7 @@ deploy:
   - provider: releases
     api_key:
       secure: CSn4UDDiBlYnD/9MMEbqYw48T37D4Fo0tTDedO0hLWPHDPvuVKuRZ5PzpPxK4gpPLY3U/0w6pDnLk0bG6qlvkoC/mWDc2vmSOAD9Y5BHRuNCnP3pg8VQ0ihhn6t6tZhHzG7HRCl+lL0E572HOH5W329wJ6JufKYU5Z96wWlyrkw=
-    file: dist/*
+    file: $TRAVIS_BUILD_DIR/dist/*
     skip_cleanup: true
     on:
       tags: true
