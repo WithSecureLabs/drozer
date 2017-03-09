@@ -16,7 +16,27 @@ before_install:
 install:
   - make apks 
   - python setup.py build
+  - python setup.py sdist bdist_wheel
   - python setup.py install
 
 script:
   - ./bin/drozer
+
+
+deploy:
+  - provider: pypi
+    user: "drozer"
+    password:
+      secure: gD9zqaooEJYDh8bOLivY0C/mVcIoeLVv9tdXmuLz7psZvuWrjGCGCrkB0K82iZGbfl8sbZyUsCN0bH2RcdrmRDqUkaRmXz6k+aiqraM4ZfVboVKDITTDYK6U0byfoBQ6AKJvqM0zcqXkZmg/5jWzx/IVUcfhEwK39u4NYGZWYGM=
+    on:
+      tags: true
+      repo: mwrlabs/drozer
+    distributions: "sdist bdist_wheel"
+  - provider: releases
+    api_key:
+      secure: CSn4UDDiBlYnD/9MMEbqYw48T37D4Fo0tTDedO0hLWPHDPvuVKuRZ5PzpPxK4gpPLY3U/0w6pDnLk0bG6qlvkoC/mWDc2vmSOAD9Y5BHRuNCnP3pg8VQ0ihhn6t6tZhHzG7HRCl+lL0E572HOH5W329wJ6JufKYU5Z96wWlyrkw=
+    file: dist/*
+    skip_cleanup: true
+    on:
+      tags: true
+      repo: mwrlabs/drozer
