@@ -3,6 +3,9 @@ python:
   - "2.6"
   - "2.7"
 
+jdk:
+  - oraclejdk7
+
 os:
   - linux
 
@@ -10,7 +13,8 @@ before_install:
 - export PYTHONPATH=$PYTHONPATH:$(pwd)/src
 - export PATH=$PATH:$(pwd)/bin
 
-install: 
+install:
+  - make apks 
   - python setup.py build
   - python setup.py install
 
