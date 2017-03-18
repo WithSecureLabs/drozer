@@ -49,6 +49,6 @@ setuptools.setup(
                               "lib/*.pk8",
                               "lib/weasel/armeabi/w",
                               "server/web_root/*" ] },
-  scripts = ["bin/drozer", "bin/drozer-complete"],
+  scripts = ["bin/drozer", "bin/drozer-complete", "bin/drozer-repository"],
   install_requires = ["protobuf>=2.6.1","pyopenssl>=16.2", "pyyaml>=3.11"],
   classifiers = [])
