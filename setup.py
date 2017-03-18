@@ -51,4 +51,5 @@ setuptools.setup(
                               "server/web_root/*" ] },
   scripts = ["bin/drozer", "bin/drozer-complete", "bin/drozer-repository"],
   install_requires = ["protobuf>=2.6.1","pyopenssl>=16.2", "pyyaml>=3.11"],
+  data_files = [('/etc/bash_completion.d',['scripts/drozer'])],
   classifiers = [])
