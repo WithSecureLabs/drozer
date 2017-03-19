@@ -33,6 +33,7 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 git clone https://github.com/mwrlabs/drozer/
 cd drozer
 make apks
+source ENVIRONMENT
 python setup.py build
 python setup.py install
 ```
@@ -47,7 +48,7 @@ sudo easy_install drozer-2.x.x-py2.7.egg
 sudo apt-get install python-stdeb fakeroot
 git clone https://github.com/mwrlabs/drozer/
 cd drozer
-make all
+make apks
 source ENVIRONMENT
 python setup.py --command-packages=stdeb.command bdist_deb
 
