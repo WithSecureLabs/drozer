@@ -3,7 +3,7 @@ import glob
 import os
 import setuptools
 
-from src.drozer import meta
+from drozer import meta
 
 def find_files(src):
     matches = []
@@ -30,7 +30,7 @@ setuptools.setup(
   author = meta.vendor,
   author_email = meta.contact,
   description = meta.description,
-  long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).read(),
+  long_description = meta.long_description,
   license = meta.license,
   keywords = meta.keywords,
   url = meta.url,
@@ -49,6 +49,7 @@ setuptools.setup(
                               "lib/*.pk8",
                               "lib/weasel/armeabi/w",
                               "server/web_root/*" ] },
-  scripts = ["bin/drozer", "bin/drozer-complete"],
-  install_requires = ["protobuf==2.6.1","pyopenssl==16.2", "pyyaml==3.11"],
+  scripts = ["bin/drozer", "bin/drozer-complete", "bin/drozer-repository"],
+  install_requires = ["protobuf>=2.6.1","pyopenssl>=16.2", "pyyaml>=3.11"],
+  data_files = [('/etc/bash_completion.d',['scripts/drozer'])],
   classifiers = [])
