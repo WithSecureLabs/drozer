@@ -4,6 +4,7 @@ import os
 import setuptools
 
 from drozer import meta
+from sys import platform
 
 def find_files(src):
     matches = []
@@ -23,6 +24,15 @@ def find_libs(src):
             matches.extend(glob.glob(os.path.join(root, filename, "*", "*")))
 
     return map(lambda fn: os.path.basename(fn), filter(lambda fn: os.path.isfile(fn), matches))
+
+# Do a system check when installing bash complete script
+def get_install_data():
+	install_data = []
+	if platform == "linux" or platform == "linux2":
+		install_data = [('/etc/bash_completion.d',['scripts/drozer'])]
+
+	return install_data
+
 
 setuptools.setup(
   name = meta.name,
@@ -51,5 +61,5 @@ setuptools.setup(
                               "server/web_root/*" ] },
   scripts = ["bin/drozer", "bin/drozer-complete", "bin/drozer-repository"],
   install_requires = ["protobuf>=2.6.1","pyopenssl>=16.2", "pyyaml>=3.11"],
-  data_files = [('/etc/bash_completion.d',['scripts/drozer'])],
+  data_files = get_install_data(),
   classifiers = [])
