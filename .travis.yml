@@ -15,6 +15,7 @@ before_install:
 
 install:
   - make apks 
+  - source ENVIRONMENT
   - python setup.py build
   - python setup.py sdist bdist_wheel
   - sudo python setup.py install
