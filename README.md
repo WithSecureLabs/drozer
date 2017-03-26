@@ -35,7 +35,7 @@ cd drozer
 make apks
 source ENVIRONMENT
 python setup.py build
-python setup.py install
+sudo env "PYTHONPATH=$PYTHONPATH:$(pwd)/src" python setup.py install
 ```
 ### Installing .egg
 
