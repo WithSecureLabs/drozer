@@ -16,23 +16,35 @@ Typically, you require root access to the device to install Busybox. drozer can 
     path = ["tools", "setup"]
 
     def execute(self, arguments):
-        if self.isBusyBoxInstalled():
-            self.stdout.write("BusyBox is already installed.\n")
+        arch = str(self.klass('java.lang.System').getProperty("os.arch")).upper()
+        self.stdout.write("arch: "+arch+"\n")
+        # Check for unsupported architecture
+        if "ARM" in arch:
+            arch = "arm"
+        elif "86" in arch:
+            arch = "x86"
         else:
-            # ARCH check
-            # if "ARM" not in str(self.klass('java.lang.System').getProperty("os.arch")).upper():
-            #     response = raw_input("[-] Unsupported CPU architecture - ARM only. Continue anyway (y/n)? ")
-            #     if "Y" not in response.upper():
-            #         return
+            self.stdout.write("Unsupported CPU architecture. Supported architectures are arm and x86.\n")
 
-            if self.klass("android.os.Build$VERSION").SDK_INT >= 21:
-                if self.installBusyBox(True):
-                    self.stdout.write("BusyBox installed " + + self.busyboxPath() + "\n")
-                else:
-                    self.stdout.write("BusyBox installation failed.\n")
+        # If the arch is supported, then check if busybox is installed
+        if arch == "x86":
+            if self.isBusyBoxInstalled():
+                self.stdout.write("BusyBox is already installed.\n")
             else:
-                if self.installBusyBox(False):
-                    self.stdout.write("BusyBox installed. " + self.busyboxPath() + "\n")
+                self.stdout.write("Installing busybox for x86.\n")
+        elif arch == "arm":
+            if self.isBusyBoxInstalled():
+                self.stdout.write("BusyBox is already installed.\n")
+            else:
+                if self.klass("android.os.Build$VERSION").SDK_INT >= 21:
+                    if self.installBusyBox(True):
+                        self.stdout.write("BusyBox installed " + self.busyboxPath() + "\n")
+                    else:
+                        self.stdout.write("BusyBox installation failed.\n")
                 else:
-                    self.stdout.write("BusyBox installation failed.\n")
-
+                    if self.installBusyBox(False):
+                        self.stdout.write("BusyBox installed. " + self.busyboxPath() + "\n")
+                    else:   
+                        self.stdout.write("BusyBox installation failed.\n")
+        else:
+            self.stdout.write("Unsupported CPU architecture. Supported architectures are arm and x86.\n")
