@@ -22,7 +22,7 @@ import android.os.Process;
 import android.util.Log;
 import java.lang.ref.WeakReference;
 
-/* Mercury ServiceBinder
+/* drozer ServiceBinder
  * 
  * The ServiceBinder provides synchronous interaction with services, exported by
  * other Android apps.
@@ -52,7 +52,7 @@ public class ServiceBinder {
     HgServiceConnection serviceConnection;
 
     public boolean execute(Context context, String package_name, String class_name, Message message, int timeout) {
-        HandlerThread thread = new HandlerThread("MercuryHandler", Process.THREAD_PRIORITY_BACKGROUND);
+        HandlerThread thread = new HandlerThread("drozerHandler", Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
         Looper serviceLooper = thread.getLooper();
 
@@ -66,7 +66,7 @@ public class ServiceBinder {
             return false;
 
         for(String key : message.getData().keySet()){
-    			Log.i("MercuryServiceBinder", "Key: " + key + " : " + message.getData().get(key));
+    			Log.i("drozerServiceBinder", "Key: " + key + " : " + message.getData().get(key));
     	}
 
         Intent i = new Intent();

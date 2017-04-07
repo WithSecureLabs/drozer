@@ -39,6 +39,11 @@ WARNING: This minimal version of the su binary is completely unprotected, meanin
             response = raw_input("[-] Unsupported CPU architecture - ARM only. Continue anyway (y/n)? ")
             if "Y" not in response.upper():
                 return
+
+        # Android 4.3 >= check
+        if self.klass("android.os.Build$VERSION").SDK_INT >= 18:
+            self.stdout.write("[-] This module is not supported on Android 4.3 and above yet. This is due to security changes in Android that mount the /system partition as nosuid for processes spawned by zygote.\n")
+            return
         
         # Upload su binary
         if self.uploadMinimalSu():

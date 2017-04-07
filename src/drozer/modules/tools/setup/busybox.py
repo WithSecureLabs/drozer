@@ -24,6 +24,11 @@ Typically, you require root access to the device to install Busybox. drozer can 
                 if "Y" not in response.upper():
                     return
 
+            # Android 5.0 >= check
+            if self.klass("android.os.Build$VERSION").SDK_INT >= 21:
+                self.stdout.write("[-] This module is not supported on Android 5.0 and above yet. This is due to the enforcement of PIE binaries and will be updated in future versions of drozer.\n")
+                return
+
             if self.installBusyBox():
                 self.stdout.write("BusyBox installed.\n")
             else:

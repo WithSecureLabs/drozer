@@ -12,7 +12,7 @@ class Drozer(FrameReceiver):
     Implementation of the drozer Protocol, as a FrameReceiver.
     """
     
-    __logger = getLogger(__name__ + '.droidhg')
+    __logger = getLogger(__name__ + '.drozer')
     
     name = 'drozer'
     

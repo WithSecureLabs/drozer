@@ -51,7 +51,10 @@ class ModuleLoader(object):
                         reload(sys.modules[modules[i]])
                 except ImportError:
                     sys.stderr.write("Skipping source file at %s. Unable to load Python module.\n" % modules[i])
-                    raise
+                    pass 
+                except IndentationError:
+                    sys.stderr.write("Skipping source file at %s. Indentation Error.\n" % modules[i])
+                    pass
 
     def __load(self, base):
         """
@@ -99,10 +102,10 @@ class ModuleLoader(object):
     def __module_path(self):
         """
         Calculate the full set of module paths, by combining internal paths with
-        those specified in the DROIDHG_MODULE_PATH environment variable.
+        those specified in the DROZER_MODULE_PATH environment variable.
         """
 
-        return self.__module_paths + ":" + Repository.droidhg_modules_path()
+        return self.__module_paths + ":" + Repository.drozer_modules_path()
         
     def __paths(self):
         """
@@ -138,4 +141,3 @@ class ModuleLoader(object):
                 yield c
                 
         yield klass
-        

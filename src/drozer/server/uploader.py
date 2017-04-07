@@ -13,7 +13,10 @@ def delete(arguments, resource):
     request.writeTo(sock)
     response = HTTPResponse.readFrom(sock)
     
-    return response.code == 200
+    if response:
+        return response.status == 200
+    else:
+        return False
 
 def get_socket(arguments):
     sock = socket()

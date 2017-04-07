@@ -209,40 +209,40 @@ Finding content providers that do not require permissions to read/write:
             if not arguments.unexported:
                 for provider in exported_providers:
                     for authority in provider.authority.split(";"):
-                        self.__print_provider(provider, authority)
+                        self.__print_provider(provider, authority, "  ")
             else:
                 self.stdout.write("  Exported Providers:\n")
                 for provider in exported_providers:
                     for authority in provider.authority.split(";"):
-                        self.__print_provider(provider, authority)
+                        self.__print_provider(provider, authority, "    ")
                 self.stdout.write("  Hidden Providers:\n")
                 for provider in hidden_providers:
                     for authority in provider.authority.split(";"):
-                        self.__print_provider(provider, authority)
+                        self.__print_provider(provider, authority, "    ")
             self.stdout.write("\n")
         elif arguments.package or arguments.verbose:
             self.stdout.write("Package: %s\n" % package.packageName)
             self.stdout.write("  No matching providers.\n\n")
 
-    def __print_provider(self, provider, authority):
-        self.stdout.write("  Authority: %s\n" % authority)
-        self.stdout.write("    Read Permission: %s\n" % provider.readPermission)
-        self.stdout.write("    Write Permission: %s\n" % provider.writePermission)
-        self.stdout.write("    Content Provider: %s\n" % provider.name)
-        self.stdout.write("    Multiprocess Allowed: %s\n" % provider.multiprocess)
-        self.stdout.write("    Grant Uri Permissions: %s\n" % provider.grantUriPermissions)
+    def __print_provider(self, provider, authority, prefix):
+        self.stdout.write("%sAuthority: %s\n" % (prefix, authority))
+        self.stdout.write("%s  Read Permission: %s\n" % (prefix, provider.readPermission))
+        self.stdout.write("%s  Write Permission: %s\n" % (prefix, provider.writePermission))
+        self.stdout.write("%s  Content Provider: %s\n" % (prefix, provider.name))
+        self.stdout.write("%s  Multiprocess Allowed: %s\n" % (prefix, provider.multiprocess))
+        self.stdout.write("%s  Grant Uri Permissions: %s\n" % (prefix, provider.grantUriPermissions))
         if provider.uriPermissionPatterns != None:
-            self.stdout.write("    Uri Permission Patterns:\n")
+            self.stdout.write("%s  Uri Permission Patterns:\n" % prefix)
             for pattern in provider.uriPermissionPatterns:
-                self.stdout.write("      Path: %s\n" % pattern.getPath())
-                self.stdout.write("        Type: %s\n" % Info.PatternMatcherTypes[int(pattern.getType())])
+                self.stdout.write("%s    Path: %s\n" % (prefix, pattern.getPath()))
+                self.stdout.write("%s      Type: %s\n" % (prefix, Info.PatternMatcherTypes[int(pattern.getType())]))
         if provider.pathPermissions != None:
-            self.stdout.write("    Path Permissions:\n")
+            self.stdout.write("%s  Path Permissions:\n" % prefix)
             for permission in provider.pathPermissions:
-                self.stdout.write("      Path: %s\n" % permission.getPath())
-                self.stdout.write("        Type: %s\n" % Info.PatternMatcherTypes[int(permission.getType())])
-                self.stdout.write("        Read Permission: %s\n" % permission.getReadPermission())
-                self.stdout.write("        Write Permission: %s\n" % permission.getWritePermission())
+                self.stdout.write("%s    Path: %s\n" % (prefix, permission.getPath()))
+                self.stdout.write("%s      Type: %s\n" % (prefix, Info.PatternMatcherTypes[int(permission.getType())]))
+                self.stdout.write("%s      Read Permission: %s\n" % (prefix, permission.getReadPermission()))
+                self.stdout.write("%s      Write Permission: %s\n" % (prefix, permission.getWritePermission()))
 
 class Insert(Module, common.Provider):
 

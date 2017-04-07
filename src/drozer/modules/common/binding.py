@@ -14,6 +14,7 @@ class ServiceBinding(loader.ClassLoader):
             
             self.bundle = None
             self.binder = None
+            self.objFormat = "setData"
         
         def getData(self):
             return self.binder.printData()
@@ -44,6 +45,9 @@ class ServiceBinding(loader.ClassLoader):
             else:
                 raise TypeError
 
+        def setBundle(self, bundle):
+            self.bundle = bundle
+
         def obtain_binder(self):
             if self.binder == None:
                 ServiceBinder = self.context.loadClass("common/ServiceBinder.apk", "ServiceBinder")
@@ -55,12 +59,19 @@ class ServiceBinding(loader.ClassLoader):
         def obtain_message(self, msg):
             return self.context.klass("android.os.Message").obtain(None, int(msg[0]), int(msg[1]), int(msg[2]))
         
+        def setObjFormat(self, format):
+            self.objFormat = format
+
         def send_message(self, msg, timeout):
             binder = self.obtain_binder()
             message = self.obtain_message(msg)
             
             if self.bundle != None:
-                message.setData(self.bundle)
+                if self.objFormat.upper() == "SETDATA":
+                    message.setData(self.bundle)
+                
+                if self.objFormat.upper() == "BUNDLEASOBJ":
+                    message.obj = self.bundle
             
             return binder.execute(self.context.getContext(), self.package, self.component, message, int(timeout))
     

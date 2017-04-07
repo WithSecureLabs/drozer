@@ -104,8 +104,9 @@ class Info(Module, common.Filters, common.IntentFilter, common.PackageManager):
         
         if(activity._has_property("parentActivityName") and activity.parentActivityName != None):
             self.stdout.write("%s  Parent Activity: %s\n" % (prefix, activity.parentActivityName))
-        if(activity.permission != None):
-            self.stdout.write("%s  Permission: %s\n" % (prefix, activity.permission))
+
+        self.stdout.write("%s  Permission: %s\n" % (prefix, activity.permission))
+        
         if(activity.targetActivity != None):
             self.stdout.write("%s  Target Activity: %s\n" % (prefix, activity.targetActivity))
         if include_intent_filters:

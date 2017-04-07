@@ -49,6 +49,13 @@ class Manifest(object):
         node.attrib["ns0:name"] = name
         
         self.__doc.insert(len(self.__doc.getchildren()) - 1, node)
+
+    def define_permission(self, name, protectionLevel):
+        node = xml.Element('permission')
+        node.attrib["ns0:name"] = name
+        node.attrib["ns0:protectionLevel"] = protectionLevel
+        
+        self.__doc.insert(len(self.__doc.getchildren()) - 1, node)
         
     def permissions(self):
         return self.__doc.findall('uses-permission')

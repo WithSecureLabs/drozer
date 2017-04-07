@@ -102,13 +102,13 @@ List exported services with no permissions required to interact with it:
 
 class Send(Module, common.ServiceBinding):
     
-    name = "send a Message to a service, and display the reply"
+    name = "Send a Message to a service, and display the reply"
     description = """Binds to an exported service, and sends a Message to it. If the service sends a reply, display the message received and any data it contains.
 
 NB: by default, this module will wait 20 seconds for a reply."""
     examples = """Deliver a Message to a dummy application, that simply returns the message:
     
-    mercury> run app.service.send com.example.srv com.example.srv.Service --msg 1 2 3 --extra float value 0.1324 --extra string test value
+    dz> run app.service.send com.example.srv com.example.srv.Service --msg 1 2 3 --extra float value 0.1324 --extra string test value
     Got a reply from com.example.srv/com.example.srv.Service:
       what: 1
       arg1: 2
@@ -130,6 +130,7 @@ NB: by default, this module will wait 20 seconds for a reply."""
         parser.add_argument("--extra", action="append", nargs=3, metavar=("type","key","value"), help="add an extra to the message's data bundle")
         parser.add_argument("--no-response", action="store_true", default=False, help="do not wait for a response from the service")
         parser.add_argument("--timeout", default="20000", help="specify a timeout in milliseconds (default is 20000)")
+        parser.add_argument("--bundle-as-obj", action="store_true", default=False, help="this is useful when the 'obj' parameter on the target is being cast back to a Bundle instead of using Message.getData()")
 
     def execute(self, arguments):
         if arguments.msg is None:
@@ -142,6 +143,9 @@ NB: by default, this module will wait 20 seconds for a reply."""
         if arguments.extra is not None:
             for extra in arguments.extra:
                 binder.add_extra(extra)
+
+            if arguments.bundle_as_obj:
+                binder.setObjFormat("bundleAsObj")
                 
         if arguments.no_response:
             binder.send_message(arguments.msg, -1)
