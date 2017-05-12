@@ -1,4 +1,5 @@
 language: python
+sudo: required
 python:
   - "2.7"
 
@@ -16,7 +17,7 @@ install:
   - make apks 
   - python setup.py build
   - python setup.py sdist bdist_wheel
-  - python setup.py install
+  - sudo python setup.py install
 
 script:
   - ./bin/drozer
