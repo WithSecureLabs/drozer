@@ -36,7 +36,7 @@ test: force
 %.apk: %.class
 	cd $(dir $^); $(DX) --dex --output=$(notdir $(^:.class=.apk) $(^:.class=*.class))
 %.class: %.java
-	cd $(dir $^); $(JAVAC) -cp $(SDK) $(notdir $^)
+	cd $(dir $^); $(JAVAC) -source 1.6 -target 1.6 -cp $(SDK) $(notdir $^)
 %.mk: force
 	cd $(dir $@); $(NDKBUILD)
 
