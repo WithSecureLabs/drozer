@@ -13,3 +13,5 @@ src/drozer/modules/**/*.class
 src/drozer/modules/**/*.apk
 src/drozer.egg-info
 mercury.log
+deb_dist/*
+*.tar.gz

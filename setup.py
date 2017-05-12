@@ -3,7 +3,7 @@ import glob
 import os
 import setuptools
 
-from src.drozer import meta
+from drozer import meta
 from sys import platform
 
 def find_files(src):
@@ -40,7 +40,7 @@ setuptools.setup(
   author = meta.vendor,
   author_email = meta.contact,
   description = meta.description,
-  long_description = open(os.path.join(os.path.dirname(__file__), "README.md")).read(),
+  long_description = meta.long_description,
   license = meta.license,
   keywords = meta.keywords,
   url = meta.url,
