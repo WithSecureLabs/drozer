@@ -31,4 +31,5 @@ deploy:
     on:
       tags: true
       repo: mwrlabs/drozer
+      branch: master
     distributions: "sdist bdist_wheel"
