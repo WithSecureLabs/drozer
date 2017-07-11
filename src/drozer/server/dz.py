@@ -7,7 +7,7 @@ try:
     from twisted.internet.protocol import Protocol, ServerFactory
 except ImportError:
     print "drozer Server requires Twisted to run."
-    print "Run 'easy_install twisted==10.2.0' to fetch this dependency."
+    print "Run 'pip install twisted' to fetch this dependency."
     sys.exit(-1)
 
 from drozer.configuration import Configuration

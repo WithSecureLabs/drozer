@@ -1,6 +1,6 @@
 language: python
+sudo: required
 python:
-  - "2.6"
   - "2.7"
 
 jdk:
@@ -14,10 +14,10 @@ before_install:
 - export PATH=$PATH:$(pwd)/bin
 
 install:
-  - make apks 
+  - make apks
   - python setup.py build
   - python setup.py sdist bdist_wheel
-  - python setup.py install
+  - sudo env "PYTHONPATH=$PYTHONPATH:$(pwd)/src" python setup.py install
 
 script:
   - ./bin/drozer
