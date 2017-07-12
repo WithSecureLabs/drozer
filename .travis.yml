@@ -16,6 +16,7 @@ before_install:
 
 install:
   - javac -version
+  - sudo update-alternatives --set javac /usr/lib/jvm/java-7-oracle/bin/javac
   - sudo apt-get update
   - sudo apt-get install python-setuptools python-all dh-make fakeroot
   - pip install stdeb
