@@ -14,7 +14,8 @@ before_install:
 - export PATH=$PATH:$(pwd)/bin
 
 install:
-  - sudo apt-get install dh-make fakeroot
+  - sudo apt-get update
+  - sudo apt-get install python-setuptools python-all dh-make fakeroot
   - pip install stdeb
   - make apks
   - python setup.py build
