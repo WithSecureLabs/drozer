@@ -14,7 +14,7 @@ install:
   - set PYTHONPATH=%PYTHONPATH%;%cd%\src;%PYTHON%\\Lib;%PYTHON\\DLLs
   - "python -m pip install cryptography"
   - "python setup.py build"
-  - "python setup.py bdist_wininst bdist_wheel"
+  - "python setup.py bdist_wininst"
   - "python setup.py install"
 
 deploy:
