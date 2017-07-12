@@ -15,7 +15,7 @@ before_install:
 
 install:
   - sudo apt-get install  fakeroot
-  - sudo pip install stdeb
+  - pip install stdeb
   - make apks
   - python setup.py build
   - python setup.py sdist bdist_wheel
