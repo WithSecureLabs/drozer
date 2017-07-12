@@ -14,10 +14,21 @@ install:
   - set PYTHONPATH=%PYTHONPATH%;%cd%\src;%PYTHON%\\Lib;%PYTHON\\DLLs
   - "python -m pip install cryptography"
   - "python setup.py build"
+  - "python setup.py bdist_wininst bdist_wheel"
   - "python setup.py install"
 
+deploy:
+  - provider: GitHub
+  - auth_token:  
+    - secure: gCPf8e7yG7XU3qSFRoRhhf4KT4LQAyluvcshLyWWZSudPE868fDq8Cs/gMNnTfiR
+  - artifact: dist/*
+  - draft: false
+  - prerelease: false
+  - on:
+      branch: master
+      appveyor_repo_tag: true
 
-build: off
+#build: off
 
 # test_script:
 
