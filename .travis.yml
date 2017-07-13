@@ -2,7 +2,7 @@ language: python
 sudo: required
 dist: trusty
 python:
-  - "2.7"
+  - "2.7_with_system_site_packages"
 
 jdk:
   - oraclejdk7
