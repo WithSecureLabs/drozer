@@ -16,7 +16,8 @@ before_install:
 - export PATH=$PATH:$(pwd)/bin
 
 install:
-  - jdk_switcher use oraclejdk7
+  - sudo apt-get install openjdk-7-jdk 
+  - jdk_switcher use openjdk-7-jdk
   - javac -version
   - sudo apt-get update
   - sudo apt-get install python-setuptools python-all dh-make fakeroot
