@@ -10,13 +10,13 @@ jdk:
 os:
   - linux
 
-group: depreciated
 
 before_install:
 - export PYTHONPATH=$PYTHONPATH:$(pwd)/src
 - export PATH=$PATH:$(pwd)/bin
 
 install:
+  - jdk_switcher use oraclejdk7
   - javac -version
   - sudo apt-get update
   - sudo apt-get install python-setuptools python-all dh-make fakeroot
@@ -25,6 +25,7 @@ install:
   - python setup.py build
   - python setup.py sdist bdist_wheel
   - python setup.py --command-packages=stdeb.command bdist_deb
+  - python setup.py install bdist_rpm
   - sudo env "PYTHONPATH=$PYTHONPATH:$(pwd)/src" python setup.py install
 
 script:
