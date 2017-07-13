@@ -16,7 +16,6 @@ before_install:
 - export PATH=$PATH:$(pwd)/bin
 
 install:
-#  - sudo apt-get install rpm
   - jdk_switcher use openjdk7
   - jdk_switcher home openjdk7
   - javac -version
@@ -27,7 +26,6 @@ install:
   - python setup.py build
   - python setup.py sdist bdist_wheel
   - python setup.py --command-packages=stdeb.command bdist_deb
-#  - python setup.py build bdist_rpm
   - sudo env "PYTHONPATH=$PYTHONPATH:$(pwd)/src" python setup.py install
 
 script:
