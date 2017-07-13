@@ -10,13 +10,14 @@ jdk:
 os:
   - linux
 
+group: depreciated
+
 before_install:
 - export PYTHONPATH=$PYTHONPATH:$(pwd)/src
 - export PATH=$PATH:$(pwd)/bin
 
 install:
   - javac -version
-  - sudo update-alternatives --set javac /usr/lib/jvm/java-7-oracle/bin/javac
   - sudo apt-get update
   - sudo apt-get install python-setuptools python-all dh-make fakeroot
   - pip install stdeb
