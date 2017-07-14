@@ -1,27 +1,45 @@
 language: python
 sudo: required
-python:
-  - "2.7"
 
 jdk:
   - oraclejdk7
 
-os:
-  - linux
+
+addons:
+  apt:
+    packages:
+    - python-setuptools
+    - python-all
+    - dh-make
+    - fakeroot
+    - protobuf-compiler
+    - libprotobuf-java
+    - python-protobuf
+    - python-twisted
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      python: "2.7_with_system_site_packages"
 
 before_install:
-- export PYTHONPATH=$PYTHONPATH:$(pwd)/src
-- export PATH=$PATH:$(pwd)/bin
+ - export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+ - export PATH=$PATH:$(pwd)/bin
+ - pip install stdeb
+ - pip install six -U
+ - jdk_switcher use openjdk7
+ - jdk_switcher home openjdk7
 
 install:
   - make apks
   - python setup.py build
   - python setup.py sdist bdist_wheel
-  - sudo env "PYTHONPATH=$PYTHONPATH:$(pwd)/src" python setup.py install
-
+  - make deb
+  - VERSION=`git describe --tags  | cut -c 1-5`
+  - sudo dpkg -i dist/drozer_$VERSION.deb
+ 
 script:
   - ./bin/drozer
-
 
 deploy:
   - provider: pypi
@@ -33,3 +51,13 @@ deploy:
       repo: mwrlabs/drozer
       branch: master
     distributions: "sdist bdist_wheel"
+
+  - provider: releases
+    api_key:
+      secure: CSn4UDDiBlYnD/9MMEbqYw48T37D4Fo0tTDedO0hLWPHDPvuVKuRZ5PzpPxK4gpPLY3U/0w6pDnLk0bG6qlvkoC/mWDc2vmSOAD9Y5BHRuNCnP3pg8VQ0ihhn6t6tZhHzG7HRCl+lL0E572HOH5W329wJ6JufKYU5Z96wWlyrkw=
+    file_glob: true
+    file: dist/*
+    skip_cleanup: true
+    on:
+      tags: true
+

@@ -1,6 +1,8 @@
 *~
 *.apk
 *.hg
+*.deb
+debian/*
 *.pyc
 .mercury_history
 .profile

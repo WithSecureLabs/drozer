@@ -12,7 +12,7 @@ CD=cd
 MD5=md5sum
 FIND=find
 GREP=grep
-VERSION=2.4.3
+VERSION=`git describe --tags  | cut -c 1-5`
 TAR=tar
 
 
@@ -58,7 +58,7 @@ drozer-prepared: src/pydiesel/api/protobuf_pb2.py apks
 
 deb: drozer-deb-structure debian/DEBIAN/control debian/DEBIAN/md5sums
 	dpkg -b debian
-	mv debian.deb drozer_${VERSION}.deb
+	mv debian.deb dist/drozer_${VERSION}.deb
 
 drozer-deb-structure: drozer-prepared
 	mkdir -p debian/etc/bash_completion.d
