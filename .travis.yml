@@ -35,7 +35,7 @@ install:
   - python setup.py sdist bdist_wheel
   - make deb
   - VERSION=`git describe --tags  | cut -c 1-5`
-  - sudo dpkg -i dist/drozer_$(VERSION).deb
+  - sudo dpkg -i dist/drozer_$VERSION.deb
  
 script:
   - ./bin/drozer
