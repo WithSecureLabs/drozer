@@ -42,15 +42,15 @@ before_install:
     export PATH="/Users/travis/.pyenv/shims:${PATH}";
     pyenv-virtualenv venv;
     source venv/bin/activate;
-    python --version; fi
-    set -euv
-    /usr/libexec/java_home -V
-    brew update
-    brew outdated caskroom/cask/brew-cask || brew upgrade caskroom/cask/brew-cask
-    brew tap caskroom/versions
-    sudo rm -rf /Library/Java/JavaVirtualMachines
-    brew cask install caskroom/versions/java7
-    /usr/libexec/java_home --failfast --version 1.7
+    python --version;
+    set -euv;
+    /usr/libexec/java_home -V;
+    brew update;
+    brew outdated caskroom/cask/brew-cask || brew upgrade caskroom/cask/brew-cask;
+    brew tap caskroom/versions;
+    sudo rm -rf /Library/Java/JavaVirtualMachines;
+    brew cask install caskroom/versions/java7;
+    /usr/libexec/java_home --failfast --version 1.7; fi
 
 install:
   - make apks
