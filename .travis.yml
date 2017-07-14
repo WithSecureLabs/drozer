@@ -34,7 +34,8 @@ install:
   - python setup.py build
   - python setup.py sdist bdist_wheel
   - make deb
-  - sudo dpkg -i dist/dro.deb
+  - VERSION=`git describe --tags  | cut -c 1-5`
+  - sudo dpkg -i dist/drozer_$(VERSION).deb
  
 script:
   - ./bin/drozer
