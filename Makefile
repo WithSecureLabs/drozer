@@ -54,7 +54,7 @@ common/protobuf.proto:
 src/pydiesel/api/protobuf_pb2.py: common/protobuf.proto
 	cd common; protoc --python_out=../src/pydiesel/api/ protobuf.proto
 
-drozer-prepared: src/pydiesel/api/protobuf_pb2.py apks native-libraries
+drozer-prepared: src/pydiesel/api/protobuf_pb2.py apks
 
 deb: drozer-deb-structure debian/DEBIAN/control debian/DEBIAN/md5sums
 	dpkg -b debian

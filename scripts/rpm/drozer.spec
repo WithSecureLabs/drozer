@@ -64,5 +64,5 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{_bindir}/*
 /etc/bash_completion.d/drozer
-/usr/lib/python2.7/site-packages/*
+/usr/lib/python2.7/dist-packages/*
 %{_defaultdocdir}/%{name}
