@@ -13,6 +13,7 @@ addons:
     - dh-make
     - fakeroot
     - protobuf-compiler
+    - libprotobuf-java
 
 matrix:
   include:
