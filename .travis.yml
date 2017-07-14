@@ -12,7 +12,6 @@ addons:
     - python-all
     - dh-make
     - fakeroot
-    - protobuf
     - protobuf-compiler
 
 matrix:
@@ -20,8 +19,6 @@ matrix:
     - os: linux
       dist: trusty
       python: "2.7_with_system_site_packages"
-    
-
 
 before_install:
  - export PYTHONPATH=$PYTHONPATH:$(pwd)/src
