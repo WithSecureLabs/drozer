@@ -29,6 +29,11 @@ deploy:
     branch: master
     appveyor_repo_tag: true
 
+artifacts:
+  - path: dist\*.msi
+    name: Drozer Installer
+
+
 build: off
 
 # test_script:
