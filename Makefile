@@ -55,6 +55,7 @@ src/pydiesel/api/protobuf_pb2.py: common/protobuf.proto
 	cd common; protoc --python_out=../src/pydiesel/api/ protobuf.proto
 
 drozer-prepared: src/pydiesel/api/protobuf_pb2.py apks
+	mkdir -p dist
 
 deb: drozer-deb-structure debian/DEBIAN/control debian/DEBIAN/md5sums
 	dpkg -b debian
@@ -87,9 +88,10 @@ debian/DEBIAN/md5sums:
 
 rpm: drozer-rpm-structure
 	$(CD) redhat && rpmbuild --define "_topdir `pwd`" -bb SPECS/drozer.spec
-	mv redhat/RPMS/noarch/*.rpm ./
+	mv redhat/RPMS/noarch/*.rpm ./dist/
 
 drozer-rpm-structure: drozer-prepared
+	mkdir -p dist
 	mkdir -p redhat/SPECS
 	mkdir -p redhat/SOURCES/drozer-${VERSION}
 	mkdir -p redhat/SOURCES/drozer-${VERSION}/etc/bash_completion.d

@@ -1,5 +1,5 @@
 %define name 	drozer
-%define version	2.4.3
+%define version	%(git describe --tags  | cut -c 1-5)
 
 %define _binaries_in_noarch_packages_terminate_build 0
 %define _unpackaged_files_terminate_build 0
