@@ -1,31 +1,54 @@
 language: python
 sudo: required
-dist: trusty
-python:
-  - "2.7_with_system_site_packages"
 
 jdk:
   - oraclejdk7
 
-os:
-  - linux
+
+addons:
+  apt:
+    packages:
+    - python-setuptools
+    - python-all
+    - dh-make
+    - fakeroot
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      python: "2.7_with_system_site_packages"
+    - os: osx
+      language: generic
+      env: PYTHON=2.7.9
+    
 
 
 before_install:
 - export PYTHONPATH=$PYTHONPATH:$(pwd)/src
 - export PATH=$PATH:$(pwd)/bin
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    pip install stdeb
+    pip install six 
+    jdk_switcher use openjdk7
+    jdk_switcher home openjdk7 ; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+    brew update
+    brew install openssl readline
+    brew outdated pyenv || brew upgrade pyenv
+    brew install pyenv-virtualenv
+    pyenv install $PYTHON 
+    export PYENV_VERSION=$PYTHON
+    export PATH="/Users/travis/.pyenv/shims:${PATH}"
+    pyenv-virtualenv venv
+    source venv/bin/activate
+    python --version; fi
 
 install:
-  - jdk_switcher use openjdk7
-  - jdk_switcher home openjdk7
-  - javac -version
-  - sudo apt-get update
-  - sudo apt-get install python-setuptools python-all dh-make fakeroot
-  - pip install stdeb
   - make apks
   - python setup.py build
   - python setup.py sdist bdist_wheel
-  - python setup.py --command-packages=stdeb.command bdist_deb
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; python setup.py --command-packages=stdeb.command bdist_deb ; fi
   - sudo env "PYTHONPATH=$PYTHONPATH:$(pwd)/src" python setup.py install
 
 script:
