@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+# Automatically added by dhpython:
+if which pycompile >/dev/null 2>&1; then
+	pycompile -p drozer 
+fi
+
+# End automatically added section
