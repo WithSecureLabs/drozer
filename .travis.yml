@@ -34,8 +34,8 @@ install:
   - python setup.py build
   - python setup.py sdist bdist_wheel
   - make deb
-  - sudo env "PYTHONPATH=$PYTHONPATH:$(pwd)/src" python setup.py install
-
+  - sudo dpkg -i dist/dro.deb
+ 
 script:
   - ./bin/drozer
 
