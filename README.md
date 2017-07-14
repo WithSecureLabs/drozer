@@ -46,7 +46,6 @@ sudo easy_install drozer-2.x.x-py2.7.egg
 ### Building for Debian/Ubuntu/Mint
 ```
 make deb
-
 ```
 
 ### Installing .deb (Debian/Ubuntu/Mint)
@@ -59,12 +58,12 @@ sudo dpkg -i drozer-2.x.x.deb
 
 ```
 make rpm
-
 ```
 ### Installing .rpm (Redhat/Fedora/CentOS)
 
 ```
 sudo rpm -I drozer-2.x.x-1.noarch.rpm
+```
 
 ### Arch Linux
 
