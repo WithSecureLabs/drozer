@@ -3,6 +3,8 @@
 *.hg
 *.deb
 debian/*
+*.rpm
+redhat/*
 *.pyc
 .mercury_history
 .profile
