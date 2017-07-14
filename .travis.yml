@@ -43,12 +43,20 @@ before_install:
     pyenv-virtualenv venv;
     source venv/bin/activate;
     python --version; fi
+    set -euv
+    /usr/libexec/java_home -V
+    brew update
+    brew outdated caskroom/cask/brew-cask || brew upgrade caskroom/cask/brew-cask
+    brew tap caskroom/versions
+    sudo rm -rf /Library/Java/JavaVirtualMachines
+    brew cask install caskroom/versions/java7
+    /usr/libexec/java_home --failfast --version 1.7
 
 install:
   - make apks
   - python setup.py build
   - python setup.py sdist bdist_wheel
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; python setup.py --command-packages=stdeb.command bdist_deb ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then python setup.py --command-packages=stdeb.command bdist_deb ; fi
   - sudo env "PYTHONPATH=$PYTHONPATH:$(pwd)/src" python setup.py install
 
 script:
