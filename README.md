@@ -43,21 +43,26 @@ sudo env "PYTHONPATH=$PYTHONPATH:$(pwd)/src" python setup.py install
 sudo easy_install drozer-2.x.x-py2.7.egg
 ```
 
-### Building for Debian/Ubuntu
+### Building for Debian/Ubuntu/Mint
 ```
-sudo apt-get install python-stdeb fakeroot
-git clone https://github.com/mwrlabs/drozer/
-cd drozer
-make apks
-source ENVIRONMENT
-python setup.py --command-packages=stdeb.command bdist_deb
-
+make deb
 ```
 
-### Installing .deb (Debian/Ubuntu)
+### Installing .deb (Debian/Ubuntu/Mint)
 
 ``` 
-sudo dpkg -i deb_dist/drozer-2.x.x.deb
+sudo dpkg -i drozer-2.x.x.deb
+```
+
+### Building for Redhat/Fedora/CentOS
+
+```
+make rpm
+```
+### Installing .rpm (Redhat/Fedora/CentOS)
+
+```
+sudo rpm -I drozer-2.x.x-1.noarch.rpm
 ```
 
 ### Arch Linux
