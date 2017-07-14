@@ -12,6 +12,8 @@ addons:
     - python-all
     - dh-make
     - fakeroot
+    - protobuf
+    - protobuf-compiler
 
 matrix:
   include:
