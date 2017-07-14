@@ -14,7 +14,8 @@ addons:
     - fakeroot
     - protobuf-compiler
     - libprotobuf-java
-
+    - python-protobuf
+    - python-twisted
 matrix:
   include:
     - os: linux
