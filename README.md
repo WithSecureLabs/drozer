@@ -45,6 +45,8 @@ sudo easy_install drozer-2.x.x-py2.7.egg
 
 ### Building for Debian/Ubuntu/Mint
 ```
+git clone https://github.com/mwrlabs/drozer/
+cd drozer
 make deb
 ```
 
@@ -57,6 +59,8 @@ sudo dpkg -i drozer-2.x.x.deb
 ### Building for Redhat/Fedora/CentOS
 
 ```
+git clone https://github.com/mwrlabs/drozer/
+cd drozer
 make rpm
 ```
 ### Installing .rpm (Redhat/Fedora/CentOS)
