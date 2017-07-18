@@ -11,11 +11,11 @@ addons:
     - python-setuptools
     - python-all
     - dh-make
-    - fakeroot
     - protobuf-compiler
     - libprotobuf-java
     - python-protobuf
     - python-twisted
+    
 matrix:
   include:
     - os: linux
@@ -23,9 +23,7 @@ matrix:
       python: "2.7_with_system_site_packages"
 
 before_install:
- - export PYTHONPATH=$PYTHONPATH:$(pwd)/src
  - export PATH=$PATH:$(pwd)/bin
- - pip install stdeb
  - pip install six -U
  - jdk_switcher use openjdk7
  - jdk_switcher home openjdk7
