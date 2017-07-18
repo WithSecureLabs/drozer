@@ -25,6 +25,23 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 
 [![Build status](https://ci.appveyor.com/api/projects/status/9d4f3qx2sn2yf8tm/branch/develop?svg=true)](https://ci.appveyor.com/project/HenryHoggard/drozer/branch/develop)
 
+## Prerequisites
+
+1. Python 2.7
+
+2. Protobuf 2.6 or greater
+
+3. Pyopenssl 16.2 or greater
+
+*Note: On Windows please ensure that the path to the Python installation and the Scripts folder under the Python installation are added to the PATH environment variable.*
+
+4. Java Development Kit 1.7 
+
+*Note: On Windows please ensure that the path to javac.exe is added to the PATH environment variable.*
+
+5. [https://developer.android.com/studio/releases/platform-tools.html](Android Debug Bridge)
+
+
 ## Installing
 
 ### Building from Source
@@ -80,8 +97,9 @@ python.exe setup.py bdist_msi
 ```
 
 ### Installing .msi (Windows)
+
 ``` 
-Run dist/drozer-2.x.x.win-amd64.msi 
+Run dist/drozer-2.x.x.win-x.msi 
 
 ```
 
@@ -114,11 +132,23 @@ Now, launch the Agent, select the “Embedded Server” option and tap “Enable
 
 Then, on your PC, connect using the drozer Console:
 
+On Linux:
+
 `$ drozer console connect`
+
+On Windows:
+
+`> drozer.bat console connect`
 
 If using a real device, the IP address of the device on the network must be specified:
 
+On Linux:
+
 `$ drozer console connect --server 192.168.0.10`
+
+On Windows:
+
+`> drozer.bat console connect --server 192.168.0.10`
 
 You should be presented with a drozer command prompt:
 
