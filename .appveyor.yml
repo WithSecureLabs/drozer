@@ -13,7 +13,7 @@ install:
   - "python -m pip install protobuf"
   - "python -m pip install pyopenssl"
   - "python setup.py bdist_msi"
-  - "dist\drozer-2.4.3.win-amd64.msi /quiet"
+  - "dist\\drozer-2.4.3.win-amd64.msi /quiet"
 
 deploy:
   provider: GitHub
