@@ -37,11 +37,11 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 
 4. [Twisted](https://pypi.python.org/pypi/Twisted) 10.2 or greater
 
-4. [Java Development Kit 1.7](http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html) 
+5. [Java Development Kit 1.7](http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html) 
 
 **Note: On Windows please ensure that the path to javac.exe is added to the PATH environment variable.**
 
-5. [Android Debug Bridge](https://developer.android.com/studio/releases/platform-tools.html)
+6. [Android Debug Bridge](https://developer.android.com/studio/releases/platform-tools.html)
 
 
 ## Installing
