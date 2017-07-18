@@ -53,12 +53,14 @@ git clone https://github.com/mwrlabs/drozer/
 cd drozer
 make apks
 python setup.py build
-sudo python setup.py install
-```
-### Installing .egg
+sudo python setup.py bdist_wheel
 
 ```
-sudo easy_install drozer-2.x.x-py2.7.egg
+### Installing Python wheel
+
+```
+sudo pip install drozer-2.x.x-py2-none-any.whl
+
 ```
 
 ### Building for Debian/Ubuntu/Mint
