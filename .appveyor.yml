@@ -7,15 +7,13 @@ environment:
 init:
   - ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%
 
-
-
 install:
-  - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
-  - set PYTHONPATH=%PYTHONPATH%;%cd%\src;%PYTHON%\\Lib;%PYTHON\\DLLs
-  - "python -m pip install cryptography"
-#  - "python setup.py build"
-  - "python setup.py bdist --format=msi"
-  - "python setup.py install"
+  - set PATH=%PYTHON%;%PYTHONPATH;%PATH%
+  - set PYTHONPATH=%PYTHONPATH%;%PYTHON%\\Lib;%PYTHON%\\Scripts
+  - "python -m pip install protobuf"
+  - "python -m pip install pyopenssl"
+  - "python setup.py bdist_msi"
+  - "dist/drozer-2.4.3.win-amd64.msi /quiet"
 
 deploy:
   provider: GitHub
