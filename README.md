@@ -33,9 +33,8 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 git clone https://github.com/mwrlabs/drozer/
 cd drozer
 make apks
-source ENVIRONMENT
 python setup.py build
-sudo env "PYTHONPATH=$PYTHONPATH:$(pwd)/src" python setup.py install
+sudo python setup.py install
 ```
 ### Installing .egg
 
@@ -67,6 +66,23 @@ make rpm
 
 ```
 sudo rpm -I drozer-2.x.x-1.noarch.rpm
+```
+
+### Building for Windows
+
+**NOTE: Windows Defender and other Antivirus software will flag drozer as malware (an exploitation tool without exploit code wouldn't be much fun!). In order to run drozer you would have to add an exception to Windows Defender and any antivirus software. Alternatively, we recommend running drozer in a Windows/Linux VM.**
+
+```
+git clone https://github.com/mwrlabs/drozer/
+cd drozer
+python.exe setup.py bdist_msi
+
+```
+
+### Installing .msi (Windows)
+``` 
+Run dist/drozer-2.x.x.win-amd64.msi 
+
 ```
 
 ### Arch Linux

@@ -3,7 +3,7 @@ import glob
 import os
 import setuptools
 
-from drozer import meta
+from src.drozer import meta
 from sys import platform
 
 def find_files(src):
@@ -33,6 +33,12 @@ def get_install_data():
 
 	return install_data
 
+def get_executable_scripts():
+  scripts = ["bin/drozer", "bin/drozer-complete", "bin/drozer-repository"]
+  if platform == "win32":
+    scripts.append("bin/drozer.bat")
+
+  return scripts
 
 setuptools.setup(
   name = meta.name,
@@ -59,7 +65,7 @@ setuptools.setup(
                               "lib/*.pk8",
                               "lib/weasel/armeabi/w",
                               "server/web_root/*" ] },
-  scripts = ["bin/drozer", "bin/drozer-complete", "bin/drozer-repository"],
+  scripts = get_executable_scripts(),
   install_requires = ["protobuf>=2.6.1","pyopenssl>=16.2", "pyyaml>=3.11"],
   data_files = get_install_data(),
   classifiers = [])
