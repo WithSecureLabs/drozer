@@ -33,13 +33,13 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 
 3. Pyopenssl 16.2 or greater
 
-*Note: On Windows please ensure that the path to the Python installation and the Scripts folder under the Python installation are added to the PATH environment variable.*
+**Note: On Windows please ensure that the path to the Python installation and the Scripts folder under the Python installation are added to the PATH environment variable.**
 
 4. Java Development Kit 1.7 
 
-*Note: On Windows please ensure that the path to javac.exe is added to the PATH environment variable.*
+**Note: On Windows please ensure that the path to javac.exe is added to the PATH environment variable.**
 
-5. [https://developer.android.com/studio/releases/platform-tools.html](Android Debug Bridge)
+5. [Android Debug Bridge](https://developer.android.com/studio/releases/platform-tools.html)
 
 
 ## Installing
