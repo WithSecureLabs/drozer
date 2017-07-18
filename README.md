@@ -27,15 +27,17 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 
 ## Prerequisites
 
-1. Python 2.7
-
-2. Protobuf 2.6 or greater
-
-3. Pyopenssl 16.2 or greater
+1. [Python2.7](https://www.python.org/downloads/)
 
 **Note: On Windows please ensure that the path to the Python installation and the Scripts folder under the Python installation are added to the PATH environment variable.**
 
-4. Java Development Kit 1.7 
+2. [Protobuf](https://pypi.python.org/pypi/protobuf) 2.6 or greater
+
+3. [Pyopenssl](https://pypi.python.org/pypi/pyOpenSSL) 16.2 or greater
+
+4. [Twisted](https://pypi.python.org/pypi/Twisted) 10.2 or greater
+
+4. [Java Development Kit 1.7](http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html) 
 
 **Note: On Windows please ensure that the path to javac.exe is added to the PATH environment variable.**
 
