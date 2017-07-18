@@ -46,7 +46,7 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 
 ## Installing
 
-### Building from Source
+### Building Python wheel
 
 ```
 git clone https://github.com/mwrlabs/drozer/
