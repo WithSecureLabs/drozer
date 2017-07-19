@@ -2,6 +2,7 @@ import fnmatch
 import glob
 import os
 import setuptools
+import re
 
 from src.drozer import meta
 from sys import platform
@@ -40,6 +41,17 @@ def get_executable_scripts():
 
   return scripts
 
+def get_package_data():
+	data = {"":[]}
+
+	for root, dirnames, filenames in os.walk('src/drozer'):
+		for filename in filenames:
+			if not (fnmatch.fnmatch(filename, "*.class") or fnmatch.fnmatch(filename, "*.pyc")):
+				m = re.search('src\/drozer\/(.*)', os.path.join(root, filename))
+				if m:
+					data[""].append(m.group(1))
+	return data
+
 setuptools.setup(
   name = meta.name,
   version = str(meta.version),
@@ -55,16 +67,7 @@ setuptools.setup(
   package_dir = {   "drozer": "src/drozer",
                     "mwr": "src/mwr",
                     "pydiesel": "src/pydiesel" },
-  package_data = { "": ["*.apk", "*.bks", "*.crt", "*.docx", "*.jar", "*.key", "*.sh", "*.xml", "busybox"] + find_libs("src"),
-                   "drozer": ["lib/aapt",
-                              "lib/aapt.exe",
-                              "lib/aapt-osx",
-                              "lib/*.apk",
-                              "lib/*.jar",
-                              "lib/*.pem",
-                              "lib/*.pk8",
-                              "lib/weasel/armeabi/w",
-                              "server/web_root/*" ] },
+  package_data = get_package_data(),
   scripts = get_executable_scripts(),
   install_requires = ["protobuf>=2.6.1","pyopenssl>=16.2", "pyyaml>=3.11"],
   data_files = get_install_data(),
