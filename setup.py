@@ -3,6 +3,7 @@ import glob
 import os
 import setuptools
 import re
+import subprocess
 
 from src.drozer import meta
 from sys import platform
@@ -41,8 +42,36 @@ def get_executable_scripts():
 
   return scripts
 
+def clear_apks():
+	for root, dirnames, filenames in os.walk('src/drozer/modules'):
+		for filename in filenames:
+			if (fnmatch.fnmatch(filename, "*.class") or fnmatch.fnmatch(filename, "*.apk")):
+				#print os.path.join(root, filename)
+				os.remove(os.path.join(root, filename))
+
+def make_apks():
+
+	lib = os.path.dirname(os.path.realpath(__file__))+'/src/drozer/lib/'
+
+	#If apks exist, delete them and regenerate
+	clear_apks()
+
+	# Generate apks
+	for root, dirnames, filenames in os.walk('src/drozer/modules'):
+		for filename in filenames:
+			if (fnmatch.fnmatch(filename, "*.java")):
+				#Compile java
+				subprocess.call(['javac -cp '+ lib+'android.jar '+filename],shell=True,cwd=root)
+				
+				#Build apk
+				m = re.search('(.+?)(\.[^.]*$|$)',filename)
+				subprocess.call([lib+'dx --dex --output='+m.group(1)+'.apk '+m.group(1)+'*.class'],shell=True,cwd=root)
+
 def get_package_data():
 	data = {"":[]}
+
+	#Make sure we build apks before generating a package
+	make_apks()
 
 	for root, dirnames, filenames in os.walk('src/drozer'):
 		for filename in filenames:
