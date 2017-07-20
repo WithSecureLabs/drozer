@@ -10,7 +10,7 @@ init:
 install:
   - java -version
   - javac -version
-  - set JAVA_HOME=C:\Program Files\Java\jdk1.7.0
+  - set JAVA_HOME=C:\Progra~1\Java\jdk1.7.0
   - set PATH=%PYTHON%;%PYTHONPATH;%JAVA_HOME%\bin;%PATH%
   - set PYTHONPATH=%PYTHONPATH%;%PYTHON%\\Lib;%PYTHON%\\Scripts
   - "python -m pip install protobuf"
