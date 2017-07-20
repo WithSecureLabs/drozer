@@ -15,7 +15,7 @@ addons:
     - libprotobuf-java
     - python-protobuf
     - python-twisted
-    - librpmbuild3
+    - rpm
     
 matrix:
   include:
