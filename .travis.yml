@@ -29,9 +29,8 @@ before_install:
  - jdk_switcher home openjdk7
 
 install:
-  - make apks
-  - python setup.py build
   - python setup.py sdist bdist_wheel
+  - make rpm
   - make deb
   - VERSION=`git describe --tags  | cut -c 1-5`
   - sudo dpkg -i dist/drozer_$VERSION.deb
