@@ -1,14 +1,16 @@
 environment:
 
+
   matrix:
     - PYTHON: "C:\\Python27"
     - PYTHON: "C:\\Python27-x64"
-
+    - JAVA_HOME: C:\Program Files\Java\jdk1.7.0
+    
 init:
-  - ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%
+  - ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH% %JAVA_HOME%
 
 install:
-  - set PATH=%PYTHON%;%PYTHONPATH;%PATH%
+  - set PATH=%PYTHON%;%PYTHONPATH;%PATH%;%JAVA_HOME%
   - set PYTHONPATH=%PYTHONPATH%;%PYTHON%\\Lib;%PYTHON%\\Scripts
   - "python -m pip install protobuf"
   - "python -m pip install pyopenssl"
