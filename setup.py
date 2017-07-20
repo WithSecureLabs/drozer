@@ -42,8 +42,25 @@ def get_executable_scripts():
 
   return scripts
 
+def get_pwd():
+	pwd = ''
+	
+	if platform == "linux" or platform == "linux2":
+		pwd = 'src/drozer'
+	elif platform == "win32":
+		pwd = 'src\\drozer'
+	
+	return pwd
+
 def clear_apks():
-	for root, dirnames, filenames in os.walk('src/drozer/modules'):
+	pwd = get_pwd()
+	
+	if platform == 'linux' or platform == 'linux2':
+		pwd += '/modules'
+	elif platform == 'win32':
+		pwd += '\\modules'
+	
+	for root, dirnames, filenames in os.walk(pwd):
 		for filename in filenames:
 			if (fnmatch.fnmatch(filename, "*.class") or fnmatch.fnmatch(filename, "*.apk")):
 				#print os.path.join(root, filename)
@@ -51,34 +68,53 @@ def clear_apks():
 
 def make_apks():
 
-	lib = os.path.dirname(os.path.realpath(__file__))+'/src/drozer/lib/'
+	pwd = get_pwd()
+	lib = os.path.dirname(os.path.realpath(__file__))
+	dx =''
 
-	#If apks exist, delete them and regenerate
+	if platform == 'linux' or 'linux2':
+		pwd += '/modules'
+		lib += '/src/drozer/lib/'
+		dx = 'dx'
+	elif platform == 'win32':
+		pwd += '\\modules'
+		lib += '\\src\\drozer\\lib\\'
+		dx = 'dx.bat'
+
+	#If apks exist, delete them and generate new ones
 	clear_apks()
 
 	# Generate apks
-	for root, dirnames, filenames in os.walk('src/drozer/modules'):
+	for root, dirnames, filenames in os.walk(pwd):
 		for filename in filenames:
 			if (fnmatch.fnmatch(filename, "*.java")):
 				#Compile java
-				subprocess.call(['javac -cp '+ lib+'android.jar '+filename],shell=True,cwd=root)
-				
+				javac_cmd = ['javac', '-cp', lib+'android.jar', filename]
+
 				#Build apk
 				m = re.search('(.+?)(\.[^.]*$|$)',filename)
-				subprocess.call([lib+'dx --dex --output='+m.group(1)+'.apk '+m.group(1)+'*.class'],shell=True,cwd=root)
+				dx_cmd = [lib+dx, '--dex', '--output='+m.group(1)+'.apk',m.group(1)+'*.class']
 
+				if platform == "linux2" or platform == "linux":
+					subprocess.call(' '.join(javac_cmd),shell=True,cwd=root)
+
+					subprocess.call(' '.join(dx_cmd),shell=True,cwd=root)
+				elif platform == "win32":
+					subprocess.call(javac_cmd,shell=True,cwd=root)
+
+					subprocess.call(dx_cmd,shell=True,cwd=root)
+				
 def get_package_data():
 	data = {"":[]}
+	pwd = get_pwd()
 
 	#Make sure we build apks before generating a package
 	make_apks()
 
-	for root, dirnames, filenames in os.walk('src/drozer'):
+	for root, dirnames, filenames in os.walk(pwd):
 		for filename in filenames:
 			if not (fnmatch.fnmatch(filename, "*.class") or fnmatch.fnmatch(filename, "*.pyc")):
-				m = re.search('src\/drozer\/(.*)', os.path.join(root, filename))
-				if m:
-					data[""].append(m.group(1))
+				data[""].append(os.path.join(root, filename)[11:])
 	return data
 
 setuptools.setup(
