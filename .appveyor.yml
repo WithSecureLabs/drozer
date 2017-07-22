@@ -12,9 +12,9 @@ init:
 install:
   - java -version
   - javac -version
-  - set PATH=%PATH:C:\Program Files\Java\jdk1.8.0\bin;=%
+  - set PATH=%PATH:"C:\Program Files\Java\jdk1.8.0\bin";=%
   - set PYTHONPATH=%PYTHONPATH%;%PYTHON%\\Lib;%PYTHON%\\Scripts
-  - set PATH=%PYTHON%;%PYTHONPATH;%JAVA_HOME%\bin;%PATH%
+  - set PATH=%PATH%;%JAVA_HOME%\\bin
   - "python -m pip install protobuf"
   - "python -m pip install pyopenssl"
   - echo %PATH%
