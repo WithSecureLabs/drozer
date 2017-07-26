@@ -21,7 +21,7 @@ deploy:
   provider: GitHub
   auth_token:  
     secure: gCPf8e7yG7XU3qSFRoRhhf4KT4LQAyluvcshLyWWZSudPE868fDq8Cs/gMNnTfiR
-  artifact: dist/*
+  artifact: dist\*.msi
   draft: false
   description: ''
   prerelease: false
