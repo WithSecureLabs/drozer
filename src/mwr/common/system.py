@@ -1,4 +1,5 @@
 import os
+import platform 
 
 from mwr.common.stream import DecolouredStream
 
@@ -6,7 +7,11 @@ def which(executable):
     """
     Implementation of the *nix `which` command, to find an executable on the
     current PATH.
+
+    Update: added support for Windows hosts
     """
+    if platform.system() == 'Windows':
+        executable = executable + ".exe"
     
     for path in os.getenv("PATH", "").split(os.pathsep):
         trial = os.path.join(path, executable)

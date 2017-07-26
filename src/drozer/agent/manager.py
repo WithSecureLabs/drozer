@@ -1,6 +1,6 @@
 import itertools
 from mwr.common import cli
-
+import yaml
 from drozer import android, meta
 from drozer.agent import builder, manifest
 
@@ -50,10 +50,11 @@ class AgentManager(cli.Base):
 
         # add extra permissions to the Manifest file
         m = manifest.Manifest(packager.manifest_path()) 
-        
-        m_ver = m.version()
+        yaml_doc = yaml.load(file(packager.apktool_yml_path()).read())
+        m_ver = yaml_doc['versionInfo']['versionName']
+        #m_ver = m.version()
         c_ver = meta.version.__str__()
-
+        
         if m_ver != c_ver:
             print "Version Mismatch: Consider updating your build(s)"
             print "Agent Version: %s" % m_ver

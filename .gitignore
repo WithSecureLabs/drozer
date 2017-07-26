@@ -1,6 +1,10 @@
 *~
 *.apk
 *.hg
+*.deb
+debian/*
+*.rpm
+redhat/*
 *.pyc
 .mercury_history
 .profile
@@ -13,3 +17,5 @@ src/drozer/modules/**/*.class
 src/drozer/modules/**/*.apk
 src/drozer.egg-info
 mercury.log
+deb_dist/*
+*.tar.gz

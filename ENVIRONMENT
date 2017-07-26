@@ -1,2 +1,0 @@
-export PATH=$PATH:./bin
-export PYTHONPATH=$PYTHONPATH:./src:./test
