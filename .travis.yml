@@ -26,6 +26,7 @@ matrix:
 before_install:
  - export PATH=$PATH:$(pwd)/bin
  - pip install six -U
+ - pip install pyOpenSSL ndg-httpsclient pyasn1  
  - jdk_switcher use openjdk7
  - jdk_switcher home openjdk7
 
