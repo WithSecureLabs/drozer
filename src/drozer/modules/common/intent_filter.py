@@ -54,10 +54,9 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
             path_prefix = 'pathPrefix' in attrs and attrs['pathPrefix']
             path_pattern = 'pathPattern' in attrs and attrs['pathPattern']
 
-            paths = filter(None, set([path, path_prefix, path_pattern]))
-            datas = map(lambda x: cls(scheme, host, port, x, mimetype), paths)
-            if not datas:
-                datas.append(cls(scheme, host, port, None, mimetype))
+            paths = filter(None, [path, path_prefix, path_pattern])
+            datas = map(lambda x: cls(scheme, host, port, x, mimetype), paths or [None])
+
             return datas
 
         def __str__(self):
@@ -76,9 +75,6 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
 
         def add_category(self, category):
             self.categories.append(category)
-
-        def add_data(self, data):
-            self.datas.append(data)
 
         def add_datas(self, datas):
             self.datas.extend(datas)
