@@ -30,7 +30,7 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
             elif child.tag == "category":
                 intent_filter.add_category(child.attrib['name'])
             elif child.tag == "data":
-                intent_filter.add_data(IntentFilter.Data.from_attributes(child.attrib))
+                intent_filter.add_datas(IntentFilter.Data.from_attributes(child.attrib))
         
         return intent_filter
 
@@ -49,10 +49,16 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
             scheme = 'scheme' in attrs and attrs['scheme']
             host = 'host' in attrs and attrs['host']
             port = 'port' in attrs and attrs['port']
-            path = 'path' in attrs and attrs['path']
             mimetype = 'mimeType' in attrs and attrs['mimeType']
+            path = 'path' in attrs and attrs['path']
+            path_prefix = 'pathPrefix' in attrs and attrs['pathPrefix']
+            path_pattern = 'pathPattern' in attrs and attrs['pathPattern']
 
-            return cls(scheme, host, port, path, mimetype)
+            paths = filter(None, set([path, path_prefix, path_pattern]))
+            datas = map(lambda x: cls(scheme, host, port, x, mimetype), paths)
+            if not datas:
+                datas.append(cls(scheme, host, port, None, mimetype))
+            return datas
 
         def __str__(self):
             return "%s://%s:%s%s (type: %s)" % (self.scheme or "*", self.host or "*", self.port or "*", self.path or "*", self.mimetype or "*")
@@ -74,3 +80,5 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
         def add_data(self, data):
             self.datas.append(data)
 
+        def add_datas(self, datas):
+            self.datas.extend(datas)
