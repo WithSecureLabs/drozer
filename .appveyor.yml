@@ -17,22 +17,21 @@ install:
   - "python -m pip install pyopenssl"
   - "python setup.py bdist_msi"
 
+artifacts:
+  - path: dist\*.msi
+    name: DrozerInstaller
+
 deploy:
   provider: GitHub
   auth_token:  
     secure: gCPf8e7yG7XU3qSFRoRhhf4KT4LQAyluvcshLyWWZSudPE868fDq8Cs/gMNnTfiR
-  artifact: dist/*
+  artifact: DrozerInstaller
   draft: false
   description: ''
   prerelease: false
   on:
     branch: master
     appveyor_repo_tag: true
-
-artifacts:
-  - path: dist\*.msi
-    name: Drozer Installer
-
 
 build: off
 

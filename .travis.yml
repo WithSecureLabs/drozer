@@ -26,6 +26,7 @@ matrix:
 before_install:
  - export PATH=$PATH:$(pwd)/bin
  - pip install six -U
+ - pip install pyOpenSSL ndg-httpsclient pyasn1  
  - jdk_switcher use openjdk7
  - jdk_switcher home openjdk7
 
@@ -52,7 +53,7 @@ deploy:
 
   - provider: releases
     api_key:
-      secure: CSn4UDDiBlYnD/9MMEbqYw48T37D4Fo0tTDedO0hLWPHDPvuVKuRZ5PzpPxK4gpPLY3U/0w6pDnLk0bG6qlvkoC/mWDc2vmSOAD9Y5BHRuNCnP3pg8VQ0ihhn6t6tZhHzG7HRCl+lL0E572HOH5W329wJ6JufKYU5Z96wWlyrkw=
+      secure: "fglL2kvuniMMXES6KxsDaODKXO9Detq0hnJHmX5/wYnvvyfJvIAWQHEDZBMCqh8SXX/ulhea6NWjKfVditxMUvVmEJRYrDmkBiA6ImvluatgVeDTJuXtVnnSbjE2CiD2IT/fAX+/PMdjyR8PVwdw7oxymcYUbqVrDFyYRPG+9WQ="
     file_glob: true
     file: dist/*
     skip_cleanup: true
