@@ -2,7 +2,9 @@ import binascii
 import glob
 import hashlib
 import os
+import subprocess
 
+from sys import platform
 from mwr.common import fs, system
 
 class ClassBuilder(object):
@@ -33,13 +35,13 @@ class ClassBuilder(object):
             # switch our working directory to the source directory
             os.chdir(os.path.dirname(self.path))
             # compile the java sources (%.java => %.class)
-            if not self.__execute(self.javac , "-cp", self.sdk_path, os.path.basename(self.path)):
+            if self.__execute(self.javac , "-cp", self.sdk_path, os.path.basename(self.path)):
                 raise RuntimeError("Error whilst compiling the Java sources.")
             
             # collect any sub-classes that we generated
             sources = map(lambda p: os.path.basename(p), glob.glob(self.path.replace(".java", "$*.class")))
             # package the compiled bytecode into an apk file (%.class => %.apk)
-            if not self.__execute(self.dx , "--dex", "--output", os.path.basename(apk_path), *([os.path.basename(self.path).replace(".java", ".class")] + sources)):
+            if self.__execute(self.dx , "--dex", "--output", os.path.basename(apk_path), *([os.path.basename(self.path).replace(".java", ".class")] + sources)):
                 raise RuntimeError("Error whilst building APK bundle.")
         
         # read the generated source file
@@ -63,9 +65,11 @@ class ClassBuilder(object):
         """
         
         print " ".join(argv)
-        
-        # TODO: do we need to use subprocess in some situations? retr = subprocess.call(args)
-        return os.spawnve(os.P_WAIT, argv[0], argv, os.environ) == 0
+
+        if platform == 'win32':
+            subprocess.call(argv,shell=True,cwd=os.getcwd())
+        else:
+            subprocess.call(' '.join(argv),shell=True, cwd=os.getcwd())
 
     def __get_generated_apk_name(self):
         """
