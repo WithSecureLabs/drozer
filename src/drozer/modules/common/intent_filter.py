@@ -30,7 +30,7 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
             elif child.tag == "category":
                 intent_filter.add_category(child.attrib['name'])
             elif child.tag == "data":
-                intent_filter.add_datas(IntentFilter.Data.from_attributes(child.attrib))
+                intent_filter.add_data(IntentFilter.Data.from_attributes(child.attrib))
         
         return intent_filter
 
@@ -76,5 +76,5 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
         def add_category(self, category):
             self.categories.append(category)
 
-        def add_datas(self, datas):
+        def add_data(self, datas):
             self.datas.extend(datas)
