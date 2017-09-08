@@ -82,6 +82,7 @@ debian/DEBIAN/control:
 	$(CP) scripts/deb/prerm debian/DEBIAN/prerm
 	# overwrite the Installed-size: field with the correct size
 	$(SED) -i s/\<FILE_SIZE\>/${shell du -s debian --exclude=DEBIAN debian |cut -f 1}/g debian/DEBIAN/control
+	$(SED) -i s/\<VERSION\>/${VERSION}/g debian/DEBIAN/control
 	
 debian/DEBIAN/md5sums:
 	$(CD) debian && $(MD5) `$(FIND) . -type f |$(GREP) -v '^[.]/DEBIAN/'` > DEBIAN/md5sums
