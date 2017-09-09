@@ -5,7 +5,7 @@ Homepage: https://labs.mwrinfosecurity.com
 Package: drozer
 Architecture: all
 Installed-Size: <FILE_SIZE>
-Version: 2.3.4
+Version: <VERSION>
 Maintainer: MWR Infosecurity
 Depends: bash (>= 2.05a-11), python2.7 (>= 2.7.3), python-dev (>= 2.7.3), python-protobuf (>= 2.4.1), python-openssl (>= 0.12-1), python-twisted (>= 10.0.2)
 Description: The Leading Security Testing Framework for Android.
