@@ -1,5 +1,6 @@
 import binascii
 import os
+import base64
 
 from mwr.common.list import chunk
 
@@ -152,10 +153,10 @@ class FileSystem(object):
             data = ""
             
             while True:
-                block = ByteStreamReader.read(file_stream, 0, block_size)
+                block = ByteStreamReader.read(file_stream, 0, block_size).base64_encode()
                 
                 if len(block) > 0:
-                    data += str(block)
+                    data += base64.decodestring(block)
                 else:
                     return data
         else:
