@@ -57,7 +57,7 @@ python setup.py bdist_wheel
 ### Installing Python wheel
 
 ```
-sudo pip install drozer-2.x.x-py2-none-any.whl
+sudo pip install dist/drozer-2.x.x-py2-none-any.whl
 
 ```
 
