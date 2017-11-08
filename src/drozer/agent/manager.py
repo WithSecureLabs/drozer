@@ -50,7 +50,11 @@ class AgentManager(cli.Base):
 
         # add extra permissions to the Manifest file
         m = manifest.Manifest(packager.manifest_path()) 
-        yaml_doc = yaml.load(file(packager.apktool_yml_path()).read())
+
+        # Apktool v2.2.4 generates a malformed YAML file when unpacking apks
+        # See https://github.com/iBotPeaches/Apktool/issues/1610
+        # This workaround generates a valid YAML document and prevents agent building from failing
+        yaml_doc = yaml.load(file(packager.apktool_yml_path()).read().replace('!!brut.androlib.meta.MetaInfo',''))
         m_ver = yaml_doc['versionInfo']['versionName']
         #m_ver = m.version()
         c_ver = meta.version.__str__()

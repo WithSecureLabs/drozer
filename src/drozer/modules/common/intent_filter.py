@@ -49,10 +49,15 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
             scheme = 'scheme' in attrs and attrs['scheme']
             host = 'host' in attrs and attrs['host']
             port = 'port' in attrs and attrs['port']
-            path = 'path' in attrs and attrs['path']
             mimetype = 'mimeType' in attrs and attrs['mimeType']
+            path = 'path' in attrs and attrs['path']
+            path_prefix = 'pathPrefix' in attrs and attrs['pathPrefix']
+            path_pattern = 'pathPattern' in attrs and attrs['pathPattern']
 
-            return cls(scheme, host, port, path, mimetype)
+            paths = filter(None, [path, path_prefix, path_pattern])
+            datas = map(lambda x: cls(scheme, host, port, x, mimetype), paths or [None])
+
+            return datas
 
         def __str__(self):
             return "%s://%s:%s%s (type: %s)" % (self.scheme or "*", self.host or "*", self.port or "*", self.path or "*", self.mimetype or "*")
@@ -71,6 +76,5 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
         def add_category(self, category):
             self.categories.append(category)
 
-        def add_data(self, data):
-            self.datas.append(data)
-
+        def add_data(self, datas):
+            self.datas.extend(datas)

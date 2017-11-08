@@ -7,6 +7,11 @@ from pydiesel.reflection.types.reflected_type import ReflectedType
 
 class ReflectedBinary(ReflectedString):
     
+    def __init__(self, native, *args, **kwargs):
+        ReflectedType.__init__(self, *args, **kwargs)
+        
+        self._native = native
+    
     def base64_encode(self):
         """
         Get a Base64-encoded representation of the underlying Binary data.
