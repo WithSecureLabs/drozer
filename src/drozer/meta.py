@@ -30,7 +30,7 @@ class Version:
 
 name = "drozer"
 vendor = "MWR InfoSecurity"
-version = Version("2.4.3", "2017-03-09")
+version = Version("2.4.4", "2017-11-09")
 
 contact = "drozer@mwrinfosecurity.com"
 description = "The Leading Android Security Testing Framework"
