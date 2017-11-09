@@ -117,9 +117,17 @@ def get_package_data():
 				data[""].append(os.path.join(root, filename)[11:])
 	return data
 
+def get_version():
+	version_cmd = ['git', 'describe', '--tags', '|' ,'cut', '-c', '1-5']
+
+	if platform == "linux2" or platform == "linux":
+		return subprocess.check_output(' '.join(version_cmd),shell=True)
+	elif platform == "win32":
+		return subprocess.check_output(version_cmd,shell=True)
+
 setuptools.setup(
   name = meta.name,
-  version = str(meta.version),
+  version = get_version(),
   author = meta.vendor,
   author_email = meta.contact,
   description = meta.description,
