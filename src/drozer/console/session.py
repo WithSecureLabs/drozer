@@ -67,6 +67,40 @@ class Session(cmd.Cmd):
         if arguments.onecmd == None:
             self.__print_banner()
 
+    def runOneCmd(self, arguments):
+        """
+
+        :param arguments:
+        :return:
+        """
+        promot = "file console/session.py :"
+        print promot + "run in the runOneCmd "
+        command = arguments.run_cmd
+        packageName = arguments.package_name
+
+        cmdLine = "run " + command + " " + "-a" + " " + packageName
+
+        print promot + "command:", command
+        print promot + "packageName: ", packageName
+        print promot + "cmdline: ", cmdLine
+
+        try:
+            self.preloop()
+            # if self.use_rawinput and self.completekey:
+            #     self.push_completer(self.complete, self.history_file)
+
+            cmdLine = self.precmd(cmdLine)
+            stop = self.onecmd(cmdLine)
+
+        except ValueError as e:
+            if e.message == "No closing quotation":
+                self.stderr.write("Failed to parse your command, because there were unmatched quotation marks.\n")
+                self.stderr.write(
+                    "Did you want a single ' or \"? You need to escape it (\\' or \\\") or surround it with the other type of quotation marks (\"'\" or '\"').\n\n")
+            else:
+                raise
+
+
     def completefilename(self, text, line, begidx, endidx):
         """
         Provides readline auto-completion for filenames on the local (Console)

@@ -1,4 +1,6 @@
+#-*-coding:utf-8-*-
 import getpass
+import logging
 import sys
 import warnings
 
@@ -11,6 +13,9 @@ from drozer import meta
 from drozer.api.formatters import SystemResponseFormatter
 from drozer.connector import ServerConnector
 from drozer.console.session import Session, DebugSession
+
+logger = logging.getLogger("console.py")
+logger.setLevel(logging.DEBUG)
 
 class Console(cli.Base):
     """
@@ -36,12 +41,16 @@ class Console(cli.Base):
         self._parser.add_argument("--password", action="store_true", default=False, help="the agent requires a password")
         self._parser.add_argument("-c", "--command", default=None, dest="onecmd", help="specify a single command to run in the session")
         self._parser.add_argument("-f", "--file", default=[], help="source file", nargs="*")
-        
+        self._parser.add_argument("-cmd", "--runcommand", default=None, dest="run_cmd", help="specify a command to run")
+        self._parser.add_argument("-a", "--package", default=None, dest="package_name", help="specify a package name")
+
         self.__accept_certificate = False
         self.__server = None
         
     def do_connect(self, arguments):
         """starts a new session with a device"""
+        logger.debug("arguments:", arguments)
+
         if arguments.password:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
@@ -49,6 +58,7 @@ class Console(cli.Base):
                 password = getpass.getpass()
         else:
             password = None
+
 
         device = self.__get_device(arguments)
         
@@ -63,6 +73,7 @@ class Console(cli.Base):
                 if(arguments.debug):
                     session = DebugSession(server, session_id, arguments)
                 else:
+                    # 与agent建立会话
                     session = Session(server, session_id, arguments)
 
                 if len(arguments.file) > 0:
@@ -71,7 +82,11 @@ class Console(cli.Base):
                 elif arguments.onecmd != None:
                     session.onecmd(arguments.onecmd)
                     session.do_exit("")
+                elif arguments.run_cmd != None:
+                    session.runOneCmd(arguments)
+                    session.do_exit("")
                 else:
+                    #进入到控制台等待命令
                     session.cmdloop()
             except KeyboardInterrupt:
                 print
