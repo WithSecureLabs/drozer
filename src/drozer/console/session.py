@@ -65,7 +65,8 @@ class Session(cmd.Cmd):
         self.__load_variables()
         
         if arguments.onecmd == None:
-            self.__print_banner()
+            #self.__print_banner()
+            pass
 
     def runOneCmd(self, arguments):
         """
@@ -74,14 +75,14 @@ class Session(cmd.Cmd):
         :return:
         """
         promot = "file console/session.py :"
-        print promot + "run in the runOneCmd "
+        # print promot + "run in the runOneCmd "
         command = arguments.run_cmd
         packageName = arguments.package_name
 
         cmdLine = "run " + command + " " + "-a" + " " + packageName
 
-        print promot + "command:", command
-        print promot + "packageName: ", packageName
+        # print promot + "command:", command
+        # print promot + "packageName: ", packageName
         print promot + "cmdline: ", cmdLine
 
         try:
