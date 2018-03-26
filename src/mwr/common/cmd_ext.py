@@ -59,6 +59,7 @@ class Cmd(cmd.Cmd):
                 else:
                     if self.use_rawinput:
                         try:
+                            # 输入命令
                             line = raw_input(self.prompt)
                         except EOFError:
                             line = 'EOF'

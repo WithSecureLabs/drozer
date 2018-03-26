@@ -89,6 +89,28 @@ class Base(object):
             self.__showUsage(e.message)
         except Exception as e:
             self.handle_error(e)
+
+    def run_cmd(self, argv=None, cmdargv= None):
+        """
+        Run is the main entry point of the console, called by the runtime. It
+        parses the command-line arguments, and invokes an appropriate handler.
+        """
+
+        if argv == None:
+            argv = []
+        if cmdargv == None:
+            cmdargv = []
+
+        self.prepare_argument_parser(argv)
+        # parse argv into arguments using the generated ArgumentParser
+        arguments = self.parse_arguments(self._parser, argv)
+
+        try:
+            self.__invokeCommand(arguments)
+        except UsageError as e:
+            self.__showUsage(e.message)
+        except Exception as e:
+            self.handle_error(e)
         
     def do_commands(self, arguments):
         """shows a list of all console commands"""
@@ -140,6 +162,7 @@ class Base(object):
                 raise UsageError("unknown command: " + command)
         except IndexError:
             raise UsageError("incorrect usage")
+
         
     def __parse_error(self, message):
         self.__showUsage(message)
