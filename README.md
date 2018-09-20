@@ -186,6 +186,10 @@ You are now ready to start exploring the device.
 
 drozer is released under a 3-clause BSD License. See LICENSE for full details.
 
+## Help
+
+Find help on the drozer [wiki](https://github.com/mwrlabs/drozer/wiki) or on the drozer [user guide](https://labs.mwrinfosecurity.com/assets/BlogFiles/mwri-drozer-user-guide-2015-03-23.pdf).
+
 ## Contacting the Project
 
 drozer is Open Source software, made great by contributions from the community.
