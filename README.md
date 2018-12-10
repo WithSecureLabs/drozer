@@ -105,9 +105,21 @@ Run dist/drozer-2.x.x.win-x.msi
 
 ```
 
-### Arch Linux
+### Installing (Arch Linux/BlackArch)
 
-`yaourt -S drozer`
+On BlackArch or any Arch-based linux distribution where BlackArch repository was enabled:
+
+`pacman -S drozer`
+
+[PKGBUILD](https://github.com/BlackArch/blackarch/blob/master/packages/drozer/PKGBUILD)
+
+### Installing (Arch Linux/AUR)
+
+With any [pacman wrapper](https://wiki.archlinux.org/index.php/AUR_helpers#Pacman_wrappers):
+
+`pikaur -S drozer`
+
+[PKGBUILD](https://aur.archlinux.org/packages/drozer/) (WARNING: out-of-date)
 
 ## Usage
 
