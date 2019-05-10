@@ -118,12 +118,14 @@ def get_package_data():
 	return data
 
 def get_version():
-	version_cmd = ['git', 'describe', '--tags', '|' ,'cut', '-c', '1-5']
-
-	if platform == "linux2" or platform == "linux" or platform == "darwin":
-		return subprocess.check_output(' '.join(version_cmd),shell=True)
-	elif platform == "win32":
-		return subprocess.check_output(version_cmd,shell=True)
+	version_cmd = ['git', 'describe', '--tags']
+	
+	if platform in ("linux2", "linux", "darwin"):
+		version_cmd = ' '.join(version_cmd)
+	elif platform != "win32":
+		return
+	
+	return subprocess.check_output(version_cmd).split('-', 1)[0]
 
 setuptools.setup(
   name = meta.name,
