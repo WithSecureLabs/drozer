@@ -20,7 +20,7 @@ public class XmlAssetReader {
             output.append(" ");
             output.append(xml.getAttributeName(i));
             output.append("=\"");
-            output.append(xml.getAttributeValue(i));
+            output.append(xml.getAttributeValue(i).replace("\"","&quot;"));
             output.append("\"");
           }
           output.append(">\n");
