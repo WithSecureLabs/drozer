@@ -49,7 +49,7 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 ### Building Python wheel
 
 ```
-git clone https://github.com/mwrlabs/drozer/
+git clone https://github.com/mwrlabs/drozer.git
 cd drozer
 python setup.py bdist_wheel
 
@@ -63,7 +63,7 @@ sudo pip install dist/drozer-2.x.x-py2-none-any.whl
 
 ### Building for Debian/Ubuntu/Mint
 ```
-git clone https://github.com/mwrlabs/drozer/
+git clone https://github.com/mwrlabs/drozer.git
 cd drozer
 make deb
 ```
@@ -77,7 +77,7 @@ sudo dpkg -i drozer-2.x.x.deb
 ### Building for Redhat/Fedora/CentOS
 
 ```
-git clone https://github.com/mwrlabs/drozer/
+git clone https://github.com/mwrlabs/drozer.git
 cd drozer
 make rpm
 ```
@@ -92,7 +92,7 @@ sudo rpm -I drozer-2.x.x-1.noarch.rpm
 **NOTE: Windows Defender and other Antivirus software will flag drozer as malware (an exploitation tool without exploit code wouldn't be much fun!). In order to run drozer you would have to add an exception to Windows Defender and any antivirus software. Alternatively, we recommend running drozer in a Windows/Linux VM.**
 
 ```
-git clone https://github.com/mwrlabs/drozer/
+git clone https://github.com/mwrlabs/drozer.git
 cd drozer
 python.exe setup.py bdist_msi
 
