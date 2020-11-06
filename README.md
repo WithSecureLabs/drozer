@@ -1,5 +1,20 @@
 # drozer
 
+## ----------------------------------------------------------------
+
+## NOTE
+
+We would like to formely announce that F-Secure has stopped further development of the drozer tool. With the amount of testing tools and techniques that have been developed since drozer's inception, it would be near impossible to incorporate everything into one tool.
+
+However, we still think drozer is a good tool for simulating a rogue application. A penetration tester does not have to develop an app with custom code to interface with a specific content provider. Instead, drozer can be used with little to no programming experience required to show the impact of letting certain components be exported on a device.
+
+To help with making sure drozer can be ran on modern systems, a Docker container was created that has a working build of Drozer.
+
+* The Docker container can be found here: https://hub.docker.com/r/kengannonmwr/drozer_docker
+* Instructions on building your own Docker container can be found here: https://github.com/Yogehi/Drozer-Docker
+
+## ----------------------------------------------------------------
+
 drozer (formerly Mercury) is the leading security testing framework for Android.
 
 drozer allows you to search for security vulnerabilities in apps and devices by assuming the role of an app and interacting with the Dalvik VM, other apps' IPC endpoints and the underlying OS.
