@@ -10,8 +10,8 @@ However, we still think drozer is a good tool for simulating a rogue application
 
 To help with making sure drozer can be ran on modern systems, a Docker container was created that has a working build of Drozer.
 
-* The Docker container can be found here: https://hub.docker.com/r/kengannonmwr/drozer_docker
-* Instructions on building your own Docker container can be found here: https://github.com/Yogehi/Drozer-Docker
+* The Docker container can be found here: https://hub.docker.com/r/fsecurelabs/drozer
+* Instructions on building your own Docker container can be found here: https://github.com/FSecureLABS/drozer/tree/develop/docker
 
 ## ----------------------------------------------------------------
 
