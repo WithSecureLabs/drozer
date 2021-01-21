@@ -1,6 +1,6 @@
 # Description
 
-This 
+This is a Docker image that uses OpenJDK 7 to compile and run the drozer computer agent. The official `openjdk:7u221-slim-jessie` Docker image is used as the base image.
 
 # Build and Install
 
