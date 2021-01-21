@@ -6,17 +6,17 @@ This is a Docker image that uses OpenJDK 7 to compile and run the drozer compute
 
 If you want to build this container yourself, use the `docker build` command to build the Docker container:
 
-`docker build -t <pending> .`
+`docker build -t fsecurelabs/drozer .`
 
 Alternatively, use the pre-built Docker container at <pending>:
 
-`<pending>`
+`https://hub.docker.com/r/fsecurelabs/drozer`
 
 # Run and Connect
 
 First, obtain a shell into the container:
 
-`docker run -it <pending>`
+`docker run -it fsecurelabs/drozer`
 
 Then run the Drozer command to connect to the phone:
 
