@@ -355,7 +355,11 @@ class List(Module, common.PackageManager):
             if arguments.no_app_name:
                 self.stdout.write("%s\n" % application.packageName)
             else:
-                self.stdout.write("%s (%s)\n" % (application.packageName, self.packageManager().getApplicationLabel(application.packageName)))
+                try:
+                    self.stdout.write("%s (%s)" % (application.packageName, self.packageManager().getApplicationLabel(application.packageName)))
+                    self.stdout.write("\n")
+                except IOError as e:
+                    self.stdout.write(" (Warning: Cannot decode application label)\n")
                 
 
 class Manifest(Module, common.Assets):
