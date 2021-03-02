@@ -64,7 +64,7 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 ### Building Python wheel
 
 ```
-git clone https://github.com/mwrlabs/drozer/
+git clone https://github.com/FSecureLABS/drozer.git
 cd drozer
 python setup.py bdist_wheel
 
@@ -78,7 +78,7 @@ sudo pip install dist/drozer-2.x.x-py2-none-any.whl
 
 ### Building for Debian/Ubuntu/Mint
 ```
-git clone https://github.com/mwrlabs/drozer/
+git clone https://github.com/FSecureLABS/drozer.git
 cd drozer
 make deb
 ```
@@ -92,7 +92,7 @@ sudo dpkg -i drozer-2.x.x.deb
 ### Building for Redhat/Fedora/CentOS
 
 ```
-git clone https://github.com/mwrlabs/drozer/
+git clone https://github.com/FSecureLABS/drozer.git
 cd drozer
 make rpm
 ```
@@ -107,7 +107,7 @@ sudo rpm -I drozer-2.x.x-1.noarch.rpm
 **NOTE: Windows Defender and other Antivirus software will flag drozer as malware (an exploitation tool without exploit code wouldn't be much fun!). In order to run drozer you would have to add an exception to Windows Defender and any antivirus software. Alternatively, we recommend running drozer in a Windows/Linux VM.**
 
 ```
-git clone https://github.com/mwrlabs/drozer/
+git clone https://github.com/FSecureLABS/drozer.git
 cd drozer
 python.exe setup.py bdist_msi
 
@@ -142,7 +142,7 @@ With any [pacman wrapper](https://wiki.archlinux.org/index.php/AUR_helpers#Pacma
 
 Drozer can be installed using Android Debug Bridge (adb).
 
-Download the latest Drozer Agent [here](https://github.com/mwrlabs/drozer/releases/download/2.3.4/drozer-agent-2.3.4.apk).
+Download the latest Drozer Agent [here](https://github.com/FSecureLABS/drozer/releases/download/2.3.4/drozer-agent-2.3.4.apk).
 
 `$ adb install drozer-agent-2.x.x.apk`
 
@@ -219,13 +219,6 @@ drozer is Open Source software, made great by contributions from the community.
 
 For full source code, to report bugs, suggest features and contribute patches please see our Github project:
 
-  <https://github.com/mwrlabs/drozer>
+  <https://github.com/FSecureLABS/drozer>
 
-Bug reports, feature requests, comments and questions can be submitted [here](https://github.com/mwrlabs/drozer/issues).
-  
-Follow the latest drozer news, follow the project on Twitter:
-
-  [@mwrdrozer](https://twitter.com/mwrdrozer)
-
-
-
+Bug reports, feature requests, comments and questions can be submitted [here](https://github.com/FSecureLABS/drozer/issues).
