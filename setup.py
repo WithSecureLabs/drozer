@@ -120,9 +120,9 @@ def get_package_data():
 def get_version():
 	version_cmd = ['git', 'describe', '--tags']
 	
-	if platform in ("linux2", "linux", "darwin"):
+	if platform in ("linux2", "linux"):
 		version_cmd = ' '.join(version_cmd)
-	elif platform != "win32":
+	elif platform not in ("win32", "darwin"):
 		return
 	
 	return subprocess.check_output(version_cmd).split('-', 1)[0]
