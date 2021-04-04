@@ -62,7 +62,7 @@ class SocketTransport(Transport):
     
             frame = Frame.fromMessage(message.setId(message_id).build())
     
-            self.__socket.sendall(str(frame))
+            self.__socket.sendall(bytes(frame))
     
             return message_id
         except socket.timeout as e:
