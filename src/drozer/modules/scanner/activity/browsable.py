@@ -79,7 +79,7 @@ Package: com.android.mms
                         for i in returned['classNames']:
                             self.stdout.write("    %s\n" % str(i))
                         self.stdout.write("\n")
-            except Exception, e:
+            except Exception as e:
                 pass # amazing error checking
             
     # Get browsable activities that use data attribute

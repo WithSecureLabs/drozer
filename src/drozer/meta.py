@@ -1,4 +1,5 @@
-from urllib2 import HTTPError, URLError, urlopen, Request
+from urllib.error import HTTPError, URLError
+from urllib.request import urlopen, Request
 from xml.etree import ElementTree
 
 class Version:
@@ -53,11 +54,11 @@ def latest_version():
         xml = urlopen(Request("https://www.mwrinfosecurity.com/products/drozer/community-edition/manifest.xml", None, {"user-agent": "drozer: %s" % version}), None, 1).read()
         doc = ElementTree.fromstring(xml)
         
-        return max(map(lambda n: Version(n.text[1:], n.attrib['release_date']), doc.findall('version')))
+        return max([Version(n.text[1:], n.attrib['release_date']) for n in doc.findall('version')])
     except HTTPError:
         return None
     except URLError:
         return None
 
 def print_version():
-    print "%s %s\n" % (name, version)
+    print("%s %s\n" % (name, version))

@@ -83,11 +83,11 @@ class Session(cmd.Cmd):
         modules = self.modules.all(permissions=self.permissions(), prefix=self.__base)
         
         if self.__base == "":
-            modules = filter(lambda m: m.startswith(text), modules)
+            modules = [m for m in modules if m.startswith(text)]
         elif text.startswith("."):
-            modules = filter(lambda m: m.startswith(text[1:]), modules)
+            modules = [m for m in modules if m.startswith(text[1:])]
         else:
-            modules = map(lambda m: m[len(self.__base):], filter(lambda m: m.startswith(self.__base + text), modules))
+            modules = [m[len(self.__base):] for m in [m for m in modules if m.startswith(self.__base + text)]]
         
         #if len(modules) == 1 and text == modules[0]:
         #    return []
@@ -100,14 +100,14 @@ class Session(cmd.Cmd):
         """
 
         if self.__base == "":
-            return filter(lambda m: m.startswith(text), self.__namespaces())
+            return [m for m in self.__namespaces() if m.startswith(text)]
         elif text.startswith("."):
             namespaces = self.__namespaces(global_scope=True)
             namespaces.add("..")
 
-            return map(lambda m: "." + m, filter(lambda m: m.startswith(text[1:]), namespaces))
+            return ["." + m for m in [m for m in namespaces if m.startswith(text[1:])]]
         else:
-            return map(lambda m: m[len(self.__base):], filter(lambda m: m.startswith(self.__base + text), self.__namespaces()))
+            return [m[len(self.__base):] for m in [m for m in self.__namespaces() if m.startswith(self.__base + text)]]
 
     def context(self):
         if self.has_context():
@@ -299,15 +299,15 @@ class Session(cmd.Cmd):
         s_modules = self.modules.all(contains=term, permissions=self.permissions(), prefix=self.__base)
         
         if include_unsupported:
-            u_modules = filter(lambda m: not m in s_modules, self.modules.all(contains=term, permissions=None, prefix=self.__base))
+            u_modules = [m for m in self.modules.all(contains=term, permissions=None, prefix=self.__base) if not m in s_modules]
         else:
             u_modules = []
 
-        self.stdout.write(console.format_dict(dict(map(lambda m: [m, self.modules.get(m).name], s_modules))) + "\n")
+        self.stdout.write(console.format_dict(dict([[m, self.modules.get(m).name] for m in s_modules])) + "\n")
         
         if len(u_modules) > 0:
             self.stdout.write("\nUnsupported Modules:\n\n")
-            self.stdout.write(console.format_dict(dict(map(lambda m: [m, self.modules.get(m).name], u_modules))) + "\n")
+            self.stdout.write(console.format_dict(dict([[m, self.modules.get(m).name] for m in u_modules])) + "\n")
 
     def do_load(self, args):
         """
@@ -531,7 +531,7 @@ class Session(cmd.Cmd):
             package = packageManager.getPackageInfo(packageName, pm.GET_PERMISSIONS)
             self.__permissions = []
             if package.requestedPermissions != None:
-                requestedPermissions = map(lambda p: str(p), package.requestedPermissions)
+                requestedPermissions = [str(p) for p in package.requestedPermissions]
                 
                 for permission in requestedPermissions:
                     #Check for PERMISSION_GRANTED
@@ -557,10 +557,10 @@ class Session(cmd.Cmd):
             latest = meta.latest_version()
             if latest != None:
                 if meta.version > latest:
-                    print "It seems that you are running a drozer pre-release. Brilliant!\n\nPlease send any bugs, feature requests or other feedback to our Github project:\nhttp://github.com/mwrlabs/drozer.\n\nYour contributions help us to make drozer awesome.\n"
+                    print("It seems that you are running a drozer pre-release. Brilliant!\n\nPlease send any bugs, feature requests or other feedback to our Github project:\nhttp://github.com/mwrlabs/drozer.\n\nYour contributions help us to make drozer awesome.\n")
                 elif meta.version < latest:
-                    print "It seems that you are running an old version of drozer. drozer v%s was\nreleased on %s. We suggest that you update your copy to make sure that\nyou have the latest features and fixes.\n\nTo download the latest drozer visit: https://labs.f-secure.com/tools/drozer/\n" % (latest, latest.date)
-        except Exception, e:
+                    print("It seems that you are running an old version of drozer. drozer v%s was\nreleased on %s. We suggest that you update your copy to make sure that\nyou have the latest features and fixes.\n\nTo download the latest drozer visit: https://labs.f-secure.com/tools/drozer/\n" % (latest, latest.date))
+        except Exception as e:
             pass #TODO figure out what this exception is and handle appropriately (exp. IOError)
 
     def sendAndReceive(self, message):
@@ -646,7 +646,7 @@ class Session(cmd.Cmd):
         else:
             self.modules.all(permissions=self.permissions(), prefix=self.__base)
         
-        return set(map(lambda m: self.__module("." + m).namespace(), modules))
+        return set([self.__module("." + m).namespace() for m in modules])
     
     def __push_module_completer(self, completer, history_file=None):
         """
@@ -669,21 +669,21 @@ class Session(cmd.Cmd):
         self.pop_completer()
     
     def __print_banner(self):
-        print "            ..                    ..:."
-        print "           ..o..                  .r.."
-        print "            ..a..  . ....... .  ..nd"
-        print "              ro..idsnemesisand..pr"
-        print "              .otectorandroidsneme."
-        print "           .,sisandprotectorandroids+."
-        print "         ..nemesisandprotectorandroidsn:."
-        print "        .emesisandprotectorandroidsnemes.."
-        print "      ..isandp,..,rotectorandro,..,idsnem."
-        print "      .isisandp..rotectorandroid..snemisis."
-        print "      ,andprotectorandroidsnemisisandprotec."
-        print "     .torandroidsnemesisandprotectorandroid."
-        print "     .snemisisandprotectorandroidsnemesisan:"
-        print "     .dprotectorandroidsnemesisandprotector."
-        print
+        print("            ..                    ..:.")
+        print("           ..o..                  .r..")
+        print("            ..a..  . ....... .  ..nd")
+        print("              ro..idsnemesisand..pr")
+        print("              .otectorandroidsneme.")
+        print("           .,sisandprotectorandroids+.")
+        print("         ..nemesisandprotectorandroidsn:.")
+        print("        .emesisandprotectorandroidsnemes..")
+        print("      ..isandp,..,rotectorandro,..,idsnem.")
+        print("      .isisandp..rotectorandroid..snemisis.")
+        print("      ,andprotectorandroidsnemisisandprotec.")
+        print("     .torandroidsnemesisandprotectorandroid.")
+        print("     .snemisisandprotectorandroidsnemesisan:")
+        print("     .dprotectorandroidsnemesisandprotector.")
+        print()
 
 
     def __setBase(self, base):
@@ -716,7 +716,7 @@ class Session(cmd.Cmd):
             else:
                 target = self.__base + base + "."
 
-            if True in map(lambda m: m.startswith(target), self.modules.all(permissions=self.permissions())):
+            if True in [m.startswith(target) for m in self.modules.all(permissions=self.permissions())]:
                 self.__base = target
             else:
                 self.stderr.write("no such namespace: %s\n"%base)

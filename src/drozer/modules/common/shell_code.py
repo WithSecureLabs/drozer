@@ -1,4 +1,4 @@
-from itertools import izip
+
 
 from drozer import util
 
@@ -15,15 +15,15 @@ class ShellCode(object):
             self.__shell_code.append(byte_or_bytes)
 
     def asHex(self):
-        return "".join(map(lambda b: "\\x%0.2X" % b, self.__shell_code))
+        return "".join(["\\x%0.2X" % b for b in self.__shell_code])
 
     def asRaw(self):
-        return "".join(map(lambda b: "%s" % chr(b), self.__shell_code))
+        return "".join(["%s" % chr(b) for b in self.__shell_code])
 
     def asUnicode(self):
         shell_code = len(self.__shell_code) % 2 == 0 and self.__shell_code or self.__shell_code + [0]
         
-        return "".join(map(lambda bs: "\\u%0.2X%0.2X" % (bs[1], bs[0]), izip(*[iter(shell_code)] * 2)))
+        return "".join(["\\u%0.2X%0.2X" % (bs[1], bs[0]) for bs in zip(*[iter(shell_code)] * 2)])
 
     def execute(self, arguments):
         """
@@ -47,7 +47,7 @@ class ShellCode(object):
             return self.asHex()
 
     def hexifyInetAddr(self, inet_addr):
-        return map(lambda s: int(s), inet_addr.split("."))
+        return [int(s) for s in inet_addr.split(".")]
     
     def hexifyInt32(self, int32):
         byte = "%.4X" % int32
@@ -58,4 +58,4 @@ class ShellCode(object):
         return 0x00
     
     def hexifyString(self, string):
-        return map(lambda c: ord(c), string)
+        return [ord(c) for c in string]

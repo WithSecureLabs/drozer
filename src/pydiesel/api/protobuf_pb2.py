@@ -335,7 +335,7 @@ _MESSAGE_REFLECTIONREQUEST_RESOLVE = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='classname', full_name='com.mwr.diesel.api.Message.ReflectionRequest.Resolve.classname', index=0,
       number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -403,7 +403,7 @@ _MESSAGE_REFLECTIONREQUEST_INVOKE = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='method', full_name='com.mwr.diesel.api.Message.ReflectionRequest.Invoke.method', index=1,
       number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -444,7 +444,7 @@ _MESSAGE_REFLECTIONREQUEST_SETPROPERTY = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='property', full_name='com.mwr.diesel.api.Message.ReflectionRequest.SetProperty.property', index=1,
       number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -485,7 +485,7 @@ _MESSAGE_REFLECTIONREQUEST_GETPROPERTY = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='property', full_name='com.mwr.diesel.api.Message.ReflectionRequest.GetProperty.property', index=1,
       number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -539,7 +539,7 @@ _MESSAGE_REFLECTIONREQUEST = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='session_id', full_name='com.mwr.diesel.api.Message.ReflectionRequest.session_id', index=0,
       number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -616,7 +616,7 @@ _MESSAGE_REFLECTIONRESPONSE = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='session_id', full_name='com.mwr.diesel.api.Message.ReflectionResponse.session_id', index=0,
       number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -637,7 +637,7 @@ _MESSAGE_REFLECTIONRESPONSE = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='errormessage', full_name='com.mwr.diesel.api.Message.ReflectionResponse.errormessage', index=3,
       number=8, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -679,14 +679,14 @@ _MESSAGE_SYSTEMREQUEST = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='session_id', full_name='com.mwr.diesel.api.Message.SystemRequest.session_id', index=2,
       number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='password', full_name='com.mwr.diesel.api.Message.SystemRequest.password', index=3,
       number=8, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -735,14 +735,14 @@ _MESSAGE_SYSTEMRESPONSE = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='session_id', full_name='com.mwr.diesel.api.Message.SystemResponse.session_id', index=3,
       number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='error_message', full_name='com.mwr.diesel.api.Message.SystemResponse.error_message', index=4,
       number=8, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -792,7 +792,7 @@ _MESSAGE_ARGUMENT = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='string', full_name='com.mwr.diesel.api.Message.Argument.string', index=2,
       number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -876,28 +876,28 @@ _MESSAGE_DEVICE = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='id', full_name='com.mwr.diesel.api.Message.Device.id', index=0,
       number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='manufacturer', full_name='com.mwr.diesel.api.Message.Device.manufacturer', index=1,
       number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='model', full_name='com.mwr.diesel.api.Message.Device.model', index=2,
       number=3, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='software', full_name='com.mwr.diesel.api.Message.Device.software', index=3,
       number=4, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1035,14 +1035,14 @@ _MESSAGE_SESSION = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='id', full_name='com.mwr.diesel.api.Message.Session.id', index=0,
       number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='device_id', full_name='com.mwr.diesel.api.Message.Session.device_id', index=1,
       number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value="",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1184,44 +1184,34 @@ _MESSAGE.fields_by_name['reflection_response'].message_type = _MESSAGE_REFLECTIO
 _MESSAGE_MESSAGETYPE.containing_type = _MESSAGE;
 DESCRIPTOR.message_types_by_name['Message'] = _MESSAGE
 
-class Message(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
-  
-  class ReflectionRequest(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
-    
-    class Resolve(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
+class Message(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+  class ReflectionRequest(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+    class Resolve(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
       DESCRIPTOR = _MESSAGE_REFLECTIONREQUEST_RESOLVE
       
       # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.ReflectionRequest.Resolve)
     
-    class Construct(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
+    class Construct(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
       DESCRIPTOR = _MESSAGE_REFLECTIONREQUEST_CONSTRUCT
       
       # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.ReflectionRequest.Construct)
     
-    class Invoke(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
+    class Invoke(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
       DESCRIPTOR = _MESSAGE_REFLECTIONREQUEST_INVOKE
       
       # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.ReflectionRequest.Invoke)
     
-    class SetProperty(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
+    class SetProperty(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
       DESCRIPTOR = _MESSAGE_REFLECTIONREQUEST_SETPROPERTY
       
       # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.ReflectionRequest.SetProperty)
     
-    class GetProperty(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
+    class GetProperty(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
       DESCRIPTOR = _MESSAGE_REFLECTIONREQUEST_GETPROPERTY
       
       # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.ReflectionRequest.GetProperty)
     
-    class Delete(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
+    class Delete(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
       DESCRIPTOR = _MESSAGE_REFLECTIONREQUEST_DELETE
       
       # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.ReflectionRequest.Delete)
@@ -1229,56 +1219,47 @@ class Message(message.Message):
     
     # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.ReflectionRequest)
   
-  class ReflectionResponse(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class ReflectionResponse(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _MESSAGE_REFLECTIONRESPONSE
     
     # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.ReflectionResponse)
   
-  class SystemRequest(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class SystemRequest(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _MESSAGE_SYSTEMREQUEST
     
     # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.SystemRequest)
   
-  class SystemResponse(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class SystemResponse(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _MESSAGE_SYSTEMRESPONSE
     
     # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.SystemResponse)
   
-  class Argument(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class Argument(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _MESSAGE_ARGUMENT
     
     # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.Argument)
   
-  class Array(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class Array(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _MESSAGE_ARRAY
     
     # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.Array)
   
-  class Device(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class Device(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _MESSAGE_DEVICE
     
     # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.Device)
   
-  class ObjectReference(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class ObjectReference(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _MESSAGE_OBJECTREFERENCE
     
     # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.ObjectReference)
   
-  class Primitive(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class Primitive(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _MESSAGE_PRIMITIVE
     
     # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.Primitive)
   
-  class Session(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class Session(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _MESSAGE_SESSION
     
     # @@protoc_insertion_point(class_scope:com.mwr.diesel.api.Message.Session)

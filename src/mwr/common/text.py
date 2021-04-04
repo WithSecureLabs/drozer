@@ -1,13 +1,14 @@
 """
 A library of text handling functions.
 """
+from functools import reduce
 
 def indent(text, prefix):
     """
     Add prefix to the beginning of all lines in text.
     """
     
-    return "\n".join(map(lambda l: "%s%s" % (prefix, l), text.split("\n")))
+    return "\n".join(["%s%s" % (prefix, l) for l in text.split("\n")])
     
 def wrap(text, width=80):
     """

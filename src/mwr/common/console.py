@@ -10,13 +10,13 @@ from mwr.common import text
 
 def format_dict(values, left_margin=0):
     width = { 'gutter': 2, 'left_margin': left_margin, 'total': get_size()[0] - left_margin }
-    width['key'] = min([max(map(lambda k: len(k), values.keys()) + [0]), width['total'] / 3])
+    width['key'] = min([max([len(k) for k in list(values.keys())] + [0]), width['total'] / 3])
     width['value'] = width['total'] - (width['gutter'] + width['key'])
     
     template_key_only = "%%%ds%%-%ds\n" % (width['left_margin'], width['key']) 
     template = "%%%ds%%-%ds%%%ds%%-%ds\n" % (width['left_margin'], width['key'], width['gutter'], width['value'])
 
-    keys = values.keys()
+    keys = list(values.keys())
     keys.sort()
     
     formatted = ""

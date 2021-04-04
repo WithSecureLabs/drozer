@@ -1,4 +1,4 @@
-import cStringIO
+import io
 import os
 import re
 import zipfile
@@ -56,7 +56,7 @@ class ModuleInstaller(object):
         """
 
         if force:
-            print "Forcing installation of modules from repositories"
+            print("Forcing installation of modules from repositories")
         
         status = { 'success': [], 'existing': [], 'fail': {} }
 
@@ -73,19 +73,19 @@ class ModuleInstaller(object):
                     _modules = []
             
             for module in _modules:
-                print "Processing %s..." % module,
+                print("Processing %s..." % module, end=' ')
                 
                 try:
                     self.__install_module(fetch, module, force)
-                    print "Done."
+                    print("Done.")
                     
                     status['success'].append(module)
                 except AlreadyInstalledError as e:
-                    print "Already Installed."
+                    print("Already Installed.")
 
                     status['existing'].append(module)
                 except InstallError as e:
-                    print "Failed."
+                    print("Failed.")
                     
                     status['fail'][module] = str(e) 
         
@@ -99,7 +99,7 @@ class ModuleInstaller(object):
         
         index = self.__get_combined_index()
 
-        return sorted(filter(lambda m: m.matches(".*" + module.replace("*", ".*") + ".*") != None, index), key=lambda m: m.name)
+        return sorted([m for m in index if m.matches(".*" + module.replace("*", ".*") + ".*") != None], key=lambda m: m.name)
     
     def __create_package(self, package):
         """
@@ -130,7 +130,7 @@ class ModuleInstaller(object):
         
         directories = package[len(self.repository):].split(os.path.sep)
         
-        for i in xrange(len(directories)):
+        for i in range(len(directories)):
             self.__emit(os.path.join(self.repository, *directories[0:i+1] + ["__init__.py"]))
     
     def __get_combined_index(self):
@@ -147,9 +147,9 @@ class ModuleInstaller(object):
             if source != None:
                 modules = xml.fromstring(source)
                 
-                index = index.union(map(lambda m: ModuleInfo(url, m.attrib['name'], m.find("./description").text), modules.findall("./module")))
+                index = index.union([ModuleInfo(url, m.attrib['name'], m.find("./description").text) for m in modules.findall("./module")])
         
-        return filter(lambda m: m != None and m != "", index)
+        return [m for m in index if m != None and m != ""]
 
     def __install_module(self, fetch, module, force):
         """
@@ -249,11 +249,11 @@ class ModuleInstaller(object):
         package = self.__create_package(os.path.join(self.repository, *path))
         
         # get a list of files within the archives
-        archive = zipfile.ZipFile(cStringIO.StringIO(source))
+        archive = zipfile.ZipFile(io.StringIO(source))
         files = archive.infolist()
         # if force is set, we dont care if it overwrites an existing file
         # ensure we are not about to overwrite any existing files
-        if True in map(lambda f: f.filename != "__init__.py" and f.filename != ".drozer_package" and os.path.exists(os.path.join(package, f.filename)), files) and not force:
+        if True in [f.filename != "__init__.py" and f.filename != ".drozer_package" and os.path.exists(os.path.join(package, f.filename)) for f in files] and not force:
             raise AlreadyInstalledError("Installing this module would overwrite one-or-more files in your repository.")
         # extract each file, in turn
         try:

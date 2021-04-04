@@ -46,7 +46,7 @@ class AgentManager(cli.Base):
 
         defined_permissions = {}
         if arguments.define_permission != None:
-            defined_permissions = dict(itertools.izip_longest(*[iter(arguments.define_permission)] * 2, fillvalue=""))
+            defined_permissions = dict(itertools.zip_longest(*[iter(arguments.define_permission)] * 2, fillvalue=""))
 
         # add extra permissions to the Manifest file
         m = manifest.Manifest(packager.manifest_path()) 
@@ -60,18 +60,18 @@ class AgentManager(cli.Base):
         c_ver = meta.version.__str__()
         
         if m_ver != c_ver:
-            print "Version Mismatch: Consider updating your build(s)"
-            print "Agent Version: %s" % m_ver
-            print "drozer Version: %s" % c_ver
+            print("Version Mismatch: Consider updating your build(s)")
+            print("Agent Version: %s" % m_ver)
+            print("drozer Version: %s" % c_ver)
 
         for p in permissions:
             m.add_permission(p)
 
-        for name, protectionLevel in defined_permissions.iteritems():
+        for name, protectionLevel in defined_permissions.items():
             m.define_permission(name, protectionLevel)
 
         m.write()
 
         built = packager.package()
         
-        print "Done:", built
+        print("Done:", built)

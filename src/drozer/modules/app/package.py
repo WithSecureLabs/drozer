@@ -188,7 +188,7 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
                     else:
                         break
 
-        if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0 or self.packageManager().getApplicationLabel(package.packageName).upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)) and intent_matches: 
+        if (arguments.defines_permission == None or package.permissions != None and True in [p.name.upper().find(arguments.defines_permission.upper()) >= 0 for p in package.permissions]) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0 or self.packageManager().getApplicationLabel(package.packageName).upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in [g == int(arguments.gid) for g in package.gids]) and (arguments.permission == None or package.requestedPermissions != None and True in [p.upper().find(arguments.permission.upper()) >= 0 for p in package.requestedPermissions]) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)) and intent_matches: 
             self.stdout.write("Package: %s\n" % application.packageName)
             self.stdout.write("  Application Label: %s\n" % self.packageManager().getApplicationLabel(application.packageName))
             self.stdout.write("  Process Name: %s\n" % application.processName)
@@ -309,7 +309,7 @@ class LaunchIntent(Module, common.PackageManager):
 
         out = ""
         #flags are a bit mask
-        for key in android.Intent.flags.keys():
+        for key in list(android.Intent.flags.keys()):
             for i in range(0, 8):
                 flag = flags & (0x0000000F << i*4)
                 if android.Intent.flags.get(key) == flag:
@@ -351,7 +351,7 @@ class List(Module, common.PackageManager):
     def __get_package(self, arguments, package):
         application = package.applicationInfo
 
-        if (arguments.defines_permission == None or package.permissions != None and True in map(lambda p: p.name.upper().find(arguments.defines_permission.upper()) >= 0, package.permissions)) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0 or self.packageManager().getApplicationLabel(application.packageName).upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in map(lambda g: g == int(arguments.gid), package.gids)) and (arguments.permission == None or package.requestedPermissions != None and True in map(lambda p: p.upper().find(arguments.permission.upper()) >= 0, package.requestedPermissions)) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
+        if (arguments.defines_permission == None or package.permissions != None and True in [p.name.upper().find(arguments.defines_permission.upper()) >= 0 for p in package.permissions]) and (arguments.filter == None or package.packageName.upper().find(arguments.filter.upper()) >= 0 or self.packageManager().getApplicationLabel(application.packageName).upper().find(arguments.filter.upper()) >= 0) and (arguments.gid == None or package.gids != None and True in [g == int(arguments.gid) for g in package.gids]) and (arguments.permission == None or package.requestedPermissions != None and True in [p.upper().find(arguments.permission.upper()) >= 0 for p in package.requestedPermissions]) and (arguments.uid == None or arguments.uid == str(package.applicationInfo.uid)):
             if arguments.no_app_name:
                 self.stdout.write("%s\n" % application.packageName)
             else:
@@ -410,7 +410,7 @@ class Manifest(Module, common.Assets):
                 
                 self.stdout.write("%s%s<[color green]%s[/color]" % ("  " * level, match.group(1), contents[0]))
                 if len(contents) > 1:
-                    self.stdout.write(("\n%s%s" % ("  " * level, " " * (len(contents[0]) + 1))).join(map(lambda m: " [color purple]%s[/color]=[color red]\"%s\"[/color]" % m, re.compile("([^=]+)=\"([^\"]+)\"\s*").findall(contents[1]))))
+                    self.stdout.write(("\n%s%s" % ("  " * level, " " * (len(contents[0]) + 1))).join([" [color purple]%s[/color]=[color red]\"%s\"[/color]" % m for m in re.compile("([^=]+)=\"([^\"]+)\"\s*").findall(contents[1])]))
                         
                 self.stdout.write(">\n")
             else:
@@ -515,7 +515,7 @@ class SharedUID(Module, common.PackageManager):
                         for permission in package.requestedPermissions:
                             permissions.add(permission)
 
-                self.stdout.write("  Permissions: %s\n"%", ".join(map(lambda p: str(p), permissions)))
+                self.stdout.write("  Permissions: %s\n"%", ".join([str(p) for p in permissions]))
                 self.stdout.write("\n")
             else:
                 self.stdout.write("No such UID.\n")

@@ -59,7 +59,7 @@ class Cmd(cmd.Cmd):
                 else:
                     if self.use_rawinput:
                         try:
-                            line = raw_input(self.prompt)
+                            line = input(self.prompt)
                         except EOFError:
                             line = 'EOF'
                     else:
@@ -82,7 +82,7 @@ class Cmd(cmd.Cmd):
                     else:
                         raise
             self.postloop()
-        except Exception, e:
+        except Exception as e:
             pass
             
         finally:
@@ -125,7 +125,7 @@ class Cmd(cmd.Cmd):
                 if len(matches) == 1 and matches[0].endswith(os.path.sep):
                     self.completion_matches = matches
                 else:
-                    self.completion_matches = map(lambda s: s+" ", matches)
+                    self.completion_matches = [s+" " for s in matches]
                 
         try:
             return self.completion_matches[state]
@@ -168,7 +168,7 @@ class Cmd(cmd.Cmd):
             run app.package.info com.example.app
         """
         
-        print self.__do_substitutions(arguments)
+        print(self.__do_substitutions(arguments))
 
     def do_env(self, arguments):
         """
@@ -178,8 +178,8 @@ class Cmd(cmd.Cmd):
         """
 
         for key in self.variables:
-            print "%s=%s" % (key, self.variables[key])
-        print
+            print("%s=%s" % (key, self.variables[key]))
+        print()
     
     def do_set(self, arguments):
         """

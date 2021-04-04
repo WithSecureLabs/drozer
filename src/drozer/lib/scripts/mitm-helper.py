@@ -11,7 +11,7 @@ from java.util import ArrayList
 from java.util import List
 from javax.swing.table import AbstractTableModel
 from threading import Lock
-import re, os, httplib
+import re, os, http.client
 from time import gmtime, strftime
 from java.net import URL
 
@@ -96,9 +96,9 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
 
             # Determine whether an HTTP or HTTPS connection must be made
             if reqPort == 443:
-                conn = httplib.HTTPSConnection(reqHost, reqPort)
+                conn = http.client.HTTPSConnection(reqHost, reqPort)
             else:
-                conn = httplib.HTTPConnection(reqHost, reqPort)
+                conn = http.client.HTTPConnection(reqHost, reqPort)
 
             # Get headers from user request
             httpLibHeaders = {}
@@ -119,7 +119,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
             else:
                 version = "HTTP/1.0"
             self.apkRequests[reqPath] = [reqUrl, version + " " + str(response.status) + " " + str(response.reason), responseHeaders]
-            print self.apkRequests[reqPath]
+            print(self.apkRequests[reqPath])
 
             # Instead of passing request - change host to www.google.com which will be non existent
             httpService = messageInfo.getHttpService()

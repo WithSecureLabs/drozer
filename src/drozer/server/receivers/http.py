@@ -47,7 +47,7 @@ class HTTPMessage:
             self.headers = {}
     
     def format_headers(self):
-        return "\r\n".join(map(lambda k: "%s: %s" % (k,self.headers[k]), self.headers))
+        return "\r\n".join(["%s: %s" % (k,self.headers[k]) for k in self.headers])
 
 
 class HTTPRequest(HTTPMessage):
@@ -189,7 +189,7 @@ class HTTPResponse(HTTPMessage):
         Read headers from an HTTP response.
         """
         
-        return dict(map(lambda l: [l[0:l.index(": ")], l[l.index(": ")+2:]], lines))
+        return dict([[l[0:l.index(": ")], l[l.index(": ")+2:]] for l in lines])
     
     @classmethod
     def processResponse(cls, line):

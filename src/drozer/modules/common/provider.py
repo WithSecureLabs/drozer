@@ -238,7 +238,7 @@ class Provider(loader.ClassLoader):
             elif (".odex" in path):
                 strings = self.getStrings(path)
             
-            content_uris.append((path, filter(lambda s: ("CONTENT://" in s.upper()) and ("CONTENT://" != s.upper()), strings)))
+            content_uris.append((path, [s for s in strings if ("CONTENT://" in s.upper()) and ("CONTENT://" != s.upper())]))
 
         return content_uris
 
@@ -258,7 +258,7 @@ class Provider(loader.ClassLoader):
             while cursor.isAfterLast() == False:
                 row = []
 
-                for i in xrange(len(columns)):
+                for i in range(len(columns)):
                     try:
                         if(cursor.getType(i) == blob_type):
                             row.append("%s (Base64-encoded)" % (cursor.getBlob(i).base64_encode()))
@@ -290,7 +290,7 @@ class Provider(loader.ClassLoader):
         create a union set of them.
         """
 
-        print "Scanning %s..." % package.packageName
+        print("Scanning %s..." % package.packageName)
 
         uris = set([])
 

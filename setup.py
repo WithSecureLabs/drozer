@@ -12,7 +12,7 @@ def find_files(src):
     matches = []
 
     for root, dirnames, filenames in os.walk(src):
-        matches.extend(map(lambda f: os.path.join(root, f), filenames))
+        matches.extend([os.path.join(root, f) for f in filenames])
 
     return matches
 
@@ -25,7 +25,7 @@ def find_libs(src):
         for filename in fnmatch.filter(dirnames, 'libs'):
             matches.extend(glob.glob(os.path.join(root, filename, "*", "*")))
 
-    return map(lambda fn: os.path.basename(fn), filter(lambda fn: os.path.isfile(fn), matches))
+    return [os.path.basename(fn) for fn in [fn for fn in matches if os.path.isfile(fn)]]
 
 # Do a system check when installing bash complete script
 def get_install_data():
@@ -117,19 +117,9 @@ def get_package_data():
 				data[""].append(os.path.join(root, filename)[11:])
 	return data
 
-def get_version():
-	version_cmd = ['git', 'describe', '--tags']
-	
-	if platform in ("linux2", "linux", "darwin"):
-		version_cmd = ' '.join(version_cmd)
-	elif platform != "win32":
-		return
-	
-	return subprocess.check_output(version_cmd).split('-', 1)[0]
-
 setuptools.setup(
   name = meta.name,
-  version = get_version(),
+  version = "2.4.4",
   author = meta.vendor,
   author_email = meta.contact,
   description = meta.description,

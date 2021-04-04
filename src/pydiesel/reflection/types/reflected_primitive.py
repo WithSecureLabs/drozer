@@ -132,7 +132,7 @@ class ReflectedPrimitive(ReflectedType):
         return isinstance(other, ReflectedPrimitive) and self._native <= other._native or self._native <= other
 
     def __long__(self):
-        return long(self._native)
+        return int(self._native)
 
     def __lt__(self, other):
         return isinstance(other, ReflectedPrimitive) and self._native < other._native or self._native < other
@@ -155,7 +155,7 @@ class ReflectedPrimitive(ReflectedType):
     def __neg__(self):
         return -self._native
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self._native.__nonzero__()
 
     def __or__(self, other):

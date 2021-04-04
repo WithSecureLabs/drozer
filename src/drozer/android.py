@@ -336,7 +336,7 @@ optional arguments:
             elif kwargs['idx'] == 1:
                 return cls.extra_keys
         elif action.dest == "flags":
-            return cls.flags.keys()
+            return list(cls.flags.keys())
         elif action.dest == "mimetype":
             pass
 
@@ -424,7 +424,7 @@ optional arguments:
                 elif extra[0] == "integer":
                     extras.putInt(extra[1], context.arg(int(extra[2]), obj_type="int"))
                 elif extra[0] == "long":
-                    extras.putLong(extra[1], context.arg(long(extra[2]), obj_type="long"))
+                    extras.putLong(extra[1], context.arg(int(extra[2]), obj_type="long"))
                 elif extra[0] == "short":
                     extras.putShort(extra[1], context.arg(int(extra[2]), obj_type="short"))
                 elif extra[0] == "bytearray":

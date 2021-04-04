@@ -3,6 +3,7 @@ import sys
 
 from drozer.modules.import_conflict_resolver import ImportConflictResolver
 from drozer.repoman import Repository
+import importlib
 
 class ModuleLoader(object):
 
@@ -40,7 +41,7 @@ class ModuleLoader(object):
         Import all modules, given a collection of Python modules.
         """
 
-        for i in modules.keys():
+        for i in list(modules.keys()):
             if modules[i] is not None and modules[i] != "drozer.modules.base":
                 try:
                     __import__(modules[i])
@@ -48,7 +49,7 @@ class ModuleLoader(object):
                     # need to be careful over i, because the import must have
                     # been successful to get here.
                     if modules[i] in sys.modules:
-                        reload(sys.modules[modules[i]])
+                        importlib.reload(sys.modules[modules[i]])
                 except ImportError:
                     sys.stderr.write("Skipping source file at %s. Unable to load Python module.\n" % modules[i])
                     pass 

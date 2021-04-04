@@ -31,7 +31,7 @@ class ArgumentParserCompleter(object):
         pos_actions = self.__get_positional_actions()
         offset = word - offs
         if pos_actions is not None and (offset < len(pos_actions)):
-            suggestions.extend(filter(lambda s: s.startswith(text), self.__get_suggestions_for(self.__get_positional_action(offset), text, line)))
+            suggestions.extend([s for s in self.__get_suggestions_for(self.__get_positional_action(offset), text, line) if s.startswith(text)])
         else:
             offer_flags = True
         
@@ -44,12 +44,12 @@ class ArgumentParserCompleter(object):
                 if action != None:
                     _suggestions, offer_flags = self.__offer_action_suggestions(action, value_index, text, line)
                     
-                    suggestions.extend(filter(lambda s: s.startswith(text), _suggestions))
+                    suggestions.extend([s for s in _suggestions if s.startswith(text)])
                 
             # if we could be trying to type an option flag, add them to the
             # suggestions
             if offer_flags:
-                suggestions.extend(map(lambda os: os[begidx-real_offset:], filter(lambda s: s.startswith(text), self.__offer_flag_suggestions())))
+                suggestions.extend([os[begidx-real_offset:] for os in [s for s in self.__offer_flag_suggestions() if s.startswith(text)]])
 
         return suggestions        
 
@@ -118,7 +118,7 @@ class ArgumentParserCompleter(object):
         Filter the list of tokens to include only those that are flags.
         """
         
-        return filter(lambda w: w.startswith("-"), words[0:word])
+        return [w for w in words[0:word] if w.startswith("-")]
         
     def __get_positional_action(self, word):
         """
@@ -139,7 +139,7 @@ class ArgumentParserCompleter(object):
         """
         
         pos = (self.parser._positionals._group_actions)
-        filter(lambda p: p.dest !="command" and  p.required, pos)
+        [p for p in pos if p.dest !="command" and  p.required]
         return pos
     def __get_suggestions_for(self, action, text, line, **kwargs):
         """

@@ -5,7 +5,7 @@ def chunk(l, n):
     Utility method to split a list (l) in chunks of n sections.
     """
 
-    for i in xrange(0, len(l), n):
+    for i in range(0, len(l), n):
         yield l[i:i+n]
 
 def flatten(l):
@@ -14,7 +14,7 @@ def flatten(l):
     """
 
     for el in l:
-        if isinstance(el, collections.Iterable) and not isinstance(el, basestring):
+        if isinstance(el, collections.Iterable) and not isinstance(el, str):
             for sub in flatten(el):
                 yield sub
         else:

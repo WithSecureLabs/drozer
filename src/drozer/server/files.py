@@ -37,7 +37,7 @@ class FileProvider(object):
         return ErrorResource(resource, 404, "The resource %s could not be found on this server.")
     
     def get_by_magic(self, magic):
-        resources = filter(lambda r: self.__store[r].magic == magic, self.__store)
+        resources = [r for r in self.__store if self.__store[r].magic == magic]
         
         if len(resources) == 1:
             return self.__store[resources[0]]
@@ -45,7 +45,7 @@ class FileProvider(object):
             return None
     
     def has_magic_for(self, magic):
-        resources = filter(lambda r: self.__store[r].magic == magic, self.__store)
+        resources = [r for r in self.__store if self.__store[r].magic == magic]
         
         if len(resources) == 1:
             return True
@@ -154,7 +154,7 @@ class InMemoryMultipartResource(Resource):
             
         body = self.getBody(request.headers['User-Agent'])
 
-        headers = dict(headers.items() + self.custom_headers.items())
+        headers = dict(list(headers.items()) + list(self.custom_headers.items()))
         
         if body != None:
             return HTTPResponse(status=200, headers=headers, body=body)
@@ -180,7 +180,7 @@ class InMemoryResource(Resource):
         if self.mimetype != None:
             headers['Content-Type'] = self.mimetype
 
-        headers = dict(headers.items() + self.custom_headers.items())
+        headers = dict(list(headers.items()) + list(self.custom_headers.items()))
         
         return HTTPResponse(status=200, headers=headers, body=self.getBody())
    

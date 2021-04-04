@@ -24,30 +24,30 @@ class RepositoryBuilder(object):
         """
         
         if os.path.exists(self.target):
-            print "The selected target (%s) already exists. Do you want to overwrite it?" % self.target, 
-            if raw_input().lower() == "y":
+            print("The selected target (%s) already exists. Do you want to overwrite it?" % self.target, end=' ') 
+            if input().lower() == "y":
                 shutil.rmtree(self.target)
             else:
                 sys.exit(-1)
             
-        print "Creating target..."
+        print("Creating target...")
         os.mkdir(self.target)
         
-        print "Preparing INDEX file..."
+        print("Preparing INDEX file...")
         index = xml.Element("repository")
         
-        print "Writing modules..."
+        print("Writing modules...")
         for source in self.__find_sources():
-            print "Processing %s (%s)..." % (source.name(), source.type())
+            print("Processing %s (%s)..." % (source.name(), source.type()))
             
             source.emit(self.target)
             
             source.add_to_index(index)
         
-        print "Generating INDEX file..."
+        print("Generating INDEX file...")
         xml.ElementTree(index).write(os.path.sep.join([self.target, "INDEX.xml"]))
         
-        print "Done."
+        print("Done.")
     
     def __find_sources(self):
         """
@@ -177,7 +177,7 @@ class SourcePackage(Source):
         
         for base, dirs, files in os.walk(self.path):
             for f in files:
-                print " - adding %s to the archive..." % f
+                print(" - adding %s to the archive..." % f)
                 
                 filename = os.path.join(base, f)
                 archive.write(filename, filename[len(self.path):])

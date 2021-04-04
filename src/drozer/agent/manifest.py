@@ -6,7 +6,7 @@ class Endpoint(object):
         self.__path = path
         
         lines = open(self.__path).read().split("\n")
-        data = dict(map(lambda l: l.split(":"), filter(lambda l: l.find(":") > -1, lines)))
+        data = dict([l.split(":") for l in [l for l in lines if l.find(":") > -1]])
         
         self.host = data['host']
         self.password = data['password']

@@ -2,7 +2,7 @@
 A library of fileystem functions.
 """
 
-import md5
+import hashlib
 
 def read(path):
     """
@@ -61,7 +61,7 @@ def md5sum(path):
         
         f.close()
         
-        return md5.new(data).digest().encode("hex")
+        return hashlib.md5(data).digest().encode("hex")
     except IOError:
         return None
         

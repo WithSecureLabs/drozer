@@ -25,7 +25,7 @@ class SqlTables(Module, common.FileSystem, common.PackageManager, common.Provide
                 results.append(self.__test_uri(uri))
         
         if results: 
-            self.stdout.write('\n'.join(filter(None, results)) + '\n')
+            self.stdout.write('\n'.join([_f for _f in results if _f]) + '\n')
         else:
             self.stdout.write("No results found.\n")
 
@@ -37,7 +37,7 @@ class SqlTables(Module, common.FileSystem, common.PackageManager, common.Provide
                 try:
                     cursor = self.contentResolver().query(uri, projection=["* from sqlite_master--"])
                     resultSet = self.getResultSet(cursor)
-                    listOfTables = filter(lambda x: str(x[0]) == "table", resultSet[1:]) # exclude indexes
+                    listOfTables = [x for x in resultSet[1:] if str(x[0]) == "table"] # exclude indexes
                     return "Accessible tables for uri " + uri + ":\n  " + \
                                    "\n  ".join(str(x[1]) for x in listOfTables) + "\n"
                 except:

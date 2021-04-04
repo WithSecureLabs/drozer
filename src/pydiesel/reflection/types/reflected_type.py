@@ -59,7 +59,7 @@ class ReflectedType(object):
 
         if obj_type == None and isinstance(obj, ReflectedType) or obj_type == "object":
             return obj
-        elif obj_type == None and isinstance(obj, long) or obj_type == "long":
+        elif obj_type == None and isinstance(obj, int) or obj_type == "long":
             return cls.reflected_primitive("long", obj, reflector=reflector)
         elif obj_type == None and isinstance(obj, int) or obj_type == "int":
             return cls.reflected_primitive("int", obj, reflector=reflector)
@@ -75,7 +75,7 @@ class ReflectedType(object):
             return cls.reflected_primitive("boolean", obj, reflector=reflector)
         elif obj_type == "data":
             return cls.reflected_binary(obj, reflector=reflector)
-        elif obj_type == None and (isinstance(obj, str) or isinstance(obj, unicode)) or obj_type == "string":
+        elif obj_type == None and (isinstance(obj, str) or isinstance(obj, str)) or obj_type == "string":
             return cls.reflected_string(obj, reflector=reflector)
         elif obj_type == "double":
             return cls.reflected_primitive("double", obj, reflector=reflector)

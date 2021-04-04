@@ -24,7 +24,7 @@ class PayloadManager(cli.Base):
     def do_build(self, arguments):
         """build a payload"""
         
-        print self.builder.build(arguments.module, arguments)
+        print(self.builder.build(arguments.module, arguments))
 
     def args_for_info(self):
         self._parser.add_argument("module", help="specify the payload module to use")
@@ -34,12 +34,12 @@ class PayloadManager(cli.Base):
         
         module = self.builder.module(arguments.module)
         
-        print module.usage.formatted_description()
+        print(module.usage.formatted_description())
         
     def do_list(self, arguments):
         """list the available payload modules"""
         
-        sys.stdout.write(console.format_dict(dict(map(lambda m: [m, self.builder.module(m).name], self.builder.modules()))) + "\n")
+        sys.stdout.write(console.format_dict(dict([[m, self.builder.module(m).name] for m in self.builder.modules()])) + "\n")
         
     def before_parse_args(self, argv):
         """

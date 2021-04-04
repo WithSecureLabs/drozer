@@ -38,5 +38,5 @@ class ReflectionRequestForwarder:
 
                 session.console.transport.loseConnection()
         else:
-            print "no session:", message.reflection_request.session_id
+            print("no session:", message.reflection_request.session_id)
             

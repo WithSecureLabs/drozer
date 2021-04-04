@@ -1,4 +1,4 @@
-from StringIO import StringIO
+from io import StringIO
 from twisted.internet.protocol import Protocol
 
 class StreamReceiver(Protocol):

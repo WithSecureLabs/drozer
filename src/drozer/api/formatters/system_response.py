@@ -1,4 +1,4 @@
-from StringIO import StringIO
+from io import StringIO
 
 from pydiesel.api.protobuf_pb2 import Message
 
@@ -68,7 +68,7 @@ class SystemResponseFormatter:
         Writes a series of strings into the internal StringIO buffer.
         """
 
-        self.__buffer.write(" ".join(map(lambda m: str(m), messages)))
+        self.__buffer.write(" ".join([str(m) for m in messages]))
         self.__buffer.write("\n")
 
     def __print_device_list(self):

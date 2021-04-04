@@ -36,7 +36,7 @@ WARNING: This minimal version of the su binary is completely unprotected, meanin
 
         # ARCH check
         if "ARM" not in str(self.klass('java.lang.System').getProperty("os.arch")).upper():
-            response = raw_input("[-] Unsupported CPU architecture - ARM only. Continue anyway (y/n)? ")
+            response = input("[-] Unsupported CPU architecture - ARM only. Continue anyway (y/n)? ")
             if "Y" not in response.upper():
                 return
 

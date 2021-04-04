@@ -15,9 +15,9 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
 
         xml = ElementTree.fromstring(self.getAndroidManifest(endpoint.packageName))
 
-        filters.update(map(self.__parse_filter, xml.findall(self.__filter_xpath % (endpoint_type, str(endpoint.name)[len(endpoint.packageName):]))))
-        filters.update(map(self.__parse_filter, xml.findall(self.__filter_xpath % (endpoint_type, str(endpoint.name)[len(endpoint.packageName)+1:]))))
-        filters.update(map(self.__parse_filter, xml.findall(self.__filter_xpath % (endpoint_type, str(endpoint.name)))))
+        filters.update(list(map(self.__parse_filter, xml.findall(self.__filter_xpath % (endpoint_type, str(endpoint.name)[len(endpoint.packageName):])))))
+        filters.update(list(map(self.__parse_filter, xml.findall(self.__filter_xpath % (endpoint_type, str(endpoint.name)[len(endpoint.packageName)+1:])))))
+        filters.update(list(map(self.__parse_filter, xml.findall(self.__filter_xpath % (endpoint_type, str(endpoint.name))))))
         
         return filters
 
@@ -54,8 +54,8 @@ class IntentFilter(assets.Assets, loader.ClassLoader):
             path_prefix = 'pathPrefix' in attrs and attrs['pathPrefix']
             path_pattern = 'pathPattern' in attrs and attrs['pathPattern']
 
-            paths = filter(None, [path, path_prefix, path_pattern])
-            datas = map(lambda x: cls(scheme, host, port, x, mimetype), paths or [None])
+            paths = [_f for _f in [path, path_prefix, path_pattern] if _f]
+            datas = [cls(scheme, host, port, x, mimetype) for x in paths or [None]]
 
             return datas
 

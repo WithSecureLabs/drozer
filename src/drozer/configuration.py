@@ -1,4 +1,4 @@
-import ConfigParser
+import configparser
 import os
 import platform
 import sys
@@ -60,7 +60,7 @@ class Configuration(object):
                 return cls.__config.get(section, key)
             else:
                 return None
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             return None
     
     @classmethod
@@ -85,7 +85,7 @@ class Configuration(object):
         cls.__ensure_config()
         
         if cls.__config.has_section(section):
-            return map(lambda k: cls.__config.get(section, k), cls.__config.options(section))
+            return [cls.__config.get(section, k) for k in cls.__config.options(section)]
         else:
             return []
         
@@ -145,7 +145,7 @@ class Configuration(object):
         """
         
         if cls.__config == None:
-            cls.__config = ConfigParser.SafeConfigParser()
+            cls.__config = configparser.SafeConfigParser()
             cls.__config.optionxform = lambda optionstr: optionstr.replace(":", "|")
             
             if os.path.exists(cls.path()):

@@ -130,9 +130,9 @@ class Provider(object):
         else:
             argv[0] = "keytool"
             
-            print "Could not compile the BKS keystore, because keytool could not be located on your system."
-            print "Run:"
-            print " ".join(argv) 
+            print("Could not compile the BKS keystore, because keytool could not be located on your system.")
+            print("Run:")
+            print(" ".join(argv)) 
             
             return False
     
@@ -160,9 +160,9 @@ class Provider(object):
         else:
             argv[0] = "keytool"
             
-            print "Could not compile the BKS trust store, because keytool could not be located on your system."
-            print "Run:"
-            print " ".join(argv) 
+            print("Could not compile the BKS trust store, because keytool could not be located on your system.")
+            print("Run:")
+            print(" ".join(argv)) 
             
             return False
     
@@ -188,9 +188,9 @@ class Provider(object):
         else:
             argv[0] = "keytool"
             
-            print "Could not compile the JKS trust store, because keytool could not be located on your system."
-            print "Run:"
-            print " ".join(argv) 
+            print("Could not compile the JKS trust store, because keytool could not be located on your system.")
+            print("Run:")
+            print(" ".join(argv)) 
             
             return False
         

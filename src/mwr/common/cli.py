@@ -27,7 +27,7 @@ class Base(object):
         Ask the user a question, and collect a single line as input.
         """
         
-        return raw_input(prompt)
+        return input(prompt)
 
     def choose(self, prompt, options):
         """
@@ -63,7 +63,7 @@ class Base(object):
     
     def prepare_argument_parser(self, argv):
         # try to find the command, before we invoke the parser so we can add additional arguments
-        command_argv = filter(lambda a: "do_" + a in self.__commands(), argv)
+        command_argv = [a for a in argv if "do_" + a in self.__commands()]
         
         if(len(command_argv) == 1 and hasattr(self, "args_for_" + command_argv[0])):
             getattr(self, "args_for_" + command_argv[0])()
@@ -93,10 +93,10 @@ class Base(object):
     def do_commands(self, arguments):
         """shows a list of all console commands"""
 
-        print "usage:", self.__doc__.strip()
-        print
-        print "available commands:"
-        print self.__get_commands_help()
+        print("usage:", self.__doc__.strip())
+        print()
+        print("available commands:")
+        print(self.__get_commands_help())
         
     def handle_error(self, throwable):
         """default error handler: shows an exception message, before terminating"""
@@ -110,8 +110,8 @@ class Base(object):
         method beginning with do_.
         """
 
-        return filter(lambda f: f.startswith("do_") and\
-            getattr(self, f).__doc__ is not None, dir(self))
+        return [f for f in dir(self) if f.startswith("do_") and\
+            getattr(self, f).__doc__ is not None]
     
     def __get_commands_help(self):
         """
@@ -153,8 +153,8 @@ class Base(object):
         """
 
         if message != None:
-            print "error:", message
-        print self._parser.format_help()
+            print("error:", message)
+        print(self._parser.format_help())
         
         
 class UsageError(Exception):

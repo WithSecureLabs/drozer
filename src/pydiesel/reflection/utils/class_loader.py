@@ -1,6 +1,6 @@
 import binascii
 import hashlib
-import os, md5
+import os
 
 from pydiesel.reflection.exceptions import ReflectionException
 from pydiesel.reflection.types.reflected_primitive import ReflectedPrimitive
@@ -101,7 +101,7 @@ class ClassLoader(object):
         except ReflectionException:
             return True
             
-        local_hash = md5.new(local_data).digest().encode("hex")
+        local_hash = hashlib.md5(local_data).digest().encode("hex")
         
         return remote_hash == local_hash
         

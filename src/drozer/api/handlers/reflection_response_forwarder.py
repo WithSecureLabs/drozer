@@ -29,5 +29,5 @@ class ReflectionResponseForwarder:
         if session is not None:
             session.console.write(message.SerializeToString())
         else:
-            print "no session:", message.reflection_response.session_id
+            print("no session:", message.reflection_response.session_id)
             

@@ -162,7 +162,7 @@ class ReflectedString(ReflectedType):
         method.
         """
 
-        return self._native.join(map(lambda s: str(s), iterable))
+        return self._native.join([str(s) for s in iterable])
 
     def ljust(self, width, fillchar=" "):
         """

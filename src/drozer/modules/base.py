@@ -156,7 +156,7 @@ class Module(object):
         else:
             klass = self.klass(class_or_class_name)
 
-        return self.reflector.construct(klass, *map(lambda arg: self.arg(arg), args))
+        return self.reflector.construct(klass, *[self.arg(arg) for arg in args])
 
     def null_complete(self, text, state):
         return None

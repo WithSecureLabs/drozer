@@ -35,7 +35,7 @@ class Exec(Module, common.Shell):
 
     def execute(self, arguments):
         if arguments.command == None:
-            print "No command specified."
+            print("No command specified.")
             return
             
         self.stdout.write("%s\n" % self.shellExec(arguments.command))

@@ -39,7 +39,7 @@ class Sequencer(object):
         Currently, we support one command per line.
         """
 
-        return filter(lambda c: c.strip() != "", self.__sequence.split("\n"))
+        return [c for c in self.__sequence.split("\n") if c.strip() != ""]
 
     def __do_substitutions(self, command):
         """

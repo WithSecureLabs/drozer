@@ -59,7 +59,7 @@ class ReflectedObject(ReflectedType):
         reflector's invoke() method.
         """
 
-        result = self._reflector.invoke(self, method_name, *map(lambda arg: ReflectedType.fromNative(arg, reflector=self._reflector), args), **kwargs)
+        result = self._reflector.invoke(self, method_name, *[ReflectedType.fromNative(arg, reflector=self._reflector) for arg in args], **kwargs)
 
         return result
 

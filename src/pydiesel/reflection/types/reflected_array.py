@@ -160,5 +160,5 @@ class ReflectedArray(ReflectedType):
         self._native[i:j] = seq
 
     def __str__(self):
-        return "[{}]".format(", ".join(map(lambda e: str(e), self._native)))
+        return "[{}]".format(", ".join([str(e) for e in self._native]))
         

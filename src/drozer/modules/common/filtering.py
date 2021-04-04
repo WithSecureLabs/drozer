@@ -13,6 +13,6 @@ class Filters(object):
             collection = []
             
         if term != None and term != "":
-            return filter(lambda e: str(getattr(e, key)).upper().find(str(term).upper()) >= 0, collection)
+            return [e for e in collection if str(getattr(e, key)).upper().find(str(term).upper()) >= 0]
         else:
             return collection

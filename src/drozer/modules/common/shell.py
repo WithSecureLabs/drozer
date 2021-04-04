@@ -43,7 +43,7 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
                 
                 self.stdout.write(response.strip())
                 self.stdout.write(shell.read().strip() + " ")
-                command = raw_input()
+                command = input()
             except ReflectionException as e:
                 if str(e.message) == "Broken pipe":
                     in_shell = False
@@ -53,7 +53,7 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
         shell.close()
             
     def __get_variables(self):
-        return "; ".join(map(lambda k: "export %s=\"%s\"" % (k, self.variables[k]), self.variables))
+        return "; ".join(["export %s=\"%s\"" % (k, self.variables[k]) for k in self.variables])
         
     def __send_variables(self, shell):
         shell.write(self.__get_variables())

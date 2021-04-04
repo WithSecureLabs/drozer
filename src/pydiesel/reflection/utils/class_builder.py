@@ -39,7 +39,7 @@ class ClassBuilder(object):
                 raise RuntimeError("Error whilst compiling the Java sources.")
             
             # collect any sub-classes that we generated
-            sources = map(lambda p: os.path.basename(p), glob.glob(self.path.replace(".java", "$*.class")))
+            sources = [os.path.basename(p) for p in glob.glob(self.path.replace(".java", "$*.class"))]
             # package the compiled bytecode into an apk file (%.class => %.apk)
             if self.__execute(self.dx , "--dex", "--output", os.path.basename(apk_path), *([os.path.basename(self.path).replace(".java", ".class")] + sources)):
                 raise RuntimeError("Error whilst building APK bundle.")
@@ -64,7 +64,7 @@ class ClassBuilder(object):
         Spawn a shell command
         """
         
-        print " ".join(argv)
+        print(" ".join(argv))
 
         if platform == 'win32':
             subprocess.call(argv,shell=True,cwd=os.getcwd())
