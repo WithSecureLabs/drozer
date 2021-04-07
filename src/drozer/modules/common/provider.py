@@ -290,7 +290,7 @@ class Provider(loader.ClassLoader):
         create a union set of them.
         """
 
-        print("Scanning %s..." % package.packageName)
+        print(("Scanning %s..." % package.packageName))
 
         uris = set([])
 

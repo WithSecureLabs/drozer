@@ -93,7 +93,7 @@ class HTTP(HttpReceiver):
                         if key.startswith("X-Drozer-Set-Header-"):
                             custom_headers[key.split("X-Drozer-Set-Header-")[1]] = value
 
-                    print(request.headers)
+                    print((request.headers))
                     
                     if magic != None and self.__file_provider.has_magic_for(magic) and self.__file_provider.get_by_magic(magic).resource != request.resource:
                         resource = ErrorResource(request.resource, 409, "Could not create %s. The specified magic has already been assigned to another resource.")

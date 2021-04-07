@@ -61,17 +61,17 @@ class AgentManager(cli.Base):
         
         if m_ver != c_ver:
             print("Version Mismatch: Consider updating your build(s)")
-            print("Agent Version: %s" % m_ver)
-            print("drozer Version: %s" % c_ver)
+            print(("Agent Version: %s" % m_ver))
+            print(("drozer Version: %s" % c_ver))
 
         for p in permissions:
             m.add_permission(p)
 
-        for name, protectionLevel in defined_permissions.items():
+        for name, protectionLevel in list(defined_permissions.items()):
             m.define_permission(name, protectionLevel)
 
         m.write()
 
         built = packager.package()
         
-        print("Done:", built)
+        print(("Done:", built))

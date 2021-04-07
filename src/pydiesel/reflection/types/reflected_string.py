@@ -10,10 +10,7 @@ class ReflectedString(ReflectedType):
     def __init__(self, native, *args, **kwargs):
         ReflectedType.__init__(self, *args, **kwargs)
         
-        try:
-            self._native = native.decode("utf-8")
-        except UnicodeError:
-            self._native = native
+        self._native = native
 
     def capitalize(self):
         """
@@ -389,6 +386,6 @@ class ReflectedString(ReflectedType):
     def __repr__(self):
         return repr(self._native)
 
-    def __str__(self):
-        return self._native.encode('utf-8')
+    def __bytes__(self):
+        return self._native
         

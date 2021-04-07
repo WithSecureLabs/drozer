@@ -43,7 +43,7 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
                 
                 self.stdout.write(response.strip())
                 self.stdout.write(shell.read().strip() + " ")
-                command = input()
+                command = eval(input())
             except ReflectionException as e:
                 if str(e.message) == "Broken pipe":
                     in_shell = False

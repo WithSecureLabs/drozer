@@ -64,7 +64,7 @@ class ClassBuilder(object):
         Spawn a shell command
         """
         
-        print(" ".join(argv))
+        print((" ".join(argv)))
 
         if platform == 'win32':
             subprocess.call(argv,shell=True,cwd=os.getcwd())

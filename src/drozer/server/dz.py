@@ -23,7 +23,7 @@ def serve(arguments):
     task.LoopingCall(heartbeat).start(arguments.ping_interval)
         
     if arguments.ssl != None:
-        print("Starting drozer Server, listening on 0.0.0.0:%d (with SSL)" % arguments.port)
+        print(("Starting drozer Server, listening on 0.0.0.0:%d (with SSL)" % arguments.port))
 
         if arguments.ssl == []:
             print("Using default SSL key material...")
@@ -34,7 +34,7 @@ def serve(arguments):
                           SwitcherFactoryServer(dict(arguments.credentials)),
                           ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
     else:
-        print("Starting drozer Server, listening on 0.0.0.0:%d" % arguments.port)
+        print(("Starting drozer Server, listening on 0.0.0.0:%d" % arguments.port))
         
         reactor.listenTCP(arguments.port,
                           SwitcherFactoryServer(dict(arguments.credentials)))

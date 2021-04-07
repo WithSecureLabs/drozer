@@ -76,10 +76,6 @@ class Console(cli.Base):
             except KeyboardInterrupt:
                 print()
                 print("Caught SIGINT, terminating your session.")
-            finally:
-                session.do_exit("")
-                
-            self.__getServerConnector(arguments).close()
         else:
             self.handle_error(RuntimeError(response.system_response.error_message), fatal=True)
 

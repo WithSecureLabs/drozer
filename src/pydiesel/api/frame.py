@@ -97,7 +97,7 @@ class Frame:
 
         if len(header) == 8:
             version, length = unpack(">II", header)
-            payload = ""
+            payload = b""
 
             while len(payload) != length:
                 # TODO: add a timeout in here!
@@ -113,6 +113,6 @@ class Frame:
             self.version, self.length, self.isValid() and 'VALID' or 'INVALID',
             self.messageType())
         
-    def __str__(self):
-        return pack(">II", self.version, self.length) + self.payload
+    def __bytes__(self):
+        return pack(">II", self.version, self.length) + bytes(self.payload)
         

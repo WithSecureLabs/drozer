@@ -228,5 +228,5 @@ class ReflectedPrimitive(ReflectedType):
             return self._native - other
 
     def __str__(self):
-        return "{}".format(self._native)
+        return str("{}".format(self._native))
         
