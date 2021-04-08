@@ -21,3 +21,19 @@ First, obtain a shell into the container:
 Then run the Drozer command to connect to the phone:
 
 `drozer console connect --server <phone IP address>`
+
+Notes on `phone IP address>`: For an real Android device, the phone and the host machine should be on the same LAN network, and an explicit LAN IP address of the phone should be used, for example
+
+`drozer console connect --server 192.168.7.70`
+  
+However, for a virtual device, say an Android emulator, port-forwarding must be created and the correct "IP address" must be used in order to successfully connect the Drozer client running in docker to the Drozer Server listening on port 31415(default) of the Android emulator. Specifically, 
+
+- Set up port forwarding
+
+`adb forward tcp:31415 tcp:31415`
+
+- Connect to drozer agent
+
+`drozer console connect --server host.docker.internal`
+
+for more details about [How to access host port from docker container](https://stackoverflow.com/questions/31324981/how-to-access-host-port-from-docker-container).
