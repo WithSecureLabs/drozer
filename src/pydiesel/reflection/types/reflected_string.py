@@ -386,6 +386,6 @@ class ReflectedString(ReflectedType):
     def __repr__(self):
         return repr(self._native)
 
-    def __bytes__(self):
+    def __str__(self):
         return self._native
         

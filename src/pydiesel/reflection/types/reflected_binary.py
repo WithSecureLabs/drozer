@@ -27,6 +27,6 @@ class ReflectedBinary(ReflectedString):
 
         return Message.Argument(type=Message.Argument.DATA, data=self._native)
 
-    def __str__(self):
-        return str(self._native)
+    def __bytes__(self):
+        return self._native
 

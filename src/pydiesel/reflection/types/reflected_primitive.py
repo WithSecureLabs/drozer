@@ -227,6 +227,6 @@ class ReflectedPrimitive(ReflectedType):
         else:
             return self._native - other
 
-    def __str__(self):
-        return str("{}".format(self._native))
+    def __bytes__(self):
+        return "{}".format(self._native)
         

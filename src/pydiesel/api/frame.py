@@ -100,7 +100,7 @@ class Frame:
             payload = b""
 
             while len(payload) != length:
-                # TODO: add a timeout in here!
+                socket.settimeout(90)
                 payload += socket.recv(length - len(payload))
 
                 if len(payload) == length:
@@ -114,5 +114,5 @@ class Frame:
             self.messageType())
         
     def __bytes__(self):
-        return pack(">II", self.version, self.length) + bytes(self.payload)
+        return pack(">II", self.version, self.length) + self.payload
         

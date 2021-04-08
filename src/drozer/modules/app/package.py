@@ -314,7 +314,7 @@ class LaunchIntent(Module, common.PackageManager):
                 flag = flags & (0x0000000F << i*4)
                 if android.Intent.flags.get(key) == flag:
                     out = out + "%s, "%key
-        if out is not "":
+        if out != "":
             return "[%s]"%out[:-2]
         else:
             return "null"
