@@ -507,6 +507,25 @@ class Session(cmd.Cmd):
           integer
           short
           string
+          parcelable(sort of)
+
+        When crafting a parcelable intent extra, the following data types are fully supported:
+
+          Content provider URIs
+          Website URIs
+          Intents
+
+        For Content provider URIs, use the standard 'content://' format of URIs
+
+          --extra parcelable yaycontentyay content://settings/secure
+
+        For Website URIs, use either 'http://' or 'https://' format of URIs:
+
+          --extra parcelable yaywebsiteyay http://www.f-secure.com
+
+        For Intents, it uses a slightly modified version of the 'intent://' format of URI:
+
+          --extra parcelable yayintentyay intent://host.com?queryparameter=value#package=targetPackage;component=targetComponent;action=action;category=category;type=type;identifier=identifier;launchFlags=launchFlags;scheme=scheme;sourceBounds=sourceBounds;S.extraString=value;B.extraBoolean=value;b.extraByte=value;c.extraChar=value;d.extraDouble=value;i.extraInt=value;f.extraFloat=value;l.extraLong=value;s.extraShort=value;
         
         """
         
