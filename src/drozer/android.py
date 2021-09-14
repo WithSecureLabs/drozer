@@ -434,8 +434,87 @@ optional arguments:
                     extras.putByteArray(extra[1],wrapper.toByteArray())
                 elif extra[0] == "string":
                     extras.putString(extra[1], extra[2])
+                elif extra[0] == "parcelable":
+
+                    yayUriClassyay = context.klass("android.net.Uri")
+                    yayIntentyay = context.new("android.content.Intent")
+                    yayRectClassyay = context.klass("android.graphics.Rect")
+
+                    if extra[2].lower().startswith("content://"): # content:// URI
+                        yayExtrayay = yayUriClassyay.parse(extra[2])
+                    elif extra[2].lower().startswith("http://"): # http:// URI
+                        yayExtrayay = yayUriClassyay.parse(extra[2])
+                    elif extra[2].lower().startswith("https://"): # https:// uri
+                        yayExtrayay = yayUriClassyay.parse(extra[2])
+                    elif extra[2].lower().startswith("intent://"): # intent:// intent
+                        yayDatayay = extra[2][9:].split("#")[0]
+                        if not yayDatayay:
+                            yayDatayay = ""
+                        yayUriArryay = extra[2][9:].split("#")[1].split(";")
+                        yayIntyay = len(yayUriArryay)
+                        while yayIntyay != 0:
+                            yayKeyyay = yayUriArryay[yayIntyay - 1].split("=")[0]
+                            yayValueyay = yayUriArryay[yayIntyay - 1].split("=")[1]
+                            yayExtrasyay = context.new("android.os.Bundle")
+                            # main stuff
+                            if yayKeyyay == "action":
+                                yayIntentyay.setAction(yayValueyay)
+                            elif yayKeyyay == "category":
+                                yayIntentyay.addCategory(yayValueyay)
+                            elif yayKeyyay == "type":
+                                yayIntentyay.setType(yayValueyay)
+                            elif yayKeyyay == "identifier":
+                                yayIntentyay.setIdentifier(yayValueyay)
+                            elif yayKeyyay == "launchFlags":
+                                yayIntentyay.addFlags(context.arg(int(yayValueyay), obj_type="int"))
+                            elif yayKeyyay == "package":
+                                yayIntentyay.setPackage(yayValueyay)
+                            elif yayKeyyay == "component":
+
+                                yayTempIntyay = len(yayUriArryay)
+                                while yayTempIntyay != 0:
+                                    yayTempKeyyay = yayUriArryay[yayTempIntyay - 1].split("=")[0]
+                                    yayTempValueyay = yayUriArryay[yayTempIntyay - 1].split("=")[1]
+                                    if yayTempKeyyay == "package":
+                                        yayComponentyay = context.new("android.content.ComponentName", yayTempValueyay, yayValueyay)
+                                        yayIntentyay.setComponent(yayComponentyay)
+                                    yayTempIntyay = yayTempIntyay - 1
+
+                            elif yayKeyyay == "scheme":
+                                yayDatayay = yayValueyay + "://" + yayDatayay
+                            elif yayKeyyay == "sourceBounds":
+                                yayIntentyay.setSourceBounds(yayRectClassyay.unflattenFromString(yayValueyay))
+                            # extras
+                            elif yayKeyyay == "S.":
+                                yayExtrasyay.putString(yayKeyyay[2:], context.arg(str(yayValueyay), obj_type="string"))
+                            elif yayKeyyay == "B.":
+                                yayExtrasyay.putBoolean(yayKeyyay[2:], context.arg(yayValueyay.lower().startswith("t"), obj_type="boolean"))
+                            elif yayKeyyay == "b.":
+                                yayExtrasyay.putByte(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="byte"))
+                            elif yayKeyyay == "c.":
+                                yayExtrasyay.putChar(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="char"))
+                            elif yayKeyyay == "d.":
+                                yayExtrasyay.putDouble(yayKeyyay[2:], context.arg(float(yayValueyay), obj_type="double"))
+                            elif yayKeyyay == "i.":
+                                yayExtrasyay.putInt(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="int"))
+                            elif yayKeyyay == "f.":
+                                yayExtrasyay.putFloat(yayKeyyay[2:], context.arg(float(yayValueyay), obj_type="float"))
+                            elif yayKeyyay == "l.":
+                                yayExtrasyay.putLong(yayKeyyay[2:], context.arg(long(yayValueyay), obj_type="long"))
+                            elif yayKeyyay == "s.":
+                                yayExtrasyay.putShort(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="short"))
+
+                            yayIntyay = yayIntyay - 1
+
+                        if yayDatayay:
+                            yayIntentyay.setData(yayUriClassyay.parse(yayDatayay))
+
+                        if yayExtrasyay:
+                            yayIntentyay.putExtras(yayExtrasyay)
+
+                    extras.putParcelable(extra[1], yayIntentyay)
                 else:
-                    extras.putParcelable(extra[1], extra[2])
+                    extras.putParcelable(extra[1], yayExtrayay)
 
             intent.putExtras(extras)
             
