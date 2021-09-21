@@ -477,7 +477,12 @@ optional arguments:
                         else:
                             yayExtrasyay.append(yayKeyyay[2:])
 
-                    extras.putSerializable(extra[1], yayExtrasyay)
+                        yayIntyay = yayIntyay - 1
+
+                    if len(yayExtrasyay) == 1:
+                        extras.putSerializable(extra[1], yayExtrasyay[0])
+                    else:
+                        extras.putSerializable(extra[1], yayExtrasyay)
                     
                 elif extra[0] == "parcelable":
 
