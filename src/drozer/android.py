@@ -434,6 +434,53 @@ optional arguments:
                     extras.putByteArray(extra[1],wrapper.toByteArray())
                 elif extra[0] == "string":
                     extras.putString(extra[1], extra[2])
+                    
+                elif extra[0] == "bundle":
+                    yayExtrasyay = context.new("android.os.Bundle")
+                    yayUriArryay = extra[2].split(";")
+                    yayIntyay = len(yayUriArryay)
+                    while yayIntyay != 0:
+                        yayKeyyay = yayUriArryay[yayIntyay - 1].split("=")[0]
+                        yayValueyay = yayUriArryay[yayIntyay - 1].split("=")[1]
+                        if yayKeyyay.startswith("S."):
+                            yayExtrasyay.putString(yayKeyyay[2:], context.arg(str(yayValueyay), obj_type="string"))
+                        elif yayKeyyay.startswith("B."):
+                            yayExtrasyay.putBoolean(yayKeyyay[2:], context.arg(yayValueyay.lower().startswith("t"), obj_type="boolean"))
+                        elif yayKeyyay.startswith("b."):
+                            yayExtrasyay.putByte(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="byte"))
+                        elif yayKeyyay.startswith("c."):
+                            yayExtrasyay.putChar(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="char"))
+                        elif yayKeyyay.startswith("d."):
+                            yayExtrasyay.putDouble(yayKeyyay[2:], context.arg(float(yayValueyay), obj_type="double"))
+                        elif yayKeyyay.startswith("i."):
+                            yayExtrasyay.putInt(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="int"))
+                        elif yayKeyyay.startswith("f."):
+                            yayExtrasyay.putFloat(yayKeyyay[2:], context.arg(float(yayValueyay), obj_type="float"))
+                        elif yayKeyyay.startswith("l."):
+                            yayExtrasyay.putLong(yayKeyyay[2:], context.arg(long(yayValueyay), obj_type="long"))
+                        elif yayKeyyay.startswith("s."):
+                            yayExtrasyay.putShort(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="short"))
+
+                        yayIntyay = yayIntyay - 1
+
+                    extras.putBundle(extra[1], yayExtrasyay)
+
+                elif extra[0] == "serializable":
+                    yaySerializableArryay = extra[2].split(";")
+                    yayExtrasyay = []
+                    yayIntyay = len(yayUriArryay)
+                    while yayIntyay != 0:
+                        yayKeyyay = yaySerializableArryay[yayIntyay - 1].split("=")[0]
+                        yayValueyay = yaySerializableArryay[yayIntyay - 1].split("=")[1]
+                        if yayKeyyay.startswith("S."):
+                            yayExtrasyay.append(str(yayKeyyay[2:]))
+                        elif yayKeyyay.startswith("i."):
+                            yayExtrasyay.append(int(yayKeyyay[2:]))
+                        else:
+                            yayExtrasyay.append(yayKeyyay[2:])
+
+                    extras.putSerializable(extra[1], yayExtrasyay)
+                    
                 elif extra[0] == "parcelable":
 
                     yayUriClassyay = context.klass("android.net.Uri")
