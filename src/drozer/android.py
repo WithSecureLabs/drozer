@@ -468,7 +468,7 @@ optional arguments:
                 elif extra[0] == "serializable":
                     yaySerializableArryay = extra[2].split(";")
                     yayExtrasyay = []
-                    yayIntyay = len(yayUriArryay)
+                    yayIntyay = len(yaySerializableArryay)
                     while yayIntyay != 0:
                         yayKeyyay = yaySerializableArryay[yayIntyay - 1].split("=")[0]
                         yayValueyay = yaySerializableArryay[yayIntyay - 1].split("=")[1]
