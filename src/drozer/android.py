@@ -470,12 +470,10 @@ optional arguments:
                     yayExtrasyay = []
                     yayIntyay = len(yaySerializableArryay)
                     while yayIntyay != 0:
-                        yayKeyyay = yaySerializableArryay[yayIntyay - 1].split("=")[0]
-                        yayValueyay = yaySerializableArryay[yayIntyay - 1].split("=")[1]
-                        if yayKeyyay.startswith("S."):
-                            yayExtrasyay.append(str(yayKeyyay[2:]))
-                        elif yayKeyyay.startswith("i."):
-                            yayExtrasyay.append(int(yayKeyyay[2:]))
+                        if yaySerializableArryay[yayIntyay - 1].startswith("S."):
+                            yayExtrasyay.append(str(yaySerializableArryay[yayIntyay - 1][2:]))
+                        elif yaySerializableArryay[yayIntyay - 1].startswith("i."):
+                            yayExtrasyay.append(int(yaySerializableArryay[yayIntyay - 1][2:]))
                         else:
                             yayExtrasyay.append(yayKeyyay[2:])
 
