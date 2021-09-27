@@ -493,10 +493,13 @@ optional arguments:
 
                     if extra[2].lower().startswith("content://"): # content:// URI
                         yayExtrayay = yayUriClassyay.parse(extra[2])
+                        extras.putParcelable(extra[1], yayExtrayay)
                     elif extra[2].lower().startswith("http://"): # http:// URI
                         yayExtrayay = yayUriClassyay.parse(extra[2])
+                        extras.putParcelable(extra[1], yayExtrayay)
                     elif extra[2].lower().startswith("https://"): # https:// uri
                         yayExtrayay = yayUriClassyay.parse(extra[2])
+                        extras.putParcelable(extra[1], yayExtrayay)
                     elif extra[2].lower().startswith("intent://"): # intent:// intent
                         yayDatayay = extra[2][9:].split("#")[0]
                         if not yayDatayay:
@@ -561,8 +564,7 @@ optional arguments:
 
                         if yayExtrasyay:
                             yayIntentyay.putExtras(yayExtrasyay)
-
-                    extras.putParcelable(extra[1], yayIntentyay)
+                        extras.putParcelable(extra[1], yayIntentyay)
                 else:
                     extras.putParcelable(extra[1], yayExtrayay)
 
