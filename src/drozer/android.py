@@ -483,15 +483,23 @@ optional arguments:
                         extras.putSerializable(extra[1], yayExtrasyay[0])
                     else:
                         extras.putSerializable(extra[1], yayExtrasyay)
+                        
+                elif extra[0] == "parcelablearraylist": # currently only supports URIs
+                    yayListyay = context.new("java.util.ArrayList")
+                    yayUriClassyay = context.klass("android.net.Uri")
+                    yayListyay.add(yayUriClassyay.parse(extra[2]))
+                    extras.putParcelableArrayList("android.intent.extra.STREAM", yayListyay)
                     
                 elif extra[0] == "parcelable":
-
                     yayUriClassyay = context.klass("android.net.Uri")
                     yayIntentyay = context.new("android.content.Intent")
                     yayRectClassyay = context.klass("android.graphics.Rect")
                     yayExtrasyay = context.new("android.os.Bundle")
 
                     if extra[2].lower().startswith("content://"): # content:// URI
+                        yayExtrayay = yayUriClassyay.parse(extra[2])
+                        extras.putParcelable(extra[1], yayExtrayay)
+                    if extra[2].lower().startswith("file://"): # file:// URI
                         yayExtrayay = yayUriClassyay.parse(extra[2])
                         extras.putParcelable(extra[1], yayExtrayay)
                     elif extra[2].lower().startswith("http://"): # http:// URI
@@ -556,7 +564,11 @@ optional arguments:
                                 yayExtrasyay.putLong(yayKeyyay[2:], context.arg(long(yayValueyay), obj_type="long"))
                             elif yayKeyyay.startswith("s."):
                                 yayExtrasyay.putShort(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="short"))
-
+                            elif yayKeyyay.startswith("p."):
+                                yayListyay = context.new("java.util.ArrayList")
+                                yayListyay.add(yayUriClassyay.parse(yayValueyay))
+                                yayExtrasyay.putParcelableArrayList(yayKeyyay[2:], yayListyay)
+                                
                             yayIntyay = yayIntyay - 1
 
                         if yayDatayay:
@@ -564,6 +576,7 @@ optional arguments:
 
                         if yayExtrasyay:
                             yayIntentyay.putExtras(yayExtrasyay)
+
                         extras.putParcelable(extra[1], yayIntentyay)
                 else:
                     extras.putParcelable(extra[1], yayExtrayay)
