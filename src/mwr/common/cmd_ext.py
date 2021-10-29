@@ -1,5 +1,7 @@
 import cmd
 import os
+from platform import platform
+
 try:
     import readline
 except ImportError:
@@ -272,7 +274,14 @@ class Cmd(cmd.Cmd):
             self.__history_stack.append(history_file)
             readline.clear_history()
             if history_file != None and os.path.exists(history_file):
-                readline.read_history_file(history_file)
+                try:
+                    # In macOS, this line causes a `[Errno 1] Operation not permitted` if there is a `~/.drozer_history`
+                    readline.read_history_file(history_file)
+                except IOError as e:
+                    if "darwin" in platform().lower()  and str(e).strip() == "[Errno 1] Operation not permitted":
+                        print "Could not access the history file..."
+                    else:
+                        raise e
                 
             readline.parse_and_bind(self.completekey + ": complete")
     
