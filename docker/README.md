@@ -13,27 +13,27 @@ Alternatively, use the pre-built Docker container at <pending>:
 `https://hub.docker.com/r/fsecurelabs/drozer`
 
 # Run and Connect
+  
+## Option 1: connect to the phone via network
 
 First, obtain a shell into the container:
 
-`docker run -it fsecurelabs/drozer`
+docker run -it fsecurelabs/drozer_docker
 
 Then run the Drozer command to connect to the phone:
 
-`drozer console connect --server <phone IP address>`
+drozer console connect --server <phone IP address>
 
-Notes on `phone IP address>`: For an real Android device, the phone and the host machine should be on the same LAN network, and an explicit LAN IP address of the phone should be used, for example
+## Option 2: connect to the phone via USB
 
-`drozer console connect --server 192.168.7.70`
-  
-However, for a virtual device, say an Android emulator, port-forwarding must be created and the correct "IP address" must be used in order to successfully connect the Drozer client running in docker to the Drozer Server listening on port 31415(default) of the Android emulator. Specifically, 
+First, forward port 31415 to the phone via ADB:
 
-- Set up port forwarding
+adb forward tcp:31415 tcp:31415
 
-`adb forward tcp:31415 tcp:31415`
+Next, obtain a shell into the container while adding an address to the container's Hosts file:
 
-- Connect to drozer agent
+docker run -it --add-host host.docker.internal:host-gateway fsecurelabs/drozer_docker
 
-`drozer console connect --server host.docker.internal`
+Finally, connect to drozer:
 
-for more details about [How to access host port from docker container](https://stackoverflow.com/questions/31324981/how-to-access-host-port-from-docker-container).
+drozer console connect --server host.docker.internal
