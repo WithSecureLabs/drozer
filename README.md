@@ -4,7 +4,7 @@
 
 ## NOTE
 
-We would like to formely announce that F-Secure has stopped further development of the drozer tool. With the amount of testing tools and techniques that have been developed since drozer's inception, it would be near impossible to incorporate everything into one tool.
+We would like to formally announce that F-Secure has stopped further development of the drozer tool. With the amount of testing tools and techniques that have been developed since drozer's inception, it would be near impossible to incorporate everything into one tool.
 
 However, we still think drozer is a good tool for simulating a rogue application. A penetration tester does not have to develop an app with custom code to interface with a specific content provider. Instead, drozer can be used with little to no programming experience required to show the impact of letting certain components be exported on a device.
 
