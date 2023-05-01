@@ -18,7 +18,7 @@ Alternatively, use the pre-built Docker container at <pending>:
 
 First, obtain a shell into the container:
 
-`docker run -it fsecurelabs/drozer_docker`
+`docker run -it fsecurelabs/drozer`
 
 Then run the Drozer command to connect to the phone:
 
@@ -32,7 +32,7 @@ First, forward port 31415 to the phone via ADB:
 
 Next, obtain a shell into the container while adding an address to the container's Hosts file:
 
-`docker run -it --add-host host.docker.internal:host-gateway fsecurelabs/drozer_docker`
+`docker run -it --add-host host.docker.internal:host-gateway fsecurelabs/drozer`
 
 Finally, connect to drozer:
 
