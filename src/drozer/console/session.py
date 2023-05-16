@@ -696,7 +696,7 @@ class Session(cmd.Cmd):
         print "           .,sisandprotectorandroids+."
         print "         ..nemesisandprotectorandroidsn:."
         print "        .emesisandprotectorandroidsnemes.."
-        print "      ..isandp,..,rotectorandro,..,idsnem."
+        print "      ..isandp,..,rotecyayandro,..,idsnem."
         print "      .isisandp..rotectorandroid..snemisis."
         print "      ,andprotectorandroidsnemisisandprotec."
         print "     .torandroidsnemesisandprotectorandroid."
