@@ -257,7 +257,7 @@ class Intent(object):
                 --data-uri http://www.google.com
                 --flags ACTIVITY_NEW_TASK
 
-Last Modified: 2012-11-06
+Last Modified: 2021-09-20
 Credit: MWR InfoSecurity (@mwrlabs)
 License: MWR Code License
 
@@ -434,8 +434,152 @@ optional arguments:
                     extras.putByteArray(extra[1],wrapper.toByteArray())
                 elif extra[0] == "string":
                     extras.putString(extra[1], extra[2])
+                    
+                elif extra[0] == "bundle":
+                    yayExtrasyay = context.new("android.os.Bundle")
+                    yayUriArryay = extra[2].split(";")
+                    yayIntyay = len(yayUriArryay)
+                    while yayIntyay != 0:
+                        yayKeyyay = yayUriArryay[yayIntyay - 1].split("=")[0]
+                        yayValueyay = yayUriArryay[yayIntyay - 1].split("=")[1]
+                        if yayKeyyay.startswith("S."):
+                            yayExtrasyay.putString(yayKeyyay[2:], context.arg(str(yayValueyay), obj_type="string"))
+                        elif yayKeyyay.startswith("B."):
+                            yayExtrasyay.putBoolean(yayKeyyay[2:], context.arg(yayValueyay.lower().startswith("t"), obj_type="boolean"))
+                        elif yayKeyyay.startswith("b."):
+                            yayExtrasyay.putByte(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="byte"))
+                        elif yayKeyyay.startswith("c."):
+                            yayExtrasyay.putChar(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="char"))
+                        elif yayKeyyay.startswith("d."):
+                            yayExtrasyay.putDouble(yayKeyyay[2:], context.arg(float(yayValueyay), obj_type="double"))
+                        elif yayKeyyay.startswith("i."):
+                            yayExtrasyay.putInt(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="int"))
+                        elif yayKeyyay.startswith("f."):
+                            yayExtrasyay.putFloat(yayKeyyay[2:], context.arg(float(yayValueyay), obj_type="float"))
+                        elif yayKeyyay.startswith("l."):
+                            yayExtrasyay.putLong(yayKeyyay[2:], context.arg(long(yayValueyay), obj_type="long"))
+                        elif yayKeyyay.startswith("s."):
+                            yayExtrasyay.putShort(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="short"))
+
+                        yayIntyay = yayIntyay - 1
+
+                    extras.putBundle(extra[1], yayExtrasyay)
+
+                elif extra[0] == "serializable":
+                    yaySerializableArryay = extra[2].split(";")
+                    yayExtrasyay = []
+                    yayIntyay = len(yaySerializableArryay)
+                    while yayIntyay != 0:
+                        if yaySerializableArryay[yayIntyay - 1].startswith("S."):
+                            yayExtrasyay.append(str(yaySerializableArryay[yayIntyay - 1][2:]))
+                        elif yaySerializableArryay[yayIntyay - 1].startswith("i."):
+                            yayExtrasyay.append(int(yaySerializableArryay[yayIntyay - 1][2:]))
+                        else:
+                            yayExtrasyay.append(yayKeyyay[2:])
+
+                        yayIntyay = yayIntyay - 1
+
+                    if len(yayExtrasyay) == 1:
+                        extras.putSerializable(extra[1], yayExtrasyay[0])
+                    else:
+                        extras.putSerializable(extra[1], yayExtrasyay)
+                        
+                elif extra[0] == "parcelablearraylist": # currently only supports URIs
+                    yayListyay = context.new("java.util.ArrayList")
+                    yayUriClassyay = context.klass("android.net.Uri")
+                    yayListyay.add(yayUriClassyay.parse(extra[2]))
+                    extras.putParcelableArrayList("android.intent.extra.STREAM", yayListyay)
+                    
+                elif extra[0] == "parcelable":
+                    yayUriClassyay = context.klass("android.net.Uri")
+                    yayIntentyay = context.new("android.content.Intent")
+                    yayRectClassyay = context.klass("android.graphics.Rect")
+                    yayExtrasyay = context.new("android.os.Bundle")
+
+                    if extra[2].lower().startswith("content://"): # content:// URI
+                        yayExtrayay = yayUriClassyay.parse(extra[2])
+                        extras.putParcelable(extra[1], yayExtrayay)
+                    if extra[2].lower().startswith("file://"): # file:// URI
+                        yayExtrayay = yayUriClassyay.parse(extra[2])
+                        extras.putParcelable(extra[1], yayExtrayay)
+                    elif extra[2].lower().startswith("http://"): # http:// URI
+                        yayExtrayay = yayUriClassyay.parse(extra[2])
+                        extras.putParcelable(extra[1], yayExtrayay)
+                    elif extra[2].lower().startswith("https://"): # https:// uri
+                        yayExtrayay = yayUriClassyay.parse(extra[2])
+                        extras.putParcelable(extra[1], yayExtrayay)
+                    elif extra[2].lower().startswith("intent://"): # intent:// intent
+                        yayDatayay = extra[2][9:].split("#")[0]
+                        if not yayDatayay:
+                            yayDatayay = ""
+                        yayUriArryay = extra[2][9:].split("#")[1].split(";")
+                        yayIntyay = len(yayUriArryay)
+                        while yayIntyay != 0:
+                            yayKeyyay = yayUriArryay[yayIntyay - 1].split("=")[0]
+                            yayValueyay = yayUriArryay[yayIntyay - 1].split("=")[1]
+                            # main stuff
+                            if yayKeyyay == "action":
+                                yayIntentyay.setAction(yayValueyay)
+                            elif yayKeyyay == "category":
+                                yayIntentyay.addCategory(yayValueyay)
+                            elif yayKeyyay == "type":
+                                yayIntentyay.setType(yayValueyay)
+                            elif yayKeyyay == "identifier":
+                                yayIntentyay.setIdentifier(yayValueyay)
+                            elif yayKeyyay == "launchFlags":
+                                yayIntentyay.addFlags(context.arg(int(yayValueyay), obj_type="int"))
+                            elif yayKeyyay == "package":
+                                yayIntentyay.setPackage(yayValueyay)
+                            elif yayKeyyay == "component":
+
+                                yayTempIntyay = len(yayUriArryay)
+                                while yayTempIntyay != 0:
+                                    yayTempKeyyay = yayUriArryay[yayTempIntyay - 1].split("=")[0]
+                                    yayTempValueyay = yayUriArryay[yayTempIntyay - 1].split("=")[1]
+                                    if yayTempKeyyay == "package":
+                                        yayComponentyay = context.new("android.content.ComponentName", yayTempValueyay, yayValueyay)
+                                        yayIntentyay.setComponent(yayComponentyay)
+                                    yayTempIntyay = yayTempIntyay - 1
+
+                            elif yayKeyyay == "scheme":
+                                yayDatayay = yayValueyay + "://" + yayDatayay
+                            elif yayKeyyay == "sourceBounds":
+                                yayIntentyay.setSourceBounds(yayRectClassyay.unflattenFromString(yayValueyay))
+                            # extras
+                            elif yayKeyyay.startswith("S."):
+                                yayExtrasyay.putString(yayKeyyay[2:], context.arg(str(yayValueyay), obj_type="string"))
+                            elif yayKeyyay.startswith("B."):
+                                yayExtrasyay.putBoolean(yayKeyyay[2:], context.arg(yayValueyay.lower().startswith("t"), obj_type="boolean"))
+                            elif yayKeyyay.startswith("b."):
+                                yayExtrasyay.putByte(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="byte"))
+                            elif yayKeyyay.startswith("c."):
+                                yayExtrasyay.putChar(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="char"))
+                            elif yayKeyyay.startswith("d."):
+                                yayExtrasyay.putDouble(yayKeyyay[2:], context.arg(float(yayValueyay), obj_type="double"))
+                            elif yayKeyyay.startswith("i."):
+                                yayExtrasyay.putInt(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="int"))
+                            elif yayKeyyay.startswith("f."):
+                                yayExtrasyay.putFloat(yayKeyyay[2:], context.arg(float(yayValueyay), obj_type="float"))
+                            elif yayKeyyay.startswith("l."):
+                                yayExtrasyay.putLong(yayKeyyay[2:], context.arg(long(yayValueyay), obj_type="long"))
+                            elif yayKeyyay.startswith("s."):
+                                yayExtrasyay.putShort(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="short"))
+                            elif yayKeyyay.startswith("p."):
+                                yayListyay = context.new("java.util.ArrayList")
+                                yayListyay.add(yayUriClassyay.parse(yayValueyay))
+                                yayExtrasyay.putParcelableArrayList(yayKeyyay[2:], yayListyay)
+                                
+                            yayIntyay = yayIntyay - 1
+
+                        if yayDatayay:
+                            yayIntentyay.setData(yayUriClassyay.parse(yayDatayay))
+
+                        if yayExtrasyay:
+                            yayIntentyay.putExtras(yayExtrasyay)
+
+                        extras.putParcelable(extra[1], yayIntentyay)
                 else:
-                    extras.putParcelable(extra[1], extra[2])
+                    extras.putParcelable(extra[1], yayExtrayay)
 
             intent.putExtras(extras)
             

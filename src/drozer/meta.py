@@ -36,7 +36,7 @@ contact = "drozer@mwrinfosecurity.com"
 description = "The Leading Android Security Testing Framework"
 license = "BSD (3 clause)"
 keywords = "drozer android security framework"
-url = "http://mwr.to/drozer"
+url = "https://labs.f-secure.com/tools/drozer/"
 
 long_description = '''
 drozer (formerly Mercury) is the leading security testing framework for Android.
@@ -45,7 +45,7 @@ drozer allows you to search for security vulnerabilities in apps and devices by 
 
 drozer provides tools to help you use, share and understand public Android exploits. It helps you to deploy a drozer Agent to a device through exploitation or social engineering. Using weasel (MWR's advanced exploitation payload) drozer is able to maximise the permissions available to it by installing a full agent, injecting a limited agent into a running process, or connecting a reverse shell to act as a Remote Access Tool (RAT).
 
-drozer is open source software, maintained by MWR InfoSecurity, and can be downloaded from: http://mwr.to/drozer
+drozer is open source software, maintained by MWR InfoSecurity, and can be downloaded from: https://labs.f-secure.com/tools/drozer/
 '''
 
 def latest_version():

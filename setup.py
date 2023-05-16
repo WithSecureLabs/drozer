@@ -44,22 +44,22 @@ def get_executable_scripts():
 
 def get_pwd():
 	pwd = ''
-	
-	if platform == "linux" or platform == "linux2":
+
+	if platform == "linux" or platform == "linux2" or platform == "darwin":
 		pwd = 'src/drozer'
 	elif platform == "win32":
 		pwd = 'src\\drozer'
-	
+
 	return pwd
 
 def clear_apks():
 	pwd = get_pwd()
-	
-	if platform == 'linux' or platform == 'linux2':
+
+	if platform == 'linux' or platform == 'linux2' or platform == 'darwin':
 		pwd += '/modules'
 	elif platform == 'win32':
 		pwd += '\\modules'
-	
+
 	for root, dirnames, filenames in os.walk(pwd):
 		for filename in filenames:
 			if (fnmatch.fnmatch(filename, "*.class") or fnmatch.fnmatch(filename, "*.apk")):
@@ -72,7 +72,7 @@ def make_apks():
 	lib = os.path.dirname(os.path.realpath(__file__))
 	dx =''
 
-	if platform == 'linux' or 'linux2':
+	if platform == 'linux' or 'linux2' or 'darwin':
 		pwd += '/modules'
 		lib += '/src/drozer/lib/'
 		dx = 'dx'
@@ -95,7 +95,7 @@ def make_apks():
 				m = re.search('(.+?)(\.[^.]*$|$)',filename)
 				dx_cmd = [lib+dx, '--dex', '--output='+m.group(1)+'.apk',m.group(1)+'*.class']
 
-				if platform == "linux2" or platform == "linux":
+				if platform == "linux2" or platform == "linux" or platform == "darwin":
 					subprocess.call(' '.join(javac_cmd),shell=True,cwd=root)
 
 					subprocess.call(' '.join(dx_cmd),shell=True,cwd=root)
@@ -103,7 +103,7 @@ def make_apks():
 					subprocess.call(javac_cmd,shell=True,cwd=root)
 
 					subprocess.call(dx_cmd,shell=True,cwd=root)
-				
+
 def get_package_data():
 	data = {"":[]}
 	pwd = get_pwd()
@@ -116,6 +116,16 @@ def get_package_data():
 			if not (fnmatch.fnmatch(filename, "*.class") or fnmatch.fnmatch(filename, "*.pyc")):
 				data[""].append(os.path.join(root, filename)[11:])
 	return data
+
+def get_version():
+	version_cmd = ['git', 'describe', '--tags']
+	
+	if platform in ("linux2", "linux"):
+		version_cmd = ' '.join(version_cmd)
+	elif platform not in ("win32", "darwin"):
+		return
+	
+	return subprocess.check_output(version_cmd).split('-', 1)[0]
 
 setuptools.setup(
   name = meta.name,

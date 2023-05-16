@@ -507,6 +507,25 @@ class Session(cmd.Cmd):
           integer
           short
           string
+          parcelable(sort of)
+
+        When crafting a parcelable intent extra, the following data types are fully supported:
+
+          Content provider URIs
+          Website URIs
+          Intents
+
+        For Content provider URIs, use the standard 'content://' format of URIs
+
+          --extra parcelable yaycontentyay content://settings/secure
+
+        For Website URIs, use either 'http://' or 'https://' format of URIs:
+
+          --extra parcelable yaywebsiteyay http://www.f-secure.com
+
+        For Intents, it uses a slightly modified version of the 'intent://' format of URI:
+
+          --extra parcelable yayintentyay intent://host.com?queryparameter=value#package=targetPackage;component=targetComponent;action=action;category=category;type=type;identifier=identifier;launchFlags=launchFlags;scheme=scheme;sourceBounds=sourceBounds;S.extraString=value;B.extraBoolean=value;b.extraByte=value;c.extraChar=value;d.extraDouble=value;i.extraInt=value;f.extraFloat=value;l.extraLong=value;s.extraShort=value;
         
         """
         
@@ -559,7 +578,7 @@ class Session(cmd.Cmd):
                 if meta.version > latest:
                     print "It seems that you are running a drozer pre-release. Brilliant!\n\nPlease send any bugs, feature requests or other feedback to our Github project:\nhttp://github.com/mwrlabs/drozer.\n\nYour contributions help us to make drozer awesome.\n"
                 elif meta.version < latest:
-                    print "It seems that you are running an old version of drozer. drozer v%s was\nreleased on %s. We suggest that you update your copy to make sure that\nyou have the latest features and fixes.\n\nTo download the latest drozer visit: http://mwr.to/drozer/\n" % (latest, latest.date)
+                    print "It seems that you are running an old version of drozer. drozer v%s was\nreleased on %s. We suggest that you update your copy to make sure that\nyou have the latest features and fixes.\n\nTo download the latest drozer visit: https://labs.f-secure.com/tools/drozer/\n" % (latest, latest.date)
         except Exception, e:
             pass #TODO figure out what this exception is and handle appropriately (exp. IOError)
 
