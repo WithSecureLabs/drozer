@@ -4,14 +4,14 @@
 
 ## NOTE
 
-We would like to formally announce that F-Secure has stopped further development of the drozer tool. With the amount of testing tools and techniques that have been developed since drozer's inception, it would be near impossible to incorporate everything into one tool.
+We would like to formally announce that WithSecure has stopped further development of the drozer tool. With the amount of testing tools and techniques that have been developed since drozer's inception, it would be near impossible to incorporate everything into one tool.
 
 However, we still think drozer is a good tool for simulating a rogue application. A penetration tester does not have to develop an app with custom code to interface with a specific content provider. Instead, drozer can be used with little to no programming experience required to show the impact of letting certain components be exported on a device.
 
 To help with making sure drozer can be ran on modern systems, a Docker container was created that has a working build of Drozer.
 
 * The Docker container can be found here: https://hub.docker.com/r/fsecurelabs/drozer
-* Instructions on building your own Docker container can be found here: https://github.com/FSecureLABS/drozer/tree/develop/docker
+* Instructions on building your own Docker container can be found here: https://github.com/WithSecureLabs/drozer/tree/develop/docker
 
 ## ----------------------------------------------------------------
 
@@ -19,26 +19,9 @@ drozer (formerly Mercury) is the leading security testing framework for Android.
 
 drozer allows you to search for security vulnerabilities in apps and devices by assuming the role of an app and interacting with the Dalvik VM, other apps' IPC endpoints and the underlying OS.
 
-drozer provides tools to help you use, share and understand public Android exploits. It helps you to deploy a drozer Agent to a device through exploitation or social engineering. Using weasel (MWR's advanced exploitation payload) drozer is able to maximise the permissions available to it by installing a full agent, injecting a limited agent into a running process, or connecting a reverse shell to act as a Remote Access Tool (RAT).
+drozer provides tools to help you use, share and understand public Android exploits. It helps you to deploy a drozer Agent to a device through exploitation or social engineering. Using weasel (WithSecure's advanced exploitation payload) drozer is able to maximise the permissions available to it by installing a full agent, injecting a limited agent into a running process, or connecting a reverse shell to act as a Remote Access Tool (RAT).
 
-drozer is open source software, maintained by MWR InfoSecurity, and can be downloaded from: [https://labs.f-secure.com/tools/drozer/](https://labs.f-secure.com/tools/drozer/)
-
-
-## Build Status
-
-### Linux / OSX
-
-#### Develop:
-
-[![Build Status](https://travis-ci.org/mwrlabs/drozer.svg?branch=develop)](https://travis-ci.org/mwrlabs/drozer)
-
-#### Master:
-
-[![Build Status](https://travis-ci.org/mwrlabs/drozer.svg?branch=master)](https://travis-ci.org/mwrlabs/drozer)
-
-### Windows
-
-[![Build status](https://ci.appveyor.com/api/projects/status/9d4f3qx2sn2yf8tm/branch/develop?svg=true)](https://ci.appveyor.com/project/HenryHoggard/drozer/branch/develop)
+drozer is open source software, maintained by WithSecure, and can be downloaded from: [https://labs.withsecure.com/tools/drozer/](https://labs.withsecure.com/tools/drozer/)
 
 ## Prerequisites
 
@@ -64,7 +47,7 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 ### Building Python wheel
 
 ```
-git clone https://github.com/FSecureLABS/drozer.git
+git clone https://github.com/WithSecureLabs/drozer.git
 cd drozer
 python setup.py bdist_wheel
 
@@ -78,7 +61,7 @@ sudo pip install dist/drozer-2.x.x-py2-none-any.whl
 
 ### Building for Debian/Ubuntu/Mint
 ```
-git clone https://github.com/FSecureLABS/drozer.git
+git clone https://github.com/WithSecureLabs/drozer.git
 cd drozer
 make deb
 ```
@@ -92,7 +75,7 @@ sudo dpkg -i drozer-2.x.x.deb
 ### Building for Redhat/Fedora/CentOS
 
 ```
-git clone https://github.com/FSecureLABS/drozer.git
+git clone https://github.com/WithSecureLabs/drozer.git
 cd drozer
 make rpm
 ```
@@ -107,7 +90,7 @@ sudo rpm -I drozer-2.x.x-1.noarch.rpm
 **NOTE: Windows Defender and other Antivirus software will flag drozer as malware (an exploitation tool without exploit code wouldn't be much fun!). In order to run drozer you would have to add an exception to Windows Defender and any antivirus software. Alternatively, we recommend running drozer in a Windows/Linux VM.**
 
 ```
-git clone https://github.com/FSecureLABS/drozer.git
+git clone https://github.com/WithSecureLabs/drozer.git
 cd drozer
 python.exe setup.py bdist_msi
 
@@ -142,7 +125,7 @@ With any [pacman wrapper](https://wiki.archlinux.org/index.php/AUR_helpers#Pacma
 
 Drozer can be installed using Android Debug Bridge (adb).
 
-Download the latest Drozer Agent [here](https://github.com/FSecureLABS/drozer/releases/download/2.3.4/drozer-agent-2.3.4.apk).
+Download the latest Drozer Agent [here](https://github.com/WithSecureLabs/drozer-agent/releases).
 
 `$ adb install drozer-agent-2.x.x.apk`
 
@@ -217,8 +200,6 @@ drozer is released under a 3-clause BSD License. See LICENSE for full details.
 
 drozer is Open Source software, made great by contributions from the community.
 
-For full source code, to report bugs, suggest features and contribute patches please see our Github project:
+For full source code, to report bugs, suggest features and contribute patches please see our Github project: https://github.com/WithSecureLabs/drozer
 
-  <https://github.com/FSecureLABS/drozer>
-
-Bug reports, feature requests, comments and questions can be submitted [here](https://github.com/FSecureLABS/drozer/issues).
+Bug reports, feature requests, comments and questions can be submitted [here](https://github.com/WithSecureLabs/drozer/issues).
