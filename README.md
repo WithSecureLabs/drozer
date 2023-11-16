@@ -10,7 +10,16 @@ drozer is a good tool for simulating a rogue application. A penetration tester d
 
 drozer is open source software, maintained by WithSecure, and can be downloaded from: [https://labs.withsecure.com/tools/drozer/](https://labs.withsecure.com/tools/drozer/)
 
-## Prerequisites
+## Docker Container
+
+To help with making sure drozer can be ran on modern systems, a Docker container was created that has a working build of Drozer. This is currently the recommended method of using Drozer on modern systems.
+
+* The Docker container and basic setup instructions can be found [here](https://hub.docker.com/r/withsecurelabs/drozer).
+* Instructions on building your own Docker container can be found [here](https://github.com/WithSecureLabs/drozer/tree/develop/docker).
+
+## Manual Building and Installation
+
+### Prerequisites
 
 1. [Python2.7](https://www.python.org/downloads/)
 
@@ -27,16 +36,6 @@ drozer is open source software, maintained by WithSecure, and can be downloaded 
 **Note: On Windows please ensure that the path to javac.exe is added to the PATH environment variable.**
 
 6. [Android Debug Bridge](https://developer.android.com/studio/releases/platform-tools.html)
-
-## Docker Container
-
-To help with making sure drozer can be ran on modern systems, a Docker container was created that has a working build of Drozer. This is currently the recommended method of using Drozer on modern systems.
-
-* The Docker container can be found [here](https://hub.docker.com/r/withsecurelabs/drozer).
-* Instructions on building your own Docker container can be found [here](https://github.com/WithSecureLabs/drozer/tree/develop/docker).
-
-
-## Manual Building and Installation
 
 ### Building Python wheel
 
