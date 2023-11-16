@@ -1,25 +1,12 @@
 # drozer
 
-## ----------------------------------------------------------------
-
-## NOTE
-
-We would like to formally announce that WithSecure has stopped further development of the drozer tool. With the amount of testing tools and techniques that have been developed since drozer's inception, it would be near impossible to incorporate everything into one tool.
-
-However, we still think drozer is a good tool for simulating a rogue application. A penetration tester does not have to develop an app with custom code to interface with a specific content provider. Instead, drozer can be used with little to no programming experience required to show the impact of letting certain components be exported on a device.
-
-To help with making sure drozer can be ran on modern systems, a Docker container was created that has a working build of Drozer.
-
-* The Docker container can be found here: https://hub.docker.com/r/fsecurelabs/drozer
-* Instructions on building your own Docker container can be found here: https://github.com/WithSecureLabs/drozer/tree/develop/docker
-
-## ----------------------------------------------------------------
-
 drozer (formerly Mercury) is the leading security testing framework for Android.
 
 drozer allows you to search for security vulnerabilities in apps and devices by assuming the role of an app and interacting with the Dalvik VM, other apps' IPC endpoints and the underlying OS.
 
 drozer provides tools to help you use, share and understand public Android exploits. It helps you to deploy a drozer Agent to a device through exploitation or social engineering. Using weasel (WithSecure's advanced exploitation payload) drozer is able to maximise the permissions available to it by installing a full agent, injecting a limited agent into a running process, or connecting a reverse shell to act as a Remote Access Tool (RAT).
+
+drozer is a good tool for simulating a rogue application. A penetration tester does not have to develop an app with custom code to interface with a specific content provider. Instead, drozer can be used with little to no programming experience required to show the impact of letting certain components be exported on a device.
 
 drozer is open source software, maintained by WithSecure, and can be downloaded from: [https://labs.withsecure.com/tools/drozer/](https://labs.withsecure.com/tools/drozer/)
 
@@ -41,8 +28,15 @@ drozer is open source software, maintained by WithSecure, and can be downloaded 
 
 6. [Android Debug Bridge](https://developer.android.com/studio/releases/platform-tools.html)
 
+## Docker Container
 
-## Installing
+To help with making sure drozer can be ran on modern systems, a Docker container was created that has a working build of Drozer. This is currently the recommended method of using Drozer on modern systems.
+
+* The Docker container can be found [here](https://hub.docker.com/r/withsecurelabs/drozer).
+* Instructions on building your own Docker container can be found [here](https://github.com/WithSecureLabs/drozer/tree/develop/docker).
+
+
+## Manual Building and Installation
 
 ### Building Python wheel
 
@@ -102,22 +96,6 @@ python.exe setup.py bdist_msi
 Run dist/drozer-2.x.x.win-x.msi 
 
 ```
-
-### Installing (Arch Linux/BlackArch)
-
-On BlackArch or any Arch-based linux distribution where BlackArch repository was enabled:
-
-`pacman -S drozer`
-
-[PKGBUILD](https://github.com/BlackArch/blackarch/blob/master/packages/drozer/PKGBUILD)
-
-### Installing (Arch Linux/AUR)
-
-With any [pacman wrapper](https://wiki.archlinux.org/index.php/AUR_helpers#Pacman_wrappers):
-
-`pikaur -S drozer`
-
-[PKGBUILD](https://aur.archlinux.org/packages/drozer/) (WARNING: out-of-date)
 
 ## Usage
 
@@ -199,7 +177,5 @@ drozer is released under a 3-clause BSD License. See LICENSE for full details.
 ## Contacting the Project
 
 drozer is Open Source software, made great by contributions from the community.
-
-For full source code, to report bugs, suggest features and contribute patches please see our Github project: https://github.com/WithSecureLabs/drozer
 
 Bug reports, feature requests, comments and questions can be submitted [here](https://github.com/WithSecureLabs/drozer/issues).
