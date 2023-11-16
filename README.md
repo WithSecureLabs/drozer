@@ -12,7 +12,7 @@ drozer is open source software, maintained by WithSecure, and can be downloaded 
 
 ## Docker Container
 
-To help with making sure drozer can be ran on modern systems, a Docker container was created that has a working build of Drozer. This is currently the recommended method of using Drozer on modern systems.
+To help with making sure drozer can be run on modern systems, a Docker container was created that has a working build of Drozer. This is currently the recommended method of using Drozer on modern systems.
 
 * The Docker container and basic setup instructions can be found [here](https://hub.docker.com/r/withsecurelabs/drozer).
 * Instructions on building your own Docker container can be found [here](https://github.com/WithSecureLabs/drozer/tree/develop/docker).
