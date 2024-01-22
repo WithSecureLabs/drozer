@@ -38,13 +38,13 @@ If network communications is restricted, `adb` port forwarding can be used to fo
 
 1. First, forward port 31415 to the phone via ADB: ```adb forward tcp:31415 tcp:31415```
 2. Ensure that the drozer agent is running on the target device, and that the embedded server has been started.
-3. Then, to run drozer and connect to the phone, run: ```docker run --add-host host.docker.internal:host-gateway -it withsecurelabs/drozer console connect --server host.docker.internal```
+3. Then, to run drozer and connect to the phone, run: ```docker run --net host -it withsecurelabs/drozer console connect --server localhost```
 
 If a system shell is required (for example, to inspect and retrieve any files downloaded by drozer), you can:
 1. First, forward port 31415 to the phone via ADB: ```adb forward tcp:31415 tcp:31415```
 2. Ensure that the drozer agent is running on the target device, and that the embedded server has been started.
-3. Obtain a shell into the container: ```docker run --add-host host.docker.internal:host-gateway -it --entrypoint sh withsecurelabs/drozer```
-4. Then run the drozer command to connect to the phone: ```drozer console connect --server host.docker.internal```
+3. Obtain a shell into the container: ```docker run --net host -it --entrypoint sh withsecurelabs/drozer```
+4. Then run the drozer command to connect to the phone: ```drozer console connect --server localhost```
 
 # Usage
 
