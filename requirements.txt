@@ -1,0 +1,8 @@
+python
+git
+android-tools
+python-protobuf
+python-pyopenssl
+python-twisted
+python-setuptools
+python-distro

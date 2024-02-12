@@ -1,0 +1,2 @@
+import import_conflict_resolver_test
+import module_base_test
