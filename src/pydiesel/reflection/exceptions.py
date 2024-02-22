@@ -1,4 +1,0 @@
-
-class ReflectionException(Exception):
-    pass
-    
