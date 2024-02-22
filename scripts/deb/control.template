@@ -1,0 +1,23 @@
+Source: drozer
+Section: misc
+Priority: optional
+Homepage: https://labs.mwrinfosecurity.com
+Package: drozer
+Architecture: all
+Installed-Size: <FILE_SIZE>
+Version: <VERSION>
+Maintainer: MWR Infosecurity
+Depends: bash (>= 2.05a-11)
+Description: The Leading Security Testing Framework for Android.
+ drozer enables you to search for security vulnerabilities in apps and devices by assuming the role of an app and interacting with the Dalvik VM, other apps’ IPC endpoints and the underlying OS.
+ drozer provides tools to help you use and share public Android exploits. It helps you to deploy a drozer agent by using weasel – MWR’s advanced exploitation payload.
+ For the latest drozer updates, follow @mwrdrozer.
+ .
+ drozer allows you to use dynamic analysis during an Android security assessment. By assuming the role of an Android app you can:
+   * find information about installed packages.
+   * interact with the 4 IPC endpoints – activities, broadcast receivers, content providers and services.
+   * use a proper shell to play with the underlying Linux OS (from the content of an unprivileged application).
+   * check an app’s attack surface, and search for known vulnerabilities.
+   * create new modules to share your latest findings on Android.
+ .
+ drozer’s remote exploitation features provide a unified framework for sharing Android payloads and exploits. It helps to reduce the time needed for vulnerability assessments and mobile red-teaming exercises, and includes the outcome of some of MWR’s cutting-edge research into advanced Android payloads and exploits.

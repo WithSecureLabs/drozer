@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>drozer - the Leading Android Security Testing Framework</title>
+		
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<link rel="icon" href="/favicon.png" type="image/x-icon" />
+		<link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+	
+		<style type="text/css">
+			html, body {
+				background-color: #394a58;
+				color: white;
+				font: normal 100%/1.25 'InterFace W15 Regular', Helvetica, Arial, Sans-Serif;
+				margin: 0;
+				padding: 0; }
+			a {
+				color: #e37222;
+				text-decoration: none; }
+			a:hover {
+				text-decoration: underline; }
+			body header h1 {
+				background: url(/drozer.png) top left no-repeat;
+				display: block;
+				height: 63px;
+				margin: 32px 0;
+				text-indent: -10000px;
+				width: 240px; }
+			body.mobile header h1 {
+				margin: 32px auto; }
+			body section#about {
+				margin-top: 60px;
+				text-align: center; }
+			body section#about p {
+				background: url(/labs.png) top left no-repeat;
+				height: 50px;
+				margin: 0 auto;
+				width: 160px; }
+			body section#about p a {
+				display: block;
+				height: 50px;
+				text-indent: -10000px;
+				width: 160px; }
+			body section#file-upload a.cancel,
+			body section#file-upload div.enable {
+				display: none; }
+			body.desktop header,
+			body.desktop section {
+				margin: 0 auto 20px;
+				width: 960px; }
+			body.mobile header {
+				text-align: center; }
+			body.mobile header,
+			body.mobile section {
+				margin: 0 20px 20px; }
+			body.desktop section#agent-download {
+				display: none; }
+			body.desktop section#file-upload,
+			body.desktop section#file-upload a.cancel,
+			body.desktop section#file-upload div.enable {
+				display: block; }
+			body.desktop section#file-upload form {
+				display: none; }
+			body.mobile.android section#agent-download {
+				display: block;
+				text-align: center; }
+			body.mobile section#agent-download a {
+				display: block; }
+			body.mobile section#file-upload {
+				display: none; }
+			
+			form fieldset {
+				border: 0;
+				margin: 0;
+				padding: 0; }
+			form fieldset legend {
+				display: none; }
+			form fieldset p {}
+			form fieldset ol {
+				list-style: none;
+				padding: 0; }
+			form fieldset ol li { }
+			form fieldset ol li label {
+				display: none; }
+			form fieldset ol li button {
+				border: 1px solid #394a58;
+				margin: 0 0 10px;
+				padding: 3px; }
+			form fieldset ol li input {
+				border: 1px solid #394a58;
+				margin: 0 0 10px;
+				padding: 3px;
+				width: 240px; }
+			form fieldset ol li textarea {
+				border: 1px solid #394a58;
+				height: 120px;
+				margin: 0 0 10px;
+				padding: 3px;
+				width: 240px; }
+			form fieldset ol li a.cancel,
+			form fieldset ol li button {
+				display: block;
+				float: left;
+				font-size: 1em;
+				margin: 0;
+				padding: 3px; }
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1>drozer</h1>
+		</header>
+		<section id="introduction">
+			<p>drozer allows you to assume the role of an Android app, and to interact with other apps, through Android’s Inter-Process Communication (IPC) mechanism, and the underlying operating system.</p>
+			<p>drozer also helps to you to remotely exploit an Android device, by building malicious files or web pages that exploit known vulnerabilities to install drozer as a remote administration tool. Depending on the permissions granted to the vulnerable app, drozer can install a full agent, inject a limited agent into the process or spawn a reverse shell.</p>
+			<p>drozer is open source software, released under a BSD license and maintained by MWR InfoSecurity.</p>
+		</section>
+		<section id="agent-download">
+			<a href="/default-agent.apk">Download Agent</a>
+		</section>
+		<section id="file-upload">
+			<div class="enable">
+				<a href="#">Upload a Resource</a>
+			</div>
+			<form id="upload">
+				<fieldset>
+					<legend>Upload a Resource</legend>
+					<p>Upload a resource to the drozer Server, to be available over the HTTP and bytestream protocols.</p>
+					<ol>
+						<li><label for="resource">Resource</label> <input type="text" name="resource" id="resource" placeholder="/resource" /></li>
+						<li><label for="content">Content</label> <textarea name="magic" id="content" placeholder="Resource Content"></textarea></li>
+						<li><label for="magic">Magic</label> <input type="text" name="magic" id="magic" placeholder="Magic Byte" /></li>
+						<li>
+							<button type="submit">Create File</button>
+							<a href="#" class="cancel">Cancel</a>
+						</li>
+					</ol>
+				</fieldset>
+			</form>
+		</section>
+		<section id="about">
+			<p><a href="http://labs.mwrinfosecurity.com" target="_blank">drozer by MWR Labs</a></p>
+		</section>
+
+		<script src="/jquery.js"></script>
+		<script type="text/javascript">
+			var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1; //&& ua.indexOf("mobile");
+			
+			var UploadForm = function(e) {
+				var upload_form = {
+					e: e,
+					
+					getData: function() { return $("textarea#content", this.e).val(); },
+					getMagic: function() { return $("input#magic", this.e).val(); },
+					getResource: function() { return $("input#resource", this.e).val(); },
+					reset: function() {
+						this.setData("");
+						this.setMagic("");
+						this.setResource("");
+					},
+					setData: function() { $("textarea#content", this.e).val(""); },
+					setMagic: function() { $("input#magic", this.e).val(""); },
+					setResource: function() { $("input#resource", this.e).val(""); },
+					upload: function(resource, data, magic) {
+						$.ajax({
+							contentType: "text/plain",
+							context: this,
+							data: this.getData(),
+							processData: false,
+							type: "post",
+							url: this.getResource(),
+							
+							beforeSend: function(r) {
+								if(this.getMagic() != "")
+									r.setRequestHeader("X-Drozer-Magic", this.getMagic()); },
+							success: function(r) {
+								this.reset();
+								alert("Upload Successful"); },
+							error: function(r) {
+								alert("There was a problem with your upload."); } }); }, };
+				
+				upload_form.e.submit(function() {
+					upload_form.upload(upload_form.getResource(), upload_form.getData(), upload_form.getMagic());
+					return false; });
+				
+				return upload_form;
+			};
+			
+			if(isAndroid) {
+				$("body").addClass("android").addClass("mobile");
+			}
+			else {
+				$("body").addClass("desktop");
+				
+				var upload_form = UploadForm($('form#upload'));
+				$("section#file-upload div.enable a").click(function() {
+					$("section#file-upload div.enable").hide();
+					$("section#file-upload form").show();
+					
+					return false; });
+				$("section#file-upload form a.cancel").click(function() {
+					$("section#file-upload div.enable").show();
+					$("section#file-upload form").hide();
+					
+					return false; });
+			}
+		</script>
+	</body>
+</html>

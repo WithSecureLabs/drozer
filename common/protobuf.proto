@@ -1,0 +1,221 @@
+
+package com.WithSecure.jsolar.api;
+
+option optimize_for = SPEED;
+
+message Message {
+
+  enum MessageType {
+    SYSTEM_REQUEST = 1;
+    SYSTEM_RESPONSE = 2;
+    REFLECTION_REQUEST = 3;
+    REFLECTION_RESPONSE = 4;
+  }
+
+  required int32 id = 1;
+  required MessageType type = 2;
+
+  optional SystemRequest system_request = 5;
+  optional SystemResponse system_response = 6;
+  optional ReflectionRequest reflection_request = 7;
+  optional ReflectionResponse reflection_response = 8;
+
+  message ReflectionRequest {
+
+    enum RequestType {
+      RESOLVE = 1;
+      CONSTRUCT = 2;
+      INVOKE = 3;
+      SET_PROPERTY = 4;
+      GET_PROPERTY = 5;
+      DELETE = 6;
+      DELETE_ALL = 7;
+    }
+
+    required string session_id = 1;
+    required RequestType type = 2;
+
+    message Resolve {
+      optional string classname = 1;
+    }
+
+    message Construct {
+      optional ObjectReference object = 1;
+      repeated Argument argument = 2;
+    }
+
+    message Invoke {
+      optional ObjectReference object = 1;
+      optional string method = 2;
+      repeated Argument argument = 3;
+    }
+
+    message SetProperty {
+      optional ObjectReference object = 1;
+      optional string property = 2;
+      optional Argument value = 3;
+    }
+
+    message GetProperty {
+      optional ObjectReference object = 1;
+      optional string property = 2;
+    }
+
+    message Delete {
+      optional ObjectReference object = 1;
+    }
+
+    optional Resolve resolve = 3;
+    optional Construct construct = 4;
+    optional Invoke invoke = 5;
+    optional SetProperty set_property = 6;
+    optional GetProperty get_property = 7;
+    optional Delete delete = 8;
+
+  }
+
+  message ReflectionResponse {
+
+    enum ResponseStatus {
+      SUCCESS = 1;
+      ERROR = 2;
+      FATAL = 3;
+    }
+
+    required string session_id = 1;
+    required ResponseStatus status = 2;
+    optional Argument result = 3;
+    optional string errormessage = 8;
+
+  }
+
+  message SystemRequest {
+
+    enum RequestType {
+      PING = 1;
+      BIND_DEVICE = 2;
+      UNBIND_DEVICE = 3;
+      LIST_DEVICES = 4;
+      START_SESSION = 5;
+      STOP_SESSION = 6;
+      RESTART_SESSION = 7;
+      LIST_SESSIONS = 8;
+    }
+
+    required RequestType type = 1 [default = PING];
+
+    optional Device device = 5;
+    optional string session_id = 7;
+    optional string password = 8;
+
+  }
+
+  message SystemResponse {
+
+    enum ResponseType {
+      PONG = 1;
+      BOUND = 2;
+      UNBOUND = 3;
+      DEVICE_LIST = 4;
+      SESSION_ID = 5;
+      SESSION_LIST = 6;
+    }
+
+    enum ResponseStatus {
+      SUCCESS = 1;
+      ERROR = 2;
+    }
+
+    required ResponseType type = 1;
+    required ResponseStatus status = 2;
+
+    repeated Device devices = 6;
+    optional string session_id = 7;
+    optional string error_message = 8;
+    repeated Session sessions = 9;
+
+  }
+
+  message Argument {
+
+    enum ArgumentType {
+      NULL = 1;
+      PRIMITIVE = 2;
+      STRING = 3;
+      OBJECT = 4;
+      ARRAY = 5;
+      DATA = 6;
+    }
+
+    required ArgumentType type = 1 [default = STRING];
+
+    optional Primitive primitive = 2;
+    optional string string = 3;
+    optional ObjectReference object = 4;
+    optional Array array = 5;
+    optional bytes data = 6;
+
+  }
+
+  message Array {
+
+    enum ArrayType {
+      PRIMITIVE = 1;
+      STRING = 2;
+      OBJECT = 3;
+      ARRAY = 4;
+    }
+
+    required ArrayType type = 1 [default = STRING];
+    repeated Argument element = 2;
+
+  }
+
+  message Device {
+
+    required string id = 1;
+    required string manufacturer = 2;
+    required string model = 3;
+    required string software = 4;
+
+  }
+
+  message ObjectReference {
+    optional int32 reference = 1;
+  }
+
+  message Primitive {
+
+    enum PrimitiveType {
+      BOOL = 1;
+      INT = 2;
+      LONG = 3;
+      FLOAT = 4;
+      BYTE = 5;
+      SHORT = 6;
+      DOUBLE = 7;
+      CHAR = 8;
+    }
+
+    required PrimitiveType type = 1;
+
+    optional bool bool = 2;
+    optional int32 int = 3;
+    optional int64 long = 4;
+    optional float float = 5;
+    optional int32 byte = 6;
+    optional int32 short = 7;
+    optional double double = 8;
+    optional int32 char = 9;
+
+  }
+
+  message Session {
+
+    required string id = 1;
+    required string device_id = 2;
+
+  }
+
+}
+
