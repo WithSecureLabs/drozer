@@ -1,6 +1,6 @@
 import itertools
 
-from mwr.common.list import flatten
+from WithSecure.common.list import flatten
 
 from drozer.modules import base
 

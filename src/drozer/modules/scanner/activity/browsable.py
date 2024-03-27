@@ -43,7 +43,7 @@ Package: com.android.mms
     date = "2014-10-31"
     license = "BSD (3-clause)"
     path = ["scanner", "activity"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", help="specify a package to search")
@@ -79,7 +79,7 @@ Package: com.android.mms
                         for i in returned['classNames']:
                             self.stdout.write("    %s\n" % str(i))
                         self.stdout.write("\n")
-            except Exception, e:
+            except Exception as e:
                 pass # amazing error checking
             
     # Get browsable activities that use data attribute

@@ -2,7 +2,7 @@ import binascii
 import os
 import base64
 
-from mwr.common.list import chunk
+from WithSecure.common.list import chunk
 
 class FileSystem(object):
     """
@@ -23,7 +23,7 @@ class FileSystem(object):
 
         file_io = self.new("java.io.File", source)
 
-        if file_io.exists() == True:
+        if (file_io.exists() == True):
             return file_io.delete()
         else:
             return None
@@ -36,11 +36,11 @@ class FileSystem(object):
         data = self.readFile(source, block_size=block_size)
 
         if data:
-            if os.path.isdir(destination):
+            if (os.path.isdir(destination) == True):
                 destination = os.path.sep.join([destination, source.split("/")[-1]])
                 
             output = open(destination, 'wb')
-            output.write(str(data))
+            output.write(data)
             output.close()
 
             return len(data)
@@ -52,10 +52,10 @@ class FileSystem(object):
         Tests whether a directory exists, on the Agent's file system, and creates
         it if it does not.
         """
-        
-        if self.isFile(target):
+
+        if (self.isFile(target) == True):
             return False
-        elif not self.isDirectory(target):
+        elif (self.isDirectory(target) == False):
             return self.new("java.io.File", target).mkdirs()
         else:
             return True
@@ -76,7 +76,7 @@ class FileSystem(object):
 
         file_io = self.new("java.io.File", source)
 
-        if file_io.exists() == True:
+        if (file_io.exists() == True):
             return file_io.length()
         else:
             return None
@@ -87,8 +87,8 @@ class FileSystem(object):
         """
         
         for x in ['bytes', 'KiB', 'MiB', 'GiB']:
-            if size < 1024.0 and size > -1024.0:
-                if x != "bytes":
+            if (size < 1024.0 and size > -1024.0):
+                if (x != "bytes"):
                     return "%.1f %s" % (size, x)
                 else:
                     return "%d %s" % (size, x)
@@ -122,7 +122,7 @@ class FileSystem(object):
         #TODO does not work past the first folder
         file_io = self.new("java.io.File", target)
         
-        return ["%s%s" %(s, '/') if file_io.isDirectory() else s for s in file_io.list()]
+        return ["%s%s" %(s, '/') if (file_io.isDirectory() == True) else s for s in file_io.list()]
         
     def md5sum(self, source):
         """
@@ -133,7 +133,7 @@ class FileSystem(object):
 
         file_io = self.new("java.io.File", source)
 
-        if file_io.exists() == True:
+        if (file_io.exists() == True):
             return FileUtil.md5sum(file_io)
         else:
             return None
@@ -147,16 +147,16 @@ class FileSystem(object):
 
         file_io = self.new("java.io.File", source)
 
-        if file_io.exists() == True:
+        if (file_io.exists() == True):
             file_stream = self.new("java.io.FileInputStream", file_io)
 
-            data = ""
+            data = b""
             
             while True:
                 block = ByteStreamReader.read(file_stream, 0, block_size).base64_encode()
                 
-                if len(block) > 0:
-                    data += base64.decodestring(block)
+                if (len(block) > 0):
+                    data += base64.b64decode(block)
                 else:
                     return data
         else:
@@ -167,7 +167,7 @@ class FileSystem(object):
         Copy a file from the local file system to the Agent's.
         """
         
-        if self.isDirectory(destination):
+        if (self.isDirectory(destination) == True):
             destination = "/".join([destination, source.split(os.path.sep)[-1]])
 
         return self.writeFile(destination, open(source, 'rb').read(), block_size=block_size)
@@ -188,11 +188,11 @@ class FileSystem(object):
 
         file_io = self.new("java.io.File", destination)
 
-        if file_io.exists() != True:
+        if (file_io.exists() != True):
             file_stream = self.new("java.io.FileOutputStream", destination)
 
             for c in chunk(data, block_size):
-                ByteStreamWriter.writeHexStream(file_stream, binascii.hexlify(c))
+                ByteStreamWriter.writeHexStream(file_stream, binascii.hexlify(c).decode())
 
             file_stream.close()
             

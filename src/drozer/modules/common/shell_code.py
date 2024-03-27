@@ -1,5 +1,3 @@
-from itertools import izip
-
 from drozer import util
 
 class ShellCode(object):
@@ -23,7 +21,7 @@ class ShellCode(object):
     def asUnicode(self):
         shell_code = len(self.__shell_code) % 2 == 0 and self.__shell_code or self.__shell_code + [0]
         
-        return "".join(map(lambda bs: "\\u%0.2X%0.2X" % (bs[1], bs[0]), izip(*[iter(shell_code)] * 2)))
+        return "".join(map(lambda bs: "\\u%0.2X%0.2X" % (bs[1], bs[0]), zip(*[iter(shell_code)] * 2)))
 
     def execute(self, arguments):
         """

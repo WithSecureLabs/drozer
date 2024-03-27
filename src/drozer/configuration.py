@@ -1,9 +1,9 @@
-import ConfigParser
+import configparser
 import os
 import platform
 import sys
 
-from mwr.common import system
+from WithSecure.common import system
 
 class Configuration(object):
     """
@@ -32,7 +32,10 @@ class Configuration(object):
             path = cls.get("executables", name)
         
         if path == None or path == "":
-            sys.stderr.write("Could not find %s. Please ensure that it is installed and on your PATH.\n\nIf this error persists, specify the path in the ~/.drozer_config file:\n\n    [executables]\n    %s = %s\n" % (name, name, platform.system() == "Windows" and "C:\\path\\to\\" + name or "/path/to/" + name))
+            sys.stderr.write("Could not find %s. Please ensure that it is installed and on your PATH.\n\nIf this "
+                             "error persists, specify the path in the ~/.drozer_config file:\n\n    [executables]\n  "
+                             "  %s = %s\n" % (name, name, platform.system() == "Windows" and "C:\\path\\to\\" + name
+                                              or "/path/to/" + name))
             
         return path
     
@@ -60,7 +63,7 @@ class Configuration(object):
                 return cls.__config.get(section, key)
             else:
                 return None
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             return None
     
     @classmethod
@@ -145,7 +148,7 @@ class Configuration(object):
         """
         
         if cls.__config == None:
-            cls.__config = ConfigParser.SafeConfigParser()
+            cls.__config = configparser.SafeConfigParser()
             cls.__config.optionxform = lambda optionstr: optionstr.replace(":", "|")
             
             if os.path.exists(cls.path()):

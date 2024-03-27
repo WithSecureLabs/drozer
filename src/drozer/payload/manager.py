@@ -1,6 +1,6 @@
 import sys
 
-from mwr.common import cli, console
+from WithSecure.common import cli, console
 
 from drozer.payload import builder
 
@@ -24,7 +24,7 @@ class PayloadManager(cli.Base):
     def do_build(self, arguments):
         """build a payload"""
         
-        print self.builder.build(arguments.module, arguments)
+        print(self.builder.build(arguments.module, arguments))
 
     def args_for_info(self):
         self._parser.add_argument("module", help="specify the payload module to use")
@@ -34,7 +34,7 @@ class PayloadManager(cli.Base):
         
         module = self.builder.module(arguments.module)
         
-        print module.usage.formatted_description()
+        print(module.usage.formatted_description())
         
     def do_list(self, arguments):
         """list the available payload modules"""

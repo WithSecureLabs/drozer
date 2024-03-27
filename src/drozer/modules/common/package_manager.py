@@ -1,4 +1,4 @@
-from pydiesel.reflection import ReflectionException
+from pysolar.reflection import ReflectionException
 
 class PackageManager(object):
     """
@@ -72,8 +72,7 @@ class PackageManager(object):
             """
 
             packages = self.installedPackages(flags)
-
-            for i in xrange(packages.size()):
+            for i in range(int(packages.size())):
                 yield packages.get(i)
 
         def getApplicationLabel(self, package, flags=0):
@@ -108,7 +107,7 @@ class PackageManager(object):
             Get all installed packages, as a Java List<>.
             """
 
-            return self.__package_manager.getInstalledPackages(flags)
+            return self.__package_manager.getInstalledPackages(self.__package_manager.GET_META_DATA)
 
         def packageManager(self):
             """
@@ -119,22 +118,26 @@ class PackageManager(object):
 
         def queryContentProviders(self, process_name, uid, flags):
             """
-            Get Content Provider information.
+            Get Content Provider information, as a Java List<>
             """
 
+            # yaynoteyay
+            # need to add `int()` in order to read the list properly in python
             providers = self.__package_manager.queryContentProviders(process_name, uid, flags)
 
-            for i in xrange(providers.size()):
+            for i in range(int(providers.size())):
                 yield providers.get(i)
 
         def queryIntentActivities(self, intent, flags):
             """
-            Get all Activities that can be launched with a specified Intent.
+            Get all Activities that can be launched with a specified Intent, as a Java List<>.
             """
 
+            # yaynoteyay
+            # need to add `int()` in order to read the list properly in python
             activities = self.__package_manager.queryIntentActivities(intent.buildIn(self.__module), flags)
 
-            for i in xrange(activities.size()):
+            for i in range(int(activities.size())):
                 yield activities.get(i)
 
     def packageManager(self):

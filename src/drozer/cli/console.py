@@ -3,7 +3,7 @@
 import logging
 import sys
 
-from mwr.common import logger
+from WithSecure.common import logger
 
 from drozer.console import Console
 

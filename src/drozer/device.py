@@ -1,4 +1,4 @@
-from pydiesel.api.builders import SystemRequestFactory
+from pysolar.api.builders import SystemRequestFactory
 
 from drozer.session import Sessions
 

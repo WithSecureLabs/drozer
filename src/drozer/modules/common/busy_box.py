@@ -46,7 +46,9 @@ class BusyBox(shell.Shell):
         """
         Install Busybox on the Agent.
         """
+
         if self.ensureDirectory(self.busyboxPath()[0:self.busyboxPath().rindex("/")]):
+
             bytes_copied = self.uploadFile(self._localPath(arch,pie), self.busyboxPath())
     
             if bytes_copied != os.path.getsize(self._localPath(arch,pie)):

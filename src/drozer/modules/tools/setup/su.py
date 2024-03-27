@@ -13,15 +13,15 @@ WARNING: This minimal version of the su binary is completely unprotected, meanin
     dz> run tools.setup.minimalsu
     [*] Uploaded minimal-su
     [*] Uploaded install-minimal-su.sh
-    [*] chmod 770 /data/data/com.mwr.dz/install-minimal-su.sh
-    [*] Ready! Execute /data/data/com.mwr.dz/install-minimal-su.sh from root context to install su
+    [*] chmod 770 /data/data/com.WithSecure.dz/install-minimal-su.sh
+    [*] Ready! Execute /data/data/com.WithSecure.dz/install-minimal-su.sh from root context to install su
     
     ...insert root exploit here...
-    u0_a95@android:/data/data/com.mwr.dz # /data/data/com.mwr.dz/install-minimal-su.sh
+    u0_a95@android:/data/data/com.WithSecure.dz # /data/data/com.WithSecure.dz/install-minimal-su.sh
     Done. You can now use `su` from a shell.
-    u0_a95@android:/data/data/com.mwr.dz # exit
-    u0_a95@android:/data/data/com.mwr.dz $ su
-    u0_a95@android:/data/data/com.mwr.dz #
+    u0_a95@android:/data/data/com.WithSecure.dz # exit
+    u0_a95@android:/data/data/com.WithSecure.dz $ su
+    u0_a95@android:/data/data/com.WithSecure.dz #
     """
     author = "Tyrone (@mwrlabs)"
     date = "2013-12-12"
@@ -36,7 +36,7 @@ WARNING: This minimal version of the su binary is completely unprotected, meanin
 
         # ARCH check
         if "ARM" not in str(self.klass('java.lang.System').getProperty("os.arch")).upper():
-            response = raw_input("[-] Unsupported CPU architecture - ARM only. Continue anyway (y/n)? ")
+            response = input("[-] Unsupported CPU architecture - ARM only. Continue anyway (y/n)? ")
             if "Y" not in response.upper():
                 return
 

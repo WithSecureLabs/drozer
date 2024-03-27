@@ -1,6 +1,6 @@
 import os, platform
 
-from pydiesel.reflection import utils
+from pysolar.reflection import utils
 
 from drozer.configuration import Configuration
 from drozer.modules.base import Module
@@ -24,7 +24,7 @@ class ClassLoader(object):
         if not Module.cached_klass(".".join([source, klass])):
             loader = utils.ClassLoader(source, self.__get_cache_path(), self.__get_constructor(), self.klass('java.lang.ClassLoader').getSystemClassLoader(), relative_to=relative_to)
             loader.android_path = lambda: Configuration.library("android.jar")
-            loader.dx_path = lambda: Configuration.executable("dx.bat") if platform.system() == "Windows" else Configuration.executable("dx")
+            loader.dx_path = lambda: Configuration.executable("d8.bat") if platform.system() == "Windows" else Configuration.executable("d8")
             loader.javac_path = lambda: Configuration.executable("javac")
             
             Module.cache_klass(".".join([source, klass]), loader.loadClass(klass))

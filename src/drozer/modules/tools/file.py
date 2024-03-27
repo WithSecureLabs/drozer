@@ -44,6 +44,8 @@ class Size(Module, common.FileSystem):
     def execute(self, arguments):
         size = self.fileSize(arguments.target)
 
+        size = size.__float__()
+
         if size != None:
             if size > 1024:
                 self.stdout.write("%s (%d bytes)\n" % (self.format_file_size(size), size))

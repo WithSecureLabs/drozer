@@ -424,7 +424,7 @@ optional arguments:
                 elif extra[0] == "integer":
                     extras.putInt(extra[1], context.arg(int(extra[2]), obj_type="int"))
                 elif extra[0] == "long":
-                    extras.putLong(extra[1], context.arg(long(extra[2]), obj_type="long"))
+                    extras.putLong(extra[1], context.arg(int(extra[2]), obj_type="long"))
                 elif extra[0] == "short":
                     extras.putShort(extra[1], context.arg(int(extra[2]), obj_type="short"))
                 elif extra[0] == "bytearray":
@@ -434,7 +434,6 @@ optional arguments:
                     extras.putByteArray(extra[1],wrapper.toByteArray())
                 elif extra[0] == "string":
                     extras.putString(extra[1], extra[2])
-                    
                 elif extra[0] == "bundle":
                     yayExtrasyay = context.new("android.os.Bundle")
                     yayUriArryay = extra[2].split(";")
@@ -457,7 +456,7 @@ optional arguments:
                         elif yayKeyyay.startswith("f."):
                             yayExtrasyay.putFloat(yayKeyyay[2:], context.arg(float(yayValueyay), obj_type="float"))
                         elif yayKeyyay.startswith("l."):
-                            yayExtrasyay.putLong(yayKeyyay[2:], context.arg(long(yayValueyay), obj_type="long"))
+                            yayExtrasyay.putLong(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="long"))
                         elif yayKeyyay.startswith("s."):
                             yayExtrasyay.putShort(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="short"))
 
@@ -561,7 +560,7 @@ optional arguments:
                             elif yayKeyyay.startswith("f."):
                                 yayExtrasyay.putFloat(yayKeyyay[2:], context.arg(float(yayValueyay), obj_type="float"))
                             elif yayKeyyay.startswith("l."):
-                                yayExtrasyay.putLong(yayKeyyay[2:], context.arg(long(yayValueyay), obj_type="long"))
+                                yayExtrasyay.putLong(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="long"))
                             elif yayKeyyay.startswith("s."):
                                 yayExtrasyay.putShort(yayKeyyay[2:], context.arg(int(yayValueyay), obj_type="short"))
                             elif yayKeyyay.startswith("p."):
@@ -585,14 +584,15 @@ optional arguments:
             
     def __add_flags_to(self, intent, context):
         """
-        Set the FLAGS of intent, iff we have a value to set.
+        Set the FLAGS of intent, if we have a value to set.
         """
+
         if self.flags != None:
             intent.setFlags(self.__build_flags(self.flags))
     
     def __add_type_to(self, intent, context):
         """
-        Set the TYPE of intent, iff we have a value to set.
+        Set the TYPE of intent, if we have a value to set.
         """
         
         if self.mimetype != None:

@@ -1,4 +1,5 @@
 import os
+import base64
 
 from drozer import android
 from drozer.modules import common, Module
@@ -15,7 +16,7 @@ class Columns(Module, common.Provider, common.TableFormatter):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("uri", help="the content provider uri to query")
@@ -44,7 +45,7 @@ class Delete(Module, common.Provider):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("uri", help="the content provider uri to query")
@@ -68,7 +69,7 @@ class Download(Module, common.Provider):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("uri", help="the content provider URI to read a file through")
@@ -76,12 +77,21 @@ class Download(Module, common.Provider):
 
     def execute(self, arguments):
         data = self.contentResolver().read(arguments.uri)
+
+        # yaynoteyay
+        # TODO WILLIAM PLEASE
+        # data is a base64 encoded string
+        data = base64.b64decode(data)
         
         if os.path.isdir(arguments.destination):
             arguments.destination = os.path.sep.join([arguments.destination, arguments.uri.split("/")[-1]])
         
-        output = open(arguments.destination, 'w')
-        output.write(str(data))
+        # yaynoteyay
+        # TODO WILLIAM PLEASE
+        # instead of `output.write(str(data))`
+        # we just write as a binary file
+        output = open(arguments.destination, 'wb')
+        output.write(data)
         output.close()
 
         self.stdout.write("Written %d bytes\n\n" % len(data))
@@ -115,7 +125,7 @@ This module uses a number of strategies to identify a content URI, including ins
     date = "2012-13-18"
     license = "BSD (3 clause)"
     path = ["app", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("package", help="the package to search for content provider uris")
@@ -167,7 +177,7 @@ Finding content providers that do not require permissions to read/write:
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     PatternMatcherTypes = { 0: "PATTERN_LITERAL", 1: "PATTERN_PREFIX", 2: "PATTERN_SIMPLE_GLOB" }
 
@@ -258,7 +268,7 @@ class Insert(Module, common.Provider):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("uri", help="the content provider uri to insert into")
@@ -325,7 +335,7 @@ Querying, with a WHERE clause in the SELECT statement:
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("uri", help="the content provider uri to query")
@@ -357,13 +367,18 @@ class Read(Module, common.Provider):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("uri", help="the content provider URI to read a file through")
 
     def execute(self, arguments):
-        self.stdout.write(self.contentResolver().read(arguments.uri) + "\n")
+        # yaynoteyay
+        # TODO WILLIAM PLEASE
+        # the old code could more easily convert the retrieved file to a string
+        # this time we can't. so we convert to base64, and then decode here while ignoring errors, since we are just printing to console anyway.
+        yayencodedyay = self.contentResolver().read(arguments.uri)
+        self.stdout.write(base64.b64decode(yayencodedyay).decode("utf-8", errors="ignore") + "\n")
         
 class Update(Module, common.Provider):
 
@@ -380,7 +395,7 @@ class Update(Module, common.Provider):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("uri", help="the content provider uri to update in")

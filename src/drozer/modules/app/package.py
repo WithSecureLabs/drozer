@@ -19,7 +19,7 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "package"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("package", help="the identifier of the package to inspect")
@@ -29,6 +29,8 @@ class AttackSurface(Module, common.Filters, common.PackageManager):
             package = self.packageManager().getPackageInfo(arguments.package, common.PackageManager.GET_ACTIVITIES | common.PackageManager.GET_RECEIVERS | common.PackageManager.GET_PROVIDERS | common.PackageManager.GET_SERVICES)
             application = package.applicationInfo
 
+            # yaynoteyay
+            # removed `list()` from here because i added `list()` to `src/drozer/modules/common/filtering.py` line 16
             activities = self.match_filter(package.activities, 'exported', True)
             receivers = self.match_filter(package.receivers, 'exported', True)
             providers = self.match_filter(package.providers, 'exported', True)
@@ -94,7 +96,7 @@ Finding all packages with the "INSTALL_PACKAGES" permission:
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "package"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", default=None, help="the identifier of the package to inspect")
@@ -263,7 +265,7 @@ class LaunchIntent(Module, common.PackageManager):
     date = "2013-03-06"
     license = "BSD (3 clause)"
     path = ["app", "package"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("package", help="the identifier of the package to inspect")
@@ -334,7 +336,7 @@ class List(Module, common.PackageManager):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "package"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-d", "--defines-permission", default=None, help="filter by the permissions a package defines")
@@ -368,9 +370,9 @@ class Manifest(Module, common.Assets):
     description = "Retrieves AndroidManifest.xml from an installed package."
     examples = """Getting the manifest for drozer
 
-    dz> run app.package.manifest com.mwr.dz
+    dz> run app.package.manifest com.WithSecure.dz
 
-    <manifest versionCode="2" versionName="1.1" package="com.mwr.dz">
+    <manifest versionCode="2" versionName="1.1" package="com.WithSecure.dz">
       <uses-sdk minSdkVersion="8" targetSdkVersion="4">
       </uses-sdk>
       <uses-permission name="android.permission.INTERNET">
@@ -382,7 +384,7 @@ class Manifest(Module, common.Assets):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "package"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("package", help="the identifier of the package")
@@ -429,7 +431,7 @@ class Native(Module, common.ClassLoader, common.PackageManager):
     date = "2013-03-23"
     license = "BSD (3 clause)"
     path = ["app", "package"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("package", help="the identifier of the package")
@@ -482,7 +484,7 @@ class SharedUID(Module, common.PackageManager):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["app", "package"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-u", "--uid", default=None, help="specify uid")
@@ -513,7 +515,10 @@ class SharedUID(Module, common.PackageManager):
 
                     if package.requestedPermissions != None:
                         for permission in package.requestedPermissions:
-                            permissions.add(permission)
+                            # yaynoteyay
+                            # `permission` is a `ReflectedString`
+                            # convert it to `String` so it can be put in array `permissions`
+                            permissions.add(str(permission))
 
                 self.stdout.write("  Permissions: %s\n"%", ".join(map(lambda p: str(p), permissions)))
                 self.stdout.write("\n")

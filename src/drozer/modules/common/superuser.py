@@ -1,5 +1,5 @@
 import os, tempfile
-from mwr.common import fs
+from WithSecure.common import fs
 
 from drozer.modules.common import file_system
 
@@ -13,8 +13,13 @@ class SuperUser(file_system.FileSystem):
         """
         Get the path to which su is uploaded on the Agent.
         """
-
-        return "%s/su" % (self.workingDir())
+        
+        # yaynoteyay
+        # not sure how to fix this yet
+        # but if the phone is rooted, then `su` should be in a directoy on `path` anyway
+        # need to figure out a way to dynamically detect location of `su`
+        # using `self.exists()` and `self.isAnySuInstalled()` in this method does not work
+        return "su"
 
     def _localPathMinimalSu(self):
         """

@@ -1,4 +1,4 @@
-from mwr.common.twisted import StreamReceiver
+from WithSecure.common.twisted import StreamReceiver
 
 class HttpReceiver(StreamReceiver):
     """
@@ -67,14 +67,16 @@ class HTTPRequest(HTTPMessage):
         """
         Read the HTTP headers (terminated by a double-CRLF)
         """
-        headers = ""
+        headers = b""
         
         bytes_read = 0
         while bytes_read != -1:
             pLength = len(headers)
             headers += stream.read(1)
             bytes_read = (len(headers) - pLength) -1
-            if str(headers).endswith("\r\n\r\n"):
+            # yaynoteyay
+            # original code didn't escape backslashes, and didn't end with a single quote
+            if str(headers).endswith("\\r\\n\\r\\n'"):
                 return headers
             
         return None
@@ -83,7 +85,9 @@ class HTTPRequest(HTTPMessage):
     def processHeader(cls, request):
         headers = []
         
-        lines = str(request.strip()).rsplit("\r\n")
+        # yaynoteyay
+        # original code didn't escape backslashes
+        lines = str(request.strip()).rsplit("\\r\\n")
         if len(lines) < 1:
             return None
         
@@ -105,7 +109,10 @@ class HTTPRequest(HTTPMessage):
         slice1 = line.index(" ")
         slice2 = line.rindex(" ")
         
-        return (line[0:slice1], line[slice1+1:slice2], line[slice2+1:])
+        # yaynoteyay
+        # the verb still contained `b'` at the beginning since the line was originally a byte thingy
+        # so gotta remove `b'` from the beginning of the verb
+        return (line[0:slice1].split("'")[1], line[slice1+1:slice2], line[slice2+1:])
 
     @classmethod
     def contentPresent(cls, message):
@@ -126,6 +133,7 @@ class HTTPRequest(HTTPMessage):
         """
         Try to read HTTP Requests from the stream.
         """
+
         position = stream.tell()
         message = None
         header = HTTPRequest.readHeaders(stream)

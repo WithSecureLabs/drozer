@@ -1,6 +1,6 @@
 import os
 
-from mwr.common import fs
+from WithSecure.common import fs
 
 from drozer.configuration import Configuration
 from drozer.modules import common, Module

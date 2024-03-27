@@ -62,7 +62,7 @@ def clear_apks():
 
 	for root, dirnames, filenames in os.walk(pwd):
 		for filename in filenames:
-			if (fnmatch.fnmatch(filename, "*.class") or fnmatch.fnmatch(filename, "*.apk")):
+			if (fnmatch.fnmatch(filename, "*.class") or fnmatch.fnmatch(filename, "*.apk") or fnmatch.fnmatch(filename, "*.zip")):
 				#print os.path.join(root, filename)
 				os.remove(os.path.join(root, filename))
 
@@ -70,21 +70,22 @@ def make_apks():
 
 	pwd = get_pwd()
 	lib = os.path.dirname(os.path.realpath(__file__))
-	dx =''
+	d8 =''
 
 	if platform == 'linux' or 'linux2' or 'darwin':
 		pwd += '/modules'
 		lib += '/src/drozer/lib/'
-		dx = 'dx'
+		d8 = 'd8'
 	elif platform == 'win32':
 		pwd += '\\modules'
 		lib += '\\src\\drozer\\lib\\'
-		dx = 'dx.bat'
+		d8 = 'd8.bat'
 
 	#If apks exist, delete them and generate new ones
 	clear_apks()
 
 	# Generate apks
+
 	for root, dirnames, filenames in os.walk(pwd):
 		for filename in filenames:
 			if (fnmatch.fnmatch(filename, "*.java")):
@@ -93,16 +94,20 @@ def make_apks():
 
 				#Build apk
 				m = re.search('(.+?)(\.[^.]*$|$)',filename)
-				dx_cmd = [lib+dx, '--dex', '--output='+m.group(1)+'.apk',m.group(1)+'*.class']
+				d8_cmd = [lib+d8, '--output', m.group(1)+'.zip', m.group(1)+'*.class', '--lib', lib+'android.jar']
 
 				if platform == "linux2" or platform == "linux" or platform == "darwin":
 					subprocess.call(' '.join(javac_cmd),shell=True,cwd=root)
 
-					subprocess.call(' '.join(dx_cmd),shell=True,cwd=root)
+					subprocess.call(' '.join(d8_cmd),shell=True,cwd=root)
+
+					subprocess.call(' '.join(['mv', m.group(1)+'.zip', m.group(1)+'.apk']),shell=True,cwd=root)
 				elif platform == "win32":
 					subprocess.call(javac_cmd,shell=True,cwd=root)
 
-					subprocess.call(dx_cmd,shell=True,cwd=root)
+					subprocess.call(d8_cmd,shell=True,cwd=root)
+
+					subprocess.call(' '.join(['move', m.group(1)+'.zip', m.group(1)+'.apk']),shell=True,cwd=root)
 
 def get_package_data():
 	data = {"":[]}
@@ -117,19 +122,9 @@ def get_package_data():
 				data[""].append(os.path.join(root, filename)[11:])
 	return data
 
-def get_version():
-	version_cmd = ['git', 'describe', '--tags']
-	
-	if platform in ("linux2", "linux"):
-		version_cmd = ' '.join(version_cmd)
-	elif platform not in ("win32", "darwin"):
-		return
-	
-	return subprocess.check_output(version_cmd).split('-', 1)[0]
-
 setuptools.setup(
   name = meta.name,
-  version = str(meta.version),
+  version = meta.version,
   author = meta.vendor,
   author_email = meta.contact,
   description = meta.description,
@@ -140,8 +135,8 @@ setuptools.setup(
 
   packages = setuptools.find_packages("src"),
   package_dir = {   "drozer": "src/drozer",
-                    "mwr": "src/mwr",
-                    "pydiesel": "src/pydiesel" },
+                    "WithSecure": "src/WithSecure",
+                    "pysolar": "src/pysolar" },
   package_data = get_package_data(),
   scripts = get_executable_scripts(),
   install_requires = ["protobuf>=2.6.1","pyopenssl>=16.2", "pyyaml>=3.11"],

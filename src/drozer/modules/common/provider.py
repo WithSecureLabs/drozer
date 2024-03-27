@@ -1,7 +1,11 @@
-from pydiesel.reflection import ReflectionException
+from pysolar.reflection import ReflectionException
 
 from drozer.modules.common import loader
 from drozer.modules.common.package_manager import PackageManager
+
+# DEBUG
+from optparse import OptionParser
+import inspect
 
 class Provider(loader.ClassLoader):
     """
@@ -34,7 +38,10 @@ class Provider(loader.ClassLoader):
             try:
                 return_val = client.delete(self.parseUri(uri), selection, selectionArgs)
             except ReflectionException as e:
-                if e.message.startswith("Unknown Exception"):
+                # yaynoteyay
+                # for some reason, ReflectionException doesn't have a `message` attribute
+                # so convert to string first
+                if str(e).startswith("Unknown Exception"):
                     raise ReflectionException("Could not delete from %s." % uri)
                 else:
                     raise
@@ -54,7 +61,10 @@ class Provider(loader.ClassLoader):
             try:
                 return_val = client.insert(self.parseUri(uri), contentValues)
             except ReflectionException as e:
-                if e.message.startswith("Unknown Exception"):
+                # yaynoteyay
+                # for some reason, ReflectionException doesn't have a `message` attribute
+                # so convert to string first
+                if str(e).startswith("Unknown Exception"):
                     raise ReflectionException("Could not insert into %s." % uri)
                 else:
                     raise
@@ -87,7 +97,10 @@ class Provider(loader.ClassLoader):
                 cursor = client.query(self.parseUri(uri), projection, selection, selectionArgs, sortOrder)
             except ReflectionException as e:
 
-                if e.message.startswith("Unknown Exception"):
+                # yaynoteyay
+                # for some reason, ReflectionException doesn't have a `message` attribute
+                # so convert to string first
+                if str(e).startswith("Unknown Exception"):
                     raise ReflectionException("Could not query %s." % uri)
                 else:
                     raise
@@ -113,7 +126,10 @@ class Provider(loader.ClassLoader):
                     try:
                         fd = client.openFile(self.parseUri(uri), "r")
                     except ReflectionException as e:
-                        if e.message.startswith("Unknown Exception"):
+                        # yaynoteyay
+                        # for some reason, ReflectionException doesn't have a `message` attribute
+                        # so convert to string first
+                        if str(e).startswith("Unknown Exception"):
                             raise ReflectionException("Could not read from %s." % uri)
                         else:
                             raise
@@ -121,14 +137,24 @@ class Provider(loader.ClassLoader):
                 self.__release(client)
     
                 if fd != None:
-                    return str(ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fd.getFileDescriptor())))
+
+                    # yaynoteyay
+                    # TODO WILLIAM PLEASE
+                    # original code assumed that `ByteStreamReader()` could be converted to `String` automatically. this time, it can't.
+                    # for now, returning base64 string
+                    yayencodedyay = ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fd.getFileDescriptor())).base64_encode()
+                    return yayencodedyay.decode('utf-8')
                 else:
                     raise Provider.UnableToOpenFileException(uri)
             else:
                 input_stream = self.__content_resolver.openInputStream(self.parseUri(uri))
                 
                 if input_stream != None:
-                    return str(ByteStreamReader.read(input_stream))
+                    # yaynoteyay
+                    # TODO WILLIAM PLEASE
+                    # original code assumed that `ByteStreamReader()` could be converted to `String` automatically. this time, it can't.
+                    # for now, returning as bytes
+                    return ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fd.getFileDescriptor()))
                 else:
                     raise Provider.UnableToOpenFileException(uri)
 
@@ -143,7 +169,10 @@ class Provider(loader.ClassLoader):
             try:
                 return_val = client.update(self.parseUri(uri), contentValues, selection, selectionArgs)
             except ReflectionException as e:
-                if e.message.startswith("Unknown Exception"):
+                # yaynoteyay
+                # for some reason, ReflectionException doesn't have a `message` attribute
+                # so convert to string first
+                if str(e).startswith("Unknown Exception"):
                     raise ReflectionException("Could not update %s." % uri)
                 else:
                     raise
@@ -195,7 +224,7 @@ class Provider(loader.ClassLoader):
                 try:
                     uris = uris.union(self.__search_package(package))
                 except ReflectionException as e:
-                    if "java.util.zip.ZipException: unknown format" in e.message:
+                    if "java.util.zip.ZipException: unknown format" in str(e):
                         self.stderr.write("Skipping package %s, because we cannot unzip it..." % package.applicationInfo.packageName)
                     else:
                         raise
@@ -205,7 +234,7 @@ class Provider(loader.ClassLoader):
             try:
                 uris = uris.union(self.__search_package(package))
             except ReflectionException as e:
-                if "java.util.zip.ZipException: unknown format" in e.message:
+                if "java.util.zip.ZipException: unknown format" in str(e):
                     self.stderr.write("Skipping package %s, because we cannot unzip it..." % package.applicationInfo.packageName)
                 else:
                     raise
@@ -258,18 +287,24 @@ class Provider(loader.ClassLoader):
             while cursor.isAfterLast() == False:
                 row = []
 
-                for i in xrange(len(columns)):
+                for i in range(len(columns)):
                     try:
                         if(cursor.getType(i) == blob_type):
                             row.append("%s (Base64-encoded)" % (cursor.getBlob(i).base64_encode()))
                         else:
                             row.append(cursor.getString(i))
                     except ReflectionException as e:
-                        if e.message.startswith("getType"):
+                        # yaynoteyay
+                        # for some reason, ReflectionException doesn't have a `message` attribute
+                        # so convert to string first
+                        if str(e).startswith("getType"):
                             try:
                                 row.append(cursor.getString(i))
                             except ReflectionException as e:
-                                if e.message.startswith("unknown error: Unable to convert BLOB to string"):
+                                # yaynoteyay
+                                # for some reason, ReflectionException doesn't have a `message` attribute
+                                # so convert to string first
+                                if str(e).startswith("unknown error: Unable to convert BLOB to string"):
                                     row.append("%s (Base64-encoded)" % (cursor.getBlob(i).base64_encode()))
                                 else:
                                     raise
@@ -290,7 +325,7 @@ class Provider(loader.ClassLoader):
         create a union set of them.
         """
 
-        print "Scanning %s..." % package.packageName
+        print("Scanning %s..." % package.packageName)
 
         uris = set([])
 
@@ -301,10 +336,10 @@ class Provider(loader.ClassLoader):
                     
                     if provider.uriPermissionPatterns != None:
                         for pattern in provider.uriPermissionPatterns:
-                            paths.add(pattern.getPath())
+                            paths.add(str(pattern.getPath()))
                     if provider.pathPermissions != None:
                         for permission in provider.pathPermissions:
-                            paths.add(permission.getPath())
+                            paths.add(str(permission.getPath()))
                             
                     # TODO: try to handle wildcard paths sensibly, like /contacts/.*/xyz
                     
@@ -314,6 +349,7 @@ class Provider(loader.ClassLoader):
                         for path in paths:
                             uris.add("content://%s%s" % (authority, path))
         for (path, content_uris) in self.findContentUris(package.packageName):
+            content_uris = list(content_uris)
             if len(content_uris) > 0:
                 for uri in content_uris:
                     uris.add(uri[uri.upper().find("CONTENT"):])
@@ -331,4 +367,7 @@ class Provider(loader.ClassLoader):
     class UnableToOpenFileException(ReflectionException):
         
         def __str__(self):
-            return "it was not possible to open the file represented by: %s" % (self.message)
+            # the original source code
+            # return "it was not possible to open the file represented by: %s" % (self.message)
+            # but there is no `UnableToOpenFileException.message`
+            return "Could not find either the specified file or provider. Check your spelling"

@@ -1,4 +1,4 @@
-from pydiesel.reflection import ReflectionException
+from pysolar.reflection import ReflectionException
 
 from drozer.modules.common import file_system, loader
 
@@ -22,7 +22,7 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
         first command.
         """
         try:
-            shell = self.new("com.mwr.jdiesel.util.Shell")
+            shell = self.new("com.WithSecure.jsolar.util.Shell")
             in_shell = True
         except ReflectionException as e:
             raise e
@@ -43,7 +43,7 @@ class Shell(file_system.FileSystem, loader.ClassLoader):
                 
                 self.stdout.write(response.strip())
                 self.stdout.write(shell.read().strip() + " ")
-                command = raw_input()
+                command = input()
             except ReflectionException as e:
                 if str(e.message) == "Broken pipe":
                     in_shell = False

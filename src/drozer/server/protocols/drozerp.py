@@ -1,8 +1,8 @@
 from logging import getLogger
 from time import time
 
-from pydiesel.api import Frame
-from pydiesel.api.protobuf_pb2 import Message
+from pysolar.api import Frame
+from pysolar.api.protobuf_pb2 import Message
 
 from drozer.api.handlers import *
 from drozer.server.receivers.frame import FrameReceiver
@@ -33,7 +33,6 @@ class Drozer(FrameReceiver):
         """
 
         FrameReceiver.connectionMade(self)
-
         self.request_forwarder = ReflectionRequestForwarder(self, self.__logger)
         self.request_handler = SystemRequestHandler(self, self.__logger)
         self.response_forwarder = ReflectionResponseForwarder(self, self.__logger)
@@ -61,6 +60,10 @@ class Drozer(FrameReceiver):
         message = frame.message()
         response = None
 
+        # yaynoteyay
+        # leaving this here for future debugging purposes
+        # print(f"Recieved Main Frame: {message}")
+
         if self.device and self.device.hasCallback(message.id):
             response = self.device.callCallback(message.id, message)
         elif message.type == Message.REFLECTION_REQUEST:
@@ -73,24 +76,27 @@ class Drozer(FrameReceiver):
             response = self.response_handler.handle(message)
         else:
             self.__logger.error("got unexpected message type " + message.type)
-        
         if response is not None:
             self.write(response)
         
         if self.device is not None:
             self.device.last_message_at = time()
-    
+
     def write(self, message):
         """
         Writes a message to a client, encapsulating it in a Frame first.
         """
 
-        self.__write(Frame.fromMessage(message))
+        # yaynoteyay
+        # leaving this here for future debugging purposes
+        # print(f"Sending frame {Frame.fromMessage(message).message()}")
+
+        self.__write(bytes(Frame.fromMessage(message)))
         
     def __write(self, frame):
         """
         Writes a message to a client.
         """
         
-        self.transport.write(str(frame))
+        self.transport.write(frame)
         

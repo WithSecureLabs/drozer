@@ -3,9 +3,9 @@ try:
 except ImportError:
     pass
 
-from pydiesel.api import handlers
-from pydiesel.api.builders import SystemResponseFactory
-from pydiesel.api.protobuf_pb2 import Message
+from pysolar.api import handlers
+from pysolar.api.builders import SystemResponseFactory
+from pysolar.api.protobuf_pb2 import Message
 
 from drozer.device import Devices
 from drozer.session import Sessions
@@ -33,7 +33,7 @@ class SystemRequestHandler(handlers.SystemRequestHandler):
         request to refresh the list of active sessions is queued for later.
         """
 
-        if message.system_request.HasField('device'):
+        if (message.system_request.HasField('device') == True):
             device = Devices.addFromProtobuf(message.system_request.device)
             
             if device in Devices:
@@ -72,7 +72,6 @@ class SystemRequestHandler(handlers.SystemRequestHandler):
         Invoked when a Console wishes to see a list of all Devices bound to the
         Server.
         """
-
         return SystemResponseFactory\
             .listDevices(Devices)\
             .inReplyTo(message)\
@@ -95,7 +94,7 @@ class SystemRequestHandler(handlers.SystemRequestHandler):
         Device.
         """
 
-        if message.system_request.HasField('device'):
+        if (message.system_request.HasField('device') == True):
             device = Devices.getFromProtobuf(message.system_request.device)
 
             if device is not None:
@@ -135,7 +134,7 @@ class SystemRequestHandler(handlers.SystemRequestHandler):
         request.
         """
 
-        if message.system_request.HasField('device'):
+        if (message.system_request.HasField('device') == True):
             device = Devices.removeFromProtobuf(message.system_request.device)
             
             self.connection.device = None

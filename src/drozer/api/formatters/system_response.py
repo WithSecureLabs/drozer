@@ -1,6 +1,6 @@
-from StringIO import StringIO
+from io import StringIO
 
-from pydiesel.api.protobuf_pb2 import Message
+from pysolar.api.protobuf_pb2 import Message
 
 class SystemResponseFormatter:
     """

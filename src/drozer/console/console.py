@@ -2,10 +2,10 @@ import getpass
 import sys
 import warnings
 
-from pydiesel.api.protobuf_pb2 import Message
-from pydiesel.api.transport.exceptions import ConnectionError
+from pysolar.api.protobuf_pb2 import Message
+from pysolar.api.transport.exceptions import ConnectionError
 
-from mwr.common import cli, path_completion
+from WithSecure.common import cli, path_completion
 
 from drozer import meta
 from drozer.api.formatters import SystemResponseFormatter
@@ -49,23 +49,20 @@ class Console(cli.Base):
                 password = getpass.getpass()
         else:
             password = None
-
-        device = self.__get_device(arguments)
-        
         server = self.__getServerConnector(arguments)
+        device = self.__get_device(arguments)
         response = server.startSession(device, password)
-        
         if response.type == Message.SYSTEM_RESPONSE and\
             response.system_response.status == Message.SystemResponse.SUCCESS:
             session_id = response.system_response.session_id
-
+            session = None
             try:
                 if(arguments.debug):
                     session = DebugSession(server, session_id, arguments)
                 else:
                     session = Session(server, session_id, arguments)
-
                 if len(arguments.file) > 0:
+                    print("Length is above 0")
                     session.do_load(" ".join(arguments.file))
                     session.do_exit("")
                 elif arguments.onecmd != None:
@@ -74,8 +71,9 @@ class Console(cli.Base):
                 else:
                     session.cmdloop()
             except KeyboardInterrupt:
-                print
-                print "Caught SIGINT, terminating your session."
+                print("Caught SIGINT, terminating your session.")
+            except Exception as e:
+                print(f"Caught Exception {e}")
             finally:
                 session.do_exit("")
                 
@@ -85,10 +83,9 @@ class Console(cli.Base):
 
     def do_devices(self, arguments):
         """lists all devices bound to the drozer server"""
-
         response = self.__getServerConnector(arguments).listDevices()
 
-        print SystemResponseFormatter.format(response)
+        print(SystemResponseFormatter.format(response))
 
         self.__getServerConnector(arguments).close()
 
@@ -97,7 +94,7 @@ class Console(cli.Base):
 
         response = self.__getServerConnector(arguments).stopSession(arguments.device)
 
-        print SystemResponseFormatter.format(response)
+        print(SystemResponseFormatter.format(response))
         
         self.__getServerConnector(arguments).close()
         
@@ -151,22 +148,20 @@ class Console(cli.Base):
         """
         Determines which device to request after connecting to the server.
         """
-
         if arguments.device == None:
             devices = self.__getServerConnector(arguments).listDevices().system_response.devices
 
             if len(devices) == 1:
                 device = devices[0].id
 
-                print "Selecting %s (%s %s %s)\n" % (devices[0].id, devices[0].manufacturer, devices[0].model, devices[0].software)
-
+                print("Selecting %s (%s %s %s)\n" % (devices[0].id, devices[0].manufacturer, devices[0].model, devices[0].software))
                 return device
             elif len(devices) == 0:
-                print "No devices available.\n"
+                print("No devices available.\n")
 
                 sys.exit(-1)
             else:
-                print "More than one device available. Please specify the target device ID.\n"
+                print("More than one device available. Please specify the target device ID.\n")
 
                 sys.exit(-1)
         else:
@@ -177,7 +172,7 @@ class Console(cli.Base):
         Get a Server object which provides a connection to the selected server.
         """
 
-        if self.__server == None:
+        if self.__server is None:
             self.__server = ServerConnector(arguments, self.__manage_trust)
 
         return self.__server
@@ -198,26 +193,26 @@ class Console(cli.Base):
                 """
                 return
             
-            print "drozer has established an SSL Connection to %s:%d." % peer
-            print "The server has provided an SSL Certificate with the SHA-1 Fingerprint:"
-            print "%s\n" % provider.digest(certificate)
+            print("drozer has established an SSL Connection to %s:%d." % peer)
+            print("The server has provided an SSL Certificate with the SHA-1 Fingerprint:")
+            print("%s\n" % provider.digest(certificate))
             
             if trust_status == -2:
-                print "WARNING: this host has previously used a certificate with the fingerprint:"
-                print "%s\n" % provider.trusted_certificate_for(peer)
+                print("WARNING: this host has previously used a certificate with the fingerprint:")
+                print("%s\n" % provider.trusted_certificate_for(peer))
             
             while(True):
-                print "Do you want to accept this certificate? [yna] ",
+                print("Do you want to accept this certificate? [yna] ")
                 
-                selection = raw_input().strip().lower()
+                selection = input().strip().lower()
                 
                 if selection == "n":
                     sys.exit(-2)
                 elif selection == "y":
-                    print
+                    print("")
                     break
                 elif selection == "a":
-                    print "Adding certificate to known hosts.\n"
+                    print("Adding certificate to known hosts.\n")
                     provider.trust(certificate, peer)
                     break
                     

@@ -1,4 +1,4 @@
-from base64 import b64decode
+import base64
 from logging import getLogger
 
 from drozer.server.files import CreatedResource, ErrorResource
@@ -22,9 +22,8 @@ class HTTP(HttpReceiver):
         Checks the Authorization header, send to provide credentials
         to the server.
         """
-        
         method, credentials = authorization.split(" ")
-        username, password = b64decode(credentials).split(":")
+        username, password = base64.b64decode(credentials).split(":")
         
         return method == "Basic" and username in self.__credentials and self.__credentials[username] == password
     
@@ -33,14 +32,12 @@ class HTTP(HttpReceiver):
         Called when a connection is made to the HTTP Server. We write back a
         placeholder message, for testing.
         """
-        
         HttpReceiver.connectionMade(self)
         
     def requestReceived(self, request):
         """
         Called when a complete HTTP request has been made to the HTTP server.
         """
-        
         resource = None
         
         if request.verb == "DELETE":
@@ -93,7 +90,7 @@ class HTTP(HttpReceiver):
                         if key.startswith("X-Drozer-Set-Header-"):
                             custom_headers[key.split("X-Drozer-Set-Header-")[1]] = value
 
-                    print request.headers
+                    print(request.headers)
                     
                     if magic != None and self.__file_provider.has_magic_for(magic) and self.__file_provider.get_by_magic(magic).resource != request.resource:
                         resource = ErrorResource(request.resource, 409, "Could not create %s. The specified magic has already been assigned to another resource.")
@@ -107,7 +104,20 @@ class HTTP(HttpReceiver):
             resource.download(request.resource)
         if httpResponse != None and request.verb == "HEAD":
             httpResponse.body = None
- 
-        self.transport.write(str(httpResponse))
+
+        # yaynoteyay
+        # `httpResponse` must be in `bytes()` to be written properly
+        # `httpResponse.headers` are in list(str) format
+        # `httpResponse.body` is in bytes() format
+
+        yaysplityay = str(httpResponse).split("\r\n\r\n")
+        yayheadersyay = bytes(yaysplityay[0], 'utf-8')
+        
+        if (isinstance(httpResponse.body, str) == True):
+            httpResponse.body = bytes(httpResponse.body, 'utf-8')
+
+        yayresponseyay = yayheadersyay + b"\r\n\r\n" + httpResponse.body
+
+        self.transport.write(yayresponseyay)
         self.transport.loseConnection()
         

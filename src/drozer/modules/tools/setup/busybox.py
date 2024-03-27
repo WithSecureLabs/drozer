@@ -19,7 +19,7 @@ Typically, you require root access to the device to install Busybox. drozer can 
         arch = str(self.klass('java.lang.System').getProperty("os.arch")).upper()
         
         # Check for unsupported architecture
-        if "ARM" in arch:
+        if ("ARM" in arch) or ("AARCH" in arch):
             arch = "arm"
         elif "86" in arch:
             arch = "x86"
@@ -28,7 +28,7 @@ Typically, you require root access to the device to install Busybox. drozer can 
 
         # If the arch is supported, then check if busybox is installed
         if arch == "x86":
-            if self.isBusyBoxInstalled():
+            if (self.isBusyBoxInstalled() == True):
                 self.stdout.write("BusyBox is already installed.\n")
             else:
                 if self.installBusyBox(arch="x86", pie=False):
@@ -36,7 +36,7 @@ Typically, you require root access to the device to install Busybox. drozer can 
                 else:
                     self.stdout.write("BusyBox installation failed.\n")
         elif arch == "arm":
-            if self.isBusyBoxInstalled():
+            if (self.isBusyBoxInstalled() == True):
                 self.stdout.write("BusyBox is already installed.\n")
             else:
                 if self.klass("android.os.Build$VERSION").SDK_INT >= 21:

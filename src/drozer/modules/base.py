@@ -1,10 +1,10 @@
 import argparse
 import textwrap
 
-from pydiesel.reflection.types import ReflectedType
+from pysolar.reflection.types import ReflectedType
 
-from mwr.common import argparse_completer, console
-from mwr.common.text import wrap
+from WithSecure.common import argparse_completer, console
+from WithSecure.common.text import wrap
 
 class Module(object):
     """
@@ -54,7 +54,7 @@ class Module(object):
         This should be used to force an object to assume a particular data type
         in Java.
         """
-
+        
         return ReflectedType.fromNative(native, reflector=self.reflector, obj_type=obj_type)
     
     @classmethod
@@ -119,7 +119,7 @@ class Module(object):
         Gets the context of the running Agent application.
         """
 
-        return self.klass('com.mwr.dz.Agent').getContext()
+        return self.klass('com.WithSecure.dz.Agent').getContext()
     
     def has_context(self):
         """

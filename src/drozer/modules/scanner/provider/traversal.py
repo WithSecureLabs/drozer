@@ -1,4 +1,4 @@
-from pydiesel.reflection import ReflectionException
+from pysolar.reflection import ReflectionException
 
 from drozer.modules import common, Module
 
@@ -11,7 +11,7 @@ class Traversal(Module, common.FileSystem, common.PackageManager, common.Provide
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["scanner", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", "--uri", dest="package_or_uri", help="specify a package, or content uri to search", metavar="<package or uri>")
@@ -52,11 +52,11 @@ class Traversal(Module, common.FileSystem, common.PackageManager, common.Provide
         try:
             data = self.contentResolver().read(uri + "/../../../../../../../../../../../../../../../../etc/hosts")
         except ReflectionException as e:
-            if e.message.find("java.io.FileNotFoundException") >= 0 or \
-                e.message.find("java.lang.IllegalArgumentException") >= 0 or \
-                e.message.find("java.lang.SecurityException") >= 0 or \
-                e.message.find("No content provider") >= 0 or \
-                e.message.find("RuntimeException"):
+            if "java.io.FileNotFoundException" in str(e) or \
+                "java.lang.IllegalArgumentException" in str(e) or \
+                "java.lang.SecurityException" in str(e) or \
+                "No content provider" in str(e) or \
+                "RuntimeException" in str(e):
                 data = ""
             else:
                 raise

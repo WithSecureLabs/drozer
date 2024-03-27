@@ -41,7 +41,7 @@ class Manifest(object):
     
     def __init__(self, path):
         self.__path = path
-        self.__doc = xml.fromstring(file(self.__path).read())
+        self.__doc = xml.fromstring(open(self.__path).read())
         
     
     def add_permission(self, name):

@@ -1,11 +1,11 @@
-import cStringIO
+from io import StringIO
 import os
 import re
 import zipfile
 
 from xml.etree import ElementTree as xml
 
-from mwr.common import fs
+from WithSecure.common import fs
 
 from drozer.repoman.remotes import Remote, NetworkException
 
@@ -56,7 +56,7 @@ class ModuleInstaller(object):
         """
 
         if force:
-            print "Forcing installation of modules from repositories"
+            print ("Forcing installation of modules from repositories")
         
         status = { 'success': [], 'existing': [], 'fail': {} }
 
@@ -73,19 +73,19 @@ class ModuleInstaller(object):
                     _modules = []
             
             for module in _modules:
-                print "Processing %s..." % module,
+                print("Processing %s..." % module)
                 
                 try:
                     self.__install_module(fetch, module, force)
-                    print "Done."
+                    print("Done.")
                     
                     status['success'].append(module)
                 except AlreadyInstalledError as e:
-                    print "Already Installed."
+                    print("Already Installed.")
 
                     status['existing'].append(module)
                 except InstallError as e:
-                    print "Failed."
+                    print("Failed.")
                     
                     status['fail'][module] = str(e) 
         
@@ -130,7 +130,7 @@ class ModuleInstaller(object):
         
         directories = package[len(self.repository):].split(os.path.sep)
         
-        for i in xrange(len(directories)):
+        for i in range(len(directories)):
             self.__emit(os.path.join(self.repository, *directories[0:i+1] + ["__init__.py"]))
     
     def __get_combined_index(self):
@@ -142,11 +142,15 @@ class ModuleInstaller(object):
         index = set([])
         
         for url in Remote.all():
+
+            # currently borked
+            # the URL leads to a github repo that doesn't exist
+
             source = Remote.get(url).download("INDEX.xml")
             
             if source != None:
                 modules = xml.fromstring(source)
-                
+
                 index = index.union(map(lambda m: ModuleInfo(url, m.attrib['name'], m.find("./description").text), modules.findall("./module")))
         
         return filter(lambda m: m != None and m != "", index)
@@ -249,7 +253,7 @@ class ModuleInstaller(object):
         package = self.__create_package(os.path.join(self.repository, *path))
         
         # get a list of files within the archives
-        archive = zipfile.ZipFile(cStringIO.StringIO(source))
+        archive = zipfile.ZipFile(StringIO(source))
         files = archive.infolist()
         # if force is set, we dont care if it overwrites an existing file
         # ensure we are not about to overwrite any existing files

@@ -1,6 +1,6 @@
-from pydiesel.api import Frame
+from pysolar.api import Frame
 
-from mwr.common.twisted import StreamReceiver
+from WithSecure.common.twisted import StreamReceiver
 
 class FrameReceiver(StreamReceiver):
     """
@@ -18,7 +18,6 @@ class FrameReceiver(StreamReceiver):
         Called when a connection is made to the FrameReceiver, and passes the
         context back to the StreamReceiver.
         """
-
         StreamReceiver.connectionMade(self)
 
     def buildFrame(self):

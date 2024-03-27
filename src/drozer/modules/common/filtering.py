@@ -13,6 +13,9 @@ class Filters(object):
             collection = []
             
         if term != None and term != "":
-            return filter(lambda e: str(getattr(e, key)).upper().find(str(term).upper()) >= 0, collection)
+            # yaynoteyay
+            # i guess in python2, the length of a `filter` class could be obtained via `len(), but i guess this doesn't work in python3`
+            # so making this return a `list` instead of `filter`
+            return list(filter(lambda e: str(getattr(e, key)).upper().find(str(term).upper()) >= 0, collection))
         else:
             return collection

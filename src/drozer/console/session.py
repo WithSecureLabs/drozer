@@ -4,15 +4,16 @@ import shlex
 import sys
 import textwrap
 import traceback
+import random
 
-from pydiesel.api.protobuf_pb2 import Message
-from pydiesel.api.transport.exceptions import ConnectionError
-from pydiesel.reflection import Reflector
+from pysolar.api.protobuf_pb2 import Message
+from pysolar.api.transport.exceptions import ConnectionError
+from pysolar.reflection import Reflector
 
-from mwr.common import cmd_ext as cmd
-from mwr.common import console
-from mwr.common.stream import ColouredStream, DecolouredStream
-from mwr.common.text import wrap
+from WithSecure.common import cmd_ext as cmd
+from WithSecure.common import console
+from WithSecure.common.stream import ColouredStream, DecolouredStream
+from WithSecure.common.text import wrap
 
 from drozer import meta
 from drozer.configuration import Configuration
@@ -35,7 +36,7 @@ class Session(cmd.Cmd):
         self.__module_pushed_completers = 0
         self.__permissions = None
         self.__server = server
-        self.__session_id = session_id
+        self.__session_id = bytes(session_id, encoding='utf-8')
         self.__onecmd = arguments.onecmd
         self.active = True
         self.aliases = { "l": "list", "ls": "list", "ll": "list" }
@@ -51,19 +52,16 @@ class Session(cmd.Cmd):
             self.stdout = DecolouredStream(self.stdout)
             self.stderr = DecolouredStream(self.stderr)
 
-
         m = Module(self)
-
         if m.has_context():
-            dataDir = str(m.getContext().getApplicationInfo().dataDir)
+            dataDir = str(m.getContext().getDataDir().getCanonicalPath().native())
         else:
             dataDir = str(m.new("java.io.File", ".").getCanonicalPath().native())
-
         self.variables = {  'PATH': dataDir +'/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin',
                             'WD': dataDir }
         
         self.__load_variables()
-        
+
         if arguments.onecmd == None:
             self.__print_banner()
 
@@ -111,7 +109,7 @@ class Session(cmd.Cmd):
 
     def context(self):
         if self.has_context():
-            return self.reflector.resolve("com.mwr.dz.Agent").getContext()
+            return self.reflector.resolve("com.WithSecure.dz.Agent").getContext()
         else:
             return None
         
@@ -362,7 +360,7 @@ class Session(cmd.Cmd):
             self.stdout.write("Has ApplicationContext: YES\n")
             self.stdout.write("Available Permissions:\n")
             for permission in sorted(self.permissions()):
-                if permission != "com.mwr.dz.permissions.GET_CONTEXT":
+                if permission != "com.WithSecure.dz.permissions.GET_CONTEXT":
                     self.stdout.write(" - %s\n" % (permission))
         else:
             self.stdout.write("Has ApplicationContext: NO\n")
@@ -391,10 +389,14 @@ class Session(cmd.Cmd):
                 return None
 
             try:
+                print("Attempting to run shell module")
                 module.run(argv[1:])
             except KeyboardInterrupt:
                 self.stderr.write("\nCaught SIGINT. Interrupt again to terminate you session.\n")
             except Exception as e:
+                # yaynoteyay
+                # commenting out because `self.handleException(e)` does the same thing anyway
+                #print(f"Exception occured: {e}")
                 self.handleException(e)
             
             while self.__module_pushed_completers > 0:
@@ -533,7 +535,7 @@ class Session(cmd.Cmd):
     
     def has_context(self):
         if self.__has_context == None:
-            self.__has_context = not self.reflector.resolve("com.mwr.dz.Agent").getContext() == None
+            self.__has_context = not self.reflector.resolve("com.WithSecure.dz.Agent").getContext() == None
             
         return self.__has_context == True
     
@@ -557,7 +559,7 @@ class Session(cmd.Cmd):
                     if (packageManager.checkPermission(str(permission), packageName) == pm.PERMISSION_GRANTED):
                         self.__permissions.append(str(permission))
             
-            self.__permissions.append("com.mwr.dz.permissions.GET_CONTEXT")
+            self.__permissions.append("com.WithSecure.dz.permissions.GET_CONTEXT")
         elif self.__permissions == None:
             self.__permissions = []
         
@@ -576,10 +578,10 @@ class Session(cmd.Cmd):
             latest = meta.latest_version()
             if latest != None:
                 if meta.version > latest:
-                    print "It seems that you are running a drozer pre-release. Brilliant!\n\nPlease send any bugs, feature requests or other feedback to our Github project:\nhttp://github.com/mwrlabs/drozer.\n\nYour contributions help us to make drozer awesome.\n"
+                    print("It seems that you are running a drozer pre-release. Brilliant!\n\nPlease send any bugs, feature requests or other feedback to our Github project:\nhttp://github.com/mwrlabs/drozer.\n\nYour contributions help us to make drozer awesome.\n")
                 elif meta.version < latest:
-                    print "It seems that you are running an old version of drozer. drozer v%s was\nreleased on %s. We suggest that you update your copy to make sure that\nyou have the latest features and fixes.\n\nTo download the latest drozer visit: https://labs.f-secure.com/tools/drozer/\n" % (latest, latest.date)
-        except Exception, e:
+                    print("It seems that you are running an old version of drozer. drozer v%s was\nreleased on %s. We suggest that you update your copy to make sure that\nyou have the latest features and fixes.\n\nTo download the latest drozer visit: https://labs.f-secure.com/tools/drozer/\n" % (latest, latest.date))
+        except Exception as e:
             pass #TODO figure out what this exception is and handle appropriately (exp. IOError)
 
     def sendAndReceive(self, message):
@@ -688,22 +690,75 @@ class Session(cmd.Cmd):
         self.pop_completer()
     
     def __print_banner(self):
-        print "            ..                    ..:."
-        print "           ..o..                  .r.."
-        print "            ..a..  . ....... .  ..nd"
-        print "              ro..idsnemesisand..pr"
-        print "              .otectorandroidsneme."
-        print "           .,sisandprotectorandroids+."
-        print "         ..nemesisandprotectorandroidsn:."
-        print "        .emesisandprotectorandroidsnemes.."
-        print "      ..isandp,..,rotecyayandro,..,idsnem."
-        print "      .isisandp..rotectorandroid..snemisis."
-        print "      ,andprotectorandroidsnemisisandprotec."
-        print "     .torandroidsnemesisandprotectorandroid."
-        print "     .snemisisandprotectorandroidsnemesisan:"
-        print "     .dprotectorandroidsnemesisandprotector."
-        print
+        x = random.randint(0,100)
+        if x == 69:
+            self.__print_banner2()
+        elif x == 42:
+            self.__print_banner3()
+        else:
+            self.__print_banner1()
 
+    def __print_banner1(self):
+        print("            ..                    ..:."      )
+        print("           ..o..                  .r.."      )
+        print("            ..a..  . ....... .  ..nd"        )
+        print("              ro..idsnemesisand..pr"         )
+        print("              .otectorandroidsneme."         )
+        print("           .,sisandprotectorandroids+."      )
+        print("         ..nemesisandprotectorandroidsn:."   )
+        print("        .emesisandprotectorandroidsnemes.."  )
+        print("      ..isandp,..,rotecyayandro,..,idsnem."  )
+        print("      .isisandp..rotectorandroid..snemisis." )
+        print("      ,andprotectorandroidsnemisisandprotec.")
+        print("     .torandroidsnemesisandprotectorandroid.")
+        print("     .snemisisandprotectorandroidsnemesisan:")
+        print("     .dprotectorandroidsnemesisandprotector.")
+        print("")
+
+    # You found the easter egg!
+    # What you wanted a prize or something?
+    def __print_banner2(self):
+        print("                     ,  ,..,                 ")
+        print("                    .........,.              ")
+        print("                      ..........             ")
+        print("         .      ...,*//*,....                ")
+        print("       ,.##./androidsnemsisandp#,,           ")
+        print("    ..(%#/rotectorandroidsnemesisa/.,.       ")
+        print("   .(//*ndprotectorandroidsnemesis//%/*      ")
+        print("  ,#//and@@@@/protector@@@@&androidsne,,     ")
+        print(" .///mes@ .. @andprote@ .. @ctorandroid#.    ")
+        print("  (snemsi@@@sand&&&yay&&@@@protectorandro,   ")
+        print(" ..##idsn&&&&&&&&&&&&&&/emisisandprotector,, ")
+        print(" ,.#&&&&&&&&&&&&&&&&&&&#androidsnemesisandp,.")
+        print(",%&&&&&&&&&&&&&&&&&&&&%/rotectorandroidsneme,")
+        print(".&&&&&&&&&&&&&&&&&&&&//sisandprotectorandro/,")
+        print(" .*%&&&&&&&&&&&&&&&/idsnemesisandprotector(, ")
+        print("    .,.,*/androidsnemesisandprotectorand(,,  ")
+        print("     ,roidsnemesisandprotectorandroidsn/.    ")
+        print("   .,emisisandprotectorandroidsnemsisan(...**")
+        print("")
+
+    # TODO replace this with pichu
+    def __print_banner3(self):
+        print("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣷⠀⣀⣤⡆⠀⠀⠀")
+        print("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⡿⠀⠀⠀⠀")
+        print("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣷⡖⠀⠀⠀")
+        print("⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⡿⢛⣿⢿⣿⡟⠋⠀⠀⠀⠀")
+        print("⣿⣿⣿⣶⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠠⣾⣿⡿⠋⠀⠈⠀⢸⣿⡇⠀⠀⠀⠀⠀")
+        print("⢻⣿⣿⣟⠻⣿⣿⣷⣦⣀⠀⠀⠀⠀⠀⠻⠉⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀⠀⠀⠀")
+        print("⢸⣿⣟⠿⠀⠀⠉⠛⢿⣿⡇⠀⠀⠀⠀⠈⡀⠀⠀⠀⠀⠀⣿⣿⠇⠀⠀⠀⠀⠀")
+        print("⠀⣿⣿⡄⠀⠀⠀⠀⠀⠈⡇⢀⠠⠀⠀⠀⠁⠀⠀⡀⠀⠠⠟⠛⠀⠀⠀⠀⠀⠀")
+        print("⠀⠸⣿⣷⡀⠀⠀⠀⠀⠀⠔⠁⠀⠀⠀⢀⢀⡀⠀⠈⠢⠀⠀⠀⠀⠀⠀⠀⠀⠀")
+        print("⠀⠀⢻⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣴⣿⠀⠔⠀⡄⠀⠀⠀⠀⠀⠀⠀⠀")
+        print("⠀⠀⠀⠻⠿⠇⠒⠈⡄⠀⠀⠀⠀⠀⠀⠈⡉⠁⠀⠀⠀⠁⠀⠀⠄⠀⠀⠀⠀⠀")
+        print("⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⡠⠴⠄⠀⢀⠔⠀⠀⠀⠄⠌⠀⠀⡁⠀⠀⠀⠀⠀⠀")
+        print("⠀⠀⠀⠀⠀⠀⠀⠀⢁⣀⡀⠀⡀⠙⠄⠀⢀⠀⣠⣾⠄⣤⠊⠀⠀⠀⠀⠀⠀⠀")
+        print("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠄⡑⠁⠂⠀⣈⣥⣾⡿⢿⠀⠀⢄⠀⢀⣠⣤⣤⣴⣦")
+        print("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⡀⠈⠀⠋⠿⠀⠀⠀⠄⠀⠌⣴⣿⣿⣿⣿⣿⣿")
+        print("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠃⠀⠀⠀⠀⠀⠉⠀⠏⠀⠀⠈⠉⠙⠋")
+        print("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡔⠈⠂⠄⠀⠀⠀⠀⡠⠀⠀⠀⠀⠀⠀⠀⠀")
+        print("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠄⢀⣀⡰⠀⠂⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀")
+        print("")
 
     def __setBase(self, base):
         """

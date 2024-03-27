@@ -1,5 +1,7 @@
 *~
 *.apk
+*.zip
+*.cache
 *.hg
 *.deb
 debian/*
@@ -19,3 +21,4 @@ src/drozer.egg-info
 mercury.log
 deb_dist/*
 *.tar.gz
+.vs/

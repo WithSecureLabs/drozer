@@ -1,5 +1,5 @@
 import itertools
-from mwr.common import cli
+from WithSecure.common import cli
 import yaml
 from drozer import android, meta
 from drozer.agent import builder, manifest
@@ -54,15 +54,15 @@ class AgentManager(cli.Base):
         # Apktool v2.2.4 generates a malformed YAML file when unpacking apks
         # See https://github.com/iBotPeaches/Apktool/issues/1610
         # This workaround generates a valid YAML document and prevents agent building from failing
-        yaml_doc = yaml.load(file(packager.apktool_yml_path()).read().replace('!!brut.androlib.meta.MetaInfo',''))
+        yaml_doc = yaml.load(open(packager.apktool_yml_path()).read().replace('!!brut.androlib.meta.MetaInfo',''))
         m_ver = yaml_doc['versionInfo']['versionName']
         #m_ver = m.version()
         c_ver = meta.version.__str__()
         
         if m_ver != c_ver:
-            print "Version Mismatch: Consider updating your build(s)"
-            print "Agent Version: %s" % m_ver
-            print "drozer Version: %s" % c_ver
+            print("Version Mismatch: Consider updating your build(s)")
+            print("Agent Version: %s" % m_ver)
+            print("drozer Version: %s" % c_ver)
 
         for p in permissions:
             m.add_permission(p)
@@ -74,4 +74,4 @@ class AgentManager(cli.Base):
 
         built = packager.package()
         
-        print "Done:", built
+        print("Done:", built)

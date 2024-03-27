@@ -6,8 +6,8 @@ try:
     from twisted.internet import reactor, ssl, task
     from twisted.internet.protocol import Protocol, ServerFactory
 except ImportError:
-    print "drozer Server requires Twisted to run."
-    print "Run 'pip install twisted' to fetch this dependency."
+    print("drozer Server requires Twisted to run.")
+    print("Run 'pip install twisted' to fetch this dependency.")
     sys.exit(-1)
 
 from drozer.configuration import Configuration
@@ -23,10 +23,10 @@ def serve(arguments):
     task.LoopingCall(heartbeat).start(arguments.ping_interval)
         
     if arguments.ssl != None:
-        print "Starting drozer Server, listening on 0.0.0.0:%d (with SSL)" % arguments.port
+        print("Starting drozer Server, listening on 0.0.0.0:%d (with SSL)" % arguments.port)
 
         if arguments.ssl == []:
-            print "Using default SSL key material..."
+            print("Using default SSL key material...")
             
             arguments.ssl = Provider().get_keypair("drozer-server")
         
@@ -34,7 +34,7 @@ def serve(arguments):
                           SwitcherFactoryServer(dict(arguments.credentials)),
                           ssl.DefaultOpenSSLContextFactory(*arguments.ssl))
     else:
-        print "Starting drozer Server, listening on 0.0.0.0:%d" % arguments.port
+        print("Starting drozer Server, listening on 0.0.0.0:%d" % arguments.port)
         
         reactor.listenTCP(arguments.port,
                           SwitcherFactoryServer(dict(arguments.credentials)))
@@ -72,16 +72,21 @@ class ProtocolSwitcher(Protocol):
         """
         Selects which protocol to be used, by inspecting the data.
         """
-
-        if data.startswith("DELETE") or data.startswith("GET") or data.startswith("HEAD") or data.startswith("POST"):
+        print(f"Choosing Protocol: {str(data)}")
+        if data.startswith(b"DELETE") or data.startswith(b"GET") or data.startswith(b"HEAD") or data.startswith(b"POST"):
+            print("Chose HTTP")
             return HTTP(self.factory.credentials, self.__file_provider)
-        elif data.startswith("COLLECT"):
+        elif data.startswith(b"COLLECT"):
+            print("Chose Shell")
             return ShellCollector()
-        elif data.startswith("S"):
+        elif data.startswith(b"S"):
+            print("Chose OtherShell")
             return ShellServer()
         elif self.__file_provider.has_magic_for(data.strip()):
+            print("Magic")
             return ByteStream(self.__file_provider)
         else:
+            print("Chose Drozer")
             return Drozer()
     
     def connectionMade(self):

@@ -1,8 +1,10 @@
 import re
 
-from mwr.common import fs
+from WithSecure.common import fs
 
 from drozer.server.receivers.http import HTTPResponse
+
+import traceback
 
 class FileProvider(object):
     
@@ -45,8 +47,8 @@ class FileProvider(object):
             return None
     
     def has_magic_for(self, magic):
-        resources = filter(lambda r: self.__store[r].magic == magic, self.__store)
-        
+        resources = list(filter(lambda r: self.__store[r].magic == magic, self.__store))
+
         if len(resources) == 1:
             return True
         else:
@@ -180,7 +182,9 @@ class InMemoryResource(Resource):
         if self.mimetype != None:
             headers['Content-Type'] = self.mimetype
 
-        headers = dict(headers.items() + self.custom_headers.items())
+        # yaynoteyay
+        # old code didn't combine dictionaries properly
+        headers.update(self.custom_headers)
         
         return HTTPResponse(status=200, headers=headers, body=self.getBody())
    

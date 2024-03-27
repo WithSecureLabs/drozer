@@ -1,4 +1,4 @@
-from mwr.common import cli, path_completion
+from WithSecure.common import cli, path_completion
 
 from drozer import util
 from drozer.server import dz, uploader

@@ -1,10 +1,10 @@
 import functools
-import urlparse
+import urllib
 
-from BaseHTTPServer import BaseHTTPRequestHandler
-from BaseHTTPServer import HTTPServer
+from http.server import BaseHTTPRequestHandler
+from http.server import HTTPServer
 
-from pydiesel.reflection import ReflectionException
+from pysolar.reflection import ReflectionException
 
 from drozer.modules import common, Module
 
@@ -20,7 +20,7 @@ class WebContentResolver(Module, common.PackageManager, common.Provider):
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["auxiliary"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-p", "--port", default=8080, help="the port to start the WebContentResolver on")
@@ -29,12 +29,12 @@ class WebContentResolver(Module, common.PackageManager, common.Provider):
         try:
             server = HTTPServer(('', int(arguments.port)), functools.partial(Handler, self))
 
-            print "WebContentResolver started on port " + str(arguments.port) + "."
-            print "Ctrl+C to Stop"
+            print("WebContentResolver started on port " + str(arguments.port) + ".")
+            print("Ctrl+C to Stop")
 
             server.serve_forever()
         except KeyboardInterrupt:
-            print "Stopping...\n"
+            print("Stopping...\n")
 
             server.socket.close()
 
@@ -53,31 +53,31 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
 
         # grab the requested path, and parse it
-        url = urlparse.urlparse(self.path)
+        url = urllib.parse.urlparse(self.path)
         # split out the path component into an array
         path = [ x for x in url.path.split('/') if x ]
         # parse the trailing url parameters
-        params = urlparse.parse_qs(url.query)
+        params = urllib.parse.parse_qs(url.query)
 
         try:
             if not path or path[0] == 'list':
                 # if / or /list, produce a list of all known content provider uris
                 output = self.__provider_list(filters=params.get('filter', [None])[0], permissions=params.get('permissions', [None])[0])
 
-                self.wfile.write(self.header + output + self.footer)
+                self.wfile.write(bytes(self.header + output + self.footer, "utf-8"))
             elif path[0] == 'query':
                 # if /query, build a query against the specified content uri, with
                 # the projection and selection
                 output = self.__query(params.get('uri', [None])[0], params.get('projection', [None])[0], params.get('selection', [None])[0], params.get('selectionArgs', [None])[0], params.get('selectionSort', [None])[0])
 
-                self.wfile.write(self.header + output + self.footer)
+                self.wfile.write(bytes(self.header + output + self.footer, "utf-8"))
             else:
                 # if the path is not recognised, print usage information
-                self.wfile.write(self.header + self.usage() + self.footer)
+                self.wfile.write(bytes(self.header + self.usage() + self.footer, "utf-8"))
         except ReflectionException as e:
             # handle any ReflectionExceptions here, and show the error message in the
             # user's browser - this will help them to build their query
-            self.wfile.write(self.header + self.__format_exception(e) + self.footer)
+            self.wfile.write(bytes(self.header + self.__format_exception(e) + self.footer, "utf-8"))
     
     def __eligible_path_permission(self, permissions, path):
         return permissions == None or \

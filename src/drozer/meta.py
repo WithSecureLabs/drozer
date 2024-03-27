@@ -1,4 +1,5 @@
-from urllib2 import HTTPError, URLError, urlopen, Request
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError, URLError
 from xml.etree import ElementTree
 
 class Version:
@@ -27,16 +28,16 @@ class Version:
     def __str__(self):
         return "%d.%d.%d" % (self.major, self.minor, self.patch)
 
-
+# TODO License check this stuff
 name = "drozer"
-vendor = "MWR InfoSecurity"
-version = Version("2.5.0", "2023-05-16")
+vendor = "WithSecure"
+version = Version("3.0.0", "2020-05-18")
 
-contact = "drozer@mwrinfosecurity.com"
+contact = "drozer@withsecure.com"
 description = "The Leading Android Security Testing Framework"
 license = "BSD (3 clause)"
 keywords = "drozer android security framework"
-url = "https://labs.f-secure.com/tools/drozer/"
+url = "https://labs.withsecure.com/tools/drozer/"
 
 long_description = '''
 drozer (formerly Mercury) is the leading security testing framework for Android.
@@ -50,7 +51,7 @@ drozer is open source software, maintained by MWR InfoSecurity, and can be downl
 
 def latest_version():
     try:
-        xml = urlopen(Request("https://www.mwrinfosecurity.com/products/drozer/community-edition/manifest.xml", None, {"user-agent": "drozer: %s" % version}), None, 1).read()
+        xml = urlopen(Request("https://www.withsecure.com/products/drozer/community-edition/manifest.xml", None, {"user-agent": "drozer: %s" % version}), None, 1).read()
         doc = ElementTree.fromstring(xml)
         
         return max(map(lambda n: Version(n.text[1:], n.attrib['release_date']), doc.findall('version')))
@@ -60,4 +61,4 @@ def latest_version():
         return None
 
 def print_version():
-    print "%s %s\n" % (name, version)
+    print("%s %s\n" % (name, version))

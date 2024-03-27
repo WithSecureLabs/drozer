@@ -1,4 +1,4 @@
-from pydiesel.reflection import ReflectionException
+from pysolar.reflection import ReflectionException
 
 from drozer.modules import common, Module
 
@@ -11,7 +11,7 @@ class Injection(Module, common.FileSystem, common.PackageManager, common.Provide
     date = "2012-11-06"
     license = "BSD (3 clause)"
     path = ["scanner", "provider"]
-    permissions = ["com.mwr.dz.permissions.GET_CONTEXT"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
 
     def add_arguments(self, parser):
         parser.add_argument("-a", "--package", "--uri", dest="package_or_uri", help="specify a package, or content uri to search", metavar="<package or uri>")
@@ -56,12 +56,12 @@ class Injection(Module, common.FileSystem, common.PackageManager, common.Provide
         try:
             self.contentResolver().query(uri, projection=["'"])
         except ReflectionException as e:
-            if e.message.find("unrecognized token") >= 0:
+            if "unrecognized token" in str(e):
                 vulnerable['projection'].add(uri)
 
         try:
             self.contentResolver().query(uri, selection="'")
         except ReflectionException as e:
-            if e.message.find("unrecognized token") >= 0:
+            if "unrecognized token" in str(e):
                 vulnerable['selection'].add(uri)
             

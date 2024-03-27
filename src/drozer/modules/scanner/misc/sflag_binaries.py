@@ -25,7 +25,7 @@ Discovered suid/sgid files in /system:
         parser.add_argument("-p", "--privileged", action="store_true", default=False, help="request root to perform the task in a privileged context")
 
     def execute(self, arguments):
-        if self.isBusyBoxInstalled():
+        if (self.isBusyBoxInstalled() == True):
             command = self.busyboxPath() + " find %s -type f \( -perm -04000 -o -perm -02000 \) \-exec ls {} \;" % arguments.target
             privileged = arguments.privileged
             

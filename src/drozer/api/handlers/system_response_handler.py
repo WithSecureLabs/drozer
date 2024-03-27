@@ -1,4 +1,4 @@
-from pydiesel.api import handlers, UnexpectedMessageException
+from pysolar.api import handlers, UnexpectedMessageException
 
 class SystemResponseHandler(handlers.SystemResponseHandler):
     """

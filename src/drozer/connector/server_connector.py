@@ -1,8 +1,8 @@
 import socket
 
-from pydiesel.api.builders import SystemRequestFactory
-from pydiesel.api.transport import SocketTransport
-from pydiesel.api.transport.exceptions import ConnectionError
+from pysolar.api.builders import SystemRequestFactory
+from pysolar.api.transport import SocketTransport
+from pysolar.api.transport.exceptions import ConnectionError
 
 class ServerConnector(SocketTransport):
     """
@@ -20,8 +20,10 @@ class ServerConnector(SocketTransport):
         try:
             SocketTransport.__init__(self, arguments, trust_callback)
         except socket.error as e:
+            print("Socket Error")
             raise ConnectionError(e)
         except socket.timeout as e:
+            print("Other Socket Timout")
             raise ConnectionError(e)
 
     def listDevices(self):
@@ -30,7 +32,8 @@ class ServerConnector(SocketTransport):
         """
 
         try:
-            return self.sendAndReceive(SystemRequestFactory.listDevices())
+            datum = self.sendAndReceive(SystemRequestFactory.listDevices())
+            return datum
         except RuntimeError as e:
             if e.message == 'Received an empty response from the Agent. This normally means the remote service has crashed.':
                 raise ConnectionError(e)

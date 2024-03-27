@@ -1,5 +1,6 @@
 import os
 import sys
+import importlib
 
 from drozer.modules.import_conflict_resolver import ImportConflictResolver
 from drozer.repoman import Repository
@@ -41,15 +42,15 @@ class ModuleLoader(object):
         """
 
         for i in modules.keys():
-            if modules[i] is not None and modules[i] != "drozer.modules.base":
+            if modules[i] is not None and modules[i] != "drozer.modules.base" and "__pycache__" not in modules[i]:
                 try:
                     __import__(modules[i])
                     # Reload the module in case the source has changed. We don't
                     # need to be careful over i, because the import must have
                     # been successful to get here.
                     if modules[i] in sys.modules:
-                        reload(sys.modules[modules[i]])
-                except ImportError:
+                        importlib.reload(sys.modules[modules[i]])
+                except ImportError as e:
                     sys.stderr.write("Skipping source file at %s. Unable to load Python module.\n" % modules[i])
                     pass 
                 except IndentationError:

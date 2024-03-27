@@ -119,7 +119,7 @@ class BurpExtender(IBurpExtender, ITab, IHttpListener, IMessageEditorController,
             else:
                 version = "HTTP/1.0"
             self.apkRequests[reqPath] = [reqUrl, version + " " + str(response.status) + " " + str(response.reason), responseHeaders]
-            print self.apkRequests[reqPath]
+            print(self.apkRequests[reqPath])
 
             # Instead of passing request - change host to www.google.com which will be non existent
             httpService = messageInfo.getHttpService()
