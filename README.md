@@ -1,18 +1,5 @@
 # drozer
 
-## ----------------------------------------------------------------
-
-## NOTE
-
-This is an BETA release of a rewritten drozer version, this version is updated to support python3.
-
-Currently, the following known issues are present:
-
-- Building of custom agents functionality will crash the drozer client, this functionality is considered out of scope for the beta release of the revived drozer project.
-- It is not possible to run drozer on a Windows host; you must run drozer on either a virtual machine or Docker image
-
-## ----------------------------------------------------------------
-
 drozer is an security testing framework for Android.
 
 drozer allows you to search for security vulnerabilities in apps and devices by assuming the role of an app and interacting with the Android Runtime, other apps' IPC endpoints and the underlying OS.
@@ -20,6 +7,15 @@ drozer allows you to search for security vulnerabilities in apps and devices by 
 drozer provides tools to help you use, share and understand public Android exploits.
 
 drozer is open source software, maintained by WithSecure, and can be downloaded from: [https://labs.withsecure.com/tools/drozer/](https://labs.withsecure.com/tools/drozer/)
+
+## NOTE
+
+This is an BETA release of a rewritten drozer version, this version is updated to support python3.
+
+Currently, the following known issues are present:
+
+- Building of custom agents functionality will crash the drozer client. This functionality is considered out of scope for the beta release of the revived drozer project.
+- It is not possible to run drozer on a Windows host; you must run drozer on either a virtual machine or Docker image
 
 ## Docker Container
 
