@@ -29,18 +29,12 @@ To help with making sure drozer can be run on all systems, a Docker container wa
 ### Software pre-requisites
 
 1. [Python3.8](https://www.python.org/downloads/)
-
 2. [Protobuf](https://pypi.python.org/pypi/protobuf) 4.25.2 or greater
-
 3. [Pyopenssl](https://pypi.python.org/pypi/pyOpenSSL) 22.0.0 or greater 
-
 4. [Twisted](https://pypi.python.org/pypi/Twisted) 18.9.0 or greater
-
 4. [Distro](https://pypi.org/project/distro/) 1.8.0 or greater
-
 5. [Java Development Kit](https://adoptopenjdk.net/releases.html) 11 or greater
 
-## ----------------------------------------------------------------
 
 ### Installing (Kali / Debian)
 
@@ -73,7 +67,6 @@ Finally, install drozer
 pip install dist/drozer-<version>-py3-none-any.whl
 ```
 
-===========================
 
 ### Building and Installing (Arch Linux/BlackArch)
 
@@ -88,20 +81,6 @@ python setup.py bdist_wheel
 sudo pip install dist/drozer-<version>-py3-none-any.whl
 ```
 
-===========================
-
-### Installing (Docker)
-
-Make sure your host user has the ability to create and run Docker images. Then run the following commands:
-
-```
-git clone https://github.com/WithSecureLabs/drozer.git
-cd drozer
-docker build -t drozer-docker .
-```
-
-===========================
-
 ### Protobuf errors
 
 If protobuf complains about the protobuf defintions being out of date. Copy the protobuf definition from [here](https://github.com/WithSecureLabs/mercury-common/tree/48e81d5ae65ec38dbe1e4bfe09548203dcf13384) into common/protobuf.proto
@@ -112,8 +91,6 @@ cd common
 protoc --python_out=../src/pysolar/api/ protobuf.proto
 ```
 
-## ----------------------------------------------------------------
-
 ## Usage
 
 ### Installing the Agent
@@ -122,9 +99,7 @@ drozer can be installed using Android Debug Bridge (adb).
 
 Download the latest drozer Agent [here](https://github.com/WithSecureLabs/drozer-agent/releases/latest).
 
-`$ adb install drozer-agent-x.x.x.apk`
-
-===========================
+`$ adb install drozer-agent.apk`
 
 ### Setup for session
 
@@ -138,8 +113,6 @@ You need to set up a suitable port forward so that your PC can connect to a TCP 
 
 Now, launch the Agent, select the "Embedded Server" option and tap "Enable" to start the server. You should see a notification that the server has started.
 
-===========================
-
 ### Start a session - running drozer on host
 
 On your PC, connect using the drozer Console:
@@ -149,34 +122,6 @@ On your PC, connect using the drozer Console:
 If using a real device, the IP address of the device on the network must be specified:
 
 `$ drozer console connect --server 192.168.0.10`
-
-===========================
-
-### Start a session - Docker image
-
-You have two options for connecting to the drozer agent.
-
-**Option 1 - network connection**
-
-First start the docker image in interactive mode:
-
-`$ docker run -it drozer_docker`
-
-Then connect to the drozer agent via the Android device's IP address
-
-`$ drozer console connect --server 192.168.0.10`
-
-**Option 2 - USB connection**
-
-First, start the docker image in interactive mode while forwarding TCP traffic from the host to the docker image:
-
-`$ docker run -it --add-host host.docker.internal:host-gateway drozer_docker`
-
-Then connect to the drozer agent via the forwarded host interface:
-
-`$ drozer console connect --server host.docker.internal`
-
-## -------------------------------------------------------------
 
 ### Command Reference
 
