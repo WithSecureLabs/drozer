@@ -192,7 +192,7 @@ class Session(cmd.Cmd):
             return
 
         self.stdout.write("Core Contributors:\n")
-        for contributor in ['MWR InfoSecurity (@mwrlabs)', 'Luander (luander.r@samsung.com)', 'Rodrigo Chiossi (r.chiossi@samsung.com)']:
+        for contributor in ['WithSecure Labs (@withconsulting)', 'Ken Gannon (@Yogehi)', 'William Ben Embarek (@willbenem)', 'Miłosz Gaczkowski (@cyberMilosz)', 'Luander (luander.r@samsung.com)', 'Rodrigo Chiossi (r.chiossi@samsung.com)']:
             self.stdout.write("  %s\n"%contributor)
 
         self.stdout.write("\nModule Contributors:\n")
