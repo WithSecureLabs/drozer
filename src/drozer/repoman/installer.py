@@ -1,4 +1,4 @@
-from io import StringIO
+from io import BytesIO
 import os
 import re
 import zipfile
@@ -215,7 +215,7 @@ class ModuleInstaller(object):
         #
         # Because the bytes are in little-endian order, we actually must look for
         # the bytes 50 4b 03 04.
-        if source[0:4] == "\x50\x4b\x03\x04":
+        if source[0:4] == b"\x50\x4b\x03\x04":
             return self.__unpack_module_zip(module, source, force)
         else:
             return self.__unpack_module_raw(module, source, force)
@@ -257,7 +257,7 @@ class ModuleInstaller(object):
         package = self.__create_package(os.path.join(self.repository, *path))
         
         # get a list of files within the archives
-        archive = zipfile.ZipFile(StringIO(source))
+        archive = zipfile.ZipFile(BytesIO(source))
         files = archive.infolist()
         # if force is set, we dont care if it overwrites an existing file
         # ensure we are not about to overwrite any existing files
