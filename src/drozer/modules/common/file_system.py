@@ -35,7 +35,7 @@ class FileSystem(object):
 
         data = self.readFile(source, block_size=block_size)
 
-        if data:
+        if data is not None:
             if (os.path.isdir(destination) == True):
                 destination = os.path.sep.join([destination, source.split("/")[-1]])
                 
@@ -129,7 +129,7 @@ class FileSystem(object):
         #TODO does not work past the first folder
         file_io = self.new("java.io.File", target)
         
-        return ["%s%s" %(s, '/') if (file_io.isDirectory() == True) else s for s in file_io.list()]
+        return ["%s/" % s if self.new("java.io.File", file_io, s).isDirectory() else s for s in file_io.list()]
         
     def md5sum(self, source):
         """
@@ -159,13 +159,15 @@ class FileSystem(object):
 
             data = b""
             
-            while True:
-                block = ByteStreamReader.read(file_stream, 0, block_size).base64_encode()
-                
-                if (len(block) > 0):
-                    data += base64.b64decode(block)
-                else:
-                    return data
+            try:
+                while True:
+                    block = ByteStreamReader.read(file_stream, 0, block_size).base64_encode()
+                    if len(block) > 0:
+                        data += base64.b64decode(block)
+                    else:
+                        return data
+            finally:
+                file_stream.close()
         else:
             return None
 
@@ -206,4 +208,3 @@ class FileSystem(object):
             return len(data)
         else:
             return None
-            

@@ -150,11 +150,10 @@ class Provider(loader.ClassLoader):
                 input_stream = self.__content_resolver.openInputStream(self.parseUri(uri))
                 
                 if input_stream != None:
-                    # yaynoteyay
-                    # TODO WILLIAM PLEASE
-                    # original code assumed that `ByteStreamReader()` could be converted to `String` automatically. this time, it can't.
-                    # for now, returning as bytes
-                    return ByteStreamReader.read(self.__module.new("java.io.FileInputStream", fd.getFileDescriptor()))
+                    try:
+                        return ByteStreamReader.read(input_stream).base64_encode().decode('utf-8')
+                    finally:
+                        input_stream.close()
                 else:
                     raise Provider.UnableToOpenFileException(uri)
 
