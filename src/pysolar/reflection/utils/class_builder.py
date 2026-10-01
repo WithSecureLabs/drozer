@@ -1,4 +1,3 @@
-import binascii
 import glob
 import hashlib
 import os
@@ -14,7 +13,7 @@ class ClassBuilder(object):
     """
     
     def __init__(self, path, d8_path, javac_path, sdk_path):
-        self.path = path
+        self.path = os.path.abspath(path)
         
         self.d8 = d8_path
         self.javac = javac_path
@@ -32,17 +31,17 @@ class ClassBuilder(object):
         # if the apk file we are about to generate already exists, then we do
         # not need to compile it again
         if not os.path.exists(apk_path):
-            # switch our working directory to the source directory
-            os.chdir(os.path.dirname(self.path))
-            # compile the java sources (%.java => %.class)
-            if self.__execute(self.javac , "-cp", self.sdk_path, os.path.basename(self.path)):
-                raise RuntimeError("Error whilst compiling the Java sources.")
-            
-            # collect any sub-classes that we generated
-            sources = map(lambda p: os.path.basename(p), glob.glob(self.path.replace(".java", "$*.class")))
-            # package the compiled bytecode into an apk file (%.class => %.apk)
-            if self.__execute(self.d8, "--output", os.path.basename(apk_path), *([os.path.basename(self.path).replace(".java", ".class")] + sources)):
-                raise RuntimeError("Error whilst building APK bundle.")
+            previous_directory = os.getcwd()
+            try:
+                os.chdir(os.path.dirname(self.path))
+                if self.__execute(self.javac, "-cp", self.sdk_path, os.path.basename(self.path)):
+                    raise RuntimeError("Error whilst compiling the Java sources.")
+
+                sources = [os.path.basename(p) for p in glob.glob(self.path.replace(".java", "$*.class"))]
+                if self.__execute(self.d8, "--output", os.path.basename(apk_path), *([os.path.basename(self.path).replace(".java", ".class")] + sources)):
+                    raise RuntimeError("Error whilst building APK bundle.")
+            finally:
+                os.chdir(previous_directory)
         
         # read the generated source file
         return fs.read(apk_path)
@@ -67,9 +66,9 @@ class ClassBuilder(object):
         print(" ".join(argv))
 
         if platform == 'win32':
-            subprocess.call(argv,shell=True,cwd=os.getcwd())
+            return subprocess.call(argv,shell=True,cwd=os.getcwd())
         else:
-            subprocess.call(' '.join(argv),shell=True, cwd=os.getcwd())
+            return subprocess.call(' '.join(argv),shell=True, cwd=os.getcwd())
 
     def __get_generated_apk_name(self):
         """
@@ -77,7 +76,7 @@ class ClassBuilder(object):
         of the source file.
         """
         
-        return os.path.join(os.path.dirname(self.path), binascii.hexlify(hashlib.md5(self.__get_source()).digest()) + ".apk")
+        return os.path.join(os.path.dirname(self.path), hashlib.md5(self.__get_source()).hexdigest() + ".apk")
         
     def __get_source(self):
         """
@@ -85,4 +84,3 @@ class ClassBuilder(object):
         """
 
         return fs.read(self.path)
-        
