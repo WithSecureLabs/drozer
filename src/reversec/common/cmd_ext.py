@@ -522,7 +522,11 @@ class Cmd(cmd.Cmd):
 
             line = line.replace("!!", self.lastcmd)
             line = line.replace("!$", argv[-1])
-            line = line.replace("!^", argv[1])
+            if "!^" in line:
+                if len(argv) < 2:
+                    self.stderr.write("no previous argument\n")
+                    return ""
+                line = line.replace("!^", argv[1])
             line = line.replace("!*", " ".join(argv[1:]))
 
             return line
@@ -538,6 +542,9 @@ class Cmd(cmd.Cmd):
         """
 
         (line, destination) = line.rsplit(">", 1)
+        if line.endswith(">"):
+            line = line[:-1]
+            destination = ">" + destination
 
         if len(destination) > 0:
             try:
