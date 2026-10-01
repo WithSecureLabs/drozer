@@ -777,7 +777,7 @@ class Session(cmd.Cmd):
         if global_scope:
             modules = self.modules.all(permissions=self.permissions(), prefix=None)
         else:
-            self.modules.all(permissions=self.permissions(), prefix=self.__base)
+            modules = self.modules.all(permissions=self.permissions(), prefix=self.__base)
         
         return set(map(lambda m: self.__module("." + m).namespace(), modules))
     
