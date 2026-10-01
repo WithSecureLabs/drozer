@@ -29,7 +29,7 @@ class ReflectedString(ReflectedType):
 
         return self._native.center(width, fillchar)
 
-    def count(self, sub, start=0, end=-1):
+    def count(self, sub, start=0, end=None):
         """
         Return the number of non-overlapping occurrences of substring sub in the
         range [start, end]. Optional arguments start and end are interpreted as
@@ -46,7 +46,7 @@ class ReflectedString(ReflectedType):
         at that position.
         """
 
-        return self._native.endswith(suffix, start, end == None and len(self._native) or end)
+        return self._native.endswith(suffix, start, end)
 
     def expandtabs(self, tabsize=8):
         """
@@ -59,7 +59,7 @@ class ReflectedString(ReflectedType):
 
         return self._native.expandtabs(tabsize)
 
-    def find(self, sub, start=0, end=-1):
+    def find(self, sub, start=0, end=None):
         """
         Return the lowest index in the string where substring sub is found,
         such that sub is contained in the slice s[start:end]. Optional
@@ -76,7 +76,7 @@ class ReflectedString(ReflectedType):
 
         return self._native.format(*attrs)
 
-    def index(self, sub, start=0, end=-1):
+    def index(self, sub, start=0, end=None):
         """
         Like find(), but raise ValueError when the substring is not found.
         """
@@ -218,7 +218,7 @@ class ReflectedString(ReflectedType):
 
         return self._native.replace(old, new, count)
 
-    def rfind(self, sub, start=0, end=-1):
+    def rfind(self, sub, start=0, end=None):
         """
         Return the highest index in the string where substring sub is found,
         such that sub is contained within s[start:end]. Optional arguments
@@ -228,7 +228,7 @@ class ReflectedString(ReflectedType):
 
         return self._native.rfind(sub, start, end)
 
-    def rindex(self, sub, start=0, end=-1):
+    def rindex(self, sub, start=0, end=None):
         """
         Like rfind() but raises ValueError when the substring sub is not found.
         """
@@ -291,7 +291,7 @@ class ReflectedString(ReflectedType):
 
         return self._native.splitlines(keepends)
 
-    def startswith(self, prefix, start=0, end=-1):
+    def startswith(self, prefix, start=0, end=None):
         """
         Return True if string starts with the prefix, otherwise return False.
         prefix can also be a tuple of prefixes to look for. With optional start,
@@ -366,7 +366,9 @@ class ReflectedString(ReflectedType):
         return Message.Argument(type=Message.Argument.STRING, string=self._native)
 
     def __add__(self, other):
-        return isinstance(other, ReflectedString) and self._native + other._native or self._native + other
+        if isinstance(other, ReflectedString):
+            other = other._native
+        return self._native + other
 
     def __contains__(self, other):
         if isinstance(other, ReflectedString):
@@ -375,7 +377,9 @@ class ReflectedString(ReflectedType):
             return other in self._native
 
     def __eq__(self, other):
-        return isinstance(other, ReflectedString) and self._native == other._native or self._native == other
+        if isinstance(other, ReflectedString):
+            other = other._native
+        return self._native == other
 
     def __getitem__(self, key):
         return self._native[key]
@@ -384,7 +388,9 @@ class ReflectedString(ReflectedType):
         return self._native.__len__()
 
     def __ne__(self, other):
-        return isinstance(other, ReflectedString) and self._native != other._native or self._native != other
+        if isinstance(other, ReflectedString):
+            other = other._native
+        return self._native != other
 
     def __repr__(self):
         return repr(self._native)
@@ -392,4 +398,3 @@ class ReflectedString(ReflectedType):
     def __str__(self):
         return self._native
         #return self._native.encode('utf-8')
-        
