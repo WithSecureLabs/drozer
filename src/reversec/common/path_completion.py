@@ -9,7 +9,7 @@ def complete(path, include_files=True):
         path = os.path.abspath(".")
 
     folder, search_path = get_folder_and_search_path(path, os.path.sep)
-    folders = os.listdir(folder)
+    folders = os.listdir(folder or os.curdir)
 
     return list(get_suggestions(folder, search_path, folders, os.path.sep, include_files))
 

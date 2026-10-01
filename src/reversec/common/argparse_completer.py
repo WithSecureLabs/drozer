@@ -188,7 +188,9 @@ class ArgumentParserCompleter(object):
             return (self.__get_suggestions_for(action, text, line, idx=value_index), True)
         elif nargs == "?" and value_index == 0:
             # we are completing an optional value
-            return (self.__get_suggestions_for(action), True)
+            return (self.__get_suggestions_for(action, text, line, idx=value_index), True)
+        elif nargs == "?":
+            return ([], True)
         else:
             if value_index < nargs:
                 # we are completing the value_index-th element of an fixed list
