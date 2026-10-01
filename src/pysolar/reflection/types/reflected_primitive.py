@@ -107,6 +107,8 @@ class ReflectedPrimitive(ReflectedType):
         else:
             return self._native / other
 
+    __truediv__ = __div__
+
     def __divmod__(self, other):
         if isinstance(other, ReflectedPrimitive):
             return divmod(self._native, other._native)
@@ -114,28 +116,28 @@ class ReflectedPrimitive(ReflectedType):
             return divmod(self._native, other)
 
     def __eq__(self, other):
-        return isinstance(other, ReflectedPrimitive) and self._native == other._native or self._native == other
+        return self._native == (other._native if isinstance(other, ReflectedPrimitive) else other)
 
     def __float__(self):
         return float(self._native)
 
     def __ge__(self, other):
-        return isinstance(other, ReflectedPrimitive) and self._native >= other._native or self._native >= other
+        return self._native >= (other._native if isinstance(other, ReflectedPrimitive) else other)
 
     def __gt__(self, other):
-        return isinstance(other, ReflectedPrimitive) and self._native > other._native or self._native > other
+        return self._native > (other._native if isinstance(other, ReflectedPrimitive) else other)
 
     def __int__(self):
         return int(self._native)
 
     def __le__(self, other):
-        return isinstance(other, ReflectedPrimitive) and self._native <= other._native or self._native <= other
+        return self._native <= (other._native if isinstance(other, ReflectedPrimitive) else other)
 
     def __long__(self):
         return int(self._native)
 
     def __lt__(self, other):
-        return isinstance(other, ReflectedPrimitive) and self._native < other._native or self._native < other
+        return self._native < (other._native if isinstance(other, ReflectedPrimitive) else other)
 
     def __mod__(self, other):
         if isinstance(other, ReflectedPrimitive):
@@ -150,23 +152,25 @@ class ReflectedPrimitive(ReflectedType):
             return self._native * other
 
     def __ne__(self, other):
-        return self._native != other
+        return self._native != (other._native if isinstance(other, ReflectedPrimitive) else other)
 
     def __neg__(self):
         return -self._native
 
     def __nonzero__(self):
-        return self._native.__nonzero__()
+        return bool(self._native)
+
+    __bool__ = __nonzero__
 
     def __or__(self, other):
-        return ReflectedPrimitive(self._type, self._native | other._native)
+        return ReflectedPrimitive(self._type, self._native | (other._native if isinstance(other, ReflectedPrimitive) else other))
 
     def __pos__(self):
         return self
     
     def __pow__(self, power, modulus=None):
-        power = isinstance(power, ReflectedPrimitive) and power._native or power
-        modulus = isinstance(modulus, ReflectedPrimitive) and modulus._native or modulus
+        power = power._native if isinstance(power, ReflectedPrimitive) else power
+        modulus = modulus._native if isinstance(modulus, ReflectedPrimitive) else modulus
 
         if modulus == None:
             return pow(self._native, power)
@@ -184,6 +188,8 @@ class ReflectedPrimitive(ReflectedType):
             return other._native / self._native
         else:
             return other / self._native
+
+    __rtruediv__ = __rdiv__
 
     def __rdivmod__(self, other):
         if isinstance(other, ReflectedPrimitive):
@@ -207,8 +213,8 @@ class ReflectedPrimitive(ReflectedType):
             return other * self._native
 
     def __rpow__(self, mantissa, modulus=None):
-        mantissa = isinstance(mantissa, ReflectedPrimitive) and mantissa._native or mantissa
-        modulus = isinstance(modulus, ReflectedPrimitive) and modulus._native or modulus
+        mantissa = mantissa._native if isinstance(mantissa, ReflectedPrimitive) else mantissa
+        modulus = modulus._native if isinstance(modulus, ReflectedPrimitive) else modulus
 
         if modulus == None:
             return pow(mantissa, self._native)
@@ -229,4 +235,3 @@ class ReflectedPrimitive(ReflectedType):
 
     def __str__(self):
         return "{}".format(self._native)
-        
